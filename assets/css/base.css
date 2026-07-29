@@ -314,6 +314,9 @@ button{ font-family: inherit; cursor: pointer; }
   opacity: 1;
   transform: translateY(0);
 }
+@media (prefers-reduced-motion: reduce){
+  .reveal{ opacity: 1; transform: none; transition: none; }
+}
 
 @media (max-width: 880px){
   .nav-links{
