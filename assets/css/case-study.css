@@ -1,0 +1,282 @@
+/* ============================================================
+   Shared case-study components (used by all /case-studies/*.html)
+   ============================================================ */
+
+.cs-nav .nav-inner{ padding: 14px 24px; }
+.back-link{
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13.5px; color: var(--text-muted);
+}
+.back-link:hover{ color: var(--text); }
+
+/* ---------- Hero ---------- */
+.cs-hero{
+  position: relative;
+  padding: 84px 0 56px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border-soft);
+}
+.cs-hero-bg{
+  position: absolute; inset: 0;
+  z-index: 0;
+}
+.cs-hero-bg::after{
+  content:"";
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(8,10,9,.55) 0%, var(--bg) 92%);
+}
+.cs-hero-inner{ position: relative; z-index: 1; text-align: center; }
+.cs-kicker{
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  color: var(--pink-soft);
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.cs-hero h1{
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(30px, 5vw, 50px);
+  line-height: 1.18;
+  max-width: 760px;
+  margin: 0 auto;
+}
+.cs-hero p.desc{
+  max-width: 620px;
+  margin: 18px auto 0;
+  color: var(--text-muted);
+  font-size: 15px;
+}
+.cs-tags{
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+  margin-top: 26px;
+}
+
+/* ---------- Generic section ---------- */
+.cs-section{ padding: 72px 0; }
+.cs-section.alt{ background: var(--bg-soft); }
+.cs-section-inner{ position: relative; z-index: 1; }
+.cs-label{
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-weight: 700;
+  color: var(--pink-soft);
+  margin-bottom: 12px;
+}
+.cs-h2{
+  font-size: clamp(22px, 2.8vw, 32px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.28;
+}
+.cs-h2.center{ text-align: center; margin: 0 auto; max-width: 640px; }
+.cs-p{ color: var(--text-muted); font-size: 14.5px; line-height: 1.7; margin-top: 14px; }
+
+.cs-two-col{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+.cs-two-col.top{ align-items: start; }
+
+/* ---------- Image / media placeholder ---------- */
+.media-frame{
+  position: relative;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  background: linear-gradient(140deg, var(--surface-2), var(--bg-soft));
+  display: flex; align-items: center; justify-content: center;
+  min-height: 220px;
+}
+.media-frame.tall{ aspect-ratio: 4/3; }
+.media-frame .media-caption{
+  position: absolute;
+  left: 14px; bottom: 14px;
+  font-size: 11px;
+  color: var(--text-dim);
+  background: rgba(0,0,0,.4);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+}
+.media-frame svg{ opacity: .55; }
+
+/* ---------- Icon + text row (problem/solution) ---------- */
+.icon-row{ display: flex; gap: 16px; align-items: flex-start; }
+.icon-row .icon-badge{
+  width: 46px; height: 46px; flex-shrink: 0;
+  border-radius: 12px;
+  background: var(--gradient-brand-soft);
+  color: var(--pink-soft);
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ---------- Stat mini grid reused with base .stat-box ---------- */
+.cs-stats-row{ margin-top: 40px; }
+
+/* ---------- Persona cards ---------- */
+.persona-card{
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: 22px;
+}
+.persona-card .avatar{
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 14px;
+  color: var(--pink-soft);
+  font-weight: 700;
+}
+.persona-card h4{ font-size: 15px; font-weight: 700; }
+.persona-card .role{ font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+.persona-card p.quote{
+  margin-top: 12px; font-size: 13px; color: var(--text-muted);
+  font-style: italic; border-left: 2px solid var(--border); padding-left: 12px;
+}
+.persona-card ul{ margin-top: 14px; display: flex; flex-direction: column; gap: 6px; }
+.persona-card ul li{
+  font-size: 12.5px; color: var(--text-muted);
+  padding-left: 16px; position: relative;
+}
+.persona-card ul li::before{
+  content:"•"; position:absolute; left:0; color: var(--pink-soft);
+}
+
+/* ---------- Pain -> Decision mapping ---------- */
+.map-row{
+  display: grid;
+  grid-template-columns: 1fr 32px 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0;
+  border-top: 1px solid var(--border-soft);
+}
+.map-row:last-child{ border-bottom: 1px solid var(--border-soft); }
+.map-row .pain{ font-size: 13.5px; color: var(--text-muted); }
+.map-row .decision{ font-size: 13.5px; color: var(--text); font-weight: 500; }
+.map-row .arrow{ color: var(--pink-soft); text-align: center; }
+
+/* ---------- Charts ---------- */
+.chart-card{
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: 24px;
+}
+.chart-card h4{ font-size: 13.5px; font-weight: 600; margin-bottom: 18px; color: var(--text-muted); }
+.chart-legend{ display: flex; flex-wrap: wrap; gap: 14px; margin-top: 16px; }
+.chart-legend span{ display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); }
+.chart-legend i{ width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+
+/* ---------- Tables ---------- */
+.cs-table-wrap{ overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius-md); }
+table.cs-table{ width: 100%; border-collapse: collapse; font-size: 13px; min-width: 480px; }
+table.cs-table th{
+  text-align: left; padding: 14px 16px;
+  background: var(--surface-2);
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+table.cs-table td{ padding: 13px 16px; border-top: 1px solid var(--border-soft); color: var(--text-muted); }
+table.cs-table td:first-child, table.cs-table th:first-child{ color: var(--text); font-weight: 500; }
+table.cs-table .yes{ color: var(--teal); }
+table.cs-table .no{ color: var(--text-dim); }
+
+/* ---------- Process / step nav ---------- */
+.step-nav{ display: flex; justify-content: center; gap: 10px; margin-bottom: 40px; }
+.step-nav span{
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: var(--text-dim);
+}
+.step-nav span.active{ background: var(--gradient-brand); color: #14060d; border: none; font-weight: 700; }
+
+/* ---------- Flow diagram ---------- */
+.flow-row{ display: flex; align-items: center; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.flow-box{
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  text-align: center;
+}
+.flow-arrow{ color: var(--text-dim); }
+
+/* ---------- Phone rows ---------- */
+.phone-row{ display: grid; gap: 22px; }
+.phone-row.p2{ grid-template-columns: repeat(2, minmax(140px, 1fr)); max-width: 460px; margin: 0 auto; }
+.phone-row.p3{ grid-template-columns: repeat(3, minmax(120px, 1fr)); }
+.phone-row.p4{ grid-template-columns: repeat(4, minmax(110px, 1fr)); }
+.phone-col{ text-align: center; }
+.phone-col .phone-caption{ margin-top: 12px; font-size: 12.5px; color: var(--text-muted); font-weight: 500; }
+.phone-col .phone-sub{ font-size: 11.5px; color: var(--text-dim); }
+
+/* ---------- Color / type swatches ---------- */
+.swatch-row{ display: flex; gap: 14px; flex-wrap: wrap; }
+.swatch{ text-align: center; }
+.swatch .chip{ width: 64px; height: 64px; border-radius: 14px; border: 1px solid var(--border); }
+.swatch .name{ margin-top: 8px; font-size: 11px; color: var(--text-dim); }
+
+/* ---------- Insight icon cards ---------- */
+.insight-card{
+  border: 1px solid var(--border); background: var(--surface);
+  border-radius: var(--radius-md); padding: 20px;
+  text-align: center;
+}
+.insight-card .icon{
+  width: 40px; height: 40px; margin: 0 auto 12px;
+  border-radius: 10px; background: var(--gradient-brand-soft);
+  color: var(--pink-soft); display: flex; align-items: center; justify-content: center;
+}
+.insight-card h4{ font-size: 13.5px; font-weight: 600; }
+.insight-card p{ margin-top: 6px; font-size: 12px; color: var(--text-muted); }
+
+/* ---------- Results band ---------- */
+.results-band{
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: 44px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+.results-band .media-frame{ min-height: 240px; }
+
+/* ---------- Next case study CTA ---------- */
+.cs-next{
+  border-top: 1px solid var(--border-soft);
+  padding: 56px 0;
+  text-align: center;
+}
+.cs-next .label{ font-size: 12.5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .1em; }
+.cs-next a.next-title{
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3.5vw, 34px);
+  font-weight: 700;
+  margin-top: 10px;
+}
+.cs-next a.next-title:hover{ color: var(--pink-soft); }
+
+@media (max-width: 860px){
+  .cs-two-col{ grid-template-columns: 1fr; }
+  .results-band{ grid-template-columns: 1fr; padding: 28px; }
+  .phone-row.p3{ grid-template-columns: repeat(2, 1fr); }
+  .phone-row.p4{ grid-template-columns: repeat(2, 1fr); }
+  .map-row{ grid-template-columns: 1fr; text-align: left; }
+  .map-row .arrow{ display:none; }
+}

@@ -1,0 +1,135 @@
+/* ============================================================
+   Page-scoped accent overrides — My MTN case study
+   Brand yellow used for in-page content; nav/footer/next-CTA
+   keep the site's standard pink-orange gradient.
+   ============================================================ */
+.theme-mtn{
+  --mtn-yellow: #ffcc33;
+}
+
+.theme-mtn .cs-kicker,
+.theme-mtn .cs-label{ color: var(--mtn-yellow); }
+
+.theme-mtn .icon-row .icon-badge{
+  background: rgba(255,204,51,.14);
+  color: var(--mtn-yellow);
+}
+
+.theme-mtn .step-nav span.active{
+  background: var(--mtn-yellow);
+  color: #14120a;
+}
+
+.theme-mtn table.cs-table .yes{ color: var(--mtn-yellow); }
+
+.theme-mtn .flow-arrow{ color: var(--mtn-yellow); }
+
+.theme-mtn .stat-box .num{ color: var(--mtn-yellow); }
+
+.theme-mtn .persona-card .avatar{ color: var(--mtn-yellow); }
+.theme-mtn .persona-card ul li::before{ color: var(--mtn-yellow); }
+
+.theme-mtn .insight-card .icon{
+  background: rgba(255,204,51,.14);
+  color: var(--mtn-yellow);
+}
+
+.theme-mtn .cs-next .label{ color: var(--text-dim); }
+
+/* ---------- MTN wordmark chip used in mockups ---------- */
+.theme-mtn .mtn-chip{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: .04em;
+  color: #14120a;
+  background: var(--mtn-yellow);
+  border-radius: 5px;
+  padding: 3px 7px;
+}
+
+/* ---------- Phone mockup screen content (flat blocks) ---------- */
+.theme-mtn .mock-screen{
+  position: absolute; inset: 0;
+  background: #121214;
+  display: flex; flex-direction: column;
+}
+.theme-mtn .mock-screen.dark{ background: #0d0d0f; }
+.theme-mtn .mock-topbar{
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 10px 8px;
+}
+.theme-mtn .mock-bar{ height: 8px; border-radius: 4px; background: rgba(255,255,255,.1); }
+.theme-mtn .mock-body{ flex: 1; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+.theme-mtn .mock-card{
+  border-radius: 8px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.08);
+  padding: 8px;
+}
+.theme-mtn .mock-card.hero{
+  background: linear-gradient(135deg, rgba(255,204,51,.9), rgba(255,153,0,.65));
+  color: #14120a;
+  min-height: 46px;
+}
+.theme-mtn .mock-pill{
+  height: 18px; border-radius: 999px;
+  background: var(--mtn-yellow);
+  width: 60%;
+}
+.theme-mtn .mock-dot-row{ display:flex; gap:6px; }
+.theme-mtn .mock-dot{ width:8px; height:8px; border-radius:50%; background: rgba(255,255,255,.14); }
+.theme-mtn .mock-dot.on{ background: var(--mtn-yellow); }
+.theme-mtn .mock-line{ height:6px; border-radius:3px; background: rgba(255,255,255,.1); }
+.theme-mtn .mock-nav{
+  display:flex; justify-content:space-around; align-items:center;
+  padding: 10px 6px; border-top: 1px solid rgba(255,255,255,.08);
+}
+.theme-mtn .mock-nav i{ width:14px; height:14px; border-radius:4px; background: rgba(255,255,255,.14); display:block; }
+.theme-mtn .mock-nav i.on{ background: var(--mtn-yellow); }
+.theme-mtn .mock-grid2{ display:grid; grid-template-columns: 1fr 1fr; gap:8px; }
+.theme-mtn .mock-btn{
+  border-radius: 999px;
+  background: var(--mtn-yellow);
+  color: #14120a;
+  font-size: 9px; font-weight: 700;
+  text-align: center;
+  padding: 7px;
+}
+.theme-mtn .mock-avatar{
+  width: 26px; height: 26px; border-radius: 50%;
+  background: rgba(255,204,51,.25);
+  border: 1px solid rgba(255,204,51,.5);
+}
+.theme-mtn .mock-stars{ display:flex; gap:3px; }
+.theme-mtn .mock-stars i{ width:9px; height:9px; background: var(--mtn-yellow); clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+
+/* ---------- Hero + media-frame silhouettes ---------- */
+.theme-mtn .cs-hero-bg{
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(255,204,51,.14), transparent 70%);
+}
+.theme-mtn .media-frame.warm{
+  background: linear-gradient(150deg, #3a2a08, #1a1508 60%, #0f0f10);
+}
+.theme-mtn .media-frame.warm-soft{
+  background: linear-gradient(150deg, #2c2410, #17140a 60%, #101012);
+}
+
+/* ---------- Wordmark closer (like section-watermark, but inline) ---------- */
+.theme-mtn .mtn-wordmark{
+  text-align: center;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: clamp(48px, 10vw, 120px);
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,204,51,.35);
+  padding: 40px 0 10px;
+}
+
+@media (max-width: 640px){
+  .theme-mtn .phone-row.p3{ grid-template-columns: repeat(2, 1fr); }
+}
