@@ -114,6 +114,129 @@
 .theme-ipl .mock-stat b{ display: block; font-size: 12px; color: var(--blue); font-family: var(--font-display); }
 .theme-ipl .mock-stat span{ font-size: 7px; color: rgba(255,255,255,.5); }
 
+/* ---------- Live scorecard / commentary screens ---------- */
+.theme-ipl .mock-scorebar.column{
+  flex-direction: column; align-items: stretch; gap: 6px;
+  padding: 18px 10px 10px;
+}
+.theme-ipl .mock-match-tag{
+  align-self: center;
+  font-size: 6.5px; font-weight: 700; letter-spacing: .06em;
+  background: rgba(255,255,255,.16); color: #fff;
+  padding: 2px 8px; border-radius: 999px;
+}
+.theme-ipl .mock-teams-row{ display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
+.theme-ipl .mock-team-block{ display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1; }
+.theme-ipl .mock-team-block .mock-badge{ width: 16px; height: 16px; border-radius: 50%; }
+.theme-ipl .mock-team-block span{ font-size: 7px; font-weight: 700; color: rgba(255,255,255,.85); }
+.theme-ipl .mock-team-block b{ font-size: 11px; color: #fff; font-family: var(--font-display); }
+.theme-ipl .mock-team-block small{ font-size: 6px; color: rgba(255,255,255,.6); }
+.theme-ipl .mock-vs{
+  width: 18px; height: 18px; border-radius: 50%;
+  background: rgba(255,255,255,.14);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 6px; font-weight: 700; color: #fff; flex-shrink: 0;
+}
+.theme-ipl .mock-result{
+  text-align: center; font-size: 7px; font-weight: 700;
+  color: var(--amber); margin-top: 4px;
+}
+.theme-ipl .mock-tabs{
+  display: flex; gap: 10px; padding: 8px 10px 0; border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.theme-ipl .mock-tabs span{ font-size: 6.5px; color: rgba(255,255,255,.4); padding-bottom: 6px; font-weight: 600; }
+.theme-ipl .mock-tabs span.on{ color: var(--blue); border-bottom: 2px solid var(--blue); }
+.theme-ipl .mock-pill-row{ display: flex; gap: 5px; padding: 7px 10px 0; }
+.theme-ipl .mock-pill-row span{
+  font-size: 6px; font-weight: 700; color: rgba(255,255,255,.5);
+  border: 1px solid rgba(255,255,255,.14); border-radius: 999px; padding: 2.5px 7px;
+}
+.theme-ipl .mock-pill-row span.on{ background: var(--blue); color: #051422; border-color: var(--blue); }
+.theme-ipl .mock-card.poty{ display: flex; align-items: center; gap: 7px; }
+.theme-ipl .mock-line.sm{ height: 4px; }
+.theme-ipl .mock-ball-badge{
+  width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0;
+  background: var(--amber); color: #231400;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 8px; font-weight: 800;
+}
+.theme-ipl .mock-ball-badge.wicket{ background: #e5484d; color: #fff; }
+.theme-ipl .mock-over-row{ display: flex; gap: 4px; }
+.theme-ipl .mock-over-row i{
+  width: 14px; height: 14px; border-radius: 50%;
+  background: rgba(255,255,255,.12);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 6px; font-weight: 700; color: rgba(255,255,255,.7); font-style: normal;
+}
+.theme-ipl .mock-over-row i.four{ background: var(--blue); color: #051422; }
+.theme-ipl .mock-over-row i.six{ background: var(--amber); color: #231400; }
+.theme-ipl .mock-over-row i.wkt{ background: #e5484d; color: #fff; }
+.theme-ipl .mock-stat-line{ display: flex; justify-content: space-between; font-size: 7px; color: rgba(255,255,255,.6); }
+.theme-ipl .mock-stat-line b{ color: #fff; }
+.theme-ipl .mock-photo{
+  border-radius: 8px; aspect-ratio: 16/10;
+  background: linear-gradient(135deg, rgba(63,169,255,.35), rgba(10,18,28,.9));
+  border: 1px solid rgba(255,255,255,.1);
+}
+
+/* ---------- Onboarding screens (choose player / team) ---------- */
+.theme-ipl .mock-onboard{
+  background: linear-gradient(160deg, #12408c 0%, #0a2358 100%);
+  padding: 16px 12px; flex: 1; display: flex; flex-direction: column;
+}
+.theme-ipl .mock-onboard-top{ display: flex; justify-content: flex-end; }
+.theme-ipl .mock-skip{ font-size: 7px; font-weight: 700; color: rgba(255,255,255,.85); }
+.theme-ipl .mock-onboard-title{
+  text-align: center; font-size: 9.5px; font-weight: 800; letter-spacing: .03em;
+  color: #fff; text-transform: uppercase; margin-top: 6px; line-height: 1.4;
+}
+.theme-ipl .mock-hero-avatar{
+  width: 74px; height: 74px; border-radius: 50%; margin: 14px auto 0;
+  background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.3), rgba(255,255,255,.05));
+  border: 2px solid rgba(255,255,255,.4);
+}
+.theme-ipl .mock-avatar-row{ display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 10px; }
+.theme-ipl .mock-avatar-row i{
+  width: 16px; height: 16px; border-radius: 50%; background: rgba(255,255,255,.18);
+  border: 1px solid rgba(255,255,255,.3); display: block;
+}
+.theme-ipl .mock-avatar-row i.on{ width: 22px; height: 22px; background: rgba(255,255,255,.32); border-color: #fff; }
+.theme-ipl .mock-onboard-name{ text-align: center; font-size: 8.5px; font-weight: 700; color: #fff; margin-top: 10px; }
+.theme-ipl .mock-confirm{
+  margin-top: auto;
+  background: #fff; color: #0a2358;
+  text-align: center; font-size: 7.5px; font-weight: 800;
+  padding: 8px; border-radius: 4px;
+  clip-path: polygon(4% 0, 100% 0, 96% 100%, 0 100%);
+}
+
+/* ---------- Official partners splash ---------- */
+.theme-ipl .mock-partners{
+  background: linear-gradient(160deg, #12408c 0%, #0a2358 100%);
+  flex: 1; padding: 28px 10px 14px; display: flex; flex-direction: column; align-items: center; gap: 6px;
+  overflow: hidden;
+}
+.theme-ipl .mock-wordmark{ display: flex; align-items: center; gap: 4px; margin-top: 2px; }
+.theme-ipl .mock-wordmark .bat{ width: 10px; height: 10px; border-radius: 3px; background: var(--amber); }
+.theme-ipl .mock-wordmark span{ font-size: 10px; font-weight: 800; color: #fff; letter-spacing: .02em; }
+.theme-ipl .mock-section-label{
+  font-size: 6px; font-weight: 700; letter-spacing: .08em; color: rgba(255,255,255,.55);
+  text-transform: uppercase; margin-top: 4px;
+}
+.theme-ipl .mock-sponsor-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 4px; width: 100%; }
+.theme-ipl .mock-sponsor-pill{
+  background: rgba(255,255,255,.94); color: #12203a;
+  font-size: 5.6px; font-weight: 700; text-align: center;
+  border-radius: 4px; padding: 4px 2px;
+}
+
+/* ---------- Match info table screen ---------- */
+.theme-ipl .mock-info-table{ display: flex; flex-direction: column; gap: 8px; }
+.theme-ipl .mock-info-row{ border-bottom: 1px solid rgba(255,255,255,.08); padding-bottom: 6px; }
+.theme-ipl .mock-info-row .k{ font-size: 6px; color: rgba(255,255,255,.45); text-transform: uppercase; letter-spacing: .05em; }
+.theme-ipl .mock-info-row .v{ font-size: 7.5px; color: #fff; font-weight: 700; margin-top: 2px; }
+.theme-ipl .mock-info-row .v small{ display: block; font-size: 6px; color: rgba(255,255,255,.5); font-weight: 500; }
+
 /* ---------- Media frame: stadium celebration ---------- */
 .theme-ipl .media-frame.ipl-celebration{
   background: linear-gradient(160deg, #2a1608 0%, #0d1826 55%, #0a0a0b 100%);
