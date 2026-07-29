@@ -1,0 +1,125 @@
+/* ============================================================
+   Page-scoped accent overrides — IPL case study
+   Accent: cricket blue (var(--blue)) + stadium-lights amber
+   (var(--amber)) instead of the site-wide pink, except for the
+   nav brand / CTA / next-case-study link which stay on the
+   standard pink-orange brand gradient.
+   ============================================================ */
+
+.theme-ipl .cs-kicker,
+.theme-ipl .cs-label{ color: var(--blue); }
+
+.theme-ipl .stat-box .num{ color: var(--blue); }
+
+.theme-ipl .icon-row .icon-badge,
+.theme-ipl .insight-card .icon,
+.theme-ipl .feature-card .icon{
+  background: rgba(63,169,255,.14);
+  color: var(--blue);
+}
+
+.theme-ipl .step-nav span.active{
+  background: var(--blue);
+  color: #051422;
+  border: none;
+  font-weight: 700;
+}
+
+.theme-ipl table.cs-table .yes{ color: var(--blue); }
+.theme-ipl .flow-arrow{ color: var(--blue); }
+.theme-ipl .map-row .arrow{ color: var(--amber); }
+
+.theme-ipl .persona-card .avatar{ color: var(--blue); }
+.theme-ipl .persona-card ul li::before{ color: var(--amber); }
+
+.theme-ipl .cs-next .label{ color: var(--text-dim); }
+
+/* Centered intro paragraph helper */
+.theme-ipl .cs-p.intro-center{
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+/* ---------- Hero: stadium-at-night background ---------- */
+.ipl-hero-bg{
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(55% 50% at 24% 8%, rgba(63,169,255,.24) 0%, rgba(63,169,255,0) 60%),
+    radial-gradient(46% 40% at 78% 4%, rgba(255,179,71,.20) 0%, rgba(255,179,71,0) 65%),
+    linear-gradient(200deg, #081422 0%, #0a121a 42%, #0a0d12 74%, #0a0a0b 100%);
+}
+.ipl-hero-bg svg{
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  opacity: .6;
+}
+
+/* ---------- Map-row wrapper ---------- */
+.ipl-map-wrap{ max-width: 820px; margin: 0 auto; }
+
+/* ---------- Phone mockup screen content (flat cricket-app blocks) ---------- */
+.theme-ipl .mock-screen{
+  position: absolute; inset: 0;
+  background: #0a121c;
+  display: flex; flex-direction: column;
+}
+.theme-ipl .mock-scorebar{
+  background: linear-gradient(90deg, var(--blue), #1c5f96);
+  padding: 20px 8px 8px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.theme-ipl .mock-team{ display: flex; align-items: center; gap: 4px; }
+.theme-ipl .mock-badge{ width: 14px; height: 14px; border-radius: 4px; background: rgba(255,255,255,.3); }
+.theme-ipl .mock-team span{ font-size: 8px; font-weight: 700; color: #fff; }
+.theme-ipl .mock-score{ font-size: 10px; font-weight: 800; color: #fff; text-align: center; }
+.theme-ipl .mock-score small{ display: block; font-size: 6.5px; font-weight: 500; color: rgba(255,255,255,.75); }
+
+.theme-ipl .mock-topbar{ display: flex; justify-content: space-between; padding: 10px 10px 4px; }
+.theme-ipl .mock-bar{ height: 7px; border-radius: 4px; background: rgba(255,255,255,.1); }
+
+.theme-ipl .mock-body{ flex: 1; padding: 8px 10px; display: flex; flex-direction: column; gap: 7px; overflow: hidden; }
+.theme-ipl .mock-card{
+  border-radius: 8px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.08);
+  padding: 7px;
+}
+.theme-ipl .mock-card.amber{
+  background: linear-gradient(135deg, rgba(255,179,71,.92), rgba(255,138,61,.6));
+  color: #231400;
+}
+.theme-ipl .mock-line{ height: 5px; border-radius: 3px; background: rgba(255,255,255,.12); }
+.theme-ipl .mock-card.amber .mock-line{ background: rgba(0,0,0,.25); }
+.theme-ipl .mock-pill{ height: 14px; border-radius: 999px; background: var(--amber); width: 46%; }
+.theme-ipl .mock-row{ display: flex; align-items: center; gap: 6px; }
+.theme-ipl .mock-row.between{ justify-content: space-between; }
+.theme-ipl .mock-dot{ width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.18); flex-shrink: 0; }
+.theme-ipl .mock-dot.on{ background: var(--blue); }
+.theme-ipl .mock-dot.amber{ background: var(--amber); }
+.theme-ipl .mock-avatar{
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(63,169,255,.25); border: 1px solid rgba(63,169,255,.5);
+  flex-shrink: 0;
+}
+.theme-ipl .mock-nav{
+  display: flex; justify-content: space-around; align-items: center;
+  padding: 8px 6px; border-top: 1px solid rgba(255,255,255,.08);
+}
+.theme-ipl .mock-nav i{ width: 12px; height: 12px; border-radius: 4px; background: rgba(255,255,255,.16); display: block; }
+.theme-ipl .mock-nav i.on{ background: var(--blue); }
+.theme-ipl .mock-grid2{ display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.theme-ipl .mock-stat{ text-align: center; padding: 6px 2px; }
+.theme-ipl .mock-stat b{ display: block; font-size: 12px; color: var(--blue); font-family: var(--font-display); }
+.theme-ipl .mock-stat span{ font-size: 7px; color: rgba(255,255,255,.5); }
+
+/* ---------- Media frame: stadium celebration ---------- */
+.theme-ipl .media-frame.ipl-celebration{
+  background: linear-gradient(160deg, #2a1608 0%, #0d1826 55%, #0a0a0b 100%);
+}
+.theme-ipl .media-frame.ipl-celebration svg{ opacity: .9; }
+
+@media (max-width: 640px){
+  .theme-ipl .phone-row.p3{ grid-template-columns: repeat(2, 1fr); }
+}

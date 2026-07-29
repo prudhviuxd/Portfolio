@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WHO · myYoga — Case Study | Prudhvi Raj PJ</title>
+<meta name="description" content="How an accessible, multilingual meditation and yoga app was designed for the World Health Organization — from research to high-fidelity UI.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/case-study.css">
+<link rel="stylesheet" href="../assets/css/who-myyoga.css">
+</head>
+<body>
+
+<header class="nav cs-nav">
+  <div class="nav-inner container">
+    <a href="../index.html" class="brand">
+      <span class="brand-mark">P</span>
+      Prudhvi Raj PJ
+    </a>
+    <nav class="nav-links">
+      <a href="../index.html#projects" class="back-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg>
+        Back to Projects
+      </a>
+      <a href="../index.html#contact" class="btn btn-primary">Let's Talk</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Toggle menu"><span></span></button>
+  </div>
+</header>
+
+<main class="theme-who">
+
+  <!-- ============ HERO ============ -->
+  <section class="cs-hero">
+    <div class="cs-hero-bg who-hero-bg">
+      <svg viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <filter id="whoBlur" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="34"/>
+          </filter>
+          <radialGradient id="whoGlow" cx="50%" cy="30%" r="70%">
+            <stop offset="0%" stop-color="#14c6a5" stop-opacity=".35"/>
+            <stop offset="100%" stop-color="#14c6a5" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <g filter="url(#whoBlur)" opacity=".65">
+          <ellipse cx="180" cy="120" rx="220" ry="140" fill="#0f3d34"/>
+          <ellipse cx="560" cy="60" rx="260" ry="120" fill="#123a2d"/>
+          <ellipse cx="980" cy="140" rx="240" ry="160" fill="#0a2e26"/>
+          <ellipse cx="760" cy="260" rx="200" ry="110" fill="#155040"/>
+          <ellipse cx="320" cy="300" rx="180" ry="100" fill="#0d241d"/>
+        </g>
+        <circle cx="600" cy="120" r="200" fill="url(#whoGlow)"/>
+        <g opacity=".5" stroke="#1b5445" stroke-width="2" fill="none">
+          <path d="M100 500 L140 300 L120 180"/>
+          <path d="M1080 500 L1040 320 L1070 200"/>
+          <path d="M950 500 L980 340"/>
+        </g>
+      </svg>
+    </div>
+    <div class="container cs-hero-inner reveal">
+      <div class="cs-kicker">WHO · myYoga</div>
+      <h1>Inhale the future, exhale the past.</h1>
+      <p class="desc">Designing an accessible, evidence-based meditation and yoga app for the World Health Organization — built to work across languages, literacy levels, devices, and connectivity, so mindfulness isn't a privilege reserved for the few.</p>
+      <div class="cs-tags">
+        <span class="tag-pill">UX Lead</span>
+        <span class="tag-pill">3 Months</span>
+        <span class="tag-pill">iOS · Android</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="container">
+      <div class="grid g-3 reveal">
+        <div class="stat-box"><div class="num">3 Months</div><div class="label">Project Duration</div></div>
+        <div class="stat-box"><div class="num">20+</div><div class="label">User Interviews</div></div>
+        <div class="stat-box"><div class="num">5+</div><div class="label">Countries Researched</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROBLEM / SOLUTION ============ -->
+  <section class="cs-section alt">
+    <div class="container">
+      <div class="cs-two-col reveal">
+        <div>
+          <div class="cs-label">The Challenge</div>
+          <h2 class="cs-h2">Problem Statement</h2>
+          <p class="cs-p">Most meditation and mindfulness apps are built for a narrow slice of the world — English-speaking, high-literacy, always-online users on premium devices. For a WHO audience spanning over a hundred countries, that meant onboarding flows that assumed reading fluency, guided sessions locked behind subscriptions, and content with no grounding in clinical or cultural context. The result: the people who might benefit most from accessible wellbeing tools were the least able to use them.</p>
+        </div>
+        <div>
+          <div class="cs-label">Our Approach</div>
+          <h2 class="cs-h2">Design for everyone, by default</h2>
+          <p class="cs-p">We partnered with WHO clinical advisors to ground every session in evidence-based practice, then rebuilt the experience around plain language, icon-first navigation, and offline-first architecture for low-bandwidth regions. Voice-guided sessions in multiple languages replaced dense text, and the entire core library stayed free — because inclusion had to be a design constraint, not an afterthought.</p>
+        </div>
+      </div>
+
+      <div class="grid g-4 cs-stats-row reveal">
+        <div class="stat-box"><div class="num">88%</div><div class="label">Users citing accessibility barriers in existing apps</div></div>
+        <div class="stat-box"><div class="num">4.6/5</div><div class="label">Average App Store rating post-launch</div></div>
+        <div class="stat-box"><div class="num">45%</div><div class="label">Increase in daily active use</div></div>
+        <div class="stat-box"><div class="num">2.1M+</div><div class="label">Global downloads</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONCEPT VISUAL ============ -->
+  <section class="cs-section">
+    <div class="container">
+      <div class="reveal">
+        <h2 class="cs-h2 center">A universally accessible UX for a global scale.</h2>
+        <p class="cs-p center" style="text-align:center; max-width:560px; margin-left:auto; margin-right:auto;">Every interaction was designed to hold up regardless of language, literacy, connectivity, or device — because wellbeing shouldn't require privilege to access.</p>
+      </div>
+
+      <div class="media-frame tall reveal" style="margin-top:36px;">
+        <svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" style="width:100%; height:100%; opacity:1;" aria-hidden="true">
+          <defs>
+            <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#123a30"/>
+              <stop offset="45%" stop-color="#1c5e4c"/>
+              <stop offset="75%" stop-color="#e8a24c"/>
+              <stop offset="100%" stop-color="#0a0a0b"/>
+            </linearGradient>
+            <radialGradient id="sunGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ffd9a0" stop-opacity=".9"/>
+              <stop offset="100%" stop-color="#ffd9a0" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <rect width="800" height="600" fill="url(#skyGrad)"/>
+          <circle cx="400" cy="370" r="150" fill="url(#sunGrad)"/>
+          <circle cx="400" cy="370" r="70" fill="#f3c98a" opacity=".85"/>
+          <ellipse cx="400" cy="560" rx="400" ry="60" fill="#07100d"/>
+          <g fill="#050807">
+            <circle cx="400" cy="330" r="34"/>
+            <path d="M368 358 Q400 340 432 358 L446 430 Q400 452 354 430 Z"/>
+            <path d="M354 400 Q320 420 300 460 Q330 452 358 424 Z"/>
+            <path d="M446 400 Q480 420 500 460 Q470 452 442 424 Z"/>
+            <path d="M368 430 Q340 470 300 480 Q345 490 380 452 Z"/>
+            <path d="M432 430 Q460 470 500 480 Q455 490 420 452 Z"/>
+          </g>
+        </svg>
+        <span class="media-caption">Concept visual — accessible mindfulness for everyone</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROCESS ============ -->
+  <section class="cs-section alt">
+    <div class="container">
+      <div class="step-nav reveal">
+        <span class="active">1</span>
+        <span>2</span>
+        <span>3</span>
+        <span>4</span>
+      </div>
+      <h2 class="cs-h2 center reveal">Research Execution</h2>
+
+      <div class="cs-two-col top reveal" style="margin-top:40px;">
+        <div class="chart-card">
+          <h4>User Interviews &amp; Usability Tests</h4>
+          <div class="grid g-3 mini-stats">
+            <div class="stat-box"><div class="num">20+</div><div class="label">Interviews conducted</div></div>
+            <div class="stat-box"><div class="num">12</div><div class="label">Usability sessions</div></div>
+            <div class="stat-box"><div class="num">5</div><div class="label">Countries represented</div></div>
+          </div>
+          <div class="chart-legend">
+            <span><i style="background:var(--teal)"></i>Remote sessions</span>
+            <span><i style="background:#1c5e4c"></i>In-person sessions</span>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h4>Surveys &amp; Analytics Data</h4>
+          <div class="grid g-3 mini-stats">
+            <div class="stat-box"><div class="num">450+</div><div class="label">Survey respondents</div></div>
+            <div class="stat-box"><div class="num">18</div><div class="label">Competitor apps audited</div></div>
+            <div class="stat-box"><div class="num">6 wks</div><div class="label">Analytics review window</div></div>
+          </div>
+          <div class="chart-legend">
+            <span><i style="background:var(--teal)"></i>Survey data</span>
+            <span><i style="background:#1c5e4c"></i>Store &amp; usage analytics</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ INSIGHTS ============ -->
+  <section class="cs-section">
+    <div class="container">
+      <h2 class="cs-h2 center reveal">Meaningful Insights</h2>
+      <div class="grid g-4 reveal" style="margin-top:40px;">
+        <div class="insight-card">
+          <div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg></div>
+          <h4>Language Barriers</h4>
+          <p>English-only flows excluded the majority of the intended audience from day one.</p>
+        </div>
+        <div class="insight-card">
+          <div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6c-1.6-1.6-4.2-1.6-5.8 0L12 7.6l-3-3c-1.6-1.6-4.2-1.6-5.8 0-1.6 1.6-1.6 4.2 0 5.8l8.8 8.8 8.8-8.8c1.6-1.6 1.6-4.2 0-5.8z"/></svg></div>
+          <h4>Cultural Sensitivity</h4>
+          <p>Imagery, tone, and pacing needed to feel respectful across very different belief systems.</p>
+        </div>
+        <div class="insight-card">
+          <div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <h4>Accessibility Needs</h4>
+          <p>Low-literacy and visually impaired users needed audio and icon-first alternatives to text.</p>
+        </div>
+        <div class="insight-card">
+          <div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div>
+          <h4>Device Diversity</h4>
+          <p>Entry-level Android devices and unstable connections were the norm, not the exception.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SUCCESS FACTORS ============ -->
+  <section class="cs-section alt">
+    <div class="container">
+      <div class="cs-label reveal" style="text-align:center;">Metrics</div>
+      <h2 class="cs-h2 center reveal">Key Success Factors</h2>
+      <div class="cs-table-wrap reveal" style="margin-top:32px;">
+        <table class="cs-table">
+          <thead>
+            <tr><th>Metric</th><th>Target</th><th>Achieved</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Onboarding completion rate</td><td>70%</td><td class="yes">82%</td></tr>
+            <tr><td>Session completion rate</td><td>60%</td><td class="yes">74%</td></tr>
+            <tr><td>Multilingual coverage</td><td>8 languages</td><td class="yes">10 languages</td></tr>
+            <tr><td>App Store rating</td><td>4.3+</td><td class="yes">4.6</td></tr>
+            <tr><td>7-day retention</td><td>35%</td><td class="yes">48%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BENCHMARKING ============ -->
+  <section class="cs-section">
+    <div class="container">
+      <div class="cs-label reveal" style="text-align:center;">Competitive Landscape</div>
+      <h2 class="cs-h2 center reveal">Mobile App Benchmarking</h2>
+      <div class="cs-table-wrap reveal" style="margin-top:32px;">
+        <table class="cs-table">
+          <thead>
+            <tr><th>Feature</th><th>myYoga</th><th>Competitor A</th><th>Competitor B</th><th>Competitor C</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Offline mode</td><td class="yes">✓</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
+            <tr><td>Multilingual voice guidance</td><td class="yes">✓</td><td class="no">—</td><td class="yes">✓</td><td class="no">—</td></tr>
+            <tr><td>WHO / clinically-backed content</td><td class="yes">✓</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
+            <tr><td>Free core content</td><td class="yes">✓</td><td class="no">—</td><td class="yes">✓</td><td class="no">—</td></tr>
+            <tr><td>Low-bandwidth mode</td><td class="yes">✓</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ IA & WIREFRAMING ============ -->
+  <section class="cs-section alt">
+    <div class="container">
+      <div class="cs-label reveal" style="text-align:center;">Structure</div>
+      <h2 class="cs-h2 center reveal">Information Architecture &amp; Wireframing</h2>
+
+      <div class="cs-two-col top reveal" style="margin-top:36px;">
+        <div class="media-frame" style="padding:28px 20px; min-height:300px;">
+          <div class="who-sitemap" style="display:flex; flex-direction:column; align-items:center; gap:10px;">
+            <div class="who-sitemap-box root">myYoga</div>
+            <div class="who-sitemap-line"></div>
+            <div class="who-sitemap-tier">
+              <div class="who-sitemap-box">Onboarding</div>
+              <div class="who-sitemap-box">Home</div>
+              <div class="who-sitemap-box">Library</div>
+              <div class="who-sitemap-box">Profile</div>
+            </div>
+            <div class="who-sitemap-line"></div>
+            <div class="who-sitemap-tier">
+              <div class="who-sitemap-box">Meditation</div>
+              <div class="who-sitemap-box">Yoga</div>
+              <div class="who-sitemap-box">Sleep</div>
+            </div>
+          </div>
+          <span class="media-caption">Sitemap</span>
+        </div>
+
+        <div class="media-frame" style="padding:28px 20px; min-height:300px;">
+          <div class="flow-row">
+            <div class="flow-box">Open App</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-box">Select Language</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-box">Choose Practice</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-box">Session</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-box">Feedback</div>
+          </div>
+          <span class="media-caption">User flow</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DESIGN FOUNDATION ============ -->
+  <section class="cs-section">
+    <div class="container">
+      <div class="cs-label reveal" style="text-align:center;">Visual System</div>
+      <h2 class="cs-h2 center reveal">Design Foundation</h2>
+
+      <div class="cs-two-col reveal" style="margin-top:36px; align-items:start;">
+        <div>
+          <div class="cs-label" style="text-align:left;">Colour Palette</div>
+          <div class="swatch-row" style="margin-top:12px;">
+            <div class="swatch"><div class="chip" style="background:#14c6a5;"></div><div class="name">Teal 500</div></div>
+            <div class="swatch"><div class="chip" style="background:#0f3d34;"></div><div class="name">Forest</div></div>
+            <div class="swatch"><div class="chip" style="background:#0a2620;"></div><div class="name">Deep Green</div></div>
+            <div class="swatch"><div class="chip" style="background:#f2efe6;"></div><div class="name">Sand</div></div>
+            <div class="swatch"><div class="chip" style="background:#ffb347;"></div><div class="name">Amber</div></div>
+          </div>
+        </div>
+        <div class="who-type-specimen">
+          <div class="cs-label" style="text-align:left;">Typography</div>
+          <h3>Aa</h3>
+          <div class="label-sm">Playfair Display — headings &amp; moments of calm</div>
+          <p class="body-sample">Inter carries every instructional and interface layer — chosen for its clarity at small sizes, wide language support, and calm, neutral tone across devices.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WIRES TO HI-FI ============ -->
+  <section class="cs-section alt">
+    <div class="container">
+      <div class="cs-label reveal" style="text-align:center;">Fidelity</div>
+      <h2 class="cs-h2 center reveal">Wires to High-Fidelity Design</h2>
+
+      <div class="phone-row p3 reveal" style="margin-top:40px;">
+        <div class="phone-col">
+          <div class="phone">
+            <div class="phone-screen">
+              <div class="pm-pad pm-wire">
+                <div class="pm-topbar"></div>
+                <div class="pm-hero" style="height:34%; margin:12px 0;">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4a4a52" stroke-width="1.6"><path d="M4 16l5-6 4 5 3-4 4 6"/><circle cx="17" cy="6" r="2"/></svg>
+                </div>
+                <div class="pm-stack">
+                  <div class="pm-line full"></div>
+                  <div class="pm-line med"></div>
+                  <div class="pm-line short"></div>
+                </div>
+                <div class="pm-btn"></div>
+                <div class="pm-navbar">
+                  <div class="pm-navdot active"></div>
+                  <div class="pm-navdot"></div>
+                  <div class="pm-navdot"></div>
+                  <div class="pm-navdot"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="phone-caption">Wireframe</div>
+        </div>
+
+        <div class="phone-col">
+          <div class="phone">
+            <div class="phone-screen">
+              <div class="pm-pad pm-gray">
+                <div class="pm-row between">
+                  <div class="pm-avatar"></div>
+                  <div class="pm-topbar" style="width:20%;"></div>
+                </div>
+                <div class="pm-hero" style="height:32%; margin:12px 0;"></div>
+                <div class="pm-stack">
+                  <div class="pm-line full"></div>
+                  <div class="pm-line med"></div>
+                </div>
+                <div class="pm-row wrap" style="margin-top:10px;">
+                  <span class="pm-pill">Meditation</span>
+                  <span class="pm-pill">Yoga</span>
+                  <span class="pm-pill">Sleep</span>
+                </div>
+                <div class="pm-btn"></div>
+                <div class="pm-navbar">
+                  <div class="pm-navdot active"></div>
+                  <div class="pm-navdot"></div>
+                  <div class="pm-navdot"></div>
+                  <div class="pm-navdot"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="phone-caption">Grayscale</div>
+        </div>
+
+        <div class="phone-col">
+          <div class="phone">
+            <div class="phone-screen">
+              <div class="pm-pad pm-hifi">
+                <div class="pm-row between">
+                  <div class="pm-logo">m</div>
+                  <div class="pm-pill on">EN</div>
+                </div>
+                <div class="pm-card" style="margin-top:12px;">
+                  <div class="pm-line full" style="background:rgba(255,255,255,.5);"></div>
+                  <div class="pm-line short" style="margin-top:6px;"></div>
+                </div>
+                <div class="pm-stack" style="margin-top:12px;">
+                  <div class="pm-row between"><span style="font-size:9.5px;">Today's practice</span><span style="font-size:9px; color:var(--teal);">See all</span></div>
+                  <div class="pm-grid2">
+                    <div class="pm-card" style="height:44px;"></div>
+                    <div class="pm-card" style="height:44px;"></div>
+                  </div>
+                </div>
+                <div class="pm-btn">Begin Session</div>
+                <div class="pm-navbar">
+                  <div class="pm-navdot active"></div>
+                  <div class="pm-navdot"></div>
+                  <div class="pm-navdot"></div>
+                  <div class="pm-navdot"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="phone-caption">High-fidelity</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ APP SCREENS ============ -->
+  <section class="cs-section">
+    <div class="container">
+      <div class="cs-label reveal" style="text-align:center;">Final Screens</div>
+      <h2 class="cs-h2 center reveal">Product in Detail</h2>
+
+      <div class="phone-row p4 reveal" style="margin-top:40px;">
+
+        <!-- Onboarding -->
+        <div class="phone-col">
+          <div class="phone">
+            <div class="phone-screen">
+              <div class="pm-pad pm-hifi" style="align-items:center; text-align:center;">
+                <div class="pm-logo" style="margin:18px auto 10px; width:34px; height:34px; font-size:15px;">m</div>
+                <div class="pm-line med" style="background:rgba(255,255,255,.55); margin:0 auto 6px;"></div>
+                <div class="pm-line short" style="margin:0 auto;"></div>
+                <div class="pm-row wrap" style="justify-content:center; margin-top:16px;">
+                  <span class="pm-pill on">EN</span>
+                  <span class="pm-pill">ES</span>
+                  <span class="pm-pill">HI</span>
+                  <span class="pm-pill">SW</span>
+                  <span class="pm-pill">AR</span>
+                </div>
+                <div class="pm-btn" style="width:100%;">Continue</div>
+              </div>
+            </div>
+          </div>
+          <div class="phone-caption">Onboarding</div>
+        </div>
+
+        <!-- Home -->
+        <div class="phone-col">
+          <div class="phone">
+            <div class="phone-screen">
+              <div class="pm-pad pm-hifi">
+                <div class="pm-row between">
+                  <div>
+                    <div class="pm-line short" style="background:rgba(255,255,255,.5);"></div>
+                    <div class="pm-line" style="width:26%; margin-top:5px;"></div>
+                  </div>
+                  <div class="pm-avatar" style="background:rgba(20,198,165,.25);"></div>
+                </div>
+                <div class="pm-card" style="margin-top:14px; display:flex; align-items:center; gap:8px;">
+                  <div style="width:26px; height:26px; border-radius:50%; background:var(--teal); flex-shrink:0; display:flex; align-items:center; justify-content:center;">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="#04211c"><path d="M8 5v14l11-7z"/></svg>
+                  </div>
+                  <div style="flex:1;">
+                    <div class="pm-line med" style="background:rgba(255,255,255,.45);"></div>
+                    <div class="pm-line short" style="margin-top:5px;"></div>
+                  </div>
+                </div>
+                <div class="pm-row between" style="margin-top:14px;"><span style="font-size:9.5px;">Explore</span></div>
+                <div class="pm-grid2" style="margin-top:6px;">
+                  <div class="pm-card" style="height:40px;"></div>
+                  <div class="pm-card" style="height:40px;"></div>
+                  <div class="pm-card" style="height:40px;"></div>
+                  <div class="pm-card" style="height:40px;"></div>
+                </div>
+                <div class="pm-navbar">
+                  <div class="pm-navdot active"></div>
+                  <div class="pm-navdot"></div>
+                  <div class="pm-navdot"></div>
+                  <div class="pm-navdot"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="phone-caption">Home</div>
+        </div>
+
+        <!-- Practice Library -->
+        <div class="phone-col">
+          <div class="phone">
+            <div class="phone-screen">
+              <div class="pm-pad pm-hifi">
+                <div class="pm-pill" style="width:100%; justify-content:flex-start; padding:8px 10px;">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" style="margin-right:5px;"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+                  Search
+                </div>
+                <div class="pm-row wrap" style="margin-top:10px;">
+                  <span class="pm-pill on">Meditation</span>
+                  <span class="pm-pill">Yoga</span>
+                  <span class="pm-pill">Sleep</span>
+                </div>
+                <div class="pm-stack" style="margin-top:10px;">
+                  <div class="pm-card" style="height:36px; display:flex; align-items:center; justify-content:space-between; padding:0 10px;"><div class="pm-line short" style="background:rgba(255,255,255,.4);"></div><span style="font-size:8px; color:var(--teal);">8 min</span></div>
+                  <div class="pm-card" style="height:36px; display:flex; align-items:center; justify-content:space-between; padding:0 10px;"><div class="pm-line short" style="background:rgba(255,255,255,.4);"></div><span style="font-size:8px; color:var(--teal);">12 min</span></div>
+                  <div class="pm-card" style="height:36px; display:flex; align-items:center; justify-content:space-between; padding:0 10px;"><div class="pm-line short" style="background:rgba(255,255,255,.4);"></div><span style="font-size:8px; color:var(--teal);">15 min</span></div>
+                </div>
+                <div class="pm-navbar">
+                  <div class="pm-navdot"></div>
+                  <div class="pm-navdot active"></div>
+                  <div class="pm-navdot"></div>
+                  <div class="pm-navdot"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="phone-caption">Practice Library</div>
+        </div>
+
+        <!-- Profile -->
+        <div class="phone-col">
+          <div class="phone">
+            <div class="phone-screen">
+              <div class="pm-pad pm-hifi" style="align-items:center; text-align:center;">
+                <div class="pm-avatar" style="width:44px; height:44px; margin-top:12px; background:rgba(20,198,165,.25);"></div>
+                <div class="pm-line short" style="background:rgba(255,255,255,.5); margin:8px auto 0;"></div>
+                <div class="pm-row" style="justify-content:center; gap:14px; margin-top:14px; width:100%;">
+                  <div><div style="font-size:12px; font-weight:700; color:var(--teal);">18</div><div style="font-size:7.5px;">Day streak</div></div>
+                  <div><div style="font-size:12px; font-weight:700; color:var(--teal);">42</div><div style="font-size:7.5px;">Sessions</div></div>
+                  <div><div style="font-size:12px; font-weight:700; color:var(--teal);">310</div><div style="font-size:7.5px;">Minutes</div></div>
+                </div>
+                <div class="pm-stack" style="width:100%; margin-top:14px; text-align:left;">
+                  <div class="pm-listrow"><span>Language</span><span>›</span></div>
+                  <div class="pm-listrow"><span>Notifications</span><span>›</span></div>
+                  <div class="pm-listrow"><span>Accessibility</span><span>›</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="phone-caption">Profile</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ USABILITY TESTING ============ -->
+  <section class="cs-section" style="background:linear-gradient(160deg,#0c2a24,#0a0a0b);">
+    <div class="container">
+      <h2 class="cs-h2 center reveal">Usability Testing</h2>
+      <p class="cs-p reveal" style="text-align:center; max-width:560px; margin-left:auto; margin-right:auto;">Two rounds of moderated testing across five countries validated the redesigned onboarding, language switching, and offline session flows before launch — surfacing friction points early enough to fix them without slipping the timeline.</p>
+      <div class="grid g-3 reveal" style="margin-top:36px;">
+        <div class="stat-box"><div class="num">92%</div><div class="label">Task success rate</div></div>
+        <div class="stat-box"><div class="num">4.7/5</div><div class="label">Post-test satisfaction</div></div>
+        <div class="stat-box"><div class="num">30%</div><div class="label">Reduction in onboarding drop-off</div></div>
+      </div>
+    </div>
+  </section>
+
+  <p class="who-end">The End.</p>
+
+</main>
+
+<section class="cs-next">
+  <div class="container">
+    <div class="label">Next case study</div>
+    <a href="my-mtn.html" class="next-title">My MTN →</a>
+  </div>
+</section>
+<footer class="site-footer">
+  Copyright © 2026. All rights reserved. Made with Love for UX
+</footer>
+
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

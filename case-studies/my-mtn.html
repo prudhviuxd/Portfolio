@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My MTN — Case Study | Prudhvi Raj PJ</title>
+<meta name="description" content="My MTN — redesigning MTN's self-care mobile app for recharge, plans and loyalty across Nigeria &amp; South Africa. A UX case study by Prudhvi Raj PJ.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/case-study.css">
+<link rel="stylesheet" href="../assets/css/my-mtn.css">
+</head>
+<body>
+
+<header class="nav cs-nav">
+  <div class="nav-inner container">
+    <a href="../index.html" class="brand">
+      <span class="brand-mark">P</span>
+      Prudhvi Raj PJ
+    </a>
+    <nav class="nav-links">
+      <a href="../index.html#projects" class="back-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg>
+        Back to Projects
+      </a>
+      <a href="../index.html#contact" class="btn btn-primary">Let's Talk</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Toggle menu"><span></span></button>
+  </div>
+</header>
+
+<main class="theme-mtn">
+
+  <!-- ============ HERO ============ -->
+  <section class="cs-hero">
+    <div class="cs-hero-bg" aria-hidden="true"></div>
+    <div class="cs-hero-inner container">
+      <div class="cs-kicker">MTN Nigeria</div>
+      <h1>Enhancing Mobile Experience</h1>
+      <p class="desc">A redesign of MTN's self-care mobile app — the everyday tool millions of customers in Nigeria and South Africa use to recharge airtime, manage data plans, discover OTT bundles and track loyalty rewards. The goal: turn a utility app into an experience people actually enjoy opening.</p>
+      <div class="cs-tags">
+        <span class="tag-pill">Role: Lead UX Designer</span>
+        <span class="tag-pill">Duration: 5 Months</span>
+        <span class="tag-pill">Platform: iOS · Android</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HERO BANNER IMAGE ============ -->
+  <section class="cs-section reveal" style="padding-top:0;">
+    <div class="container">
+      <div class="media-frame tall warm">
+        <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#ffcc33" stroke-width="1.4" aria-hidden="true">
+          <circle cx="12" cy="7.2" r="2.6"/>
+          <path d="M6.2 21c0-4.4 2.6-7.5 5.8-7.5s5.8 3.1 5.8 7.5"/>
+          <rect x="14.6" y="12.4" width="4.4" height="7.2" rx="1" fill="#ffcc33" stroke="none" opacity=".85"/>
+          <rect x="15.4" y="13.6" width="2.8" height="1.8" rx="0.3" fill="#14120a" opacity=".7"/>
+        </svg>
+        <span class="media-caption">Enhancing Mobile Experience — field research in Lagos</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROBLEM ============ -->
+  <section class="cs-section reveal">
+    <div class="container">
+      <div class="icon-row">
+        <div class="icon-badge">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+        </div>
+        <div>
+          <h2 class="cs-h2">Problem</h2>
+          <p class="cs-p">Recharging airtime or buying a data bundle should take seconds — instead, customers were navigating four to five screens buried under menus that mixed billing, self-care and marketing content. Plan names weren't self-explanatory, OTP verification interrupted the flow at the worst moment, and offers were scattered across banners rather than organised around what a customer actually wanted to do. The result was a rising volume of call-centre and retail-store recharge requests for a task the app was supposed to make unnecessary, along with a checkout drop-off rate well above regional benchmarks.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SOLUTION ============ -->
+  <section class="cs-section reveal">
+    <div class="container">
+      <div class="icon-row">
+        <div class="icon-badge">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+        </div>
+        <div>
+          <h2 class="cs-h2">Solution</h2>
+          <p class="cs-p">We rebuilt the core journey around a single question — "what does this customer need right now?" — and answered it with a one-tap quick-recharge shortcut for saved numbers and amounts, a redesigned plans screen that groups bundles by use-case rather than tariff code, and a curated OTT &amp; offers hub that surfaces relevant deals instead of generic promotions. Verification was moved out of the critical path wherever biometrics or a trusted device could stand in for OTP. Every change was validated against a simple metric: fewer taps to complete the task a customer opened the app to do.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PHONE ROW — ONBOARDING / HOME / QUICK RECHARGE ============ -->
+  <section class="cs-section reveal" style="padding-top:0;">
+    <div class="container">
+      <div class="phone-row p3">
+        <div class="phone-col">
+          <div class="phone">
+            <div class="mock-screen dark">
+              <div class="mock-topbar"><span class="mtn-chip">MTN</span><div class="mock-bar" style="width:34px;"></div></div>
+              <div class="mock-body" style="justify-content:center; align-items:center; gap:16px;">
+                <div class="mock-card hero" style="width:100%; min-height:70px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:11px;">Welcome to My MTN</div>
+                <div class="mock-line" style="width:70%;"></div>
+                <div class="mock-line" style="width:50%;"></div>
+                <div class="mock-btn" style="width:80%;">Get Started</div>
+              </div>
+            </div>
+          </div>
+          <div class="phone-caption">Onboarding</div>
+        </div>
+        <div class="phone-col">
+          <div class="phone">
+            <div class="mock-screen">
+              <div class="mock-topbar"><span class="mtn-chip">MTN</span><div class="mock-avatar"></div></div>
+              <div class="mock-body">
+                <div class="mock-card hero">
+                  <div class="mock-line" style="width:60%; background:rgba(20,18,10,.5);"></div>
+                  <div class="mock-line" style="width:40%; margin-top:6px; background:rgba(20,18,10,.5);"></div>
+                </div>
+                <div class="mock-grid2">
+                  <div class="mock-card"><div class="mock-dot on"></div></div>
+                  <div class="mock-card"><div class="mock-dot on"></div></div>
+                </div>
+                <div class="mock-card"><div class="mock-line" style="width:80%;"></div></div>
+              </div>
+              <div class="mock-nav"><i class="on"></i><i></i><i></i><i></i></div>
+            </div>
+          </div>
+          <div class="phone-caption">Home</div>
+        </div>
+        <div class="phone-col">
+          <div class="phone">
+            <div class="mock-screen">
+              <div class="mock-topbar"><div class="mock-bar" style="width:60px;"></div><div class="mock-bar" style="width:16px;"></div></div>
+              <div class="mock-body">
+                <div class="mock-pill" style="width:90%; height:34px;"></div>
+                <div class="mock-dot-row"><div class="mock-dot on"></div><div class="mock-dot"></div><div class="mock-dot"></div></div>
+                <div class="mock-card"><div class="mock-line" style="width:70%;"></div></div>
+                <div class="mock-btn" style="margin-top:auto;">Confirm Recharge</div>
+              </div>
+            </div>
+          </div>
+          <div class="phone-caption">Quick Recharge</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ UNDERSTANDING ESSENTIALS ============ -->
+  <section class="cs-section reveal">
+    <div class="container">
+      <div class="cs-two-col top">
+        <div>
+          <div class="cs-label">Discovery</div>
+          <h2 class="cs-h2">Understanding Essentials</h2>
+          <p class="cs-p">We started by shadowing recharge behaviour in-store and at kiosks across Lagos and Johannesburg, then paired that with a review of support-ticket transcripts and app analytics to see where the digital journey broke down against the physical one. Contextual interviews with prepaid and postpaid customers helped separate genuine usability friction from one-off complaints, and a competitive teardown of regional telecom apps gave us a baseline for what "simple" should feel like in this category.</p>
+        </div>
+        <div>
+          <h3 style="font-size:14px; font-weight:700; margin-bottom:14px;">Key Focus Areas</h3>
+          <ul class="process-list" style="display:flex; flex-direction:column; gap:10px;">
+            <li class="cs-p" style="margin-top:0;">Recharge flow</li>
+            <li class="cs-p" style="margin-top:0;">OTT bundles</li>
+            <li class="cs-p" style="margin-top:0;">Data plans</li>
+            <li class="cs-p" style="margin-top:0;">Loyalty rewards</li>
+            <li class="cs-p" style="margin-top:0;">Feedback capture</li>
+            <li class="cs-p" style="margin-top:0;">Accessibility</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SURVEY ============ -->
+  <section class="cs-section reveal">
+    <div class="container">
+      <div class="section-head" style="margin-bottom:36px;">
+        <div class="cs-label" style="text-align:center;">Survey</div>
+        <h2 class="cs-h2 center">What customers told us</h2>
+      </div>
+      <div class="grid g-4">
+        <div class="stat-box"><div class="num">83%</div><div class="label">found the recharge flow confusing</div></div>
+        <div class="stat-box"><div class="num">76%</div><div class="label">want a one-tap top-up option</div></div>
+        <div class="stat-box"><div class="num">1 in 3</div><div class="label">abandon the flow at OTP verification</div></div>
+        <div class="stat-box"><div class="num">91%</div><div class="label">want offers to be visible up front</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ COMPETITIVE ANALYSIS ============ -->
+  <section class="cs-section reveal">
+    <div class="container">
+      <div class="cs-label">Benchmarking</div>
+      <h2 class="cs-h2" style="margin-bottom:24px;">Competitive &amp; Comparative Analysis</h2>
+      <div class="cs-table-wrap">
+        <table class="cs-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>My MTN</th>
+              <th>Telco A</th>
+              <th>Telco B</th>
+              <th>Telco C</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>One-tap recharge</td>
+              <td class="yes">✓</td>
+              <td class="no">—</td>
+              <td class="yes">✓</td>
+              <td class="no">—</td>
+            </tr>
+            <tr>
+              <td>Curated OTT hub</td>
+              <td class="yes">✓</td>
+              <td class="no">—</td>
+              <td class="no">—</td>
+              <td class="yes">✓</td>
+            </tr>
+            <tr>
+              <td>Biometric checkout</td>
+              <td class="yes">✓</td>
+              <td class="no">—</td>
+              <td class="no">—</td>
+              <td class="no">—</td>
+            </tr>
+            <tr>
+              <td>Loyalty rewards visibility</td>
+              <td class="yes">✓</td>
+              <td class="yes">✓</td>
+              <td class="no">—</td>
+              <td class="no">—</td>
+            </tr>
+            <tr>
+              <td>In-app feedback capture</td>
+              <td class="yes">✓</td>
+              <td class="no">—</td>
+              <td class="yes">✓</td>
+              <td class="no">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ NICHE STATEMENT ============ -->
+  <section class="cs-section reveal">
+    <div class="container">
+      <h2 class="cs-h2 center">Carving out a niche in a saturated market</h2>
+      <p class="cs-p" style="text-align:center; max-width:640px; margin-left:auto; margin-right:auto;">Every regional telecom app offers recharge, data and offers — the difference isn't the feature list, it's how little effort it takes to use them. We chose to compete on speed and clarity rather than adding more, betting that a customer who can top up in two taps will trust My MTN with everything else too.</p>
+    </div>
+  </section>
+
+  <!-- ============ INTERVIEW SYNTHESIS ============ -->
+  <section class="cs-section reveal">
+    <div class="container">
+      <div class="cs-two-col">
+        <div class="media-frame warm-soft">
+          <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#ffcc33" stroke-width="1.4" aria-hidden="true">
+            <circle cx="9" cy="7" r="3"/>
+            <path d="M2 21c0-4 3.1-6.5 7-6.5s7 2.5 7 6.5"/>
+            <circle cx="17.5" cy="8.5" r="2.2" opacity=".6"/>
+            <path d="M14.5 21c.3-2.7 2-4.5 4.6-4.5" opacity=".6"/>
+          </svg>
+          <span class="media-caption">Interview session</span>
+        </div>
+        <div>
+          <div class="cs-label">Voice of the customer</div>
+          <h2 class="cs-h2" style="margin-bottom:18px;">What we heard, in their words</h2>
+          <p class="cs-p" style="font-style:italic; border-left:2px solid var(--border); padding-left:16px;">"I just want to send airtime to my mother without going through five screens every single time."</p>
+          <p class="cs-p" style="font-style:italic; border-left:2px solid var(--border); padding-left:16px;">"Half the time I don't even know which data plan is the good deal — the names all sound the same."</p>
+          <p class="cs-p" style="font-style:italic; border-left:2px solid var(--border); padding-left:16px;">"When the OTP doesn't arrive I just give up and go to the kiosk downstairs."</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ COOKING UP A BETTER EXPERIENCE ============ -->
+  <section class="cs-section reveal">
+    <div class="container">
+      <div class="cs-label" style="text-align:center;">Design</div>
+      <h2 class="cs-h2 center" style="margin-bottom:44px;">Cooking up a better experience</h2>
+
+      <h3 style="font-size:14px; font-weight:700; text-align:center; margin-bottom:24px; color:var(--text-muted); text-transform:uppercase; letter-spacing:.08em;">User flow — Quick Recharge</h3>
+      <div class="media-frame" style="padding:36px 24px; min-height:auto;">
+        <div class="flow-row">
+          <div class="flow-box">Login</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box">Dashboard</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box">Select Plan</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box">Confirm</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-box">Success</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WIREFRAMES ============ -->
+  <section class="cs-section reveal">
+    <div class="container">
+      <div class="cs-label">Low fidelity</div>
+      <h2 class="cs-h2" style="margin-bottom:28px;">Wire frames</h2>
+      <div class="grid g-4">
+        <div class="media-frame" style="aspect-ratio:9/16; min-height:auto; flex-direction:column; padding:14px; gap:8px; align-items:stretch;">
+          <div style="height:14px; border-radius:4px; background:rgba(255,255,255,.12);"></div>
+          <div style="height:34px; border-radius:6px; border:1px solid rgba(255,255,255,.14);"></div>
+          <div style="height:10px; width:70%; border-radius:3px; background:rgba(255,255,255,.1);"></div>
+          <div style="height:10px; width:50%; border-radius:3px; background:rgba(255,255,255,.1);"></div>
+          <div style="flex:1; border-radius:6px; border:1px dashed rgba(255,255,255,.14);"></div>
+          <span class="media-caption" style="position:static; align-self:center; margin-top:auto;">Wireframe 1</span>
+        </div>
+        <div class="media-frame" style="aspect-ratio:9/16; min-height:auto; flex-direction:column; padding:14px; gap:8px; align-items:stretch;">
+          <div style="height:14px; border-radius:4px; background:rgba(255,255,255,.12);"></div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <div style="height:40px; border-radius:6px; border:1px solid rgba(255,255,255,.14);"></div>
+            <div style="height:40px; border-radius:6px; border:1px solid rgba(255,255,255,.14);"></div>
+          </div>
+          <div style="height:10px; width:60%; border-radius:3px; background:rgba(255,255,255,.1);"></div>
+          <div style="flex:1; border-radius:6px; border:1px dashed rgba(255,255,255,.14);"></div>
+          <span class="media-caption" style="position:static; align-self:center; margin-top:auto;">Wireframe 2</span>
+        </div>
+        <div class="media-frame" style="aspect-ratio:9/16; min-height:auto; flex-direction:column; padding:14px; gap:8px; align-items:stretch;">
+          <div style="height:14px; border-radius:4px; background:rgba(255,255,255,.12);"></div>
+          <div style="height:20px; border-radius:999px; border:1px solid rgba(255,255,255,.14);"></div>
+          <div style="height:10px; width:80%; border-radius:3px; background:rgba(255,255,255,.1);"></div>
+          <div style="height:10px; width:40%; border-radius:3px; background:rgba(255,255,255,.1);"></div>
+          <div style="flex:1; border-radius:6px; border:1px dashed rgba(255,255,255,.14);"></div>
+          <span class="media-caption" style="position:static; align-self:center; margin-top:auto;">Wireframe 3</span>
+        </div>
+        <div class="media-frame" style="aspect-ratio:9/16; min-height:auto; flex-direction:column; padding:14px; gap:8px; align-items:stretch;">
+          <div style="height:14px; border-radius:4px; background:rgba(255,255,255,.12);"></div>
+          <div style="height:10px; width:70%; border-radius:3px; background:rgba(255,255,255,.1);"></div>
+          <div style="height:10px; width:55%; border-radius:3px; background:rgba(255,255,255,.1);"></div>
+          <div style="height:56px; border-radius:6px; border:1px solid rgba(255,255,255,.14);"></div>
+          <div style="flex:1; border-radius:6px; border:1px dashed rgba(255,255,255,.14);"></div>
+          <span class="media-caption" style="position:static; align-self:center; margin-top:auto;">Wireframe 4</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DARK FEATURE BAND — SIMPLICITY ============ -->
+  <section class="cs-section reveal" style="background:#0d0d0e;">
+    <div class="container">
+      <div class="section-head" style="margin-bottom:44px;">
+        <div class="cs-label" style="text-align:center;">Visual design</div>
+        <h2 class="cs-h2 center">A focus on simplicity</h2>
+        <p class="cs-p" style="text-align:center;">A highly curated experience</p>
+      </div>
+      <div class="phone-row p2">
+        <div class="phone-col">
+          <div class="phone">
+            <div class="mock-screen">
+              <div class="mock-topbar"><span class="mtn-chip">MTN</span><div class="mock-avatar"></div></div>
+              <div class="mock-body">
+                <div class="mock-card hero" style="min-height:60px;"></div>
+                <div class="mock-grid2">
+                  <div class="mock-card"></div>
+                  <div class="mock-card"></div>
+                </div>
+                <div class="mock-card"><div class="mock-line" style="width:70%;"></div></div>
+              </div>
+              <div class="mock-nav"><i class="on"></i><i></i><i></i><i></i></div>
+            </div>
+          </div>
+          <div class="phone-caption">Home</div>
+        </div>
+        <div class="phone-col">
+          <div class="phone">
+            <div class="mock-screen">
+              <div class="mock-topbar"><div class="mock-bar" style="width:60px;"></div></div>
+              <div class="mock-body">
+                <div class="mock-card"><div class="mock-line" style="width:80%;"></div><div class="mock-line" style="width:50%; margin-top:6px;"></div></div>
+                <div class="mock-card hero"><div class="mock-line" style="width:60%; background:rgba(20,18,10,.5);"></div></div>
+                <div class="mock-btn" style="margin-top:auto;">Recharge Now</div>
+              </div>
+            </div>
+          </div>
+          <div class="phone-caption">Plans</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ OTT INTEGRATION ============ -->
+  <section class="cs-section reveal">
+    <div class="container">
+      <div class="cs-label" style="text-align:center;">Feature</div>
+      <h2 class="cs-h2 center" style="margin-bottom:32px;">OTT Integration</h2>
+      <div class="phone-row p3">
+        <div class="phone-col">
+          <div class="phone"><div class="mock-screen">
+            <div class="mock-topbar"><div class="mock-bar" style="width:50px;"></div></div>
+            <div class="mock-body">
+              <div class="mock-card hero" style="min-height:50px;"></div>
+              <div class="mock-grid2"><div class="mock-card"></div><div class="mock-card"></div></div>
+            </div>
+          </div></div>
+          <div class="phone-caption">Streaming Bundles</div>
+        </div>
+        <div class="phone-col">
+          <div class="phone"><div class="mock-screen">
+            <div class="mock-topbar"><div class="mock-bar" style="width:50px;"></div></div>
+            <div class="mock-body">
+              <div class="mock-card"><div class="mock-line" style="width:80%;"></div></div>
+              <div class="mock-card"><div class="mock-line" style="width:60%;"></div></div>
+              <div class="mock-btn">Activate</div>
+            </div>
+          </div></div>
+          <div class="phone-caption">Bundle Details</div>
+        </div>
+        <div class="phone-col">
+          <div class="phone"><div class="mock-screen">
+            <div class="mock-topbar"><div class="mock-bar" style="width:50px;"></div></div>
+            <div class="mock-body" style="align-items:center; justify-content:center;">
+              <div class="mock-dot on" style="width:44px; height:44px;"></div>
+              <div class="mock-line" style="width:60%;"></div>
+              <div class="mock-btn" style="width:70%;">Done</div>
+            </div>
+          </div></div>
+          <div class="phone-caption">Confirmation</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PLANS & OFFERS ============ -->
+  <section class="cs-section reveal">
+    <div class="container">
+      <div class="cs-label" style="text-align:center;">Feature</div>
+      <h2 class="cs-h2 center" style="margin-bottom:32px;">Plans &amp; Offers</h2>
+      <div class="phone-row p3">
+        <div class="phone-col">
+          <div class="phone"><div class="mock-screen">
+            <div class="mock-topbar"><div class="mock-bar" style="width:50px;"></div></div>
+            <div class="mock-body">
+              <div class="mock-card"><div class="mock-line" style="width:70%;"></div><div class="mock-line" style="width:40%; margin-top:6px;"></div></div>
+              <div class="mock-card"><div class="mock-line" style="width:70%;"></div><div class="mock-line" style="width:40%; margin-top:6px;"></div></div>
+              <div class="mock-card hero"><div class="mock-line" style="width:50%; background:rgba(20,18,10,.5);"></div></div>
+            </div>
+          </div></div>
+          <div class="phone-caption">Plan List</div>
+        </div>
+        <div class="phone-col">
+          <div class="phone"><div class="mock-screen">
+            <div class="mock-topbar"><div class="mock-bar" style="width:50px;"></div></div>
+            <div class="mock-body" style="align-items:center;">
+              <div class="mock-card hero" style="width:100%; min-height:70px;"></div>
+              <div class="mock-btn" style="width:80%;">Choose Plan</div>
+            </div>
+          </div></div>
+          <div class="phone-caption">Plan Detail</div>
+        </div>
+        <div class="phone-col">
+          <div class="phone"><div class="mock-screen">
+            <div class="mock-topbar"><div class="mock-bar" style="width:50px;"></div></div>
+            <div class="mock-body">
+              <div class="mock-card"><div class="mock-line" style="width:60%;"></div></div>
+              <div class="mock-card"><div class="mock-line" style="width:70%;"></div></div>
+              <div class="mock-card"><div class="mock-line" style="width:50%;"></div></div>
+            </div>
+          </div></div>
+          <div class="phone-caption">Offers Feed</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RECHARGE ============ -->
+  <section class="cs-section reveal">
+    <div class="container">
+      <div class="cs-label" style="text-align:center;">Feature</div>
+      <h2 class="cs-h2 center" style="margin-bottom:32px;">Recharge</h2>
+      <div class="phone-row p2">
+        <div class="phone-col">
+          <div class="phone"><div class="mock-screen">
+            <div class="mock-topbar"><div class="mock-bar" style="width:60px;"></div></div>
+            <div class="mock-body" style="align-items:center;">
+              <div class="mock-pill" style="width:90%; height:38px;"></div>
+              <div class="mock-grid2" style="width:100%;"><div class="mock-card"></div><div class="mock-card"></div></div>
+            </div>
+          </div></div>
+          <div class="phone-caption">Select Amount</div>
+        </div>
+        <div class="phone-col">
+          <div class="phone"><div class="mock-screen">
+            <div class="mock-topbar"><div class="mock-bar" style="width:60px;"></div></div>
+            <div class="mock-body" style="align-items:center; justify-content:center; gap:14px;">
+              <div class="mock-dot on" style="width:50px; height:50px;"></div>
+              <div class="mock-line" style="width:60%;"></div>
+              <div class="mock-btn" style="width:70%;">Recharge Successful</div>
+            </div>
+          </div></div>
+          <div class="phone-caption">Success</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOR LOYAL CUSTOMERS ============ -->
+  <section class="cs-section reveal">
+    <div class="container">
+      <div class="cs-label" style="text-align:center;">Feature</div>
+      <h2 class="cs-h2 center" style="margin-bottom:32px;">For loyal customers</h2>
+      <div class="phone-row p3">
+        <div class="phone-col">
+          <div class="phone"><div class="mock-screen">
+            <div class="mock-topbar"><div class="mock-bar" style="width:50px;"></div></div>
+            <div class="mock-body" style="align-items:center;">
+              <div class="mock-card hero" style="width:100%; min-height:60px; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center;">2,450 Points</div>
+              <div class="mock-grid2" style="width:100%;"><div class="mock-card"></div><div class="mock-card"></div></div>
+            </div>
+          </div></div>
+          <div class="phone-caption">Rewards Balance</div>
+        </div>
+        <div class="phone-col">
+          <div class="phone"><div class="mock-screen">
+            <div class="mock-topbar"><div class="mock-bar" style="width:50px;"></div></div>
+            <div class="mock-body">
+              <div class="mock-card"><div class="mock-line" style="width:70%;"></div></div>
+              <div class="mock-card"><div class="mock-line" style="width:60%;"></div></div>
+              <div class="mock-btn">Redeem</div>
+            </div>
+          </div></div>
+          <div class="phone-caption">Redeem Rewards</div>
+        </div>
+        <div class="phone-col">
+          <div class="phone"><div class="mock-screen">
+            <div class="mock-topbar"><div class="mock-bar" style="width:50px;"></div></div>
+            <div class="mock-body">
+              <div class="mock-dot-row"><div class="mock-dot on"></div><div class="mock-dot on"></div><div class="mock-dot on"></div><div class="mock-dot"></div></div>
+              <div class="mock-card"><div class="mock-line" style="width:70%;"></div></div>
+            </div>
+          </div></div>
+          <div class="phone-caption">Tier Status</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FEEDBACK ============ -->
+  <section class="cs-section reveal">
+    <div class="container">
+      <div class="cs-label" style="text-align:center;">Feature</div>
+      <h2 class="cs-h2 center" style="margin-bottom:32px;">Feedback</h2>
+      <div class="phone-row p3">
+        <div class="phone-col">
+          <div class="phone"><div class="mock-screen">
+            <div class="mock-topbar"><div class="mock-bar" style="width:50px;"></div></div>
+            <div class="mock-body" style="align-items:center; justify-content:center; gap:12px;">
+              <div class="mock-line" style="width:60%;"></div>
+              <div class="mock-stars"><i></i><i></i><i></i><i></i><i></i></div>
+            </div>
+          </div></div>
+          <div class="phone-caption">Rate Experience</div>
+        </div>
+        <div class="phone-col">
+          <div class="phone"><div class="mock-screen">
+            <div class="mock-topbar"><div class="mock-bar" style="width:50px;"></div></div>
+            <div class="mock-body">
+              <div class="mock-card" style="flex:1;"><div class="mock-line" style="width:80%;"></div><div class="mock-line" style="width:60%; margin-top:6px;"></div></div>
+              <div class="mock-btn">Submit</div>
+            </div>
+          </div></div>
+          <div class="phone-caption">Share Comments</div>
+        </div>
+        <div class="phone-col">
+          <div class="phone"><div class="mock-screen">
+            <div class="mock-topbar"><div class="mock-bar" style="width:50px;"></div></div>
+            <div class="mock-body" style="align-items:center; justify-content:center;">
+              <div class="mock-dot on" style="width:44px; height:44px;"></div>
+              <div class="mock-line" style="width:55%;"></div>
+            </div>
+          </div></div>
+          <div class="phone-caption">Thank You</div>
+        </div>
+      </div>
+
+      <div style="max-width:220px;margin:40px auto 0;">
+        <div class="phone"><div class="mock-screen">
+          <div class="mock-topbar"><span class="mtn-chip">MTN</span><div class="mock-avatar"></div></div>
+          <div class="mock-body">
+            <div class="mock-card hero" style="min-height:70px;"></div>
+            <div class="mock-grid2"><div class="mock-card"></div><div class="mock-card"></div></div>
+            <div class="mock-card"><div class="mock-line" style="width:70%;"></div></div>
+          </div>
+          <div class="mock-nav"><i class="on"></i><i></i><i></i><i></i></div>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CLOSING WORDMARK ============ -->
+  <div class="mtn-wordmark reveal">My MTN</div>
+
+</main>
+
+<section class="cs-next">
+  <div class="container">
+    <div class="label">Next case study</div>
+    <a href="ipl.html" class="next-title">IPL Mobile App →</a>
+  </div>
+</section>
+<footer class="site-footer">
+  Copyright © 2026. All rights reserved. Made with Love for UX
+</footer>
+
+<script src="../assets/js/main.js"></script>
+</body>
+</html>
