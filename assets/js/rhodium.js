@@ -99,10 +99,25 @@
     });
   }
 
-  /* ---------- ticker: duplicate track so the loop is seamless ---------- */
-  var track = document.querySelector('.ticker-track');
-  if (track && !reduce) {
-    // content is already doubled in markup; nothing to do
+  /* ---------- magnetic buttons + card spotlight (fine pointer) ---------- */
+  if (fine && !reduce) {
+    document.querySelectorAll('.magnet').forEach(function (el) {
+      el.addEventListener('mousemove', function (e) {
+        var r = el.getBoundingClientRect();
+        var dx = e.clientX - r.left - r.width / 2;
+        var dy = e.clientY - r.top - r.height / 2;
+        el.style.transform = 'translate(' + dx * 0.18 + 'px,' + dy * 0.3 + 'px)';
+      });
+      el.addEventListener('mouseleave', function () { el.style.transform = ''; });
+    });
+
+    document.querySelectorAll('.card').forEach(function (card) {
+      card.addEventListener('mousemove', function (e) {
+        var r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      });
+    });
   }
 
   /* ---------- floating work preview (fine pointer only) ---------- */
