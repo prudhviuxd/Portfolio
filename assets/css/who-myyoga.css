@@ -247,7 +247,12 @@
   position: absolute; inset: 0;
   background: linear-gradient(180deg, var(--who-bg) 0%, rgba(8,9,10,.82) 22%, rgba(8,9,10,.86) 74%, var(--who-bg) 100%);
 }
-.theme-who .w-bgsec.warm > .w-bgimg img{ opacity: .5; }
+/* high-resolution source — only a touch of defocus needed */
+.theme-who .w-bgsec.warm > .w-bgimg img{
+  opacity: .62;
+  filter: blur(1px) saturate(1.02);
+  object-position: center 38%;
+}
 .theme-who .w-bgsec.warm > .w-bgimg::after{
   background: linear-gradient(180deg, var(--who-bg) 0%, rgba(28,12,10,.72) 26%, rgba(20,10,10,.8) 70%, var(--who-bg) 100%);
 }
@@ -594,7 +599,71 @@
 .w-next a:hover{ color: var(--who-teal); }
 
 /* ============================================================
-   Phone mockups — WHO mYoga app
+   iPhone frame — wraps real app screenshots
+   ============================================================ */
+.iph{
+  position: relative;
+  width: 100%;
+  border-radius: 15% / 7.4%;
+  padding: 3.1%;
+  background:
+    linear-gradient(150deg, #55595f 0%, #24272c 16%, #14161a 50%, #24272c 84%, #55595f 100%);
+  box-shadow:
+    0 26px 58px rgba(0,0,0,.55),
+    0 0 0 1px rgba(255,255,255,.05),
+    inset 0 1px 1px rgba(255,255,255,.14);
+}
+/* volume + power buttons */
+.iph::before{
+  content: "";
+  position: absolute;
+  left: -2px; top: 19%;
+  width: 2px; height: 17px;
+  background: #34373c;
+  border-radius: 2px 0 0 2px;
+  box-shadow: 0 29px 0 #34373c, 0 56px 0 #34373c;
+}
+.iph::after{
+  content: "";
+  position: absolute;
+  right: -2px; top: 29%;
+  width: 2px; height: 40px;
+  background: #34373c;
+  border-radius: 0 2px 2px 0;
+}
+.iph-screen{
+  position: relative;
+  border-radius: 12.5% / 6.1%;
+  overflow: hidden;
+  background: #000;
+  display: block;
+}
+.iph-screen img{
+  width: 100%;
+  height: auto;
+  display: block;
+}
+/* uniform-height variant: crop from the top so a row lines up */
+.iph-screen.fixed{ aspect-ratio: 9/16; }
+.iph-screen.fixed img{
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+/* a screenshot that already ships inside its own device frame */
+.iph-bare{ width: 100%; }
+.iph-bare img{ width: 100%; height: auto; display: block; }
+
+/* diagram screenshots */
+.w-diagram-img{
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+.w-diagram-img img{ width: 100%; height: auto; display: block; }
+
+/* ============================================================
+   Legacy CSS phone mockups (kept for reference)
    ============================================================ */
 .wm{
   width: 100%;
@@ -823,10 +892,10 @@
 /* mockup layout rows */
 .wm-row3{
   display: grid;
-  grid-template-columns: 1fr 1.16fr 1fr;
-  gap: 26px;
-  align-items: center;
-  max-width: 780px;
+  grid-template-columns: 1fr 1.14fr 1fr;
+  gap: 30px;
+  align-items: start;
+  max-width: 820px;
   margin: 0 auto;
 }
 .wm-row4{
