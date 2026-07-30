@@ -10,6 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/base.css">
 <link rel="stylesheet" href="assets/css/home.css">
+<link rel="stylesheet" href="assets/css/interactions.css">
 <noscript><style>.reveal{opacity:1!important;transform:none!important;}</style></noscript>
 </head>
 <body>
@@ -37,13 +38,13 @@
 
   <!-- ============ HERO ============ -->
   <section class="hero container">
-    <span class="eyebrow">I am Prudhvi 👋</span>
-    <h1>
+    <span class="eyebrow load-in">I am Prudhvi 👋</span>
+    <h1 class="load-in">
       <b>Design Leader</b> <span class="dim">advancing</span><br class="br-desktop">
       <span class="dim">UX maturity &amp; </span><b>AI innovation</b>
     </h1>
 
-    <div class="rhodium-wrap">
+    <div class="rhodium-wrap load-in">
       <svg viewBox="0 0 220 220" aria-hidden="true">
         <defs>
           <linearGradient id="rockA" x1="0" y1="0" x2="1" y2="1">
@@ -69,8 +70,8 @@
       </svg>
     </div>
 
-    <h2>Crafting UX as rare and valuable as <span class="text-gradient">Rhodium</span></h2>
-    <p class="lede">Just like Rhodium, the rarest and most precious metal, great UX design is rare and invaluable. I strive to create seamless, high-impact experiences that stand the test of time. My approach blends innovation, usability, and precision to deliver exceptional digital products. Every detail is refined to ensure accessibility, efficiency, and delight. It isn't just functional — it's unforgettable.</p>
+    <h2 class="load-in">Crafting UX as rare and valuable as <span class="text-gradient">Rhodium</span></h2>
+    <p class="lede load-in">Just like Rhodium, the rarest and most precious metal, great UX design is rare and invaluable. I strive to create seamless, high-impact experiences that stand the test of time. My approach blends innovation, usability, and precision to deliver exceptional digital products. Every detail is refined to ensure accessibility, efficiency, and delight. It isn't just functional — it's unforgettable.</p>
   </section>
 
   <!-- ============ IMPACT / MODE TOGGLE ============ -->
@@ -88,7 +89,7 @@
 
       <!-- Leader panel -->
       <div data-mode-panel="leader" class="active">
-        <div class="grid g-3 impact-stats">
+        <div class="grid g-3 impact-stats stagger">
           <div class="stat-box"><div class="num orange">100+</div><div class="label">POCs &amp; RFP Submitted</div></div>
           <div class="stat-box"><div class="num pink">200+</div><div class="label">Man-hours saved</div></div>
           <div class="stat-box"><div class="num grad">80%</div><div class="label">Reduced Churn rate</div></div>
@@ -96,7 +97,7 @@
 
         <p class="impact-line">I drive design teams toward <span class="pink-mark">impactful</span> outcomes by aligning people, process, and <span class="pink-mark">product vision</span>.</p>
 
-        <div class="grid g-3 feature-grid">
+        <div class="grid g-3 feature-grid stagger">
           <div class="feature-card">
             <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.5 5.5L20 11l-5.5 2.5L12 19l-2.5-5.5L4 11l5.5-2.5z"/></svg></div>
             <h3>Vision-Driven Leadership</h3>
@@ -117,7 +118,7 @@
 
       <!-- Designer panel -->
       <div data-mode-panel="designer">
-        <div class="grid g-3 impact-stats">
+        <div class="grid g-3 impact-stats stagger">
           <div class="stat-box"><div class="num orange">100+</div><div class="label">Projects Delivered</div></div>
           <div class="stat-box"><div class="num pink">10+</div><div class="label">Domains Touched</div></div>
           <div class="stat-box"><div class="num grad">80%</div><div class="label">Satisfied Clients</div></div>
@@ -125,7 +126,7 @@
 
         <p class="impact-line">I believe in the <span class="pink-mark">data-driven design</span></p>
 
-        <div class="grid g-3 feature-grid">
+        <div class="grid g-3 feature-grid stagger">
           <div class="feature-card">
             <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg></div>
             <h3>Rhodium-Grade UX</h3>
@@ -245,7 +246,7 @@
         <h2 class="section-title">Projects</h2>
       </div>
 
-      <div class="grid g-4">
+      <div class="grid g-4 stagger">
 
         <a href="case-studies/who-myyoga.html" class="project-card reveal">
           <div class="project-thumb thumb-who">
