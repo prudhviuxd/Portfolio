@@ -34,15 +34,23 @@
 /* ---------- Hero forest background ---------- */
 .who-hero-bg{
   position: absolute; inset: 0;
-  background:
-    radial-gradient(60% 55% at 22% 18%, rgba(20,198,165,.22) 0%, rgba(20,198,165,0) 60%),
-    radial-gradient(45% 40% at 80% 8%, rgba(255,179,71,.14) 0%, rgba(255,179,71,0) 65%),
-    linear-gradient(200deg, #0d1f1a 0%, #0a1512 42%, #07100d 72%, #0a0a0b 100%);
+  background: #07100d;
+  overflow: hidden;
 }
-.who-hero-bg svg{
+.who-hero-bg img{
   position: absolute; inset: 0;
   width: 100%; height: 100%;
-  opacity: .8;
+  object-fit: cover;
+  object-position: center 30%;
+  opacity: .55;
+}
+.who-hero-bg::after{
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(60% 55% at 22% 18%, rgba(20,198,165,.22) 0%, rgba(20,198,165,0) 60%),
+    radial-gradient(45% 40% at 80% 8%, rgba(255,179,71,.12) 0%, rgba(255,179,71,0) 65%),
+    linear-gradient(190deg, rgba(13,31,26,.5) 0%, rgba(10,21,18,.68) 40%, rgba(8,17,14,.85) 68%, #0a0a0b 96%);
 }
 
 /* ---------- Small dev / process helpers ---------- */
