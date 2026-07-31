@@ -5,34 +5,34 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WHO · mYoga, Case Study | Prudhvi Raj PJ</title>
 <meta name="description" content="Inhale the future, exhale the past, designing the WHO mYoga app with the Ministry of AYUSH to bring quality yoga practice to a global audience.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/base.css">
 <link rel="stylesheet" href="../assets/css/case-study.css">
 <link rel="stylesheet" href="../assets/css/who-myyoga.css">
 <link rel="stylesheet" href="../assets/css/interactions.css">
+<link rel="stylesheet" href="../assets/css/study.css">
 <noscript><style>.reveal{opacity:1!important;transform:none!important;}</style></noscript>
 </head>
 <body>
+
+<div class="progress" id="prog" aria-hidden="true"></div>
 
 <header class="nav cs-nav">
   <div class="nav-inner container">
     <a href="../index.html" class="brand">
       <span class="brand-mark">P</span>
-      Prudhvi Raj PJ
+      Prudhvi&nbsp;Raj&nbsp;PJ
     </a>
     <nav class="nav-links">
+      <a href="../index.html#work">Work</a>
       <a href="../index.html#impact">Impact</a>
-      <a href="../index.html#projects">Projects</a>
       <a href="../index.html#contact">Contact</a>
-      <a href="../resume.html" class="btn btn-primary">Résumé</a>
+      <a href="../resume.html" class="btn btn-primary">R&eacute;sum&eacute;</a>
     </nav>
-    <button class="nav-toggle" aria-label="Toggle menu"><span></span></button>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span></button>
   </div>
 </header>
 
-<main class="theme-who">
+<main class="theme-who" data-acc="cy">
 
   <!-- ============ HERO ============ -->
   <section class="w-hero">
@@ -50,6 +50,17 @@
       <h1><span class="teal">Inhale the future,</span><br>exhale the past.</h1>
       <p>WHO launched its global Traditional Medicine <b>Strategy 2014–2023</b> to strengthen the quality, safety and effectiveness of Traditional and Complementary Medicine. Supported by the <b>Ministry of AYUSH</b>, WHO developed the mYoga app to encourage people to practice quality yoga right from their smartphone screen.</p>
     </div>
+  </section>
+
+  <!-- ============ AT A GLANCE ============ -->
+  <section class="glance">
+    <dl class="glance-in">
+      <div><dt>Role</dt><dd class="v"><b>UX Lead</b></dd></div>
+      <div><dt>Team</dt><dd class="v">6</dd></div>
+      <div><dt>Timeline</dt><dd class="v">3 months</dd></div>
+      <div><dt>Platform</dt><dd class="v">iOS, Android</dd></div>
+      <div><dt>Scope</dt><dd class="v">Research, IA, UI, design system</dd></div>
+    </dl>
   </section>
 
   <!-- ============ TOP STATS ============ -->
@@ -552,6 +563,31 @@
     </div>
   </section>
 
+  <!-- ============ LEARNINGS ============ -->
+  <section class="learn" id="learnings">
+    <div class="learn-in">
+      <span class="w-label">What I took away</span>
+      <h2>What this project changed <span class="chrome">in how I work</span></h2>
+      <ol class="learn-grid reveal stagger">
+        <li>
+          <span class="n">01</span>
+          <h3>Constraints beat preferences</h3>
+          <p>Designing for a 2G connection on a low-end Android forced offline-first decisions I would not have reached by taste. The bandwidth budget became the brief, and the interface got better for it.</p>
+        </li>
+        <li>
+          <span class="n">02</span>
+          <h3>Test in the language people practice in</h3>
+          <p>Sessions run only in English hid comprehension failures in the pose instructions. Once we tested in regional languages, the icon set and the audio cue timing both had to change.</p>
+        </li>
+        <li>
+          <span class="n">03</span>
+          <h3>Two clients, one brief</h3>
+          <p>WHO and the Ministry of AYUSH had different definitions of success. Getting a single written problem statement signed by both, before any design, saved the project weeks of rework later.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
 </main>
 
 <section class="w-next">
@@ -566,5 +602,6 @@
 </footer>
 
 <script src="../assets/js/main.js"></script>
+<script src="../assets/js/study.js"></script>
 </body>
 </html>

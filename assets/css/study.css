@@ -1,0 +1,263 @@
+/* ============================================================
+   STUDY — chrome continuity layer for /case-studies/*
+   Loads LAST. Re-points the original tokens at the chrome
+   palette and restyles shared structure, so the case studies
+   read as the same site as the homepage.
+   Page layout is deliberately left alone.
+   ============================================================ */
+
+@font-face{
+  font-family:"Bricolage";
+  src:url("../fonts/bricolage.woff2") format("woff2-variations");
+  font-weight:300 800; font-display:swap;
+}
+@font-face{
+  font-family:"Instrument";
+  src:url("../fonts/instrument.woff2") format("woff2-variations");
+  font-weight:400 700; font-display:swap;
+}
+@font-face{
+  font-family:"JetBrains Mono";
+  src:url("../fonts/jetbrains.woff2") format("woff2-variations");
+  font-weight:400 500; font-display:swap;
+}
+
+/* ---------- retoken ---------- */
+:root{
+  --bg:#08080B; --bg-soft:#0C0C11; --surface:#101017; --surface-2:#15151d;
+  --border:rgba(255,255,255,.10); --border-soft:rgba(255,255,255,.055);
+
+  --text:#F4F4F6; --text-muted:#ADB0B8; --text-dim:#83878F;
+
+  --cy:#4FD8E8; --vi:#A98BFF; --mg:#FF7BC8;
+  /* per-project accent, one variable, swapped on <main> */
+  --acc:var(--cy);
+
+  /* the old names stay, they now resolve to chrome */
+  --pink:var(--acc); --pink-soft:var(--acc);
+  --orange:var(--vi); --amber:var(--vi); --teal:var(--cy); --blue:var(--cy);
+  --gradient-brand:linear-gradient(96deg,#FFF,var(--cy) 40%,var(--vi) 80%);
+  --gradient-brand-soft:linear-gradient(120deg,rgba(79,216,232,.14),rgba(169,139,255,.14));
+
+  --display:"Bricolage","Helvetica Neue",sans-serif;
+  --body:"Instrument","Helvetica Neue",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --font-display:var(--display);
+  --font-body:var(--body);
+
+  --container:1200px;
+}
+
+body{
+  background:var(--bg); color:var(--text);
+  font-family:var(--body); font-size:16.5px; line-height:1.6;
+}
+/* film grain, same as the homepage */
+body::after{
+  content:""; position:fixed; inset:0; z-index:1; pointer-events:none;
+  opacity:.35; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+}
+::selection{ background:var(--cy); color:#04121a; }
+:focus-visible{ outline:2px solid var(--cy); outline-offset:3px; border-radius:4px; }
+
+/* per-project accent swap, the entire per-page colour budget */
+main[data-acc="cy"]{ --acc:var(--cy); }
+main[data-acc="vi"]{ --acc:var(--vi); }
+main[data-acc="mg"]{ --acc:var(--mg); }
+
+/* WHO page tokens fold into the same system */
+.theme-who{
+  --who-teal:var(--cy); --who-teal-soft:var(--cy);
+  --who-blue:var(--cy); --who-pink:var(--mg);
+  --who-bg:var(--bg); --who-panel:#0C0C11; --who-panel-2:#101017;
+  --who-line:var(--border); --who-line-soft:var(--border-soft);
+  background:var(--bg);
+}
+
+/* ---------- iridescent fill, one phrase per viewport ---------- */
+.chrome{
+  background:linear-gradient(96deg,#FFFFFF 0%,var(--cy) 14%,#EDEFF4 27%,var(--vi) 41%,#FFFFFF 54%,var(--mg) 68%,#E4E8F0 81%,var(--cy) 100%);
+  background-size:150% 100%;
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+@media (prefers-reduced-motion: no-preference){
+  .chrome{ animation:st-shift 9s linear infinite alternate; }
+}
+@keyframes st-shift{ to{ background-position:150% 0; } }
+
+/* ---------- scroll progress hairline ---------- */
+.progress{
+  position:fixed; top:0; left:0; height:2px; width:100%; z-index:60;
+  transform:scaleX(0); transform-origin:0 50%;
+  background:linear-gradient(90deg,var(--cy),var(--vi) 50%,var(--mg));
+  will-change:transform;
+}
+
+/* ---------- masthead, matched to the homepage ---------- */
+.nav, .cs-nav{
+  position:fixed; top:0; left:0; right:0; z-index:50;
+  background:rgba(8,8,11,.72);
+  -webkit-backdrop-filter:blur(16px) saturate(150%);
+  backdrop-filter:blur(16px) saturate(150%);
+  border-bottom:1px solid var(--border-soft);
+}
+.nav-inner, .cs-nav .nav-inner{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:20px; padding:15px 26px; max-width:1400px; margin:0 auto;
+}
+.brand{
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:var(--display); font-weight:700; font-size:15px;
+  letter-spacing:-.02em; color:var(--text);
+}
+.brand-mark{
+  width:9px; height:9px; padding:0; border-radius:50%; flex:none;
+  background:linear-gradient(120deg,var(--cy),var(--vi));
+  font-size:0; color:transparent; overflow:hidden; border:0;
+}
+.nav-links{ display:flex; align-items:center; gap:26px; }
+.nav-links a:not(.btn){
+  font-family:var(--mono); font-size:11px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--text-dim);
+  transition:color .2s ease;
+}
+.nav-links a:not(.btn):hover{ color:var(--text); }
+.nav-links .btn-primary{
+  background:var(--text); color:#08080B;
+  font-family:var(--mono); font-size:11px; letter-spacing:.12em;
+  text-transform:uppercase; font-weight:500;
+  padding:9px 16px; border-radius:999px; border:0;
+}
+.nav-links .btn-primary:hover{ background:#fff; transform:translateY(-1px); }
+.nav-toggle span,
+.nav-toggle span::before,
+.nav-toggle span::after{ background:var(--text); }
+
+/* the fixed masthead needs the hero to clear it */
+.w-hero, .cs-hero{ padding-top:104px; }
+
+/* ---------- type, one treatment sitewide ---------- */
+.cs-hero h1, .theme-who .w-hero h1{
+  font-family:var(--display); font-weight:800;
+  letter-spacing:-.045em; line-height:1.02;
+  text-transform:none;
+}
+.cs-hero h1{ font-size:clamp(34px,5.6vw,62px); }
+.theme-who .w-hero h1 .teal{ color:inherit; }
+
+.cs-h2, .theme-who .w-h2, .theme-who .w-serif{
+  font-family:var(--display); font-weight:700;
+  letter-spacing:-.035em; line-height:1.1;
+  font-size:clamp(26px,3.4vw,40px); color:var(--text);
+}
+.cs-label, .cs-kicker, .theme-who .w-label, .theme-who .w-kicker{
+  font-family:var(--mono); font-weight:500;
+  font-size:10.5px; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--acc);
+}
+/* the per-page sheets each set their own label colour, one accent wins instead */
+.theme-ipl .cs-kicker, .theme-ipl .cs-label,
+.theme-mtn .cs-kicker, .theme-mtn .cs-label{ color:var(--acc); }
+
+.cs-p, .theme-who .w-p{ font-size:15.5px; line-height:1.72; color:var(--text-muted); }
+.eyebrow{
+  font-family:var(--mono); font-size:10px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--text-muted);
+  background:var(--surface); border-color:var(--border); padding:7px 14px;
+}
+
+/* ---------- at a glance ----------
+   The Overview block the case-study template requires:
+   role, team, timeline, scope, readable in four seconds. */
+.glance{
+  border-top:1px solid var(--border-soft);
+  border-bottom:1px solid var(--border-soft);
+  background:linear-gradient(180deg,rgba(255,255,255,.022),transparent);
+}
+.glance-in{
+  max-width:var(--container); margin:0 auto; padding:26px 24px;
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:22px 30px;
+}
+.glance div{ display:flex; flex-direction:column; gap:7px; min-width:0; }
+.glance dt, .glance .k{
+  font-family:var(--mono); font-size:9px; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--text-dim);
+}
+.glance dd, .glance .v{
+  margin:0; font-size:14.5px; line-height:1.45; color:var(--text);
+}
+.glance .v b{ font-weight:600; }
+@media (max-width:900px){
+  .glance-in{ grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px 24px; }
+}
+
+/* ---------- learnings ---------- */
+.learn{ padding:clamp(56px,7vw,92px) 0; border-top:1px solid var(--border-soft); }
+.learn-in{ max-width:var(--container); margin:0 auto; padding:0 24px; }
+.learn h2{
+  font-family:var(--display); font-weight:700; font-size:clamp(26px,3.4vw,40px);
+  letter-spacing:-.035em; line-height:1.1; margin-bottom:34px;
+}
+.learn-grid{
+  display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:26px;
+  list-style:none; margin:0; padding:0;
+}
+.learn-grid li{
+  border:1px solid var(--border-soft); border-radius:18px;
+  background:var(--surface); padding:24px 22px 26px;
+}
+.learn-grid .n{
+  font-family:var(--mono); font-size:10px; letter-spacing:.2em;
+  color:var(--acc); display:block; margin-bottom:14px;
+}
+.learn-grid h3{
+  font-family:var(--display); font-weight:700; font-size:18.5px;
+  letter-spacing:-.025em; line-height:1.25; margin-bottom:10px;
+}
+.learn-grid p{ font-size:14.5px; line-height:1.68; color:var(--text-muted); }
+@media (max-width:860px){ .learn-grid{ grid-template-columns:1fr; } }
+
+/* ---------- next project ---------- */
+.cs-next, .w-next{
+  border-top:1px solid var(--border-soft); background:transparent;
+  padding:clamp(48px,6vw,80px) 0;
+}
+.cs-next .label, .w-next .lbl{
+  font-family:var(--mono); font-size:10px; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--text-dim); margin-bottom:14px;
+}
+.cs-next a.next-title, .w-next a{
+  font-family:var(--display); font-weight:800;
+  font-size:clamp(30px,5vw,56px); letter-spacing:-.045em; line-height:1;
+  color:var(--text); display:inline-flex; align-items:baseline; gap:16px;
+  transition:opacity .25s ease;
+}
+.cs-next a.next-title:hover, .w-next a:hover{ color:var(--text); opacity:.62; }
+
+/* ---------- footer ---------- */
+.site-footer{
+  border-top:1px solid var(--border-soft); background:transparent;
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--text-dim);
+  padding:30px 24px; text-align:center;
+}
+
+/* ---------- misc alignment with chrome ---------- */
+.stat-box{ background:var(--surface); border-color:var(--border-soft); border-radius:18px; }
+.stat-box .num{
+  font-family:var(--display); font-weight:800; letter-spacing:-.04em;
+  background:linear-gradient(96deg,#FFF,var(--cy) 40%,var(--vi) 80%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.stat-box .label{
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--text-dim);
+}
+.media-frame{ border-color:var(--border-soft); border-radius:18px; }
+.cs-section.alt{ background:var(--bg-soft); }
+
+@media (max-width:760px){
+  .nav-links{ display:none; }
+  .w-hero, .cs-hero{ padding-top:88px; }
+}
