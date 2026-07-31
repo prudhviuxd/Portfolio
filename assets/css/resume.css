@@ -1,0 +1,176 @@
+/* ============================================================
+   Résumé — screen + print
+   Inherits the chrome system; denser, more scannable.
+   ============================================================ */
+
+.cv{ padding-top:clamp(40px,6vw,84px); padding-bottom:clamp(50px,7vw,96px); max-width:1000px; }
+
+/* ---------- head ---------- */
+.cv-head{
+  display:grid; grid-template-columns:minmax(0,1fr) minmax(0,auto);
+  gap:clamp(24px,4vw,56px); align-items:start;
+  padding-bottom:clamp(24px,3vw,36px); border-bottom:1px solid var(--line);
+}
+.cv-role{
+  font-family:var(--mono); font-size:11px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--cy); margin-top:12px;
+}
+.cv-contact{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px 26px; }
+.cv-contact li{ display:flex; flex-direction:column; gap:3px; }
+.cv-contact .mono{ font-size:9px; letter-spacing:.16em; }
+.cv-contact a,.cv-contact span:not(.mono){ font-size:13.5px; color:var(--text-2); }
+.cv-contact a:hover{ color:var(--cy); }
+
+/* ---------- sections ---------- */
+.cv-sec{ padding-top:clamp(28px,3.4vw,44px); }
+.cv-h{
+  font-family:var(--mono); font-size:10.5px; font-weight:500;
+  letter-spacing:.22em; text-transform:uppercase; color:var(--text-3);
+  padding-bottom:12px; margin-bottom:20px; border-bottom:1px solid var(--line-2);
+}
+.cv-lede{ font-size:16px; line-height:1.65; color:var(--text-2); max-width:74ch; }
+
+.cv-figs{ display:flex; flex-wrap:wrap; gap:34px; margin-top:22px; }
+.cv-figs b{
+  display:block; font-family:var(--display); font-weight:800; font-size:28px;
+  letter-spacing:-.035em; line-height:1;
+  background:linear-gradient(96deg,#FFF,var(--cy) 40%,var(--vi) 80%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.cv-figs span{
+  display:block; margin-top:6px; font-family:var(--mono); font-size:9px;
+  letter-spacing:.15em; text-transform:uppercase; color:var(--text-3);
+}
+
+/* ---------- experience ---------- */
+.cv-role-item{ padding:18px 0; border-bottom:1px solid var(--line-2); }
+.cv-role-item:last-child{ border-bottom:0; }
+.cv-role-head{ display:flex; flex-wrap:wrap; align-items:baseline; gap:10px 16px; margin-bottom:12px; }
+.cv-role-head h3{
+  font-family:var(--display); font-weight:700; font-size:19px;
+  letter-spacing:-.025em; font-variation-settings:"opsz" 24;
+}
+.cv-role-head .mono{ font-size:10px; }
+.cv-dates{ margin-left:auto; }
+.cv-bullets li{
+  position:relative; padding-left:17px; margin:7px 0;
+  font-size:14.5px; line-height:1.6; color:var(--text-2);
+}
+.cv-bullets li::before{
+  content:""; position:absolute; left:0; top:10px;
+  width:6px; height:1px; background:var(--cy);
+}
+.cv-bullets em{ font-style:normal; color:var(--text); }
+
+/* placeholders the owner must replace */
+.cv-todo{
+  border:1px dashed rgba(255,123,200,.45);
+  border-radius:12px; padding:14px 16px; margin-bottom:18px;
+  background:rgba(255,123,200,.05);
+}
+.cv-todo .mono{ color:var(--mg); display:block; margin-bottom:6px; }
+.cv-todo p{ font-size:13.5px; line-height:1.6; color:var(--text-2); }
+[data-fill]{ color:var(--mg); }
+.cv-bullets [data-fill]{ color:var(--mg); }
+
+/* ---------- projects ---------- */
+.cv-proj{ padding:16px 0; border-bottom:1px solid var(--line-2); }
+.cv-proj:last-child{ border-bottom:0; }
+.cv-proj-head{ display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:10px 16px; }
+.cv-proj h3{
+  font-family:var(--display); font-weight:700; font-size:18px;
+  letter-spacing:-.025em; font-variation-settings:"opsz" 24;
+  display:flex; flex-wrap:wrap; align-items:baseline; gap:12px;
+}
+.cv-proj h3 .mono{ font-size:9.5px; }
+.cv-proj p{ margin-top:9px; font-size:14.5px; line-height:1.65; color:var(--text-2); max-width:88ch; }
+.cv-proj p b{ color:var(--text); font-weight:600; }
+.cv-link{
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--cy); flex:none;
+}
+.cv-link:hover{ text-decoration:underline; }
+.cv-more-h{ font-family:var(--mono); font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--text-3); margin-bottom:10px; }
+.cv-more li{
+  display:grid; grid-template-columns:150px 1fr 130px; gap:16px;
+  padding:8px 0; border-bottom:1px solid var(--line-2);
+  font-size:14px; color:var(--text-3);
+}
+.cv-more li:last-child{ border-bottom:0; }
+.cv-more b{ color:var(--text); font-weight:600; }
+.cv-more em{ font-style:normal; font-family:var(--mono); font-size:9px; letter-spacing:.14em; text-transform:uppercase; text-align:right; }
+
+/* ---------- capabilities ---------- */
+.cv-skills{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px 34px; }
+.cv-skills h4{ margin-bottom:7px; color:var(--cy); font-size:9.5px; }
+.cv-skills p{ font-size:14px; line-height:1.65; color:var(--text-2); }
+
+.cv-foot{ margin-top:clamp(30px,4vw,48px); padding-top:20px; border-top:1px solid var(--line-2); font-size:13.5px; color:var(--text-3); }
+.cv-foot a{ color:var(--cy); }
+
+@media (max-width:760px){
+  .cv-head{ grid-template-columns:1fr; }
+  .cv-contact{ grid-template-columns:1fr 1fr; }
+  .cv-skills{ grid-template-columns:1fr; }
+  .cv-more li{ grid-template-columns:1fr; gap:2px; }
+  .cv-more em{ text-align:left; }
+  .cv-dates{ margin-left:0; }
+}
+
+/* ============================================================
+   PRINT — this is the deliverable PDF
+   ============================================================ */
+@media print{
+  @page{ size:A4; margin:14mm 13mm; }
+
+  .aura, .masthead, .chrome-footer, .burger, #printBtn{ display:none !important; }
+  body::after{ display:none !important; }           /* grain */
+
+  html,body{
+    background:#fff !important; color:#111 !important;
+    font-size:10.5pt; line-height:1.45;
+  }
+  .rv,.rv-s>*{ opacity:1 !important; transform:none !important; }
+
+  .cv{ max-width:none; padding:0 !important; }
+  .shell{ padding:0 !important; }
+
+  /* flatten the gradient text, it prints as nothing */
+  .chrome,.cv-figs b{
+    background:none !important; -webkit-text-fill-color:#111 !important;
+    color:#111 !important;
+  }
+
+  h1,h2,h3,h4{ color:#111 !important; }
+  .cv-head h1{ font-size:23pt; }
+  .cv-role{ color:#444 !important; }
+  .cv-h{
+    color:#111 !important; border-bottom:1px solid #bbb !important;
+    font-size:8.5pt; letter-spacing:.16em;
+  }
+  .cv-lede,.cv-bullets li,.cv-proj p,.cv-skills p,.cv-contact a,
+  .cv-contact span:not(.mono),.cv-more li{ color:#333 !important; }
+  /* bold runs inherit white from the dark theme, force them dark on paper */
+  .cv-proj p b,.cv-more b,.cv-bullets em,.cv-lede b{ color:#000 !important; }
+  /* keep the compact 3-column layout on paper */
+  .cv-more li{ display:grid !important; grid-template-columns:130px 1fr 110px !important; gap:12px !important; }
+  .cv-more em{ text-align:right !important; }
+  .cv-figs span,.cv-more em,.cv-proj h3 .mono,.cv-role-head .mono,
+  .cv-contact .mono,.cv-more-h{ color:#555 !important; }
+  .cv-link,.cv-foot a,.cv-skills h4{ color:#111 !important; }
+  .cv-bullets li::before{ background:#111 !important; }
+  .cv-head,.cv-h,.cv-role-item,.cv-proj,.cv-more li,.cv-foot{ border-color:#ccc !important; }
+
+  a{ text-decoration:none; }
+  .cv-contact a[href^="http"]::after{ content:""; }
+
+  /* keep blocks intact across page breaks */
+  .cv-sec,.cv-role-item,.cv-proj,.cv-head{ break-inside:avoid; page-break-inside:avoid; }
+  .cv-sec{ padding-top:12pt; }
+
+  /* placeholders stay obvious on paper too */
+  .cv-todo{
+    border:1px dashed #999 !important; background:#f4f4f4 !important;
+  }
+  .cv-todo .mono,[data-fill]{ color:#8a2f5f !important; }
+}
