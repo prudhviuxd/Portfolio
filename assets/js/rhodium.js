@@ -120,45 +120,5 @@
     });
   }
 
-  /* ---------- floating work preview (fine pointer only) ---------- */
-  var work = document.getElementById('workList');
-  var peek = document.getElementById('peek');
-  if (work && peek && fine && !reduce) {
-    work.setAttribute('data-hover', '');
-    var imgs = {};
-    peek.querySelectorAll('[data-img]').forEach(function (n) { imgs[n.getAttribute('data-img')] = n; });
-
-    var tx = 0, ty = 0, cx = 0, cy = 0, raf = null, active = false;
-
-    function loop() {
-      cx += (tx - cx) * 0.14;
-      cy += (ty - cy) * 0.14;
-      peek.style.transform = 'translate(' + cx + 'px,' + cy + 'px) translate(-50%,-50%) scale(' + (active ? 1 : 0.94) + ')';
-      raf = requestAnimationFrame(loop);
-    }
-
-    work.querySelectorAll('.item.live').forEach(function (item) {
-      item.addEventListener('mouseenter', function () {
-        var key = item.getAttribute('data-peek');
-        Object.keys(imgs).forEach(function (k) { imgs[k].classList.toggle('on', k === key); });
-        active = true;
-        peek.classList.add('on');
-        if (!raf) raf = requestAnimationFrame(loop);
-      });
-      item.addEventListener('mouseleave', function () {
-        active = false;
-        peek.classList.remove('on');
-      });
-    });
-
-    window.addEventListener('mousemove', function (e) {
-      tx = e.clientX; ty = e.clientY;
-      if (!cx && !cy) { cx = tx; cy = ty; }
-    }, { passive: true });
-
-    work.addEventListener('mouseleave', function () {
-      active = false;
-      peek.classList.remove('on');
-    });
-  }
+  /* work index preview removed: case studies now show their own visuals */
 })();
