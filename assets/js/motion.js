@@ -114,7 +114,7 @@
   }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
 
   function observeAll() {
-    document.querySelectorAll('[data-split],[data-fx],[data-cards]').forEach(function (el) {
+    document.querySelectorAll('[data-split],[data-fx],[data-cards],[data-rows]').forEach(function (el) {
       io.observe(el);
     });
     document.querySelectorAll('[data-cards]').forEach(function (grid) {
@@ -122,7 +122,12 @@
         c.style.setProperty('--i', i);
       });
     });
-    document.querySelectorAll('.stack .case').forEach(function (c, i) {
+    document.querySelectorAll('[data-rows]').forEach(function (list) {
+      Array.prototype.forEach.call(list.children, function (c, i) {
+        c.style.setProperty('--i', i);
+      });
+    });
+    document.querySelectorAll('.stack .case, .sk-panel').forEach(function (c, i) {
       c.style.setProperty('--i', i);
     });
   }
@@ -259,6 +264,35 @@
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
+
+  /* ------------------------------------------------------------
+     5b. Skill set chip nav
+     ------------------------------------------------------------ */
+  (function skillNav() {
+    var nav = document.querySelector('.sk-nav');
+    var panels = [].slice.call(document.querySelectorAll('.sk-panel'));
+    if (!nav || !panels.length) return;
+
+    var chips = [].slice.call(nav.querySelectorAll('button'));
+    chips.forEach(function (b, i) {
+      if (!panels[i]) return;
+      b.addEventListener('click', function () {
+        panels[i].scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+      });
+    });
+
+    // several panels can intersect at once, mark the one nearest the top
+    function mark() {
+      var best = 0, dist = Infinity;
+      panels.forEach(function (p, i) {
+        var d = Math.abs(p.getBoundingClientRect().top - innerHeight * 0.2);
+        if (d < dist) { dist = d; best = i; }
+      });
+      chips.forEach(function (b, j) { b.setAttribute('aria-current', String(j === best)); });
+    }
+    addEventListener('scroll', mark, { passive: true });
+    mark();
+  })();
 
   /* ------------------------------------------------------------
      6. Section dots
