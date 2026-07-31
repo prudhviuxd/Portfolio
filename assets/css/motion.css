@@ -1,0 +1,137 @@
+/* ============================================================
+   MOTION — trionn-grade interaction layer
+   Masked line reveals, 3D card entrances, a pinned work stack,
+   scroll-velocity skew and inertia scrolling. All vanilla,
+   all gated behind prefers-reduced-motion.
+   ============================================================ */
+
+/* ---------- preloader ---------- */
+.pre{ display:none; }
+html.js .pre{
+  display:flex; position:fixed; inset:0; z-index:120;
+  align-items:center; justify-content:center; flex-direction:column; gap:26px;
+  background:var(--bg);
+}
+.pre-mark{
+  font-family:var(--display); font-weight:800; letter-spacing:-.05em;
+  font-size:clamp(30px,6vw,64px); line-height:1; overflow:hidden;
+}
+.pre-mark span{ display:block; transform:translateY(102%); }
+.pre-bar{
+  width:min(280px,52vw); height:1px; background:var(--line); position:relative; overflow:hidden;
+}
+.pre-bar i{
+  position:absolute; inset:0; transform-origin:0 50%; transform:scaleX(0);
+  background:linear-gradient(90deg,var(--cy),var(--vi),var(--mg));
+}
+.pre-num{
+  font-family:var(--mono); font-size:10px; letter-spacing:.24em;
+  color:var(--text-3); font-variant-numeric:tabular-nums;
+}
+html.pre-done .pre{
+  transform:translateY(-101%);
+  transition:transform 1s cubic-bezier(.76,0,.24,1);
+}
+html.js:not(.pre-done) body{ overflow:hidden; }
+
+/* ---------- masked line / word reveals ---------- */
+.ln-mask{ display:block; overflow:hidden; padding-bottom:.06em; margin-bottom:-.06em; }
+.ln-in{ display:block; will-change:transform,opacity; }
+html.js .ln-in{ transform:translateY(110%); opacity:0; }
+html.js .in .ln-in{
+  transform:none; opacity:1;
+  transition:transform 1.05s cubic-bezier(.16,1,.3,1), opacity .7s ease;
+}
+/* the 3D part, each line pivots up from below the page plane */
+[data-split][data-3d] .ln-mask{ perspective:900px; }
+html.js [data-split][data-3d] .ln-in{ transform:translateY(110%) rotateX(-52deg); transform-origin:50% 0; }
+/* .in lands on the heading itself, so this must not be a descendant selector */
+html.js [data-split][data-3d].in .ln-in{
+  transform:none;
+  transition:transform 1.05s cubic-bezier(.16,1,.3,1), opacity .7s ease;
+}
+
+/* ---------- generic fx ---------- */
+html.js [data-fx]{ will-change:transform,opacity; }
+html.js [data-fx="rise"]{ opacity:0; transform:translateY(30px); }
+html.js [data-fx="fade"]{ opacity:0; }
+html.js [data-fx="wipe"]{ opacity:0; transform:translateY(18px) scale(.985); }
+html.js [data-fx].in{
+  opacity:1; transform:none;
+  transition:opacity .8s ease, transform 1s cubic-bezier(.16,1,.3,1);
+}
+
+/* ---------- 3D card entrance ---------- */
+[data-cards]{ perspective:1400px; perspective-origin:50% 20%; }
+html.js [data-cards] > *{
+  opacity:0; transform:translateY(46px) translateZ(-140px) rotateX(14deg);
+  transform-origin:50% 100%; will-change:transform,opacity;
+}
+html.js [data-cards].in > *{
+  opacity:1; transform:none;
+  transition:opacity .7s ease, transform 1.15s cubic-bezier(.16,1,.3,1);
+  transition-delay:calc(var(--i,0) * 95ms);
+}
+
+/* ---------- pinned work stack ---------- */
+@media (min-width:900px){
+  .stack{ position:relative; }
+  .stack .case{
+    position:sticky; top:calc(96px + var(--i) * 14px);
+    transform-origin:50% 0;
+    will-change:transform,filter;
+  }
+}
+
+/* ---------- parallax ---------- */
+[data-para]{ will-change:transform; }
+
+/* ---------- scroll velocity skew on the marquee ---------- */
+.mq-t{ will-change:transform; }
+
+/* ---------- hero letter cascade ---------- */
+.d-xl .ln-in{ transition-delay:calc(var(--l,0) * 105ms) !important; }
+
+/* ---------- section index rail ---------- */
+.dots{
+  position:fixed; right:20px; top:50%; transform:translateY(-50%);
+  z-index:45; display:grid; gap:13px;
+}
+.dots button{
+  width:7px; height:7px; border-radius:50%; padding:0;
+  background:rgba(255,255,255,.2); transition:background .3s ease, transform .3s ease;
+}
+.dots button[aria-current="true"]{ background:var(--cy); transform:scale(1.5); }
+.dots button:hover{ background:var(--text-2); }
+@media (max-width:1180px){ .dots{ display:none; } }
+
+/* ---------- reduced motion, everything resolves instantly ---------- */
+@media (prefers-reduced-motion:reduce){
+  html.js .pre{ display:none !important; }
+  html.js:not(.pre-done) body{ overflow:auto; }
+  html.js .ln-in,
+  html.js [data-fx],
+  html.js [data-cards] > *{
+    opacity:1 !important; transform:none !important; transition:none !important;
+  }
+  .stack .case{ position:static !important; }
+}
+
+/* ============================================================
+   Work as a pinned stack, the trionn card-sequence move.
+   Only on desktop, the three-up grid is kept below 900px.
+   ============================================================ */
+.mq{ will-change:transform; }
+
+@media (min-width:900px){
+  .cases.stack{ grid-template-columns:1fr; gap:26px; }
+  .cases.stack .case{
+    display:grid; grid-template-columns:minmax(0,1.02fr) minmax(0,1fr);
+    align-items:stretch;
+  }
+  .cases.stack .case-vis{ min-height:290px; height:100%; }
+  .cases.stack .case-body{ padding:clamp(26px,2.6vw,40px); }
+  .cases.stack .case-meta{ margin-top:18px; }
+  /* the stack needs room to travel past, one viewport per card */
+  .cases.stack{ padding-bottom:clamp(60px,16vh,200px); }
+}
