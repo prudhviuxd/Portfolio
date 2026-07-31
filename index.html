@@ -7,6 +7,7 @@
 <meta name="description" content="Prudhvi Raj PJ, a design leader advancing UX maturity and AI innovation across enterprise and consumer products.">
 <link rel="stylesheet" href="assets/css/rhodium.css">
 <link rel="stylesheet" href="assets/css/motion.css">
+<link rel="stylesheet" href="assets/css/scroll3d.css">
 <noscript><style>.rv,.rv-s>*{opacity:1!important;transform:none!important;}</style></noscript>
 </head>
 <body>
@@ -19,7 +20,7 @@
 
 <nav class="dots" aria-label="Section navigation"></nav>
 
-<div class="aura" aria-hidden="true"><b></b><b></b><b></b></div>
+<div class="aura" aria-hidden="true" data-layer="0.85"><b></b><b></b><b></b></div>
 
 <header class="masthead">
   <div class="mast-in">
@@ -39,15 +40,15 @@
 <main id="top">
 
   <!-- ======================= HERO ======================= -->
-  <section class="hero shell" id="intro" data-label="Intro">
-    <div class="tagrow rv">
+  <section class="hero shell" id="intro" data-label="Intro" data-depth>
+    <div class="tagrow rv" data-layer="0.32">
       <span class="chip">Design Leader</span>
       <span class="chip">12 Years</span>
       <span class="chip">Enterprise &amp; AI</span>
       <span class="chip">Hyderabad, IN</span>
     </div>
 
-    <h1 class="d-xl" data-split data-3d>
+    <h1 class="d-xl" data-split data-3d data-layer="0.12">
       <span class="ln">Design that</span>
       <span class="ln ind chrome">doesn't</span>
       <span class="ln">tarnish</span>
@@ -55,7 +56,7 @@
 
     <div class="hero-btm">
       <div>
-        <p class="lede rv" style="max-width:54ch;">
+        <p class="lede rv" style="max-width:54ch;" data-layer="0.2">
           I'm a design leader with 12 years across enterprise, telecom, banking
           and public health. I lead teams of 5&ndash;12 designers, own UX strategy
           with C-level stakeholders, and ship products used by millions, most
@@ -75,7 +76,7 @@
         </div>
       </div>
 
-      <div class="rail rv-s" data-para="0.05">
+      <div class="rail rv-s" data-layer="0.55">
         <div class="r"><div class="rn chrome" data-count="100">100+</div><div class="rk">Projects shipped</div></div>
         <div class="r"><div class="rn chrome">2.1M+</div><div class="rk">Users reached</div></div>
         <div class="r"><div class="rn chrome" data-count="80">80%</div><div class="rk">Churn reduced</div></div>
@@ -108,7 +109,7 @@
     </div>
 
     <div data-panel="leader" class="on">
-      <div class="bento" data-cards>
+      <div class="bento" data-float>
         <div class="card sp4"><div class="big chrome" data-count="100">100+</div><div class="cap">POCs &amp; RFPs submitted</div></div>
         <div class="card sp4"><div class="big chrome" data-count="200">200+</div><div class="cap">Man-hours saved via design ops</div></div>
         <div class="card sp4"><div class="big chrome" data-count="80">80%</div><div class="cap">Reduction in churn</div></div>
@@ -116,7 +117,7 @@
     </div>
 
     <div data-panel="designer">
-      <div class="bento" data-cards>
+      <div class="bento" data-float>
         <div class="card sp4"><div class="big chrome" data-count="100">100+</div><div class="cap">Projects delivered end to end</div></div>
         <div class="card sp4"><div class="big chrome" data-count="10">10+</div><div class="cap">Domains, telecom to healthcare</div></div>
         <div class="card sp4"><div class="big chrome" data-count="80">80%</div><div class="cap">Client satisfaction on delivery</div></div>
@@ -134,24 +135,40 @@
     </div>
 
     <!-- leader -->
+    <div class="narr" data-narrative>
+      <div class="narr-vp shell" style="padding:0;">
+        <div class="narr-side">
+          <span class="mono">Three convictions</span>
+          <p class="prose" style="max-width:34ch;">The things I will argue for in a room, and the reason teams I lead ship what they said they would.</p>
+          <ul class="narr-chapters">
+            <span class="narr-bar" aria-hidden="true"><i></i></span>
+            <li class="on"><b>&rarr;</b><span>Vision before velocity</span></li>
+            <li><b>&rarr;</b><span>Designers grow, or work stalls</span></li>
+            <li><b>&rarr;</b><span>Evidence outranks opinion</span></li>
+          </ul>
+        </div>
+        <div class="narr-stage">
+          <article class="narr-step">
+            <div class="ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2 15 9l7 3-7 3-3 7-3-7-7-3 7-3z"/></svg></div>
+            <h3>Vision before velocity</h3>
+            <p>Shipping fast is worthless without a shared picture of where the product is going. I set that early, with the people who have to build it.</p>
+          </article>
+          <article class="narr-step">
+            <div class="ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.9"/></svg></div>
+            <h3>Designers grow, or work stalls</h3>
+            <p>A team that only executes produces only what it was told. I mentor toward judgement, so good calls happen when nobody is watching.</p>
+          </article>
+          <article class="narr-step">
+            <div class="ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 3v18h18M7 15l4-6 3 4 5-7"/></svg></div>
+            <h3>Evidence outranks opinion</h3>
+            <p>Taste sets the ceiling, evidence sets the floor. Every significant call is anchored in research, instrumentation, or a test agreed before the argument.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+
     <div data-panel="leader" class="on">
       <div class="bento" data-cards>
-        <div class="card sp4">
-          <div class="ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2 15 9l7 3-7 3-3 7-3-7-7-3 7-3z"/></svg></div>
-          <h3 class="d-sm">Vision before velocity</h3>
-          <p class="prose">Shipping fast is worthless without a shared picture of where the product is going. I set that early, with the people who have to build it.</p>
-        </div>
-        <div class="card sp4">
-          <div class="ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.9"/></svg></div>
-          <h3 class="d-sm">Designers grow, or work stalls</h3>
-          <p class="prose">A team that only executes produces only what it was told. I mentor toward judgement, so good calls happen when nobody is watching.</p>
-        </div>
-        <div class="card sp4">
-          <div class="ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 3v18h18M7 15l4-6 3 4 5-7"/></svg></div>
-          <h3 class="d-sm">Evidence outranks opinion</h3>
-          <p class="prose">Taste sets the ceiling, evidence sets the floor. Every significant call is anchored in research, instrumentation, or a test agreed before the argument.</p>
-        </div>
-
         <div class="card sp5">
           <span class="mono">Phase 01</span>
           <h3 class="d-sm" style="margin-top:12px;">Discovery &amp; strategy</h3>
@@ -239,7 +256,7 @@
 
     <div class="sk-panels">
       <article class="sk-panel">
-        <div class="sk-vis">
+        <div class="sk-vis" data-s3d="rx:16,tz:-160,ty:26">
           <span class="sk-idx">01</span>
           <span class="sk-count">7 capabilities</span>
         </div>
@@ -265,7 +282,7 @@
         </div>
       </article>
       <article class="sk-panel">
-        <div class="sk-vis">
+        <div class="sk-vis" data-s3d="rx:16,tz:-160,ty:26">
           <span class="sk-idx">02</span>
           <span class="sk-count">8 capabilities</span>
         </div>
@@ -293,7 +310,7 @@
         </div>
       </article>
       <article class="sk-panel">
-        <div class="sk-vis">
+        <div class="sk-vis" data-s3d="rx:16,tz:-160,ty:26">
           <span class="sk-idx">03</span>
           <span class="sk-count">9 capabilities</span>
         </div>
@@ -323,7 +340,7 @@
         </div>
       </article>
       <article class="sk-panel">
-        <div class="sk-vis">
+        <div class="sk-vis" data-s3d="rx:16,tz:-160,ty:26">
           <span class="sk-idx">04</span>
           <span class="sk-count">6 capabilities</span>
         </div>
@@ -359,9 +376,10 @@
       <p class="prose rv" style="max-width:36ch;">Written up in full: the problem, how the team worked, and what shifted. The rest are summarised below.</p>
     </div>
 
-    <div class="cases stack" data-cards>
-
-      <a class="case" href="case-studies/who-myyoga.html">
+    <div class="pcar" data-carousel>
+      <div class="pcar-vp">
+        <div class="pcar-stage">
+          <a class="case pcar-item" href="case-studies/who-myyoga.html">
         <div class="case-vis" style="background:linear-gradient(150deg,#1C9D95,#0D5C6B);">
           <span class="case-org">World Health Organization</span>
         </div>
@@ -380,8 +398,7 @@
           </span>
         </div>
       </a>
-
-      <a class="case" href="case-studies/my-mtn.html">
+          <a class="case pcar-item" href="case-studies/my-mtn.html">
         <div class="case-vis" style="background:linear-gradient(150deg,#FFCC33,#C8871A);">
           <span class="case-org" style="color:#1A1608;">MTN Nigeria &amp; South Africa</span>
         </div>
@@ -400,8 +417,7 @@
           </span>
         </div>
       </a>
-
-      <a class="case" href="case-studies/ipl.html">
+          <a class="case pcar-item" href="case-studies/ipl.html">
         <div class="case-vis" style="background:linear-gradient(150deg,#1A3FA8,#0A1440);">
           <span class="case-org">BCCI &middot; Indian Premier League</span>
         </div>
@@ -420,7 +436,13 @@
           </span>
         </div>
       </a>
-
+        </div>
+        <div class="pcar-hud">
+          <span class="pcar-n">01</span>
+          <span class="pcar-track"><i></i></span>
+          <span>Scroll</span>
+        </div>
+      </div>
     </div>
 
     <div class="also rv">
@@ -446,7 +468,7 @@
         <h2 class="d-lg hl" data-split data-3d>Teams I've built with</h2>
       </div>
     </div>
-    <div class="logos" data-cards>
+    <div class="logos" data-cards data-s3d="rx:10,tz:-120">
       <div class="logo">Tata IPL</div>
       <div class="logo">World Health Organization</div>
       <div class="logo">Allcargo GATI</div>
@@ -501,5 +523,6 @@
 
 <script src="assets/js/rhodium.js"></script>
 <script src="assets/js/motion.js"></script>
+<script src="assets/js/scroll3d.js"></script>
 </body>
 </html>

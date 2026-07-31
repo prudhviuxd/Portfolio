@@ -1,0 +1,147 @@
+/* ============================================================
+   SCROLL3D — scrubbed, not triggered
+   Every transform here is bound to scroll position and updated
+   each frame, so it runs forwards and backwards with the wheel.
+     · layered parallax        [data-layer]
+     · scroll-driven 3D        [data-s3d]
+     · floating panel UI       [data-float]
+     · perspective carousel    [data-carousel]
+     · scroll narrative        [data-narrative]
+   ============================================================ */
+
+html.js [data-layer],
+html.js [data-s3d],
+html.js [data-float] > *{ will-change:transform, opacity; }
+
+/* ---------- 1. layered parallax ---------- */
+[data-depth]{ perspective:1200px; transform-style:preserve-3d; }
+
+/* ---------- 2. floating panel UI ---------- */
+[data-float]{ perspective:1500px; perspective-origin:50% 40%; }
+[data-float] > *{ transform-style:preserve-3d; }
+[data-float] > *::after{
+  content:""; position:absolute; inset:0; border-radius:inherit;
+  pointer-events:none; opacity:0;
+  background:linear-gradient(150deg,rgba(255,255,255,.10),transparent 55%);
+  transition:opacity .4s ease;
+}
+[data-float] > *.lit::after{ opacity:1; }
+
+/* ---------- 3. perspective carousel ---------- */
+.pcar{ position:relative; }
+.pcar-vp{
+  position:sticky; top:0; height:100svh;
+  display:flex; align-items:center; justify-content:center;
+  perspective:1600px; perspective-origin:50% 50%;
+  overflow:hidden;
+}
+.pcar-stage{
+  position:relative; width:min(920px,84vw); height:min(560px,66svh);
+  transform-style:preserve-3d;
+}
+.pcar-item{
+  position:absolute; inset:0; margin:auto;
+  display:grid; grid-template-rows:minmax(0,1fr) auto;
+  border:1px solid var(--line); border-radius:var(--r); overflow:hidden;
+  background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.015));
+  backface-visibility:hidden; will-change:transform, opacity;
+  box-shadow:0 40px 90px -30px rgba(0,0,0,.85);
+}
+/* the grid row owns the height here, the 16:10 ratio would overflow the card */
+.pcar-item .case-vis{ position:relative; aspect-ratio:auto; min-height:0; height:100%; }
+.pcar-item .case-body{ padding:clamp(20px,2.2vw,30px); flex:none; }
+.pcar-item .case-meta{ margin:12px 0 0; flex:none; }
+.pcar-item .case-go{ margin-top:16px; }
+
+.pcar-hud{
+  position:absolute; left:0; right:0; bottom:clamp(20px,4vh,44px);
+  display:flex; align-items:center; justify-content:center; gap:18px;
+  font-family:var(--mono); font-size:10px; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--text-3);
+}
+.pcar-track{ width:min(220px,32vw); height:1px; background:var(--line); position:relative; }
+.pcar-track i{
+  position:absolute; left:0; top:0; height:1px; width:0; display:block;
+  background:linear-gradient(90deg,var(--cy),var(--vi));
+}
+.pcar-n{ font-variant-numeric:tabular-nums; color:var(--text-2); }
+
+/* ---------- 4. scroll narrative ---------- */
+.narr{ position:relative; }
+.narr-vp{
+  position:sticky; top:0; min-height:100svh;
+  display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
+  gap:clamp(24px,5vw,80px); align-items:center;
+  perspective:1400px;
+}
+.narr-side{ align-self:center; }
+.narr-side .mono{ display:block; color:var(--text-3); margin-bottom:16px; }
+.narr-chapters{ position:relative; display:grid; gap:12px; margin-top:26px; padding-left:20px; }
+.narr-chapters li{
+  display:grid; grid-template-columns:26px 1fr; gap:14px; align-items:baseline;
+  font-family:var(--mono); font-size:10px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--text-3);
+  transition:color .35s ease;
+}
+.narr-chapters li.on{ color:var(--text); }
+.narr-chapters li b{ font-weight:400; color:var(--cy); opacity:0; transition:opacity .35s ease; }
+.narr-chapters li.on b{ opacity:1; }
+
+.narr-stage{ position:relative; height:min(420px,54svh); transform-style:preserve-3d; }
+.narr-step{
+  position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center;
+  border:1px solid var(--line-2); border-radius:var(--r);
+  background:linear-gradient(160deg,rgba(255,255,255,.055),rgba(255,255,255,.014));
+  padding:clamp(24px,3vw,44px); backface-visibility:hidden;
+  will-change:transform, opacity;
+}
+.narr-step .ico{
+  width:38px; height:38px; border-radius:11px; display:grid; place-items:center;
+  background:rgba(79,216,232,.12); color:var(--cy); margin-bottom:20px;
+}
+.narr-step h3{
+  font-family:var(--display); font-weight:700; font-size:clamp(22px,2.7vw,34px);
+  letter-spacing:-.035em; line-height:1.08; margin-bottom:14px;
+}
+.narr-step p{ font-size:16px; line-height:1.7; color:var(--text-2); max-width:44ch; }
+
+.narr-bar{
+  position:absolute; left:0; top:2px; bottom:2px; width:2px;
+  background:var(--line-2); overflow:hidden; border-radius:2px;
+}
+.narr-bar i{
+  position:absolute; left:0; top:0; width:2px; height:0; display:block;
+  background:linear-gradient(180deg,var(--cy),var(--vi));
+}
+
+@media (max-width:900px){
+  .narr-vp{ grid-template-columns:1fr; padding-top:90px; padding-bottom:40px; align-content:center; }
+  .narr-stage{ height:min(360px,52svh); }
+
+  /* a coverflow needs horizontal room a phone does not have, stack instead */
+  .pcar{ height:auto !important; }
+  .pcar-vp{ position:static; height:auto; overflow:visible; display:block; perspective:none; }
+  .pcar-stage{ width:100%; height:auto; display:grid; gap:18px; }
+  .pcar-item{
+    position:static !important; transform:none !important; opacity:1 !important;
+    filter:none !important; box-shadow:none; grid-template-rows:auto auto;
+  }
+  .pcar-item .case-vis{ aspect-ratio:16/10; height:auto; }
+  .pcar-hud{ position:static; margin-top:20px; }
+}
+
+/* ---------- reduced motion, everything flattens to a readable list ---------- */
+@media (prefers-reduced-motion:reduce){
+  html.js [data-layer],
+  html.js [data-s3d],
+  html.js [data-float] > *{ transform:none !important; opacity:1 !important; }
+
+  .pcar-vp,.narr-vp{ position:static !important; height:auto !important; min-height:0 !important; overflow:visible !important; }
+  .pcar{ height:auto !important; }
+  .pcar-stage{ width:100%; height:auto; display:grid; gap:18px; }
+  .pcar-item{ position:static !important; transform:none !important; opacity:1 !important; box-shadow:none; }
+  .narr{ height:auto !important; }
+  .narr-stage{ height:auto; display:grid; gap:16px; }
+  .narr-step{ position:static !important; transform:none !important; opacity:1 !important; }
+  .pcar-hud{ position:static; margin-top:18px; }
+}
