@@ -172,53 +172,22 @@
   })();
 
   /* ------------------------------------------------------------
-     4. Inertia scrolling
-     Lerps the real scroll position, so sticky and fixed keep working.
+     4. Scroll velocity
+     There was a wheel-hijacking inertia scroller here. It called
+     scrollTo() every frame, and because rhodium.css sets
+     html{scroll-behavior:smooth} each call started a fresh animated
+     scroll that the next frame cancelled, so the page never moved.
+     It also swallowed keyboard paging. Native scrolling is already
+     smooth on every trackpad, so this now only measures velocity for
+     the marquee skew.
      ------------------------------------------------------------ */
   var velocity = 0;
-  (function smooth() {
-    if (reduce || !fine) {
-      // still track velocity for the marquee skew
-      var prev = scrollY;
-      addEventListener('scroll', function () {
-        velocity = scrollY - prev; prev = scrollY;
-      }, { passive: true });
-      return;
-    }
-
-    var target = scrollY, current = scrollY, running = false;
-
-    function max() {
-      return document.documentElement.scrollHeight - innerHeight;
-    }
-
-    function loop() {
-      var d = target - current;
-      current += d * 0.11;
-      velocity = d * 0.11;
-      if (Math.abs(d) < 0.4) { current = target; running = false; }
-      scrollTo(0, current);
-      if (running) requestAnimationFrame(loop);
-      else velocity = 0;
-    }
-
-    addEventListener('wheel', function (e) {
-      if (e.ctrlKey) return;                       // pinch zoom
-      if (e.target.closest('[data-native-scroll]')) return;
-      e.preventDefault();
-      target = Math.max(0, Math.min(target + e.deltaY, max()));
-      if (!running) { running = true; requestAnimationFrame(loop); }
-    }, { passive: false });
-
-    // keyboard, anchors and programmatic scrolls stay native
-    ['keydown', 'mousedown', 'touchstart'].forEach(function (ev) {
-      addEventListener(ev, function () { target = current = scrollY; }, { passive: true });
-    });
-    addEventListener('resize', function () { target = current = scrollY; });
-    document.addEventListener('click', function (e) {
-      var a = e.target.closest('a[href^="#"]');
-      if (a) setTimeout(function () { target = current = scrollY; }, 700);
-    });
+  (function trackVelocity() {
+    var prev = scrollY;
+    addEventListener('scroll', function () {
+      velocity = scrollY - prev;
+      prev = scrollY;
+    }, { passive: true });
   })();
 
   /* ------------------------------------------------------------
