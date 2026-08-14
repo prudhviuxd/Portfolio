@@ -21,6 +21,11 @@
 #      exist. Below 520 this script renders the page inside a fixed-width
 #      iframe instead, so media queries see the real width. The plain strip on
 #      the right of those shots is padding, not the page.
+#   4. --window-size sets the window, not the viewport: the viewport comes out
+#      CHROME_H_OFFSET px shorter, so 100vh stops short of the image bottom and
+#      leaves an unpainted band. The offset is added back below. It is stable
+#      per Chromium build; re-derive it by loading a page that prints
+#      innerHeight and comparing against the requested height.
 #
 # Chromium captures the viewport, not the full page. To see further down, pass a
 # taller spec: 1440x2400.
@@ -83,6 +88,9 @@ OUTDIR="${SHOOT_OUT:-${TMPDIR:-/tmp}/uiux-shots}"
 mkdir -p "$OUTDIR"
 STAMP="$(date +%H%M%S)"
 
+# Window chrome that --window-size includes but the viewport does not.
+CHROME_H_OFFSET="${CHROME_H_OFFSET:-87}"
+
 for spec in "${SPECS[@]}"; do
   W="${spec%x*}"
   H="${spec#*x}"
@@ -96,20 +104,22 @@ for spec in "${SPECS[@]}"; do
   fi
   OUT="$OUTDIR/${BASE}-${LABEL}-${W}x${H}-${STAMP}.png"
 
-  if [ "$W" -lt 520 ]; then
-    # Below Chromium's minimum window width: render in a fixed-width iframe.
-    cat > "$PAGEDIR/$FRAME" <<EOF
+  # Always render through a fixed-size iframe. The iframe is exactly WxH CSS
+  # pixels whatever the window does, which fixes both quirks at once: media
+  # queries see the real width even below Chromium's 500px window floor, and
+  # 100vh inside the frame is exactly H, so the fold lands where it will land
+  # in a real browser. The magenta margin is the capture canvas outside the
+  # frame — it is never part of the page.
+  cat > "$PAGEDIR/$FRAME" <<EOF
 <!doctype html><meta charset="utf-8">
-<style>html,body{margin:0;padding:0;background:#000;overflow:hidden}
+<style>html,body{margin:0;padding:0;background:#f0f;overflow:hidden}
 iframe{border:0;display:block;width:${W}px;height:${H}px}</style>
 <iframe src="$COPY" scrolling="no"></iframe>
 EOF
-    TARGET="file://$PAGEDIR/$FRAME"
-    WINW=520
-  else
-    TARGET="file://$PAGEDIR/$COPY"
-    WINW="$W"
-  fi
+  TARGET="file://$PAGEDIR/$FRAME"
+  WINW="$W"
+  [ "$WINW" -lt 520 ] && WINW=520
+  WINH=$((H + CHROME_H_OFFSET))
 
   "$CHROME" \
     --headless \
@@ -118,7 +128,7 @@ EOF
     --hide-scrollbars \
     --force-prefers-reduced-motion \
     --virtual-time-budget=8000 \
-    --window-size="${WINW},${H}" \
+    --window-size="${WINW},${WINH}" \
     --screenshot="$OUT" \
     "$TARGET" >/dev/null 2>&1 || true
 

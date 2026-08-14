@@ -1,0 +1,185 @@
+/* ============================================================
+   parallax-scrolling
+   No stylesheet shipped with the original component — these are
+   the styles the markup implies. Plain CSS rather than Tailwind
+   utilities because GSAP targets [data-parallax-layer] and writes
+   to `transform`; keeping position offsets in `top`/`inset` here
+   means nothing this file sets can be clobbered by the tween.
+   ============================================================ */
+
+.parallax {
+  position: relative;
+  width: 100%;
+  background-color: #000;
+  color: #fff;
+}
+
+/* ---------- stage ----------
+   The header is the scroll stage. ScrollTrigger runs from
+   "0% 0%" to "100% 0%", i.e. from the layer box entering the top
+   of the viewport to it leaving. 100vh gives one full viewport of
+   scrub; increase it for a slower, longer parallax. */
+.parallax__header {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+.parallax__visuals {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.parallax__layers {
+  position: absolute;
+  inset: 0;
+}
+
+/* ---------- layers ----------
+   Each layer covers the whole stage and then some, so no image
+   edge is ever visible inside the frame. `height` + `object-fit`
+   rather than `width: auto` because an intrinsically-sized image
+   crops its own sky away at narrow viewports and leaves a hard
+   horizontal edge where the image ends.
+
+   Only `top`/`height` are set here; `transform` belongs to GSAP,
+   and anything this file wrote to `transform` would be clobbered
+   by the tween on first frame.
+
+   Coverage under motion: a layer travelling yPercent y moves
+   y × its own height. To keep the stage covered at both ends of
+   the scrub, a layer needs height ≥ stage ÷ (1 − y). The 70%
+   layer therefore wants ~3.3× the stage height to be provably
+   gap-free, which is far taller than the source images. The
+   headroom below is a compromise tuned for the resting state;
+   if a gap appears at the end of the scrub in a live build, lower
+   the far-layer yPercent values in LAYER_TRAVEL rather than
+   stretching the images further. */
+.parallax__layer-img {
+  position: absolute;
+  left: 0;
+  top: -15%;
+  width: 100%;
+  height: 130%;
+  object-fit: cover;
+  object-position: center;
+  user-select: none;
+  pointer-events: none;
+  will-change: transform;
+}
+
+[data-parallax-layer='1'] { z-index: 1; }
+[data-parallax-layer='2'] { z-index: 2; }
+[data-parallax-layer='3'] { z-index: 3; }
+[data-parallax-layer='4'] { z-index: 4; }
+
+/* ---------- title ---------- */
+.parallax__layer-title {
+  position: absolute;
+  top: 28%;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  will-change: transform;
+}
+
+.parallax__title {
+  margin: 0;
+  font-size: clamp(3rem, 12vw, 11rem);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* ---------- masks ----------
+   The near layer is taller than the stage; these two cover the
+   seam at the bottom so the composition ends on solid black
+   instead of a cut-off image edge. */
+.parallax__black-line-overflow {
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  z-index: 6;
+  width: 100%;
+  height: 6px;
+  background-color: #000;
+}
+
+.parallax__fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 5;
+  width: 100%;
+  height: 30vh;
+  background-image: linear-gradient(180deg, transparent, #000 90%);
+  pointer-events: none;
+}
+
+/* ---------- section after the stage ---------- */
+.parallax__content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 4rem 1.5rem;
+  background-color: #000;
+}
+
+.osmo-icon-svg {
+  width: 4rem;
+  max-width: 100%;
+  height: auto;
+  color: #fff;
+  opacity: 0.9;
+}
+
+/* ---------- credits (demo) ---------- */
+.osmo-credits {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1.5rem 4rem;
+  background-color: #000;
+}
+
+.osmo-credits__p {
+  margin: 0;
+  font-size: 0.875rem;
+  /* 6.16:1 on #000 — clears AA for body text. Do not lighten the
+     background without rechecking this pair. */
+  color: #8b8b8b;
+}
+
+.osmo-credits__p-a {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.osmo-credits__p-a:hover { opacity: 0.8; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 767px) {
+  .parallax__layer-title { top: 32%; }
+  .parallax__content { min-height: 50vh; }
+}
+
+/* ---------- reduced motion ----------
+   The component skips the GSAP timeline and the Lenis scroll
+   hijack entirely when this is set, so the layers never receive a
+   transform. Neutralising will-change here keeps the browser from
+   promoting four layers to their own compositor tiers for an
+   animation that will not run. */
+@media (prefers-reduced-motion: reduce) {
+  .parallax__layer-img,
+  .parallax__layer-title {
+    will-change: auto;
+  }
+}
