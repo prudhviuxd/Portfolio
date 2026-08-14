@@ -422,22 +422,29 @@ main,.masthead,.chrome-footer{ position:relative; z-index:2; }
 .chrome-footer p, .chrome-footer a{ font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--text-3); }
 .chrome-footer a:hover{ color:var(--text); }
 
-/* ---------- reveal ---------- */
-.rv{ opacity:0; transform:translateY(24px); transition:opacity .8s cubic-bezier(.2,.8,.2,1), transform .8s cubic-bezier(.2,.8,.2,1); }
+/* ---------- reveal ----------
+   --rv-d is the batch delay. rhodium.js sets it on each element that
+   crosses the threshold in the same observer callback, in document
+   order, so a group of blocks that come into view together cascade
+   instead of appearing on one frame. It inherits, which is what lets
+   the nth-child delays below compose with it rather than replace it.
+   Elements that enter alone never get one, so a single block still
+   reveals immediately. */
+.rv{ opacity:0; transform:translateY(24px); transition:opacity .8s cubic-bezier(.2,.8,.2,1), transform .8s cubic-bezier(.2,.8,.2,1); transition-delay:var(--rv-d,0s); }
 .rv.in{ opacity:1; transform:none; }
-.rv-s > *{ opacity:0; transform:translateY(22px) scale(.985); transition:opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1); }
+.rv-s > *{ opacity:0; transform:translateY(22px) scale(.985); transition:opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1); transition-delay:var(--rv-d,0s); }
 .rv-s.in > *{ opacity:1; transform:none; }
-.rv-s.in > *:nth-child(1){ transition-delay:.04s; }
-.rv-s.in > *:nth-child(2){ transition-delay:.10s; }
-.rv-s.in > *:nth-child(3){ transition-delay:.16s; }
-.rv-s.in > *:nth-child(4){ transition-delay:.22s; }
-.rv-s.in > *:nth-child(5){ transition-delay:.28s; }
-.rv-s.in > *:nth-child(6){ transition-delay:.34s; }
-.rv-s.in > *:nth-child(7){ transition-delay:.40s; }
-.rv-s.in > *:nth-child(8){ transition-delay:.46s; }
+.rv-s.in > *:nth-child(1){ transition-delay:calc(var(--rv-d,0s) + .04s); }
+.rv-s.in > *:nth-child(2){ transition-delay:calc(var(--rv-d,0s) + .10s); }
+.rv-s.in > *:nth-child(3){ transition-delay:calc(var(--rv-d,0s) + .16s); }
+.rv-s.in > *:nth-child(4){ transition-delay:calc(var(--rv-d,0s) + .22s); }
+.rv-s.in > *:nth-child(5){ transition-delay:calc(var(--rv-d,0s) + .28s); }
+.rv-s.in > *:nth-child(6){ transition-delay:calc(var(--rv-d,0s) + .34s); }
+.rv-s.in > *:nth-child(7){ transition-delay:calc(var(--rv-d,0s) + .40s); }
+.rv-s.in > *:nth-child(8){ transition-delay:calc(var(--rv-d,0s) + .46s); }
 
 @media (prefers-reduced-motion: reduce){
-  .rv,.rv-s > *{ opacity:1 !important; transform:none !important; transition:none !important; }
+  .rv,.rv-s > *{ opacity:1 !important; transform:none !important; transition:none !important; transition-delay:0s !important; }
   .mq-t,.aura b,.chrome{ animation:none !important; }
   .btn,.card,.logo,.lk{ transition:none; }
 }

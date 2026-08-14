@@ -159,3 +159,55 @@ Continuous · Engineered · Iridescent · Scannable · Senior
 - Rewriting the WHO layout, the risk is all downside
 - A second accent system per project, one variable swap is the whole budget
 - Adding sections that repeat what the page already says well
+
+---
+---
+
+# Moodboard v3 — the reveal cascade, and why not Framer Motion
+
+## The request, and what was actually missing
+
+The ask was to install Framer Motion and wrap every section in a
+scroll-triggered staggered fade. The first half is not available to this site
+and the second half was already built.
+
+| Question | Finding |
+|---|---|
+| Can Framer Motion run here? | No. It is React-only. This site is static HTML with no React, no JSX step and no bundler; pages load plain `<script>` tags |
+| Do sections already reveal on scroll? | Yes, on every page — `.rv`/`.rv-s` via `rhodium.js`, `data-split`/`data-3d` via `motion.js`, `.reveal` via `main.js` |
+| Is the stagger real? | Yes — `.rv-s` cascades children on `nth-child` delays |
+| So what was wrong? | Both observers added `.in` to every entry in one callback, so blocks arriving in the same screenful landed on a single frame. Sequential *within* a group, simultaneous *across* groups |
+
+## The decision
+
+Fix the actual defect rather than add a fourth animation system. A batch delay
+custom property, `--rv-d`, is set by the observer on each element crossing the
+threshold in the same callback, in document order, so a screenful cascades
+top to bottom. It inherits, so the existing `nth-child` delays compose with it
+via `calc()` instead of being replaced.
+
+Two properties matter more than the effect:
+
+- **A block entering alone gets no delay.** Scrolling one section at a time
+  stays immediate. Delay is only introduced where the problem existed.
+- **The cascade is capped at five steps.** An uncapped stagger punishes the
+  reader at the bottom of a long batch, and this portfolio is read against a
+  five-minute budget. Motion is not allowed to spend that budget.
+
+Applied symmetrically to the chrome and legacy systems so the two do not drift
+further apart.
+
+## Why not the framework
+
+Beyond it not running: a fourth animation system duplicating three working
+ones, ~34KB gzipped, on a site whose stated position is that motion must not
+gate content. The cost is paid by the person scanning on a phone, and the
+benefit is a nicer authoring API for the person who already wrote the
+vanilla version.
+
+## What to Avoid
+
+- A fourth motion system. Three is already one more than this site can justify
+- Uncapped stagger — the reader at the end of the batch pays for it
+- Any reveal that is not neutralised in the reduced-motion block in the same edit
+- Reaching for a framework to solve a fifteen-line observer problem

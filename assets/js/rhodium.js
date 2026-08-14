@@ -37,12 +37,36 @@
     }, { passive: true });
   }
 
-  /* ---------- reveal ---------- */
+  /* ---------- reveal ----------
+     Blocks that cross the threshold in the same callback are staggered
+     in document order so a screenful arriving at once cascades top to
+     bottom instead of landing on a single frame. The cascade is capped
+     so a long batch never leaves the last block waiting: past the cap
+     the delay stops growing. A block entering on its own gets no delay
+     at all, which keeps scrolling one section at a time feeling
+     immediate. */
+  var RV_STEP = 0.09;   /* seconds between siblings in a batch */
+  var RV_CAP  = 5;      /* stop growing after this many */
+
   var targets = document.querySelectorAll('.rv, .rv-s');
   if (targets.length) {
     var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (!en.isIntersecting) return;
+      var arrived = entries.filter(function (en) { return en.isIntersecting; });
+
+      /* Observer callbacks are not guaranteed to be in document order,
+         and a cascade that runs bottom-up reads as a glitch. */
+      if (arrived.length > 1 && !reduce) {
+        arrived.sort(function (a, b) {
+          var pos = a.target.compareDocumentPosition(b.target);
+          return (pos & Node.DOCUMENT_POSITION_FOLLOWING) ? -1 : 1;
+        });
+      }
+
+      arrived.forEach(function (en, i) {
+        if (i > 0 && !reduce) {
+          var steps = i < RV_CAP ? i : RV_CAP;
+          en.target.style.setProperty('--rv-d', (steps * RV_STEP).toFixed(2) + 's');
+        }
         en.target.classList.add('in');
         io.unobserve(en.target);
       });

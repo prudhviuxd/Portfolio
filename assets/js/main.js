@@ -12,15 +12,34 @@ document.querySelectorAll('.nav-links a').forEach((link) => {
 });
 
 // Reveal-on-scroll (also drives .stagger cascades)
+// Blocks crossing the threshold in the same callback cascade in document
+// order rather than landing together. Capped so a long batch does not
+// leave the last block waiting; a lone block gets no delay.
+const RV_STEP = 0.09; // seconds between siblings in a batch
+const RV_CAP = 5;
+const rvReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 const revealEls = document.querySelectorAll('.reveal, .stagger');
 if (revealEls.length) {
   const io = new IntersectionObserver(
     (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('in');
-          io.unobserve(entry.target);
+      const arrived = entries.filter((en) => en.isIntersecting);
+
+      // Callback order is not document order, and a bottom-up cascade
+      // reads as a glitch.
+      if (arrived.length > 1 && !rvReduce) {
+        arrived.sort((a, b) =>
+          a.target.compareDocumentPosition(b.target) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1
+        );
+      }
+
+      arrived.forEach((entry, i) => {
+        if (i > 0 && !rvReduce) {
+          const steps = i < RV_CAP ? i : RV_CAP;
+          entry.target.style.setProperty('--rv-d', `${(steps * RV_STEP).toFixed(2)}s`);
         }
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
       });
     },
     { threshold: 0.12 }

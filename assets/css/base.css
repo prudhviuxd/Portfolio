@@ -310,6 +310,9 @@ button{ font-family: inherit; cursor: pointer; }
   transform: perspective(1000px) translateY(48px) rotateX(10deg) scale(.97);
   transform-origin: 50% 100%;
   transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1);
+  /* Batch delay, set by main.js on blocks that enter together. See the
+     matching note in rhodium.css. */
+  transition-delay: var(--rv-d, 0s);
   will-change: opacity, transform;
 }
 .reveal.in{
@@ -317,7 +320,7 @@ button{ font-family: inherit; cursor: pointer; }
   transform: perspective(1000px) translateY(0) rotateX(0deg) scale(1);
 }
 @media (prefers-reduced-motion: reduce){
-  .reveal{ opacity: 1; transform: none; transition: none; }
+  .reveal{ opacity: 1; transform: none; transition: none; transition-delay: 0s; }
 }
 
 @media (max-width: 880px){
