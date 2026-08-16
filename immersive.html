@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#05050c">
+<title>Prudhvi Raj PJ — Immersive Portfolio</title>
+<meta name="description" content="A 3D portfolio for Prudhvi Raj PJ, design leader. Orbit a floating cosmic gallery and open About, Projects, Skills and Contact.">
+
+<link rel="stylesheet" href="assets/css/immersive.css">
+
+<!-- With scripting off nothing ever clears the loader, and it would sit on
+     top of the message below. -->
+<noscript><style>.loader,.hud{ display:none; }</style></noscript>
+
+<!-- Three.js is vendored under assets/js/vendor, so the page has no
+     third-party runtime dependency and works offline. -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "./assets/js/vendor/three/three.module.min.js",
+    "three/addons/controls/OrbitControls.js": "./assets/js/vendor/three/OrbitControls.js"
+  }
+}
+</script>
+</head>
+
+<body class="is-loading">
+
+<!-- ======================= STAGE ======================= -->
+<div class="stage" id="stage">
+  <canvas id="scene" role="img"
+          aria-label="A floating cosmic gallery of four glowing cards: About Me, Projects, Skills and Contact. Use the menu to open any of them."></canvas>
+</div>
+
+<!-- ======================= LOADER ======================= -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader-mark">Prudhvi&nbsp;Raj&nbsp;PJ</div>
+  <div class="loader-bar"><i></i></div>
+  <div class="loader-note mono">Assembling the gallery</div>
+</div>
+
+<!-- ======================= HUD ======================= -->
+<div class="hud" id="hud">
+
+  <header class="hud-top">
+    <a class="wordmark" href="index.html">
+      <span class="wordmark-dot" aria-hidden="true"></span>
+      Prudhvi&nbsp;Raj&nbsp;PJ
+    </a>
+    <div class="hud-top-right">
+      <span class="pill"><i aria-hidden="true"></i>Open to work</span>
+      <a class="ghost-btn" href="index.html">Flat version</a>
+    </div>
+  </header>
+
+  <nav class="hud-nav" aria-label="Portfolio sections">
+    <ul id="node-nav"></ul>
+  </nav>
+
+  <div class="hud-bottom">
+    <p class="hint" id="hint">
+      <span class="mono">Drag</span> to orbit
+      <span class="sep" aria-hidden="true">·</span>
+      <span class="mono">Scroll</span> to zoom
+      <span class="sep" aria-hidden="true">·</span>
+      <span class="mono">Click</span> a card to enter
+    </p>
+    <p class="readout mono" id="readout" aria-hidden="true"></p>
+    <button type="button" class="ghost-btn reset-btn" id="reset" hidden>Back to the gallery</button>
+  </div>
+
+</div>
+
+<!-- ======================= OVERLAY ======================= -->
+<div class="ov" id="overlay" hidden>
+  <div class="ov-scrim" data-close aria-hidden="true"></div>
+
+  <div class="ov-panel" role="dialog" aria-modal="true" aria-labelledby="ov-title" tabindex="-1">
+    <header class="ov-head">
+      <span class="ov-index mono"></span>
+      <h2 class="ov-title" id="ov-title"></h2>
+      <p class="ov-kicker"></p>
+      <button type="button" class="ov-close" data-close aria-label="Close and return to the gallery">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+          <path d="M1 1l13 13M14 1L1 14"/>
+        </svg>
+      </button>
+    </header>
+
+    <!-- tabindex so the scroll region is reachable from the keyboard -->
+    <div class="ov-body" tabindex="0"></div>
+
+    <footer class="ov-foot">
+      <button type="button" class="ov-nav" data-nav="prev">
+        <span class="ov-nav-dir mono">← Prev</span>
+        <span class="ov-nav-name"></span>
+      </button>
+      <button type="button" class="ov-nav is-next" data-nav="next">
+        <span class="ov-nav-dir mono">Next →</span>
+        <span class="ov-nav-name"></span>
+      </button>
+    </footer>
+  </div>
+</div>
+
+<!-- ======================= FALLBACK =======================
+     Shown when WebGL is unavailable or the scene fails to build.
+     Rendered from the same content module as the overlay. -->
+<main class="fallback" id="fallback"></main>
+
+<noscript>
+  <div class="noscript">
+    <h1>Prudhvi Raj PJ — Design Leader</h1>
+    <p>This page is a 3D experience and needs JavaScript.
+       The full portfolio is available as a standard page.</p>
+    <p><a href="index.html">Open the flat version →</a></p>
+  </div>
+</noscript>
+
+<script type="module" src="assets/js/immersive/main.js"></script>
+</body>
+</html>
