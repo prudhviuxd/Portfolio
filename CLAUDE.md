@@ -39,9 +39,15 @@ making visual or structural changes.
 
 ## Installed Skills
 
-Two skills are vendored into `.claude/skills/`, both MIT-licensed from
-[nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill).
+Three MIT-licensed skills are vendored into `.claude/skills/`. `ui-ux-pro-max`
+and `design-system` come from
+[nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill);
+`motion-design` comes from the MCPmarket plugin
+([knoxgraeme/mcpmarket-plugin](https://github.com/knoxgraeme/mcpmarket-plugin)).
 Each has a `PROVENANCE.md` recording its source and local modifications.
+
+All three are **pinned copies** — none auto-updates. Re-vendor manually to pick
+up upstream changes.
 
 ### ui-ux-pro-max
 
@@ -102,6 +108,27 @@ component-spec guidance works standalone.
 Note that this repo's CSS predates the token system and contains hardcoded hex
 and pixel values — `validate-tokens.cjs` will report many findings against
 `assets/css`. Treat those as a backlog, not as regressions to fix wholesale.
+
+### motion-design
+
+Prose-only guidance for choosing easing curves and durations — no scripts, no
+data files. Read both `references/decision-tree.md` and
+`references/easing-tokens.md` before recommending animation values.
+
+Its premise: every animation needs a job; if it has no job, don't animate.
+Evaluate purpose (responsiveness / spatial continuity / understanding /
+delight), frequency, and pattern type, then pick tokens accordingly.
+
+Framework-agnostic and CSS-first, so it fits this repo well — but its "Tips"
+section suggests naming a framework such as Framer Motion or React Spring.
+There is no React and no build step here, so prefer the CSS custom properties
+in `references/easing-tokens.md` and reconcile recommendations against the
+existing `assets/css/motion.css` and `assets/js/motion.js` rather than
+introducing a library.
+
+For scroll reveal, stagger, parallax and page transitions, `ui-ux-pro-max`'s
+`--domain gsap` already carries 17 presets across three intensity tiers; use it
+alongside this skill rather than duplicating the guidance.
 
 ## Conventions
 
