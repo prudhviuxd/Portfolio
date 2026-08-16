@@ -119,14 +119,16 @@ a:focus-visible,button:focus-visible{
 /* ---------- Layout ----------------------------------------------------- */
 main{position:relative; z-index:2}
 
+/* Only the hero is viewport-height. Content sections size to their content:
+   with six sections of real copy, a blanket min-height:100vh left half a
+   screen of void under the shorter ones. */
 .stage{
   max-width:64rem;
   margin:0 auto;
-  padding:var(--primitive-spacing-8) var(--primitive-spacing-3);
-  min-height:100vh;
-  display:flex; flex-direction:column; justify-content:center;
+  padding:var(--primitive-spacing-7) var(--primitive-spacing-3);
+  display:flex; flex-direction:column;
 }
-.hero{min-height:100vh}
+.hero{min-height:100vh; justify-content:center; padding-top:var(--primitive-spacing-8)}
 
 h1{
   font-family:"Bricolage",system-ui,sans-serif;
@@ -245,6 +247,104 @@ h3 a:hover{color:var(--color-accent-bright)}
 }
 .more:hover{text-decoration:underline}
 
+/* ---------- Convictions / principles ----------------------------------- */
+.convictions,.principles{
+  list-style:none; padding:0; margin:var(--primitive-spacing-3) 0 0;
+  display:grid; gap:var(--primitive-spacing-3);
+  grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));
+}
+.convictions li,.principles li{
+  border-top:2px solid var(--color-accent);
+  padding-top:var(--primitive-spacing-2);
+}
+.principles li{border-top-color:var(--color-border-strong)}
+.convictions h3,.principles h3{font-size:var(--primitive-fontSize-lg); margin:0 0 var(--primitive-spacing-1)}
+.convictions p,.principles p{margin:0; color:var(--color-muted-foreground); font-size:var(--primitive-fontSize-sm)}
+
+/* ---------- Phases / skill set ----------------------------------------- */
+/* Numbered because these genuinely are sequential - a phase order the reader
+   needs. The skill groups are numbered for the same reason: they run
+   discovery -> delivery. */
+.phases,.skillset{
+  list-style:none; padding:0; margin:var(--primitive-spacing-4) 0 0;
+  display:grid; gap:var(--primitive-spacing-3);
+  grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));
+  counter-reset:none;
+}
+.phases li,.skillset li{
+  background:var(--card-bg);
+  border:1px solid var(--card-border);
+  border-radius:var(--card-radius);
+  padding:var(--primitive-spacing-3);
+}
+.ph{
+  font-family:"JetBrains Mono",ui-monospace,monospace;
+  font-size:var(--primitive-fontSize-sm);
+  letter-spacing:.08em; text-transform:uppercase;
+  color:var(--color-accent-bright);
+  margin:0 0 var(--primitive-spacing-1);
+}
+.phases h3,.skillset h3{font-size:var(--primitive-fontSize-lg); margin:0 0 var(--primitive-spacing-1)}
+.skillset p{color:var(--color-muted-foreground); font-size:var(--primitive-fontSize-sm); margin:0 0 var(--primitive-spacing-1)}
+.tags{
+  font-family:"JetBrains Mono",ui-monospace,monospace;
+  font-size:var(--primitive-fontSize-sm);
+  color:var(--color-subtle-foreground);
+  line-height:1.8;
+  margin:var(--primitive-spacing-1) 0 0;
+}
+
+/* ---------- Also shipped ----------------------------------------------- */
+.also{margin-top:var(--primitive-spacing-4)}
+.also-head{
+  display:flex; align-items:baseline; justify-content:space-between;
+  gap:var(--primitive-spacing-2); flex-wrap:wrap;
+  border-bottom:1px solid var(--color-border);
+  padding-bottom:var(--primitive-spacing-1);
+}
+.also-head h3{margin:0}
+.also-head p{
+  margin:0; color:var(--color-subtle-foreground);
+  font-family:"JetBrains Mono",ui-monospace,monospace;
+  font-size:var(--primitive-fontSize-sm);
+}
+.also ul{list-style:none; padding:0; margin:0}
+.also li{
+  display:grid;
+  grid-template-columns:minmax(7rem,auto) 1fr auto;
+  gap:var(--primitive-spacing-2);
+  align-items:baseline;
+  border-bottom:1px solid var(--color-border);
+  padding:var(--primitive-spacing-2) 0;
+}
+.also b{color:var(--color-foreground)}
+.also span{color:var(--color-muted-foreground); font-size:var(--primitive-fontSize-sm)}
+.also em{
+  font-style:normal;
+  font-family:"JetBrains Mono",ui-monospace,monospace;
+  font-size:var(--primitive-fontSize-sm);
+  color:var(--color-subtle-foreground);
+  white-space:nowrap;
+}
+
+/* ---------- Clients ----------------------------------------------------- */
+/* Names, not logos: no logo assets exist in this repo, and inventing them
+   would misrepresent the client list. */
+.clients{
+  list-style:none; padding:0; margin:var(--primitive-spacing-3) 0 0;
+  display:flex; flex-wrap:wrap; gap:var(--primitive-spacing-1);
+}
+.clients li{
+  border:1px solid var(--color-border);
+  border-radius:var(--primitive-radius-full);
+  padding:var(--primitive-spacing-1) var(--primitive-spacing-3);
+  color:var(--color-muted-foreground);
+  font-size:var(--primitive-fontSize-sm);
+  transition:border-color var(--duration-ui) var(--easing-enter),
+             color var(--duration-ui) var(--easing-enter);
+}
+.clients li:hover{border-color:var(--color-accent); color:var(--color-foreground)}
+
 /* ---------- Links ------------------------------------------------------ */
 .links{list-style:none; padding:0; margin:var(--primitive-spacing-3) 0 0; display:grid; gap:var(--primitive-spacing-2)}
 .links li{
@@ -318,7 +418,7 @@ h3 a:hover{color:var(--color-accent-bright)}
 }
 
 @media (max-width:640px){
-  .stage{padding:var(--primitive-spacing-6) var(--primitive-spacing-2); min-height:auto}
+  .stage{padding:var(--primitive-spacing-6) var(--primitive-spacing-2)}
   .hero{min-height:90vh}
   .bar-nav{gap:var(--primitive-spacing-1)}
 }
