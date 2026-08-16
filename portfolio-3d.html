@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prudhvi Raj PJ, Design Leader &mdash; Immersive</title>
+<meta name="description" content="An immersive 3D route through the work of Prudhvi Raj PJ, design leader across enterprise, telecom, banking and public health.">
+<link rel="stylesheet" href="assets/design-tokens.css">
+<link rel="stylesheet" href="assets/css/portfolio-3d.css">
+<noscript><style>
+  .r{opacity:1!important;transform:none!important}
+  #bg{display:none}
+  .scene-note{display:block}
+</style></noscript>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- WebGL layer. Purely decorative: removed entirely when WebGL, JS or
+     motion preference says no. All content below stands on its own. -->
+<canvas id="bg" aria-hidden="true"></canvas>
+<div id="grade" aria-hidden="true"></div>
+
+<header class="bar">
+  <a class="mark" href="index.html">Prudhvi&nbsp;Raj&nbsp;PJ</a>
+  <nav class="bar-nav" aria-label="Sections">
+    <a href="#impact">Impact</a>
+    <a href="#work">Work</a>
+    <a href="#contact">Contact</a>
+    <a class="flat" href="index.html">Standard&nbsp;site</a>
+  </nav>
+</header>
+
+<!-- Scroll progress, mirrors camera depth -->
+<div class="prog" role="presentation"><span id="progbar"></span></div>
+
+<main id="main">
+
+  <section class="stage hero" id="intro" data-depth="0">
+    <p class="eyebrow r">Design&nbsp;Leader &middot; 12&nbsp;Years &middot; Enterprise&nbsp;&amp;&nbsp;AI &middot; Hyderabad,&nbsp;IN</p>
+    <h1 class="r">Design that doesn't tarnish</h1>
+    <p class="lede r">I'm a design leader with 12 years across enterprise, telecom, banking and
+      public health. I lead teams of 5&ndash;12 designers, own UX strategy with C-level
+      stakeholders, and ship products used by millions &mdash; most recently for WHO, MTN
+      and the IPL.</p>
+    <div class="cta r">
+      <a class="btn" href="#work">See the work</a>
+      <a class="btn ghost" href="#contact">Start a conversation</a>
+    </div>
+    <p class="scene-note">This route renders a 3D scene. The standard site carries the
+      same content without it.</p>
+    <p class="scroll-cue" aria-hidden="true">Scroll</p>
+  </section>
+
+  <section class="stage" id="impact" data-depth="1">
+    <p class="idx r">01 / Impact</p>
+    <h2 class="r">Outcomes, not artefacts</h2>
+    <ul class="stats r">
+      <li><b>100+</b><span>POCs &amp; RFPs submitted</span></li>
+      <li><b>200+</b><span>Man-hours saved via design ops</span></li>
+      <li><b>80%</b><span>Reduction in churn</span></li>
+      <li><b>100+</b><span>Projects delivered end to end</span></li>
+      <li><b>10+</b><span>Domains, telecom to healthcare</span></li>
+      <li><b>80%</b><span>Client satisfaction on delivery</span></li>
+    </ul>
+  </section>
+
+  <section class="stage" id="work" data-depth="2">
+    <p class="idx r">02 / Selected work</p>
+    <h2 class="r">Three deep, five more</h2>
+    <p class="lede r">Written up in full: the problem, how the team worked, and what
+      shifted.</p>
+
+    <ol class="work r">
+      <li class="case" data-marker="0">
+        <p class="org">World Health Organization</p>
+        <h3><a href="case-studies/who-myyoga.html">WHO &middot; mYoga</a></h3>
+        <dl>
+          <dt>Role</dt><dd>UX Lead, team of 6</dd>
+          <dt>Problem</dt><dd>Wellbeing apps assumed literacy, bandwidth and a premium device</dd>
+          <dt>Outcome</dt><dd>2.1M+ downloads, 10 languages, offline-first</dd>
+        </dl>
+        <a class="more" href="case-studies/who-myyoga.html">Read the case study</a>
+      </li>
+
+      <li class="case" data-marker="1">
+        <p class="org">MTN Nigeria &amp; South Africa</p>
+        <h3><a href="case-studies/my-mtn.html">My MTN</a></h3>
+        <dl>
+          <dt>Role</dt><dd>Lead UX Designer, 5 months</dd>
+          <dt>Problem</dt><dd>Recharge took five screens and drove customers to call centres</dd>
+          <dt>Outcome</dt><dd>One-tap recharge, OTP removed from the critical path</dd>
+        </dl>
+        <a class="more" href="case-studies/my-mtn.html">Read the case study</a>
+      </li>
+
+      <li class="case" data-marker="2">
+        <p class="org">BCCI &middot; Indian Premier League</p>
+        <h3><a href="case-studies/ipl.html">IPL</a></h3>
+        <dl>
+          <dt>Role</dt><dd>Design Lead</dd>
+          <dt>Problem</dt><dd>One app had to hold a billion cricket moods at once</dd>
+          <dt>Outcome</dt><dd>A system that flexed from live match to long tail</dd>
+        </dl>
+        <a class="more" href="case-studies/ipl.html">Read the case study</a>
+      </li>
+    </ol>
+  </section>
+
+  <section class="stage" id="contact" data-depth="3">
+    <p class="idx r">03 / Contact</p>
+    <h2 class="r">Let's build something real</h2>
+    <p class="lede r">Open to design leadership roles and selected consulting. If you're
+      weighing a hard product problem, I'd like to hear it.</p>
+    <ul class="links r">
+      <li><span>Email</span><a href="mailto:prudhviuxd@gmail.com">prudhviuxd@gmail.com</a></li>
+      <li><span>Phone</span><a href="tel:+919177598417">+91 91775 98417</a></li>
+      <li><span>LinkedIn</span><a href="https://www.linkedin.com/in/prudhviraj-pj/">/prudhviraj-pj</a></li>
+      <li><span>Behance</span><a href="https://www.behance.net/prudhviuxd">/prudhviuxd</a></li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <p>Prudhvi Raj PJ &middot; Design Leader &mdash; Hyderabad, India &middot; Working globally</p>
+  <p><a href="index.html">Standard site</a> &middot; <a href="resume.html">Resume</a> &middot; <a href="#intro">Back to top</a></p>
+</footer>
+
+<script type="module" src="assets/js/portfolio-3d.js"></script>
+</body>
+</html>

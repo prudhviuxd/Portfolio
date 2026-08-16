@@ -13,13 +13,55 @@ HTML files directly or serve the directory statically.
 index.html                  # Home
 resume.html                 # Resume
 route-b.html, route-c.html  # Alternate home-page routes/experiments
+portfolio-3d.html           # Immersive WebGL route (see below)
 case-studies/               # ipl.html, my-mtn.html, who-myyoga.html
 assets/css/                 # Per-page + shared stylesheets (base, motion, scroll3d, ...)
-assets/js/                  # main.js, motion.js, rhodium.js
+assets/js/                  # main.js, motion.js, rhodium.js, portfolio-3d.js
+assets/js/vendor/           # three.module.min.js + three.core.min.js (MIT, pinned 0.180.0)
+assets/design-tokens.json   # Token source of truth (three-layer)
+assets/design-tokens.css    # GENERATED from the JSON — never edit by hand
 assets/fonts/, assets/img/
 docs/MOODBOARD.md           # Design rationale and direction
 .claude/skills/             # Vendored design skills (see below)
 ```
+
+## The 3D route (`portfolio-3d.html`)
+
+An immersive WebGL route: a scroll-driven camera dolly through an instanced
+wireframe corridor, with three accent monoliths marking the case studies.
+
+**It is an addition, not a replacement.** `index.html` remains the primary
+route, and the 3D page links to it prominently. This matters because
+`docs/MOODBOARD.md` argues directly against WebGL-led portfolios — so the 3D
+layer is built to be strictly decorative and to fall away cleanly:
+
+| Condition | Result |
+|---|---|
+| No JS | `<noscript>` reveals all content, removes the canvas |
+| No WebGL | Canvas removed, CSS gradient carries the backdrop |
+| `prefers-reduced-motion` | Canvas removed, content in final state, no dolly, no parallax |
+| Full support | Scroll dolly + pointer parallax clamped to 0.3 |
+
+Every word of copy lives in the HTML, so the recruiter-skim path and crawlers
+never depend on the scene rendering.
+
+Three.js is **self-hosted and pinned** (`assets/js/vendor/`, ~704KB) rather
+than pulled from a CDN, so the page works offline and makes no third-party
+request. When touching the scene, keep the rules it was built to: cap
+`setPixelRatio` at 2, construct no geometry inside the frame loop, update
+`camera.aspect` + `updateProjectionMatrix()` on resize, and dispose every
+geometry and material on teardown.
+
+Regenerate tokens after editing `assets/design-tokens.json`:
+
+```bash
+node .claude/skills/design-system/scripts/generate-tokens.cjs \
+  --config assets/design-tokens.json -o assets/design-tokens.css
+```
+
+Note the generator prefixes primitives — semantic and component tokens are
+`--color-accent`, `--duration-ui`, `--card-bg`; primitives are
+`--primitive-spacing-2`, `--primitive-fontSize-lg`.
 
 To preview locally:
 

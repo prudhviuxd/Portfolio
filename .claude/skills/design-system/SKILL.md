@@ -20,7 +20,7 @@ however, assumes upstream project files that do not exist in this repo:
 
 | Referenced | Status here |
 |---|---|
-| `assets/design-tokens.json` / `.css` | **Missing** — generate with `generate-tokens.cjs` from `templates/design-tokens-starter.json` before using slide generation |
+| `assets/design-tokens.json` / `.css` | **Present** — authored for the 3D route; `.css` is generated from the `.json` by `generate-tokens.cjs`. Edit the JSON and regenerate, never the CSS. |
 | `docs/brand-guidelines.md` | **Missing** |
 | `assets/css/slide-animations.css` | **Missing** |
 | `assets/designs/slides/claudekit-pitch-251223.html` | **Missing** — upstream's reference implementation, not vendored |
