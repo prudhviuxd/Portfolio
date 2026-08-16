@@ -39,11 +39,13 @@ making visual or structural changes.
 
 ## Installed Skills
 
-Three MIT-licensed skills are vendored into `.claude/skills/`. `ui-ux-pro-max`
+Four MIT-licensed skills are vendored into `.claude/skills/`. `ui-ux-pro-max`
 and `design-system` come from
 [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill);
 `motion-design` comes from the MCPmarket plugin
-([knoxgraeme/mcpmarket-plugin](https://github.com/knoxgraeme/mcpmarket-plugin)).
+([knoxgraeme/mcpmarket-plugin](https://github.com/knoxgraeme/mcpmarket-plugin));
+`motion-framer` comes from
+[freshtechbro/claudedesignskills](https://github.com/freshtechbro/claudedesignskills).
 Each has a `PROVENANCE.md` recording its source and local modifications.
 
 All three are **pinned copies** — none auto-updates. Re-vendor manually to pick
@@ -129,6 +131,40 @@ introducing a library.
 For scroll reveal, stagger, parallax and page transitions, `ui-ux-pro-max`'s
 `--domain gsap` already carries 17 presets across three intensity tiers; use it
 alongside this skill rather than duplicating the guidance.
+
+### motion-framer
+
+Motion / Framer Motion reference: motion components, variants, gestures
+(hover/tap/drag/focus), `AnimatePresence` exit animations, layout and `layoutId`
+shared-element transitions, spring physics, and scroll-linked effects. Ships a
+1077-line `references/api_reference.md`, a 74KB `assets/examples/README.md`, a
+React+Vite starter under `assets/starter_motion/`, and two generators:
+
+```bash
+python3 .claude/skills/motion-framer/scripts/animation_generator.py --type <type> --name <Name>
+python3 .claude/skills/motion-framer/scripts/variant_builder.py --preset <preset>
+```
+
+**This skill targets React, which this repo does not use.** Its examples are JSX
+and assume a bundler; the bundled starter pulls in React, Vite and
+`framer-motion` v11. Do not add React, Vite, or a bundler here to use it. Treat
+it as reference for a future React project, or translate its concepts — spring
+parameters, gesture semantics, stagger orchestration — by hand into
+`assets/css/motion.css` and `assets/js/motion.js`.
+
+If a vanilla build is ever wanted here, the current package is `motion`, not
+`framer-motion`, imported as an ES module from a CDN:
+
+```js
+import { animate, scroll, inView, stagger } from "https://cdn.jsdelivr.net/npm/motion@latest/+esm"
+```
+
+That would still be a runtime dependency, so weigh it against the
+dependency-free convention above before adding it.
+
+Its Resources section claims `references/variants_patterns.md` and
+`references/gesture_guide.md`; neither ships. See the Install Notes at the top
+of its `SKILL.md`.
 
 ## Conventions
 
