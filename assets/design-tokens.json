@@ -1,64 +1,76 @@
 {
   "$schema": "https://design-tokens.org/schema.json",
   "_meta": {
-    "name": "Portfolio3D",
-    "note": "Palette derived from ui-ux-pro-max --design-system (Minimalism & Swiss, industrial grey + safety orange), re-based dark for the immersive 3D route. Duration and easing tokens come from the motion-design skill's easing-tokens.md. Every text pairing verified >= 4.5:1."
+    "name": "Award2026",
+    "note": "Scroll-Triggered Storytelling pattern from ui-ux-pro-max --design-system (variance 10). Its Brutalism style and pink/cyan palette were rejected: brutalism specifies 'no smooth transitions', which contradicts the brief. Chapter hue progression is the pattern's 'each chapter has distinct color, building intensity'. Neutrals carry a cool blue bias so the warm half reads as a genuine shift. All accents >=7.6:1 on ground."
   },
   "primitive": {
     "color": {
       "ink": {
+        "1000": {
+          "$value": "#08090B",
+          "$type": "color"
+        },
         "950": {
-          "$value": "#0A0B0D",
+          "$value": "#0C0E12",
           "$type": "color"
         },
         "900": {
-          "$value": "#0F1114",
+          "$value": "#11141A",
           "$type": "color"
         },
         "850": {
-          "$value": "#131519",
+          "$value": "#171B22",
           "$type": "color"
         },
         "800": {
-          "$value": "#1A1D22",
+          "$value": "#1E232C",
           "$type": "color"
         },
         "700": {
-          "$value": "#2A2E35",
+          "$value": "#2B313C",
           "$type": "color"
         },
         "600": {
-          "$value": "#3D434C",
+          "$value": "#3E4655",
           "$type": "color"
         },
         "400": {
-          "$value": "#949BA6",
+          "$value": "#8A929E",
           "$type": "color"
         },
         "300": {
-          "$value": "#A8AEB8",
+          "$value": "#AFB6C0",
           "$type": "color"
         },
         "100": {
-          "$value": "#E8EAED",
-          "$type": "color"
-        },
-        "50": {
-          "$value": "#F8FAFC",
+          "$value": "#EDEFF2",
           "$type": "color"
         }
       },
-      "amber": {
-        "600": {
-          "$value": "#EA580C",
+      "chapter": {
+        "1": {
+          "$value": "#9DB2CE",
           "$type": "color"
         },
-        "500": {
+        "2": {
+          "$value": "#7FB4EE",
+          "$type": "color"
+        },
+        "3": {
+          "$value": "#3FC9C2",
+          "$type": "color"
+        },
+        "4": {
+          "$value": "#A8D45C",
+          "$type": "color"
+        },
+        "5": {
+          "$value": "#F5A93F",
+          "$type": "color"
+        },
+        "6": {
           "$value": "#FF7A2F",
-          "$type": "color"
-        },
-        "400": {
-          "$value": "#FF8F4D",
           "$type": "color"
         }
       },
@@ -97,45 +109,49 @@
         "$type": "dimension"
       },
       "6": {
-        "$value": "4rem",
+        "$value": "4.5rem",
         "$type": "dimension"
       },
       "7": {
-        "$value": "6rem",
+        "$value": "7rem",
         "$type": "dimension"
       },
       "8": {
-        "$value": "9rem",
+        "$value": "11rem",
         "$type": "dimension"
       }
     },
     "fontSize": {
       "sm": {
-        "$value": "0.875rem",
+        "$value": "0.8125rem",
         "$type": "dimension"
       },
       "base": {
-        "$value": "1rem",
+        "$value": "1.0625rem",
         "$type": "dimension"
       },
       "lg": {
-        "$value": "1.125rem",
+        "$value": "1.25rem",
         "$type": "dimension"
       },
       "xl": {
-        "$value": "1.375rem",
+        "$value": "1.5rem",
         "$type": "dimension"
       },
       "2xl": {
-        "$value": "clamp(1.75rem, 3vw, 2.5rem)",
+        "$value": "clamp(2rem,4vw,3rem)",
         "$type": "dimension"
       },
       "3xl": {
-        "$value": "clamp(2.5rem, 6vw, 4.5rem)",
+        "$value": "clamp(2.75rem,7vw,5.5rem)",
         "$type": "dimension"
       },
       "4xl": {
-        "$value": "clamp(3rem, 9vw, 7rem)",
+        "$value": "clamp(3.25rem,11vw,9rem)",
+        "$type": "dimension"
+      },
+      "numeral": {
+        "$value": "clamp(7rem,26vw,22rem)",
         "$type": "dimension"
       }
     },
@@ -148,12 +164,8 @@
         "$value": "2px",
         "$type": "dimension"
       },
-      "default": {
-        "$value": "4px",
-        "$type": "dimension"
-      },
       "lg": {
-        "$value": "10px",
+        "$value": "14px",
         "$type": "dimension"
       },
       "full": {
@@ -175,29 +187,37 @@
         "$type": "duration"
       },
       "4": {
-        "$value": "300ms",
+        "$value": "320ms",
         "$type": "duration"
       },
       "5": {
-        "$value": "500ms",
+        "$value": "520ms",
+        "$type": "duration"
+      },
+      "chapter": {
+        "$value": "700ms",
         "$type": "duration"
       },
       "illustrative": {
-        "$value": "900ms",
+        "$value": "1100ms",
         "$type": "duration"
       }
     },
     "easing": {
       "out-quart": {
-        "$value": "cubic-bezier(.165, .84, .44, 1)",
+        "$value": "cubic-bezier(.165,.84,.44,1)",
         "$type": "cubicBezier"
       },
       "out-expo": {
-        "$value": "cubic-bezier(.19, 1, .22, 1)",
+        "$value": "cubic-bezier(.19,1,.22,1)",
+        "$type": "cubicBezier"
+      },
+      "in-out-expo": {
+        "$value": "cubic-bezier(.87,0,.13,1)",
         "$type": "cubicBezier"
       },
       "in-out-cubic": {
-        "$value": "cubic-bezier(.645, .045, .355, 1)",
+        "$value": "cubic-bezier(.645,.045,.355,1)",
         "$type": "cubicBezier"
       }
     }
@@ -205,15 +225,15 @@
   "semantic": {
     "color": {
       "background": {
-        "$value": "{primitive.color.ink.950}",
+        "$value": "{primitive.color.ink.1000}",
         "$type": "color"
       },
       "surface": {
-        "$value": "{primitive.color.ink.850}",
+        "$value": "{primitive.color.ink.900}",
         "$type": "color"
       },
       "surface-raised": {
-        "$value": "{primitive.color.ink.800}",
+        "$value": "{primitive.color.ink.850}",
         "$type": "color"
       },
       "foreground": {
@@ -237,11 +257,7 @@
         "$type": "color"
       },
       "accent": {
-        "$value": "{primitive.color.amber.600}",
-        "$type": "color"
-      },
-      "accent-bright": {
-        "$value": "{primitive.color.amber.500}",
+        "$value": "{primitive.color.chapter.6}",
         "$type": "color"
       },
       "accent-foreground": {
@@ -249,7 +265,7 @@
         "$type": "color"
       },
       "focus-ring": {
-        "$value": "{primitive.color.amber.500}",
+        "$value": "{primitive.color.chapter.6}",
         "$type": "color"
       }
     },
@@ -258,8 +274,8 @@
         "$value": "{primitive.spacing.3}",
         "$type": "dimension"
       },
-      "section": {
-        "$value": "{primitive.spacing.8}",
+      "chapter": {
+        "$value": "{primitive.spacing.7}",
         "$type": "dimension"
       }
     },
@@ -273,7 +289,11 @@
         "$type": "duration"
       },
       "surface": {
-        "$value": "{primitive.duration.3}",
+        "$value": "{primitive.duration.4}",
+        "$type": "duration"
+      },
+      "chapter": {
+        "$value": "{primitive.duration.chapter}",
         "$type": "duration"
       },
       "illustrative": {
@@ -288,6 +308,10 @@
       },
       "reveal": {
         "$value": "{primitive.easing.out-expo}",
+        "$type": "cubicBezier"
+      },
+      "chapter": {
+        "$value": "{primitive.easing.in-out-expo}",
         "$type": "cubicBezier"
       },
       "morph": {
@@ -306,16 +330,12 @@
         "$value": "{semantic.color.accent-foreground}",
         "$type": "color"
       },
-      "hover-bg": {
-        "$value": "{semantic.color.accent-bright}",
-        "$type": "color"
-      },
       "padding-x": {
-        "$value": "{primitive.spacing.3}",
+        "$value": "{primitive.spacing.4}",
         "$type": "dimension"
       },
       "padding-y": {
-        "$value": "{primitive.spacing.1}",
+        "$value": "{primitive.spacing.2}",
         "$type": "dimension"
       },
       "radius": {
