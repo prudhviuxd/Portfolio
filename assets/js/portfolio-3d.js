@@ -8,11 +8,13 @@
  * Motion patterns follow the motion-framer skill translated out of React:
  * variants become per-chapter groups, whileInView becomes inView(), and the
  * spring presets are used verbatim (gentle = stiffness 100 / damping 20).
- * The vanilla `motion` package provides the same engine the React API sits on.
+ *
+ * The scene is built from the artefacts of product design rather than
+ * abstract solids — see buildScene() for what each element is and why.
  *
  * Three.js rules from ui-ux-pro-max --stack threejs: pixel ratio capped at 2,
- * no geometry in the frame loop, aspect + projection matrix on resize,
- * explicit dispose on teardown.
+ * no geometry in the frame loop, merged line geometry instead of many meshes,
+ * aspect + projection matrix on resize, explicit dispose on teardown.
  *
  * Fallback order: no JS -> noscript; no Motion -> CSS-visible content;
  * no WebGL / reduced motion -> canvas dropped, everything in final state.
@@ -28,8 +30,6 @@ const railLinks = Array.from(document.querySelectorAll('.rail a'));
 const navLinks = Array.from(document.querySelectorAll('.bar-nav a[href^="#"]'));
 const progbar = document.getElementById('progbar');
 
-/* Accent of the chapter currently in view. The 3D scene lerps toward it, and
-   the fixed wash/progress bar inherit it off :root. */
 let activeAccent = '#FF7A2F';
 let scrollProgress = 0;
 
@@ -45,8 +45,6 @@ function revealAllNow() {
 }
 
 if (REDUCED || !M) {
-  /* No Motion bundle, or the reader asked for stillness: show the final
-     readable state immediately. The narrative never depends on the effect. */
   revealAllNow();
 } else {
   const { animate, inView, stagger } = M;
@@ -59,14 +57,7 @@ if (REDUCED || !M) {
         animate(
           items,
           { opacity: [0, 1], transform: ['translateY(22px)', 'translateY(0px)'] },
-          {
-            type: 'spring',
-            stiffness: 100,
-            damping: 20,
-            /* Capped at ~8 children before the tail starts to feel laggy,
-               per the stagger guidance in the motion presets. */
-            delay: stagger(0.055, { startDelay: 0.02 }),
-          }
+          { type: 'spring', stiffness: 100, damping: 20, delay: stagger(0.055, { startDelay: 0.02 }) }
         );
       },
       { amount: 0.12 }
@@ -75,7 +66,7 @@ if (REDUCED || !M) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Chapter tracking — accent, rail, nav                                */
+/* Chapter tracking                                                    */
 /* ------------------------------------------------------------------ */
 
 function setActiveChapter(section) {
@@ -85,24 +76,16 @@ function setActiveChapter(section) {
     document.documentElement.style.setProperty('--ch', accent);
   }
   const id = section.id;
-  railLinks.forEach((a) =>
-    a.setAttribute('aria-current', String(a.dataset.rail === id))
-  );
-  navLinks.forEach((a) =>
-    a.setAttribute('aria-current', String(a.getAttribute('href') === '#' + id))
-  );
+  railLinks.forEach((a) => a.setAttribute('aria-current', String(a.dataset.rail === id)));
+  navLinks.forEach((a) => a.setAttribute('aria-current', String(a.getAttribute('href') === '#' + id)));
 }
 
 if ('IntersectionObserver' in window && chapters.length) {
   const chapterIO = new IntersectionObserver(
     (entries) => {
-      /* Whichever chapter owns the most of the middle band wins, so a short
-         chapter between two long ones still gets its turn. */
       let best = null;
       entries.forEach((e) => {
-        if (e.isIntersecting && (!best || e.intersectionRatio > best.intersectionRatio)) {
-          best = e;
-        }
+        if (e.isIntersecting && (!best || e.intersectionRatio > best.intersectionRatio)) best = e;
       });
       if (best) setActiveChapter(best.target);
     },
@@ -112,7 +95,6 @@ if ('IntersectionObserver' in window && chapters.length) {
   setActiveChapter(chapters[0]);
 }
 
-/* Case cards light up as they pass centre-frame. */
 const cases = Array.from(document.querySelectorAll('.case'));
 if ('IntersectionObserver' in window && cases.length) {
   const caseIO = new IntersectionObserver(
@@ -136,10 +118,6 @@ window.addEventListener('scroll', readScroll, { passive: true });
 window.addEventListener('resize', readScroll);
 
 if (!REDUCED && M && M.scroll) {
-  /* Parallax is applied to the oversized chapter numerals only. Body copy is
-     never parallaxed — it hurts reading comfort and can trigger motion
-     sickness (ui-ux-pro-max, severity High). Offsets stay small so the
-     layers never visibly desync. */
   chapters.forEach((chapter) => {
     const numeral = chapter.querySelector('.numeral');
     if (!numeral) return;
@@ -165,10 +143,7 @@ function dropCanvas(reason) {
 function webglAvailable() {
   try {
     const probe = document.createElement('canvas');
-    return !!(
-      window.WebGLRenderingContext &&
-      (probe.getContext('webgl2') || probe.getContext('webgl'))
-    );
+    return !!(window.WebGLRenderingContext && (probe.getContext('webgl2') || probe.getContext('webgl')));
   } catch (err) {
     return false;
   }
@@ -178,13 +153,85 @@ if (REDUCED) dropCanvas('reduced-motion');
 else if (!webglAvailable()) dropCanvas('no-webgl');
 else initScene().catch(() => dropCanvas('load-failed'));
 
+/* ---------- 2D primitives, in local XY ------------------------------ */
+/* Everything in the scene is drawn as line segments so the whole set can be
+   merged into a handful of draw calls. Each helper returns a flat list of
+   [x,y] pairs, two per segment. */
+
+function pushRect(out, x0, y0, x1, y1) {
+  out.push(x0, y0, x1, y0, x1, y0, x1, y1, x1, y1, x0, y1, x0, y1, x0, y0);
+}
+
+/* A wireframe screen: frame, header bar, a few content lines, and a CTA.
+   The vocabulary of a UI mock, reduced to the smallest thing still
+   recognisable as one at distance. */
+function screenSegments(w, h) {
+  const out = [];
+  const hw = w / 2;
+  const hh = h / 2;
+  const pad = w * 0.1;
+  pushRect(out, -hw, -hh, hw, hh);
+  const barH = h * 0.06;
+  pushRect(out, -hw + pad, hh - pad - barH, hw - pad, hh - pad);
+  for (let i = 0; i < 3; i++) {
+    const y = hh - pad - barH - (i + 1) * h * 0.11;
+    const short = i === 2 ? w * 0.28 : 0;
+    out.push(-hw + pad, y, hw - pad - short, y);
+  }
+  pushRect(out, -hw + pad, -hh + pad, -hw + pad + w * 0.4, -hh + pad + h * 0.055);
+  return out;
+}
+
+/* Corner ticks — the crop marks that read instantly as "artboard". */
+function frameSegments(w, h, tick) {
+  const out = [];
+  const hw = w / 2;
+  const hh = h / 2;
+  const c = [
+    [-hw, -hh, 1, 1],
+    [hw, -hh, -1, 1],
+    [hw, hh, -1, -1],
+    [-hw, hh, 1, -1],
+  ];
+  c.forEach(([x, y, sx, sy]) => {
+    out.push(x, y, x + tick * sx, y);
+    out.push(x, y, x, y + tick * sy);
+  });
+  return out;
+}
+
+/* Sample a CSS cubic-bezier into a polyline. The scene plots the project's
+   real easing tokens, so the motion system is literally on the wall. */
+function bezierSegments(x1, y1, x2, y2, w, h, steps) {
+  const pts = [];
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps;
+    const mt = 1 - t;
+    const x = 3 * mt * mt * t * x1 + 3 * mt * t * t * x2 + t * t * t;
+    const y = 3 * mt * mt * t * y1 + 3 * mt * t * t * y2 + t * t * t;
+    pts.push(x * w, y * h);
+  }
+  const out = [];
+  for (let i = 0; i < pts.length / 2 - 1; i++) {
+    out.push(pts[i * 2], pts[i * 2 + 1], pts[i * 2 + 2], pts[i * 2 + 3]);
+  }
+  return out;
+}
+
+function parseBezier(value) {
+  const m = value.match(/cubic-bezier\(([^)]+)\)/);
+  if (!m) return null;
+  const n = m[1].split(',').map((s) => parseFloat(s));
+  return n.length === 4 && n.every((v) => !Number.isNaN(v)) ? n : null;
+}
+
 async function initScene() {
   const THREE = await import('./vendor/three.module.min.js');
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x08090b, 0.026);
+  scene.fog = new THREE.FogExp2(0x08090b, 0.024);
 
-  const camera = new THREE.PerspectiveCamera(64, window.innerWidth / window.innerHeight, 0.1, 140);
+  const camera = new THREE.PerspectiveCamera(64, window.innerWidth / window.innerHeight, 0.1, 150);
   camera.position.set(0, 0, 4);
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
@@ -192,62 +239,132 @@ async function initScene() {
   renderer.setSize(window.innerWidth, window.innerHeight, false);
   renderer.setClearColor(0x08090b, 1);
 
-  /* ---- geometry: constructed once ---------------------------------- */
-
-  const COUNT = 520;
   const DEPTH = 74;
 
-  const cellGeo = new THREE.BoxGeometry(0.26, 0.26, 0.26);
-  const cellMat = new THREE.MeshBasicMaterial({
-    color: 0x3e4655, wireframe: true, transparent: true, opacity: 0.34,
-  });
-
-  const field = new THREE.InstancedMesh(cellGeo, cellMat, COUNT);
-  const dummy = new THREE.Object3D();
-  for (let i = 0; i < COUNT; i++) {
-    const angle = Math.random() * Math.PI * 2;
-    const radius = 6.2 + Math.random() * 6.5;
-    dummy.position.set(
-      Math.cos(angle) * radius,
-      Math.sin(angle) * radius * 0.6,
-      -1 - Math.random() * DEPTH
-    );
-    dummy.rotation.set(Math.random() * 3.14, Math.random() * 3.14, 0);
-    const s = 0.4 + Math.random() * 1.1;
-    dummy.scale.set(s, s, s);
-    dummy.updateMatrix();
-    field.setMatrixAt(i, dummy.matrix);
+  /* Collects 2D segment lists, transforms them into world space, and merges
+     everything into one buffer. Built entirely before the loop starts. */
+  function makeLines(parts, material) {
+    const verts = [];
+    const m = new THREE.Matrix4();
+    const v = new THREE.Vector3();
+    parts.forEach(({ seg, pos, rot = [0, 0, 0], scale = 1 }) => {
+      m.makeRotationFromEuler(new THREE.Euler(rot[0], rot[1], rot[2]));
+      m.scale(new THREE.Vector3(scale, scale, scale));
+      m.setPosition(pos[0], pos[1], pos[2]);
+      for (let i = 0; i < seg.length; i += 2) {
+        v.set(seg[i], seg[i + 1], 0).applyMatrix4(m);
+        verts.push(v.x, v.y, v.z);
+      }
+    });
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+    return { mesh: new THREE.LineSegments(geo, material), geo };
   }
-  field.instanceMatrix.needsUpdate = true;
-  scene.add(field);
 
-  /* Chapter gates: one ring per chapter, tinted by that chapter's accent.
-     They give the dolly something to pass through, so depth is legible. */
-  const gateGeo = new THREE.TorusGeometry(7.4, 0.02, 8, 96);
+  /* ---- 1. Wireframe screens ---------------------------------------- */
+  /* Mobile, tablet and desktop aspect ratios, scattered through the tube
+     and angled as if pinned on a wall. */
+  const screenMat = new THREE.LineBasicMaterial({ color: 0x3e4655, transparent: true, opacity: 0.5 });
+  const ratios = [[0.62, 1.32], [1.1, 0.82], [1.5, 0.95]];
+  const screenParts = [];
+  for (let i = 0; i < 46; i++) {
+    const [w, h] = ratios[i % ratios.length];
+    const angle = Math.random() * Math.PI * 2;
+    const radius = 6.6 + Math.random() * 6.2;
+    screenParts.push({
+      seg: screenSegments(w, h),
+      pos: [Math.cos(angle) * radius, Math.sin(angle) * radius * 0.6, -2 - Math.random() * DEPTH],
+      rot: [0, (Math.random() - 0.5) * 1.1, (Math.random() - 0.5) * 0.5],
+      scale: 0.85 + Math.random() * 1.5,
+    });
+  }
+  const screens = makeLines(screenParts, screenMat);
+  scene.add(screens.mesh);
+
+  /* ---- 2. Flow connectors ------------------------------------------ */
+  /* Short links between neighbouring screens: a user flow, drawn in space. */
+  const flowMat = new THREE.LineBasicMaterial({ color: 0x2b313c, transparent: true, opacity: 0.55 });
+  const flowVerts = [];
+  for (let i = 0; i < screenParts.length - 1; i += 3) {
+    const a = screenParts[i].pos;
+    const b = screenParts[i + 1].pos;
+    const dist = Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+    if (dist > 14) continue;
+    flowVerts.push(a[0], a[1], a[2], b[0], b[1], b[2]);
+  }
+  const flowGeo = new THREE.BufferGeometry();
+  flowGeo.setAttribute('position', new THREE.Float32BufferAttribute(flowVerts, 3));
+  const flow = new THREE.LineSegments(flowGeo, flowMat);
+  scene.add(flow);
+
+  /* ---- 3. Baseline grid -------------------------------------------- */
+  /* The layout grid every screen above is measured against, laid out as a
+     floor the camera travels over. */
+  const gridMat = new THREE.LineBasicMaterial({ color: 0x1e232c, transparent: true, opacity: 0.9 });
+  const gridVerts = [];
+  const COLS = 12; /* a 12-column grid, because of course it is */
+  for (let c = 0; c <= COLS; c++) {
+    const x = -9 + (18 * c) / COLS;
+    gridVerts.push(x, -7, 4, x, -7, -DEPTH - 4);
+  }
+  for (let z = 0; z <= 40; z++) {
+    const zz = 4 - (DEPTH + 8) * (z / 40);
+    gridVerts.push(-9, -7, zz, 9, -7, zz);
+  }
+  const gridGeo = new THREE.BufferGeometry();
+  gridGeo.setAttribute('position', new THREE.Float32BufferAttribute(gridVerts, 3));
+  const grid = new THREE.LineSegments(gridGeo, gridMat);
+  scene.add(grid);
+
+  /* ---- 4. Chapter gates as artboard frames -------------------------- */
+  /* Six frames, one per chapter, sized 16:10. The reader flies through the
+     artboards rather than past abstract rings. */
   const gates = [];
   for (let i = 0; i < 6; i++) {
-    const mat = new THREE.MeshBasicMaterial({ color: 0x3e4655, transparent: true, opacity: 0.5 });
-    const gate = new THREE.Mesh(gateGeo, mat);
-    gate.position.z = -6 - i * (DEPTH / 6.6);
-    gate.rotation.z = i * 0.4;
-    scene.add(gate);
-    gates.push({ mesh: gate, mat, spin: 0.05 + i * 0.02 });
+    const mat = new THREE.LineBasicMaterial({ color: 0x3e4655, transparent: true, opacity: 0.65 });
+    const z = -7 - i * (DEPTH / 6.4);
+    const part = [
+      { seg: frameSegments(15.2, 9.5, 1.5), pos: [0, 0, z] },
+      { seg: [-7.6, 5.35, -4.2, 5.35], pos: [0, 0, z] }, /* frame label rule */
+    ];
+    const gate = makeLines(part, mat);
+    scene.add(gate.mesh);
+    gates.push({ ...gate, mat });
   }
 
-  const markerGeo = new THREE.BoxGeometry(0.45, 3.6, 0.45);
-  const markerMat = new THREE.MeshBasicMaterial({ color: 0xff7a2f, wireframe: true, transparent: true, opacity: 0.8 });
-  const markers = [-18, -36, -54].map((z, i) => {
-    const m = new THREE.Mesh(markerGeo, markerMat);
-    const x = 4.5 + Math.abs(z) * 0.3;
-    m.position.set(i % 2 === 0 ? -x : x, 0, z);
-    scene.add(m);
-    return m;
-  });
+  /* ---- 5. Case-study markers as hero screens ------------------------ */
+  const markerMat = new THREE.LineBasicMaterial({ color: 0xff7a2f, transparent: true, opacity: 0.9 });
+  const markerParts = [-18, -36, -54].map((z, i) => ({
+    seg: screenSegments(1.5, 3.2),
+    pos: [(i % 2 === 0 ? -1 : 1) * (5.2 + Math.abs(z) * 0.26), 0, z],
+    rot: [0, (i % 2 === 0 ? 1 : -1) * 0.5, 0],
+    scale: 1.5,
+  }));
+  const markers = makeLines(markerParts, markerMat);
+  scene.add(markers.mesh);
 
-  /* ---- interaction -------------------------------------------------- */
+  /* ---- 6. Easing curve plots ---------------------------------------- */
+  /* Read from the project's own design tokens at runtime, so these are the
+     actual curves governing every transition on the page. */
+  const curveMat = new THREE.LineBasicMaterial({ color: 0x8a929e, transparent: true, opacity: 0.6 });
+  const rootStyle = getComputedStyle(document.documentElement);
+  const curveNames = ['--primitive-easing-out-quart', '--primitive-easing-out-expo', '--primitive-easing-in-out-expo'];
+  const curveParts = [];
+  curveNames.forEach((name, i) => {
+    const b = parseBezier(rootStyle.getPropertyValue(name));
+    if (!b) return;
+    const z = -12 - i * 19;
+    curveParts.push({ seg: bezierSegments(b[0], b[1], b[2], b[3], 2.4, 2.4, 26), pos: [5.6, -1.2, z], rot: [0, -0.5, 0] });
+    /* axes, so it reads as a plot rather than a stray squiggle */
+    curveParts.push({ seg: [0, 0, 2.4, 0, 0, 0, 0, 2.4], pos: [5.6, -1.2, z], rot: [0, -0.5, 0] });
+  });
+  const curves = curveParts.length ? makeLines(curveParts, curveMat) : null;
+  if (curves) scene.add(curves.mesh);
+
+  /* ---- interaction --------------------------------------------------- */
 
   const pointer = { x: 0, y: 0 };
-  const PARALLAX = 0.3; /* clamped, per the magnetic-hover preset */
+  const PARALLAX = 0.3;
 
   function onPointerMove(e) {
     pointer.x = (e.clientX / window.innerWidth - 0.5) * 2;
@@ -263,13 +380,14 @@ async function initScene() {
   }
   window.addEventListener('resize', onResize);
 
-  /* ---- loop --------------------------------------------------------- */
+  /* ---- loop ---------------------------------------------------------- */
 
   const clock = new THREE.Clock();
   const target = new THREE.Color(activeAccent);
   const accentNow = new THREE.Color(activeAccent);
-  const fieldBase = new THREE.Color(0x3e4655);
-  const fieldNow = new THREE.Color(0x3e4655);
+  const screenBase = new THREE.Color(0x3e4655);
+  const gridBase = new THREE.Color(0x1e232c);
+  const tmp = new THREE.Color();
   let rafId = null;
   let camZ = 4;
   let roll = 0;
@@ -278,15 +396,16 @@ async function initScene() {
     rafId = requestAnimationFrame(frame);
     const dt = Math.min(clock.getDelta(), 0.05);
 
-    /* Colour follows the chapter, eased rather than snapped — the visible
-       half of "each chapter has a distinct colour, building intensity". */
     try { target.set(activeAccent); } catch (err) { /* keep last good colour */ }
     accentNow.lerp(target, Math.min(dt * 1.6, 1));
-    fieldNow.copy(fieldBase).lerp(accentNow, 0.22);
-    cellMat.color.copy(fieldNow);
+
+    screenMat.color.copy(tmp.copy(screenBase).lerp(accentNow, 0.2));
+    gridMat.color.copy(tmp.copy(gridBase).lerp(accentNow, 0.14));
+    flowMat.color.copy(tmp.copy(gridBase).lerp(accentNow, 0.3));
     markerMat.color.copy(accentNow);
+    if (curves) curveMat.color.copy(tmp.copy(screenBase).lerp(accentNow, 0.55));
     gates.forEach((g, i) => {
-      g.mat.color.copy(fieldBase).lerp(accentNow, 0.15 + i * 0.11);
+      g.mat.color.copy(tmp.copy(screenBase).lerp(accentNow, 0.16 + i * 0.1));
     });
 
     const targetZ = 4 - scrollProgress * DEPTH;
@@ -296,15 +415,12 @@ async function initScene() {
     camera.position.x += (pointer.x * PARALLAX - camera.position.x) * Math.min(dt * 2.4, 1);
     camera.position.y += (-pointer.y * PARALLAX - camera.position.y) * Math.min(dt * 2.4, 1);
 
-    /* A slow roll tied to depth. Small enough to read as drift, not spin. */
-    roll += (scrollProgress * 0.22 - roll) * Math.min(dt * 1.5, 1);
-    camera.rotation.z = roll;
+    roll += (scrollProgress * 0.16 - roll) * Math.min(dt * 1.5, 1);
     camera.lookAt(0, 0, camZ - 9);
     camera.rotation.z = roll;
 
-    field.rotation.z += dt * 0.01;
-    gates.forEach((g) => { g.mesh.rotation.z += dt * g.spin * 0.3; });
-    markers.forEach((m, i) => { m.rotation.y += dt * (0.1 + i * 0.05); });
+    screens.mesh.rotation.z += dt * 0.008;
+    markers.mesh.rotation.z += dt * 0.01;
 
     renderer.render(scene, camera);
   }
@@ -315,17 +431,15 @@ async function initScene() {
   document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
   start();
 
-  /* ---- teardown ----------------------------------------------------- */
-  /* Three.js frees no GPU memory on its own. No textures in this scene, so
-     geometry and materials are the whole list. */
+  /* ---- teardown ------------------------------------------------------ */
   function destroy() {
     stop();
     window.removeEventListener('pointermove', onPointerMove);
     window.removeEventListener('resize', onResize);
-    cellGeo.dispose(); cellMat.dispose();
-    gateGeo.dispose(); gates.forEach((g) => g.mat.dispose());
-    markerGeo.dispose(); markerMat.dispose();
-    field.dispose();
+    [screens.geo, flowGeo, gridGeo, markers.geo].forEach((g) => g.dispose());
+    if (curves) curves.geo.dispose();
+    gates.forEach((g) => { g.geo.dispose(); g.mat.dispose(); });
+    [screenMat, flowMat, gridMat, markerMat, curveMat].forEach((m) => m.dispose());
     renderer.dispose();
   }
   window.addEventListener('pagehide', destroy, { once: true });
