@@ -188,8 +188,55 @@ main{position:relative; z-index:2}
 .hero{
   min-height:100vh; grid-template-columns:1fr; align-content:center;
   padding-top:var(--primitive-spacing-8);
+  position:relative;
 }
-.hero .ch-head{position:static}
+.hero .ch-head{position:static; z-index:1}
+
+/* ---------- Hero: elegant dark pattern -------------------------------- */
+/* Ported from a React/Tailwind component to plain CSS — this repo has no
+   React, TypeScript, Tailwind or build step. Three changes were deliberate:
+     - the hardcoded cyan becomes var(--ch), so the streaks inherit chapter
+       colour rather than introducing a hue from outside the palette;
+     - the remote framerusercontent.com grain PNG becomes an inline SVG
+       feTurbulence data URI, so the page makes no third-party request and
+       still works offline;
+     - five separately-masked streak layers collapse into one masked
+       pseudo-element: same result, no extra DOM.
+   Scoped to the hero, above the fixed canvas, below the copy. */
+.hero-pattern{
+  position:absolute; inset:0; z-index:0;
+  /* Break out of the chapter's max-width so the ground is full-bleed —
+     boxed to the content column it leaves a visible vertical seam. */
+  left:calc(50% - 50vw); width:100vw; right:auto;
+  pointer-events:none; overflow:hidden;
+  background:radial-gradient(100% 100% at 0% 0%,
+    var(--color-surface-raised) 0%, var(--color-background) 100%);
+  -webkit-mask:radial-gradient(125% 100% at 0% 0%,
+    #000 0%, rgba(0,0,0,.22) 88%, transparent 100%);
+  mask:radial-gradient(125% 100% at 0% 0%,
+    #000 0%, rgba(0,0,0,.22) 88%, transparent 100%);
+}
+/* Skewed accent streaks, fading top to bottom. */
+.hero-pattern::before{
+  content:""; position:absolute; inset:-20% -40%;
+  background:linear-gradient(var(--ch, var(--color-accent)) 0%,
+    transparent 100%);
+  opacity:.16;
+  transform:skewX(45deg);
+  -webkit-mask:linear-gradient(90deg, transparent 0%, #000 17%, rgba(0,0,0,.55) 26%,
+    #000 35%, transparent 47%, rgba(0,0,0,.13) 67%, #000 78%, transparent 97%);
+  mask:linear-gradient(90deg, transparent 0%, #000 17%, rgba(0,0,0,.55) 26%,
+    #000 35%, transparent 47%, rgba(0,0,0,.13) 67%, #000 78%, transparent 97%);
+}
+/* Grain + dot grid, kept faint so hero copy holds its measured contrast. */
+.hero-pattern::after{
+  content:""; position:absolute; inset:0;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(255,255,255,.5) 1px, transparent 0),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  background-size:20px 20px, 140px 140px;
+  opacity:.12;
+}
 
 h1{
   font-family:"Bricolage",system-ui,sans-serif;
