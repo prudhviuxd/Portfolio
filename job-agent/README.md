@@ -144,17 +144,41 @@ the system prompt is explicit about it, but you are the one whose name is on it.
 | `write_packet` | writes the packet to disk — **the end of the agent's authority** |
 | `set_status` | tracks a job through applied / closed |
 
-## Cost
+## Cost and safety rails
+
+Two things are set on the runner in `run()`, and both are worth understanding
+because they are the difference between a script and something you can leave
+running unattended:
+
+**`cache_control={"type": "ephemeral"}`** — the system prompt and tool schemas
+are byte-identical on every turn, and a screening run makes dozens of turns.
+Caching that prefix cuts its cost by roughly 90%. Every run prints its own
+cache accounting:
+
+```
+turns: 23  tokens: 4180 in / 9340 out
+cache: 48200 read / 2400 written
+```
+
+If `read` stays at zero across several turns, something is invalidating the
+prefix — a timestamp in the system prompt, a tool list that changes order.
+The run tells you so explicitly rather than quietly costing more.
+
+**`max_iterations=60`** — unbounded by default, which for an unattended agent
+is the expensive failure mode. The subtlety: hitting the cap ends the loop with
+no exception and no flag, so a truncated run looks exactly like a finished one.
+`run()` catches this by checking whether the final turn still wanted a tool, and
+says so loudly. Re-running continues where it stopped, because the queue is on
+disk.
 
 One full cycle screening ~30 postings and writing 3–4 packets runs a few
-dollars on Opus 5. To cut it, screen on a cheaper model and write on Opus:
-split `run()` into two runners with different `model=` values. Screening is
-high-volume and mechanical; writing is where the quality shows.
+dollars on Opus 5. To cut it further, screen on a cheaper model and write on
+Opus: split `run()` into two runners with different `model=` values. Screening
+is high-volume and mechanical; writing is where the quality shows.
 
 ## What to build next
 
-- **Cache the profile.** It's resent on every turn. Add
-  `cache_control={"type": "ephemeral"}` and watch `usage.cache_read_input_tokens`.
+- **Split the models.** Screening on Sonnet, writing on Opus (see above).
 - **Schedule it.** A cron entry running the default mission each morning turns
   this into a standing process instead of a thing you remember to do.
 - **Close the loop.** You have an `events` table. Record which packets got

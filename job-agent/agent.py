@@ -32,6 +32,10 @@ OUT_DIR = ROOT / "out"
 
 MODEL = "claude-opus-5"
 
+# Ceiling on model turns in one run. Screening ~30 postings and writing a few
+# packets sits well under this; hitting it means something looped.
+MAX_ITERATIONS = 60
+
 SYSTEM = """You are a job-search agent working for one person. Their profile
 and search preferences are on disk; read them first and treat them as the
 source of truth about what they have done and what they want.
@@ -316,20 +320,52 @@ def run(mission: str) -> None:
         max_tokens=16000,
         system=SYSTEM,
         output_config={"effort": "high"},
+        # The system prompt and tool schemas are identical on every turn and a
+        # screening run makes dozens of turns. Caching that prefix cuts its
+        # cost by ~90%; `usage` below shows whether it is actually hitting.
+        cache_control={"type": "ephemeral"},
+        # Unbounded by default. A confused agent with no cap bills until it
+        # gives up, which for an unattended run is the expensive failure mode.
+        max_iterations=MAX_ITERATIONS,
         tools=TOOLS,
         messages=[{"role": "user", "content": mission}],
     )
 
     # Each iteration is one model turn. The runner has already executed any
     # tools that turn asked for by the time the next one arrives.
+    last = None
+    turns = 0
+    totals = {"in": 0, "out": 0, "cache_read": 0, "cache_write": 0}
+
     for message in runner:
+        last, turns = message, turns + 1
+        u = message.usage
+        totals["in"] += u.input_tokens or 0
+        totals["out"] += u.output_tokens or 0
+        totals["cache_read"] += getattr(u, "cache_read_input_tokens", 0) or 0
+        totals["cache_write"] += getattr(u, "cache_creation_input_tokens", 0) or 0
+
         for block in message.content:
             if block.type == "text" and block.text.strip():
                 print(block.text)
             elif block.type == "tool_use":
                 print(f"  -> {block.name}({json.dumps(block.input)[:140]})", file=sys.stderr)
 
+    # Hitting the cap ends the loop with no exception and no flag - the last
+    # turn still wanted a tool. Without this check that reads as a clean
+    # finish, and the run looks complete when it was cut off mid-screening.
+    truncated = last is not None and any(b.type == "tool_use" for b in last.content)
+
     print("\n" + "-" * 60)
+    if truncated:
+        print(f"!! STOPPED at the {MAX_ITERATIONS}-turn cap with work still pending.")
+        print("   Re-run to continue - the queue is on disk, so nothing is lost.")
+    print(f"turns: {turns}  tokens: {totals['in']} in / {totals['out']} out")
+    print(f"cache: {totals['cache_read']} read / {totals['cache_write']} written", end="")
+    if totals["cache_read"] == 0 and turns > 2:
+        print("  <- zero reads over several turns: the prefix is being invalidated")
+    else:
+        print()
     print("queue:", json.dumps(store.summary()))
     print(f"packets: {OUT_DIR}")
 
