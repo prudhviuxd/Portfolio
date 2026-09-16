@@ -39,6 +39,14 @@ html.js [data-float] > *{ will-change:transform, opacity; }
   position:relative; width:min(920px,84vw); height:min(560px,66svh);
   transform-style:preserve-3d;
 }
+/* The stage plane sits at z=0 while every card is translated to a
+   negative Z, so the stage would otherwise swallow each card's click
+   and the project links become dead on desktop. Let pointer events
+   fall through to the cards; the RAF loop still decides which single
+   card is live by setting pointer-events inline per frame. */
+.pcar-stage{ pointer-events:none; }
+.pcar-item{ pointer-events:auto; }
+
 .pcar-item{
   position:absolute; inset:0; margin:auto;
   display:grid; grid-template-rows:minmax(0,1fr) auto;

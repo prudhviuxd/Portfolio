@@ -1,0 +1,80 @@
+/* ============================================================
+   Page transitions
+
+   Two halves, deliberately built on different mechanisms:
+
+   ENTER is pure CSS on body::before. It cannot get stuck, because
+   nothing has to run to uncover the page — if the JS never loads,
+   the animation still completes. The homepage is excluded: it has
+   its own preloader, and two curtains is one too many.
+
+   EXIT is JS. If the JS is absent the links simply navigate, which
+   is the correct fallback.
+   ============================================================ */
+
+/* ---------- ENTER: lift the veil ----------
+   :has() scopes this to pages without the homepage preloader.
+   Where :has() is unsupported the selector drops out entirely and
+   the page just appears, which is a fine outcome. */
+body:not(:has(> .pre))::before{
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  background: linear-gradient(180deg, #0C0C11 0%, #08080B 100%);
+  transform-origin: 50% 0;
+  animation: pt-lift .72s cubic-bezier(.76, 0, .24, 1) forwards;
+}
+
+@keyframes pt-lift{
+  from{ transform: scaleY(1); }
+  to  { transform: scaleY(0); visibility: hidden; }
+}
+
+/* ---------- EXIT: flood, then navigate ---------- */
+.pt{
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  transform: scaleY(0);
+  transform-origin: 50% 100%;
+  will-change: transform;
+  /* overridden per-link with the card's own colour, so leaving the
+     WHO card floods teal and the MTN card floods amber */
+  background: linear-gradient(160deg, #4FD8E8, #A98BFF);
+}
+
+html.pt-out .pt{
+  animation: pt-cover .58s cubic-bezier(.76, 0, .24, 1) forwards;
+}
+
+@keyframes pt-cover{
+  to{ transform: scaleY(1); }
+}
+
+/* the outgoing page gives way a little as the colour rises */
+html.pt-out main,
+html.pt-out .masthead,
+html.pt-out .nav,
+html.pt-out .site-footer{
+  transition: opacity .42s ease, transform .42s cubic-bezier(.76, 0, .24, 1);
+  opacity: .34;
+  transform: translate3d(0, -14px, 0);
+}
+
+@media (prefers-reduced-motion: reduce){
+  body:not(:has(> .pre))::before{ display: none; }
+  .pt{ display: none; }
+  html.pt-out main,
+  html.pt-out .masthead,
+  html.pt-out .nav,
+  html.pt-out .site-footer{ transition: none; opacity: 1; transform: none; }
+}
+
+/* Neither half belongs in print. */
+@media print{
+  body::before{ display: none !important; }
+  .pt{ display: none !important; }
+}

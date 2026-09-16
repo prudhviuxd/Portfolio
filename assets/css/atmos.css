@@ -1,0 +1,118 @@
+/* ============================================================
+   Atmosphere — the homepage's ambient ground.
+
+   The page's thesis is rhodium: a surface light moves across
+   but never tarnishes. So this layer is specular, not
+   astronomical — wide iridescent sweeps drifting over a faintly
+   engraved plate, with a highlight that tracks the pointer.
+   No blur filters: the gradients carry their own softness, which
+   costs the compositor nothing.
+   ============================================================ */
+
+.atmos{
+  position: fixed;
+  inset: 0;
+  z-index: -1;            /* behind content, above the body fill */
+  pointer-events: none;
+  overflow: hidden;
+  contain: strict;
+}
+
+/* ---------- the chrome triad, diffused ---------- */
+.atmos i{
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+.atmos .s1{
+  width: 86vmax; height: 86vmax;
+  left: -26vmax; top: -34vmax;
+  background: radial-gradient(circle at 50% 50%,
+    rgba(79,216,232,.20) 0%, rgba(79,216,232,.07) 34%, rgba(79,216,232,0) 66%);
+  animation: atmos-a 38s ease-in-out infinite alternate;
+}
+.atmos .s2{
+  width: 74vmax; height: 74vmax;
+  right: -24vmax; top: 16vmax;
+  background: radial-gradient(circle at 50% 50%,
+    rgba(169,139,255,.19) 0%, rgba(169,139,255,.06) 36%, rgba(169,139,255,0) 68%);
+  animation: atmos-b 47s ease-in-out infinite alternate;
+}
+.atmos .s3{
+  width: 66vmax; height: 66vmax;
+  left: 18vmax; bottom: -30vmax;
+  background: radial-gradient(circle at 50% 50%,
+    rgba(255,123,200,.15) 0%, rgba(255,123,200,.05) 38%, rgba(255,123,200,0) 70%);
+  animation: atmos-c 43s ease-in-out infinite alternate;
+}
+
+@keyframes atmos-a{
+  from{ transform: translate3d(0,0,0) scale(1); }
+  to  { transform: translate3d(9vmax, 6vmax, 0) scale(1.14); }
+}
+@keyframes atmos-b{
+  from{ transform: translate3d(0,0,0) scale(1.08); }
+  to  { transform: translate3d(-11vmax, 9vmax, 0) scale(1); }
+}
+@keyframes atmos-c{
+  from{ transform: translate3d(0,0,0) scale(1); }
+  to  { transform: translate3d(7vmax, -8vmax, 0) scale(1.12); }
+}
+
+/* ---------- the engraved plate ----------
+   Ruled like a specimen card, faded out at the edges so it
+   never reads as a wireframe grid. */
+.atmos .plate{
+  position: absolute;
+  inset: -2px;
+  border-radius: 0;
+  background-image:
+    linear-gradient(to right,  rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size: 92px 92px;
+  -webkit-mask-image: radial-gradient(120% 90% at 50% 34%, #000 18%, transparent 78%);
+          mask-image: radial-gradient(120% 90% at 50% 34%, #000 18%, transparent 78%);
+  /* parallaxes a little against the scroll, set by atmos.js */
+  transform: translate3d(0, calc(var(--atmos-y, 0) * -34px), 0);
+}
+
+/* ---------- specular highlight ----------
+   The one element that sells "polished": a soft bloom sitting
+   under the pointer. Idles centre-top until the pointer moves. */
+.atmos .spec{
+  position: absolute;
+  inset: 0;
+  border-radius: 0;
+  background: radial-gradient(
+    38vmax circle at var(--atmos-mx, 50%) var(--atmos-my, 26%),
+    rgba(255,255,255,.055) 0%,
+    rgba(160,220,255,.028) 32%,
+    transparent 64%);
+  transition: opacity .6s ease;
+}
+
+/* ---------- seat the whole thing on a deeper ground ---------- */
+.atmos .vign{
+  position: absolute;
+  inset: 0;
+  border-radius: 0;
+  background:
+    radial-gradient(110% 76% at 50% 0%, rgba(255,255,255,.03), transparent 58%),
+    linear-gradient(180deg, transparent 52%, rgba(0,0,0,.42) 100%);
+}
+
+/* Coarse pointers get no specular highlight — there is no pointer
+   to track, and the extra paint is not free on a phone. */
+@media (hover: none){
+  .atmos .spec{ display: none; }
+}
+
+/* Stillness is a valid preference. Keep the composition, drop the drift. */
+@media (prefers-reduced-motion: reduce){
+  .atmos i,
+  .atmos .plate{ animation: none !important; transform: none !important; }
+  .atmos .spec{ display: none; }
+}
