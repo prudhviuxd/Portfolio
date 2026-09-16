@@ -516,33 +516,61 @@
   line-height: 1.2;
 }
 
-/* ---------- Design foundation ---------- */
-.theme-who .w-swatch{ display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
-.theme-who .w-swatch .chip{
-  width: 84px; height: 84px;
-  border-radius: 16px;
-  flex-shrink: 0;
-  /* the source design lets each swatch bloom into the panel behind it */
-  box-shadow: 0 14px 32px -16px currentColor;
+/* ---------- Pull quote: one verbatim voice beside the problem ---------- */
+.theme-who .w-pullquote{
+  margin: 26px 0 0;
+  padding-left: 18px;
+  border-left: 2px solid var(--who-teal);
 }
-.theme-who .w-swatch .nm{ font-size: 14px; font-weight: 600; color: #fff; }
-.theme-who .w-swatch .hex{
+.theme-who .w-pullquote blockquote{
+  margin: 0;
+  font-size: clamp(15px, 1.3vw, 18px);
+  line-height: 1.6;
+  color: #d8dee1;
+  font-style: italic;
+}
+.theme-who .w-pullquote figcaption{
+  margin-top: 10px;
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
-  font-size: 11.5px; color: #7b8186; margin-top: 3px;
+  font-size: 11.5px; letter-spacing: .1em;
+  color: var(--who-teal);
 }
-.theme-who .w-typerow{
-  display: flex; align-items: baseline; justify-content: space-between;
-  padding: 14px 0;
-  border-bottom: 1px solid var(--who-line-soft);
+
+/* ---------- Decisions: what was chosen, and what it cost ---------- */
+.theme-who .w-decisions{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  margin-top: 30px;
+  padding-top: 28px;
+  border-top: 1px solid var(--who-line);
 }
-.theme-who .w-typerow .spec{
-  font-family: ui-monospace, "SF Mono", Menlo, monospace;
-  font-size: 11px; color: #7b8186;
+.theme-who .w-decision h5{
+  margin: 0 0 10px;
+  font-size: 15px; font-weight: 600; color: #fff;
+  line-height: 1.3;
 }
-.theme-who .w-t1{ font-size: 30px; font-weight: 700; color: #fff; }
-.theme-who .w-t2{ font-size: 25px; font-weight: 700; color: #fff; }
-.theme-who .w-t3{ font-size: 21px; font-weight: 700; color: #fff; }
-.theme-who .w-tbody{ font-size: 14px; color: #c9cfd3; }
+.theme-who .w-decision h5::before{
+  content: "";
+  display: block;
+  width: 22px; height: 2px;
+  background: var(--who-teal);
+  margin-bottom: 12px;
+}
+.theme-who .w-decision p{
+  margin: 0;
+  font-size: 13.5px; line-height: 1.68;
+  color: #9ea3a8;
+}
+
+/* ---------- Closing sign-off ---------- */
+.theme-who .w-signoff{
+  margin-top: 30px;
+  font-family: var(--who-serif);
+  font-size: clamp(17px, 1.7vw, 22px);
+  font-style: italic;
+  color: var(--who-teal);
+}
 
 /* ---------- Usability panel ---------- */
 .theme-who .w-usability{
@@ -996,6 +1024,7 @@
   .theme-who .w-ksf-grid,
   .theme-who .w-metrics{ grid-template-columns: 1fr; gap: 34px; }
   .theme-who .w-metrics{ gap: 16px; }
+  .theme-who .w-decisions{ grid-template-columns: 1fr; gap: 24px; }
   .theme-who .w-stats{ grid-template-columns: 1fr; }
   .theme-who .w-themes{ grid-template-columns: 1fr; }
   .theme-who .w-insights{ grid-template-columns: repeat(2, 1fr); }
