@@ -144,9 +144,8 @@ main[data-acc="mg"]{ --acc:var(--mg); }
   text-transform:none;
 }
 .cs-hero h1{ font-size:clamp(34px,5.6vw,62px); }
-.theme-who .w-hero h1 .teal{ color:inherit; }
 
-.cs-h2, .theme-who .w-h2, .theme-who .w-serif{
+.cs-h2, .theme-who .w-h2{
   font-family:var(--display); font-weight:700;
   letter-spacing:-.035em; line-height:1.1;
   font-size:clamp(26px,3.4vw,40px); color:var(--text);
@@ -261,3 +260,46 @@ main[data-acc="mg"]{ --acc:var(--mg); }
   .nav-links{ display:none; }
   .w-hero, .cs-hero{ padding-top:88px; }
 }
+
+/* ============================================================
+   WHO · mYoga — treatments the source design calls for that the
+   shared chrome above would otherwise flatten. Scoped to the page,
+   so the other case studies keep the unified treatment.
+   ============================================================ */
+
+/* Hero: the design runs this far larger and lighter than the
+   sitewide case-study h1, with the first line in a teal gradient. */
+.theme-who .w-hero h1{
+  font-weight:400;
+  font-size:clamp(38px,7vw,100px);
+  letter-spacing:-.045em;
+  line-height:.93;
+}
+.theme-who .w-hero h1 .teal{
+  background:linear-gradient(180deg,#20b2aa 0%,#48d1cc 100%);
+  -webkit-background-clip:text; background-clip:text;
+  color:transparent;
+}
+.theme-who .w-hero .w-kicker{ color:var(--text-muted); }
+
+/* Section headings sit a step above the shared scale. */
+.theme-who .w-h2{ font-size:clamp(26px,3.9vw,46px); }
+
+/* "The Process" and "The END" are set in a serif — a deliberate
+   pause in the narrative, and the one serif on the page. */
+.theme-who .w-serif{
+  font-family:var(--who-serif);
+  font-weight:400;
+  font-size:clamp(34px,4.6vw,58px);
+  letter-spacing:-.012em;
+  line-height:1.08;
+  color:var(--text);
+  text-align:center;
+}
+
+/* Body copy runs larger here than the shared case-study paragraph. */
+.theme-who .w-p{ font-size:clamp(15px,1.25vw,17.5px); }
+
+/* The next-project title is the largest type on the page.
+   .w-next is only used by this page. */
+.w-next a{ font-size:clamp(34px,6.2vw,82px); }

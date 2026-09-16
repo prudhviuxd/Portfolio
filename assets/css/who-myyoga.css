@@ -2,7 +2,17 @@
    WHO · myYoga case study — page-scoped design system
    Teal / blue accent on near-black, per the source design.
    ============================================================ */
+
+/* The source design sets "The Process" and "The END" in a serif, a
+   deliberate pause against the grotesque used everywhere else. */
+@font-face{
+  font-family:"Fraunces";
+  src:url("../fonts/fraunces.woff2") format("woff2-variations");
+  font-weight:300 700; font-display:swap;
+}
+
 .theme-who{
+  --who-serif: "Fraunces", "Georgia", serif;
   --who-teal: #2ed3b7;
   --who-teal-soft: #36dda8;
   --who-blue: #008dc9;
@@ -28,26 +38,35 @@
 .theme-who .w-label.center{ text-align: center; }
 
 /* One title treatment used by every section */
-.theme-who .w-h2,
-.theme-who .w-serif{
+.theme-who .w-h2{
   font-family: var(--font-body);
-  font-size: clamp(28px, 3.6vw, 42px);
+  font-size: clamp(28px, 3.9vw, 48px);
   font-weight: 700;
   letter-spacing: -0.025em;
   line-height: 1.12;
   color: #fff;
 }
-.theme-who .w-h2.center,
-.theme-who .w-serif{ text-align: center; }
+.theme-who .w-h2.center{ text-align: center; }
+
+/* The two serif beats of the story — "The Process", "The END" */
+.theme-who .w-serif{
+  font-family: var(--who-serif);
+  font-size: clamp(36px, 4.6vw, 60px);
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  line-height: 1.08;
+  color: #fff;
+  text-align: center;
+}
 .theme-who .w-p{
-  font-size: 15px;
-  line-height: 1.75;
+  font-size: clamp(15px, 1.25vw, 18px);
+  line-height: 1.72;
   color: #9ea3a8;
   margin-top: 18px;
 }
 .theme-who .w-p.center{
   text-align: center;
-  max-width: 620px;
+  max-width: 720px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -94,25 +113,31 @@
 }
 .theme-who .w-kicker{
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
-  font-size: 12px;
+  font-size: 12.5px;
   letter-spacing: .3em;
   text-transform: uppercase;
-  color: var(--who-teal);
+  color: #9f9fa9;
   margin-bottom: 26px;
 }
 .theme-who .w-hero h1{
-  font-size: clamp(38px, 6.4vw, 82px);
-  font-weight: 300;
-  letter-spacing: -0.035em;
-  line-height: 1.05;
+  font-size: clamp(38px, 7vw, 100px);
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: .93;
   color: #fff;
 }
-.theme-who .w-hero h1 .teal{ color: var(--who-teal); }
+/* first line carries the teal gradient from the source design */
+.theme-who .w-hero h1 .teal{
+  background: linear-gradient(180deg, #20b2aa 0%, #48d1cc 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
 .theme-who .w-hero p{
-  max-width: 680px;
-  margin: 30px auto 0;
-  font-size: 16px;
-  line-height: 1.75;
+  max-width: 760px;
+  margin: 34px auto 0;
+  font-size: clamp(15px, 1.35vw, 20px);
+  line-height: 1.7;
   color: rgba(226,232,235,.72);
 }
 .theme-who .w-hero p b{ color: #fff; font-weight: 600; }
@@ -130,22 +155,28 @@
   background: linear-gradient(155deg, rgba(20,70,74,.42) 0%, rgba(12,20,24,.5) 55%, rgba(10,12,14,.5) 100%);
 }
 .theme-who .w-stat .ico{
-  width: 42px; height: 42px;
+  width: 58px; height: 58px;
   border-radius: 50%;
   background: rgba(46,211,183,.12);
   color: var(--who-teal);
   display: flex; align-items: center; justify-content: center;
-  margin-bottom: 22px;
+  margin-bottom: 24px;
 }
+.theme-who .w-stat .ico svg{ width: 24px; height: 24px; }
+/* the three badges step through the palette, as in the source design */
+.theme-who .w-stat:nth-child(1) .ico{ background: rgba(0,141,201,.16); color: #2ea8dd; }
+.theme-who .w-stat:nth-child(2) .ico{ background: rgba(32,178,220,.15); color: #35c3e0; }
+.theme-who .w-stat:nth-child(3) .ico{ background: rgba(46,211,183,.14); color: var(--who-teal); }
 .theme-who .w-stat .k{
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
   font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
   color: #8b9196;
 }
 .theme-who .w-stat .v{
-  margin-top: 8px;
-  font-size: 34px; font-weight: 500;
-  letter-spacing: -0.02em;
+  margin-top: 10px;
+  font-size: clamp(30px, 3vw, 44px); font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
   color: #fff;
 }
 
@@ -194,14 +225,17 @@
   color: #fff;
 }
 .theme-who .w-metric .k{ margin-top: 4px; font-size: 12.5px; color: #9ea3a8; }
+/* The source design washes near-black with a low-opacity accent along a
+   top-left to bottom-right axis, which peaks across the middle and falls
+   away at both corners. These stops are sampled from that render. */
 .theme-who .w-metric.teal{
-  background: linear-gradient(135deg, #0d4a44 0%, #0a2a2e 100%);
-  border-color: rgba(46,211,183,.28);
+  background: linear-gradient(135deg, #0c1716 0%, #103735 50%, #091f1e 100%);
+  border-color: rgba(46,211,183,.22);
 }
 .theme-who .w-metric.teal .v{ color: var(--who-teal); }
 .theme-who .w-metric.pink{
-  background: linear-gradient(135deg, #5d1148 0%, #2a0c26 100%);
-  border-color: rgba(224,64,155,.3);
+  background: linear-gradient(135deg, #1a0c17 0%, #421135 50%, #280c20 100%);
+  border-color: rgba(224,64,155,.24);
 }
 .theme-who .w-metric.pink .v{ color: #ff5fb0; }
 
@@ -238,7 +272,7 @@
 /* high-resolution source — only a touch of defocus needed */
 .theme-who .w-bgsec.warm > .w-bgimg img{
   opacity: .62;
-  filter: blur(1px) saturate(1.02);
+  filter: saturate(1.02);
   object-position: center 38%;
 }
 .theme-who .w-bgsec.warm > .w-bgimg::after{
@@ -485,9 +519,11 @@
 /* ---------- Design foundation ---------- */
 .theme-who .w-swatch{ display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
 .theme-who .w-swatch .chip{
-  width: 62px; height: 62px;
-  border-radius: 12px;
+  width: 84px; height: 84px;
+  border-radius: 16px;
   flex-shrink: 0;
+  /* the source design lets each swatch bloom into the panel behind it */
+  box-shadow: 0 14px 32px -16px currentColor;
 }
 .theme-who .w-swatch .nm{ font-size: 14px; font-weight: 600; color: #fff; }
 .theme-who .w-swatch .hex{
@@ -554,14 +590,15 @@
 /* ---------- The End ---------- */
 .theme-who .w-end{ text-align: center; padding: 96px 0 80px; }
 .theme-who .w-heart{
-  width: 54px; height: 54px;
+  width: 78px; height: 78px;
   border-radius: 50%;
   border: 1px solid rgba(46,211,183,.3);
   background: rgba(46,211,183,.07);
   color: var(--who-teal);
   display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 28px;
+  margin: 0 auto 30px;
 }
+.theme-who .w-heart svg{ width: 30px; height: 30px; }
 
 /* ---------- Next project ---------- */
 .theme-who + .w-next,
@@ -578,10 +615,11 @@
 }
 .w-next a{
   display: inline-block;
-  margin-top: 14px;
-  font-size: clamp(34px, 5vw, 56px);
+  margin-top: 16px;
+  font-size: clamp(38px, 6.4vw, 86px);
   font-weight: 500;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
   color: #fff;
 }
 .w-next a:hover{ color: var(--who-teal); }
