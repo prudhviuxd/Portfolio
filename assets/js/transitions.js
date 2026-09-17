@@ -11,6 +11,48 @@
 
   if (!document.querySelector || !window.matchMedia) return;
 
+  /* ---------- land at the top of a page we navigated to ----------
+     A fresh link navigation should start at the top. Some embeddings
+     (and a browser restoring a position it remembers) can leave the
+     new page part-way down, which reads as the case study opening
+     wherever the homepage happened to be scrolled to.
+
+     Only "navigate" is corrected: back and forward keep the position
+     the reader left, which is what they expect, and a link carrying a
+     #hash is left alone so it can reach its anchor. */
+  (function landAtTop() {
+    if (location.hash) return;
+    var type = 'navigate';
+    try {
+      var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+      if (nav && nav.type) type = nav.type;
+    } catch (e) { /* older browsers: treat as a normal navigation */ }
+    if (type !== 'navigate') return;
+
+    /* Once the reader has started moving the page themselves, their
+       position is theirs. Images can delay "load" well past that, and
+       yanking them back to the top would be worse than the bug. */
+    var userMoved = false;
+    ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach(function (evt) {
+      window.addEventListener(evt, function () { userMoved = true; },
+                              { once: true, passive: true });
+    });
+
+    function toTop() {
+      if (userMoved) return;
+      if (!window.scrollY && !window.pageYOffset) return;
+      var root = document.documentElement;
+      var prev = root.style.scrollBehavior;
+      root.style.scrollBehavior = 'auto';   /* never animate the correction */
+      window.scrollTo(0, 0);
+      root.style.scrollBehavior = prev;
+    }
+
+    toTop();
+    /* a restored position can be applied after load, so correct once more */
+    window.addEventListener('load', toTop, { once: true });
+  })();
+
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   var DURATION = 580;          /* must match pt-cover in transitions.css */
   var veil = null;

@@ -12,12 +12,6 @@
     tick();
   }
 
-  var toggle = document.querySelector('.nav-toggle');
-  var links = document.querySelector('.nav-links');
-  if (toggle && links) {
-    toggle.addEventListener('click', function () {
-      var open = links.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', String(open));
-    });
-  }
+  /* The nav toggle lives in main.js, which loads on these pages too.
+     Handling it here as well toggled .open twice per click. */
 })();

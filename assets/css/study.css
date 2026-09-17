@@ -116,6 +116,10 @@ main[data-acc="mg"]{ --acc:var(--mg); }
   background:linear-gradient(120deg,var(--cy),var(--vi));
   font-size:0; color:transparent; overflow:hidden; border:0;
 }
+/* Desktop only. base.css turns this row into a fixed overlay panel
+   below 880px, and this rule loads later with equal specificity, so
+   without the matching media query below it would force that panel
+   open on every tablet. */
 .nav-links{ display:flex; align-items:center; gap:26px; }
 .nav-links a:not(.btn){
   font-family:var(--mono); font-size:11px; letter-spacing:.14em;
@@ -256,8 +260,14 @@ main[data-acc="mg"]{ --acc:var(--mg); }
 .media-frame{ border-color:var(--border-soft); border-radius:18px; }
 .cs-section.alt{ background:var(--bg-soft); }
 
-@media (max-width:760px){
+/* Mirrors base.css: the overlay panel stays shut until the burger
+   opens it. Must match base.css's 880px breakpoint, not 760px, or the
+   band between the two is left with a menu that is always open. */
+@media (max-width:880px){
   .nav-links{ display:none; }
+  .nav-links.open{ display:flex; }
+}
+@media (max-width:760px){
   .w-hero, .cs-hero{ padding-top:88px; }
 }
 

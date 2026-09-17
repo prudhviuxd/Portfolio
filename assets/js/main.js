@@ -1,13 +1,17 @@
-// Mobile nav toggle
+// Mobile nav toggle.
+// Sole owner of the .open class — study.js used to toggle it too, so on
+// case-study pages both handlers fired on one click and cancelled out.
 document.querySelectorAll('.nav-toggle').forEach((btn) => {
   btn.addEventListener('click', () => {
-    document.querySelector('.nav-links')?.classList.toggle('open');
+    const open = document.querySelector('.nav-links')?.classList.toggle('open');
+    btn.setAttribute('aria-expanded', String(!!open));
   });
 });
 
 document.querySelectorAll('.nav-links a').forEach((link) => {
   link.addEventListener('click', () => {
     document.querySelector('.nav-links')?.classList.remove('open');
+    document.querySelector('.nav-toggle')?.setAttribute('aria-expanded', 'false');
   });
 });
 
