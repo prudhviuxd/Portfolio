@@ -316,6 +316,9 @@ button{ font-family: inherit; cursor: pointer; }
   opacity: 1;
   transform: perspective(1000px) translateY(0) rotateX(0deg) scale(1);
 }
+/* reveal.js sets --rv-d per element so siblings in a section cascade
+   rather than all landing on the same frame */
+.reveal{ transition-delay: var(--rv-d, 0ms); }
 @media (prefers-reduced-motion: reduce){
   .reveal{ opacity: 1; transform: none; transition: none; }
 }

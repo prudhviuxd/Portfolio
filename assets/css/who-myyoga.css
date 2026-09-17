@@ -541,21 +541,12 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 28px;
-  margin-top: 30px;
-  padding-top: 28px;
-  border-top: 1px solid var(--who-line);
+  margin-top: 34px;
 }
 .theme-who .w-decision h5{
   margin: 0 0 10px;
   font-size: 15px; font-weight: 600; color: #fff;
   line-height: 1.3;
-}
-.theme-who .w-decision h5::before{
-  content: "";
-  display: block;
-  width: 22px; height: 2px;
-  background: var(--who-teal);
-  margin-bottom: 12px;
 }
 .theme-who .w-decision p{
   margin: 0;
@@ -587,7 +578,12 @@
   color: var(--who-teal);
   display: flex; align-items: center; justify-content: center;
 }
-.theme-who .w-finding h5{ font-size: 14.5px; font-weight: 600; color: #fff; }
+.theme-who .w-finding{ align-items: flex-start; }
+.theme-who .w-finding h5{
+  margin: 0;                     /* base.css resets h1-h4 and p, but not h5 */
+  font-size: 14.5px; font-weight: 600; color: #fff;
+  line-height: 1.55;             /* sits on the icon's centre line */
+}
 .theme-who .w-finding p{ margin-top: 6px; font-size: 12.5px; line-height: 1.65; color: rgba(200,210,212,.66); }
 
 /* ---------- Usability results table (mock screenshot) ---------- */
