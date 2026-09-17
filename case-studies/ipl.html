@@ -25,6 +25,14 @@
   if(n && n.type === 'back_forward') return;
   window.__ptLinkNav = true;
   history.scrollRestoration = 'manual';
+  /* Framed, the panel around us holds the scroll, and it is already sitting
+     where the previous page was left. Pull ourselves to the top of it here,
+     before this document paints, so the first frame the reader sees is the
+     top of the page rather than its middle. */
+  try{
+    if(window.top !== window.self && document.documentElement.scrollIntoView)
+      document.documentElement.scrollIntoView({block:'start', behavior:'instant'});
+  }catch(e){}
 }catch(e){}})();
 </script>
 <link rel="stylesheet" href="../assets/css/base.css">

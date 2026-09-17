@@ -62,17 +62,28 @@
       root.style.scrollBehavior = prev;
     }
 
-    toTop();
+    /* Hold the correction for as long as the enter veil is covering the
+       page, and not one frame longer. Layout settles in pieces — fonts,
+       images, the frame being resized by its host — and each can move us
+       again, so re-assert rather than correct once and hope. Stopping
+       before the veil lifts is the point: the reader sees the page
+       arrive at the top, never sees it travel there. */
+    var VEIL_MS = 660;            /* pt-lift is 720ms; finish under it */
+    var started = 0;
+    try { started = performance.now(); } catch (e) { started = 0; }
 
-    /* Fallback for anything that still applies a position after this
-       script runs. Bounded to the window where the enter veil is still
-       covering the page, so a correction is never something the reader
-       watches happen; past that their position is left alone. */
-    window.addEventListener('load', function () {
-      var since = 0;
-      try { since = performance.now(); } catch (e) { return; }
-      if (since < 1200) toTop();
-    }, { once: true });
+    function hold() {
+      if (userMoved) return;
+      toTop();
+      var now = started;
+      try { now = performance.now(); } catch (e) { return; }
+      if (now - started < VEIL_MS) requestAnimationFrame(hold);
+    }
+
+    if (window.requestAnimationFrame) hold();
+    else toTop();
+
+    document.addEventListener('DOMContentLoaded', toTop, { once: true });
   })();
 
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
