@@ -141,7 +141,7 @@ main,.masthead,.chrome-footer{ position:relative; z-index:2; }
   border-bottom:1px solid var(--line-2);
   transition:transform .45s cubic-bezier(.6,0,.2,1);
 }
-.masthead.up{ transform:translateY(-102%); }
+/* .masthead.up (retract on scroll) is gone — the header stays pinned. */
 .mast-in{
   display:flex; align-items:center; justify-content:space-between; gap:20px;
   padding:14px var(--gut); max-width:var(--maxw); margin:0 auto;

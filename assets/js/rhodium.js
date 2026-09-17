@@ -25,17 +25,8 @@
     });
   }
 
-  /* ---------- masthead hide on scroll down ---------- */
-  var mast = document.querySelector('.masthead');
-  if (mast) {
-    var last = 0;
-    window.addEventListener('scroll', function () {
-      var y = window.scrollY;
-      if (y > last && y > 220 && !nav.classList.contains('open')) mast.classList.add('up');
-      else mast.classList.remove('up');
-      last = y;
-    }, { passive: true });
-  }
+  /* The masthead used to retract on scroll down. It stays put now, so the
+     nav is reachable from anywhere on a page this long. */
 
   /* ---------- reveal ---------- */
   var targets = document.querySelectorAll('.rv, .rv-s');

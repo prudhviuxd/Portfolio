@@ -156,7 +156,12 @@
       if (done) return;
       done = true;
       root.classList.add('pre-done');
-      setTimeout(function () { pre.remove(); }, 1100);
+      /* Left in the DOM on purpose. transitions.css keys its enter veil off
+         the absence of a .pre element, so removing this one flipped that
+         selector and played a second full-screen curtain right after this
+         one finished. CSS has already slid it off-screen; just make sure it
+         cannot catch a click. */
+      setTimeout(function () { pre.style.pointerEvents = 'none'; }, 1100);
     }
 
     (function tick(t) {

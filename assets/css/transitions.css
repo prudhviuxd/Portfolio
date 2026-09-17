@@ -13,7 +13,10 @@
    ============================================================ */
 
 /* ---------- ENTER: lift the veil ----------
-   :has() scopes this to pages without the homepage preloader.
+   :has() scopes this to pages without the homepage preloader, which plays
+   its own opening. motion.js therefore keeps .pre in the DOM after it
+   finishes — remove it and this selector starts matching, playing a second
+   curtain on the homepage.
    Where :has() is unsupported the selector drops out entirely and
    the page just appears, which is a fine outcome. */
 body:not(:has(> .pre))::before{

@@ -75,10 +75,14 @@
 .theme-who .w-inner{ position: relative; z-index: 2; }
 
 /* ---------- Back bar ---------- */
+/* Clears the fixed masthead (67px) — at the old 22px this sat behind it
+   and was unreachable. text-align is reset because the hero centres its
+   content and a back link belongs on the left. */
 .theme-who .w-back{
   position: absolute;
-  top: 22px; left: 0; right: 0;
+  top: 88px; left: 0; right: 0;
   z-index: 3;
+  text-align: left;
 }
 .theme-who .w-back a{
   display: inline-flex; align-items: center; gap: 10px;
