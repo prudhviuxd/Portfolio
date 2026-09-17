@@ -23,6 +23,7 @@
   if(!flagged || location.hash) return;
   var n = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
   if(n && n.type === 'back_forward') return;
+  window.__ptLinkNav = true;
   history.scrollRestoration = 'manual';
 }catch(e){}})();
 </script>

@@ -22,12 +22,9 @@
      #hash is left alone so it can reach its anchor. */
   (function landAtTop() {
     if (location.hash) return;
-    var type = 'navigate';
-    try {
-      var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
-      if (nav && nav.type) type = nav.type;
-    } catch (e) { /* older browsers: treat as a normal navigation */ }
-    if (type !== 'navigate') return;
+    /* Set by the head script when this page was reached by clicking a
+       link. Arriving any other way leaves the reader's position alone. */
+    if (!window.__ptLinkNav) return;
 
     /* Once the reader has started moving the page themselves, their
        position is theirs. Images can delay "load" well past that, and
@@ -38,13 +35,30 @@
                               { once: true, passive: true });
     });
 
+    /* Embedded in a frame, this page may not be the thing that scrolls:
+       a host that sizes the frame to its content leaves our own scrollY
+       permanently 0 while the surrounding panel holds the position, so
+       scrollTo and scrollRestoration are both no-ops and the new page
+       appears wherever the previous one was left. A framed document is
+       allowed to pull itself into view in its parent — it still cannot
+       read the parent's scroll — so that is the one lever available. */
+    var framed = false;
+    try { framed = window.top !== window.self; } catch (e) { framed = true; }
+
     function toTop() {
       if (userMoved) return;
-      if (!window.scrollY && !window.pageYOffset) return;
+
       var root = document.documentElement;
       var prev = root.style.scrollBehavior;
       root.style.scrollBehavior = 'auto';   /* never animate the correction */
-      window.scrollTo(0, 0);
+
+      if (window.scrollY || window.pageYOffset) window.scrollTo(0, 0);
+
+      if (framed && root.scrollIntoView) {
+        try { root.scrollIntoView({ block: 'start', behavior: 'instant' }); }
+        catch (e) { try { root.scrollIntoView(true); } catch (e2) {} }
+      }
+
       root.style.scrollBehavior = prev;
     }
 
