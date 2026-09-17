@@ -179,3 +179,29 @@
 @media (max-width:480px){
   .theme-mtn .skill-grid{ grid-template-columns:1fr; }
 }
+
+/* ============================================================
+   Real screens, exported from the source design, in place of the
+   CSS mockups the page was drawing.
+   ============================================================ */
+.theme-mtn .shot{
+  margin:0;
+  border:1px solid var(--border-soft);
+  border-radius:18px;
+  overflow:hidden;
+  background:var(--surface);
+}
+.theme-mtn .shot img{
+  display:block; width:100%; height:auto;
+}
+.theme-mtn .shot figcaption{
+  padding:14px 18px 16px;
+  border-top:1px solid var(--border-soft);
+  font-size:13px; line-height:1.55; color:var(--text-muted);
+}
+/* The competitive board is dense: give it room and let it scroll
+   rather than shrinking the text to nothing. */
+.theme-mtn .shot.dense img{ max-height:none; }
+@media (max-width:640px){
+  .theme-mtn .shot figcaption{ padding:12px 14px 14px; font-size:12.5px; }
+}
