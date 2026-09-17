@@ -74,8 +74,16 @@
     px = lerp(px, tpx, 0.06);
     py = lerp(py, tpy, 0.06);
 
-    /* 1 — layered parallax -------------------------------------- */
+    /* 1 — layered parallax --------------------------------------
+       Off once the layout stacks. A layer can travel ±104px, which is
+       depth between columns but a collision between rows: the hero
+       plate was riding up into the buttons above it. */
+    var stacked = innerWidth <= 980;   /* matches the CSS breakpoint exactly */
     layers.forEach(function (el) {
+      if (stacked) {
+        if (el.style.transform) el.style.transform = '';
+        return;
+      }
       var r = el.getBoundingClientRect();
       if (r.bottom < -300 || r.top > vh + 300) return;
       var d = parseFloat(el.dataset.layer) || 0;

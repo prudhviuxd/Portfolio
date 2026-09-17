@@ -67,7 +67,9 @@
    never reads as a wireframe grid. */
 .atmos .plate{
   position: absolute;
-  inset: -2px;
+  /* inset:0, not a negative bleed — a fixed layer that overhangs the
+     viewport still widens the document's scrollable area. */
+  inset: 0;
   border-radius: 0;
   background-image:
     linear-gradient(to right,  rgba(255,255,255,.028) 1px, transparent 1px),

@@ -186,7 +186,131 @@ main,.masthead,.chrome-footer{ position:relative; z-index:2; }
 .burger span::before{ top:-5px; } .burger span::after{ top:5px; }
 
 /* ---------- hero ---------- */
-.hero{ padding-top:clamp(48px,7vw,104px); padding-bottom:clamp(30px,4vw,56px); }
+/* ============================================================
+   HERO
+   The page's one job is a first impression, so the composition
+   carries it: headline left, proof right, nothing stranded at the
+   foot of the section. The type is treated as polished metal —
+   light crosses it once on arrival and then it sits still, which
+   is the headline's own argument made visible.
+   ============================================================ */
+.hero{ padding-top:clamp(48px,6vw,88px); padding-bottom:clamp(36px,5vw,72px); }
+
+.hero-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) clamp(230px,21vw,300px);
+  gap:clamp(30px,5vw,76px);
+  align-items:start;
+}
+
+/* ---------- eyebrow ----------
+   One hairline-separated line instead of a row of pills: same facts,
+   far less of the tag-soup look every portfolio opens with. */
+.hero-eyebrow{
+  display:flex; align-items:center; flex-wrap:wrap; gap:10px;
+  font-family:var(--mono); font-size:10.5px; font-weight:500;
+  letter-spacing:.2em; text-transform:uppercase; color:var(--text-3);
+  margin:0 0 clamp(20px,2.6vw,30px);
+}
+.hero-eyebrow i{ width:14px; height:1px; background:var(--line); display:inline-block; }
+.hx-live{
+  width:7px; height:7px; border-radius:50%; flex:none;
+  background:var(--cy); box-shadow:0 0 0 4px rgba(79,216,232,.14);
+}
+@media (prefers-reduced-motion: no-preference){
+  .hx-live{ animation:hx-pulse 2.6s ease-in-out infinite; }
+}
+@keyframes hx-pulse{
+  50%{ box-shadow:0 0 0 7px rgba(79,216,232,.05); }
+}
+
+/* ---------- headline ---------- */
+.hero h1{ margin-bottom:clamp(24px,3vw,36px); }
+.hero h1 .ln{ display:block; }
+/* A measured step, not the old zigzag: the indent is tied to the type
+   size so the three lines read as one shape at every width. */
+.hero h1 .ind{ padding-left:clamp(0px,4.4vw,92px); }
+
+/* Brushed-metal fill with one pass of light on arrival. .chrome keeps its
+   own iridescent treatment, so it is excluded here. */
+.hero-title .ln-in:not(.chrome){
+  background-image:linear-gradient(100deg,
+    #C9CED8 0%, #EFF1F5 26%, #FFFFFF 42%, #FFFFFF 48%,
+    #D4D9E2 64%, #F2F4F7 100%);
+  background-size:280% 100%;
+  background-position:120% 0;
+  -webkit-background-clip:text; background-clip:text;
+  color:transparent;
+}
+@media (prefers-reduced-motion: no-preference){
+  html.js .hero-title.in .ln-in:not(.chrome){
+    animation:hx-sheen 1.6s cubic-bezier(.32,.72,.2,1) forwards;
+    animation-delay:calc(var(--l,0) * 105ms + 240ms);
+  }
+}
+@keyframes hx-sheen{ to{ background-position:-30% 0; } }
+/* Without motion the light simply rests mid-sweep. */
+@media (prefers-reduced-motion: reduce){
+  .hero-title .ln-in:not(.chrome){ background-position:42% 0; }
+}
+
+.hero .lede{ max-width:52ch; margin:0; }
+.hero .cta-row{ margin-top:clamp(26px,3vw,34px); }
+
+/* ---------- the plate ----------
+   Outcome figures on hairlines, sitting beside the headline where the
+   composition used to have nothing. */
+.hero-plate{
+  border:1px solid var(--line-2);
+  border-radius:var(--r);
+  background:linear-gradient(168deg, rgba(255,255,255,.055), rgba(255,255,255,.012));
+  padding:clamp(18px,1.8vw,24px);
+  display:flex; flex-direction:column; gap:clamp(14px,1.5vw,20px);
+  position:sticky; top:96px;
+}
+.plate-head{ display:flex; align-items:center; gap:12px; }
+.plate-k{
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--text-3); white-space:nowrap;
+}
+.plate-rule{ flex:1; height:1px; background:var(--line-2); }
+.hero-plate .r{ border-top:1px solid var(--line-2); padding-top:13px; }
+.hero-plate .r:first-of-type{ border-top:0; padding-top:0; }
+.hero-plate .rn{
+  font-family:var(--display); font-weight:800; letter-spacing:-.04em;
+  font-size:clamp(28px,2.6vw,40px); line-height:1;
+}
+.hero-plate .rk{
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--text-3); margin-top:8px;
+}
+.plate-head-2{ margin-top:clamp(4px,.6vw,8px); }
+/* The quieter half: scope reads as a spec list, so it supports the
+   outcome figures above without competing with them. */
+.plate-scope{ margin:0; display:flex; flex-direction:column; gap:10px; }
+.plate-scope > div{
+  display:flex; align-items:baseline; justify-content:space-between; gap:14px;
+}
+.plate-scope dt{
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--text-3); min-width:0;
+}
+.plate-scope dd{
+  margin:0; font-family:var(--display); font-weight:700;
+  font-size:15px; letter-spacing:-.02em; color:var(--text-2);
+  font-variant-numeric:tabular-nums;
+}
+
+@media (max-width:980px){
+  .hero-grid{ grid-template-columns:minmax(0,1fr); gap:clamp(28px,5vw,44px); }
+  .hero-plate{ position:static; }
+  .hero-plate .r{ padding-top:12px; }
+}
+@media (max-width:560px){
+  .hero-eyebrow{ gap:8px; font-size:9.5px; letter-spacing:.16em; }
+  .hero-eyebrow i{ width:10px; }
+}
+
 .hero .tagrow{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:clamp(22px,3vw,34px); }
 .chip{
   font-family:var(--mono); font-size:10px; font-weight:500; letter-spacing:.16em;
@@ -383,6 +507,11 @@ main,.masthead,.chrome-footer{ position:relative; z-index:2; }
 }
 
 /* ---------- clients ---------- */
+/* The logo grid is projected in 3D, and at some widths its projected box
+   overhangs the viewport by a few pixels and widens the document. clip,
+   not hidden: hidden would make this a scroll container and break any
+   sticky descendant. */
+.sec:has(> .logos){ overflow-x:clip; }
 .logos{ display:grid; grid-template-columns:repeat(4,1fr); gap:var(--gut); }
 .logo{
   border:1px solid var(--line-2); border-radius:14px;
