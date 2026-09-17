@@ -5,6 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Prudhvi Raj PJ, Design Leader &amp; UX Strategist</title>
 <meta name="description" content="Prudhvi Raj PJ, a design leader advancing UX maturity and AI innovation across enterprise and consumer products.">
+<script>
+/* Runs before first paint, on purpose. The browser applies a remembered
+   scroll position during load, so correcting it from a script at the end
+   of the body shows the reader the old position and then a jump. Turning
+   restoration off here means there is nothing to correct.
+
+   Only for a navigation we started by clicking a link, which transitions.js
+   flags on the way out. Arriving any other way — back, forward, a reload,
+   a pasted URL — keeps the browser's own restoring, so returning to a page
+   still lands where you left it. */
+(function(){try{
+  if(!('scrollRestoration' in history)) return;
+  var flagged = null;
+  try{ flagged = sessionStorage.getItem('pt:top');
+       if(flagged) sessionStorage.removeItem('pt:top'); }catch(e){}
+  if(!flagged || location.hash) return;
+  var n = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+  if(n && n.type === 'back_forward') return;
+  history.scrollRestoration = 'manual';
+}catch(e){}})();
+</script>
 <link rel="stylesheet" href="assets/css/rhodium.css">
 <link rel="stylesheet" href="assets/css/motion.css">
 <link rel="stylesheet" href="assets/css/scroll3d.css">

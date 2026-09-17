@@ -49,8 +49,16 @@
     }
 
     toTop();
-    /* a restored position can be applied after load, so correct once more */
-    window.addEventListener('load', toTop, { once: true });
+
+    /* Fallback for anything that still applies a position after this
+       script runs. Bounded to the window where the enter veil is still
+       covering the page, so a correction is never something the reader
+       watches happen; past that their position is left alone. */
+    window.addEventListener('load', function () {
+      var since = 0;
+      try { since = performance.now(); } catch (e) { return; }
+      if (since < 1200) toTop();
+    }, { once: true });
   })();
 
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -96,6 +104,18 @@
     var crest = card.querySelector('.case-vis');
     return (crest && crest.style && crest.style.background) || '';
   }
+
+  /* Flag a link-driven navigation for the next page's head script, which
+     uses it to stop the browser restoring a scroll position onto a page
+     the reader asked for fresh. Capture phase and separate from the
+     animation below, so it is recorded even under reduced motion or if
+     something downstream stops the event. */
+  document.addEventListener('click', function (e) {
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!isInternalNav(a)) return;
+    try { sessionStorage.setItem('pt:top', '1'); } catch (err) { /* private mode */ }
+  }, true);
 
   document.addEventListener('click', function (e) {
     if (leaving) { e.preventDefault(); return; }
