@@ -262,7 +262,30 @@
   var vision = $('.vision'), mqTrack = $('.mq-track'), stripes = $$('.stripes i');
   var fades = $$('.vision [data-fade]');
   var fcards = $$('.fcard');
-  var projs = $$('.proj');
+  var work = $('.work'), wTrack = $('.work-track'), wFront = $('.work-front');
+  var wBack = $('.work-back .wrap'), wCards = $$('.wcard');
+  var wEnd = $('.wend i'), wPlus = $('.wend svg');
+  var hs = false;
+
+  // Desktop pins the section and scrolls the track sideways; phones and
+  // reduced motion get a plain vertical stack.
+  function setWorkMode() {
+    hs = !!work && window.innerWidth >= 768 && !reduced;
+    if (work) work.classList.toggle('hs', hs);
+    if (!hs) {
+      [wTrack, wFront, wBack].forEach(function (el) { if (el) { el.style.transform = ''; el.style.opacity = ''; } });
+      $$('.wcard-in').forEach(function (el) { el.style.transform = ''; });
+    }
+  }
+  setWorkMode();
+
+  function reveal(card, i) {
+    if (!card.classList.contains('play')) card.classList.add('play');
+    if (!card.classList.contains('lit')) {
+      $('.wline', card).style.transitionDelay = (0.1 * i) + 's';
+      card.classList.add('lit');
+    }
+  }
   var mqDrift = 0;
 
   function progress(el) {
@@ -305,21 +328,40 @@
       fcards[1].style.zIndex = 2;
     } else fcards.forEach(function (c) { c.style.transform = ''; });
 
-    // Work: each case recedes as the next one slides over it.
-    if (window.innerWidth > 1024 && !reduced) {
-      for (var j = 0; j < projs.length - 1; j++) {
-        var cur = projs[j].getBoundingClientRect(), nxt = projs[j + 1].getBoundingClientRect();
-        var k2 = clamp(1 - (nxt.top - cur.top) / cur.height, 0, 1);
-        projs[j].style.transform = 'scale(' + (1 - k2 * 0.07) + ')';
-        projs[j].style.filter = 'brightness(' + (1 - k2 * 0.55) + ')';
-      }
-    } else projs.forEach(function (p) { p.style.transform = ''; p.style.filter = ''; });
+    // Work: vertical scroll drives the track sideways (2 screens), then the
+    // whole light layer slides off left (1.5 screens) over the dark one.
+    if (hs && work) {
+      var w = window.innerWidth;
+      var y = clamp(-work.getBoundingClientRect().top, 0, work.offsetHeight - h);
+      var k = clamp(y / (2 * h), 0, 1), m = clamp((y - 2 * h) / (1.5 * h), 0, 1);
+      var S = k * Math.max(0, wTrack.scrollWidth - w);
+      wTrack.style.transform = 'translate3d(' + (-S) + 'px,0,0)';
+      wFront.style.transform = 'translate3d(' + (-w * m) + 'px,0,0)';
+      wBack.style.transform = 'translate3d(' + ((1 - m) * 18) + 'vw,0,0)';
+      wBack.style.opacity = 0.2 + 0.8 * m;
+
+      // Each card rises from 550px below as it travels in from the right.
+      wCards.forEach(function (card, i) {
+        var r = (0.5 * w + i * 0.5 * w + 0.25 * w - S) / w;
+        var off = r > 1.2 ? 550 : r > 0.5 ? 550 * Math.pow(1 - (1.2 - r) / 0.7, 3) : 0;
+        $('.wcard-in', card).style.transform = 'translate3d(0,' + off + 'px,0)';
+        if (r < 1.05) card.classList.add('play');
+        if (r < 1) reveal(card, i);
+      });
+
+      // Right-edge rule grows and its plus spins as the layer leaves.
+      var right = wCards[wCards.length - 1].getBoundingClientRect().right;
+      var n = right <= w ? clamp((w - right) / w, 0, 1) : 0;
+      wEnd.style.transform = 'scaleY(' + n + ')';
+      wPlus.style.transform = 'translate(-50%,-50%) rotate(' + (360 * n) + 'deg)';
+      wPlus.style.opacity = n > 0.01 && right >= 0 ? 1 : 0;
+    }
   }
 
   var ticking = false;
   function req() { if (!ticking) { ticking = true; requestAnimationFrame(function () { ticking = false; onScroll(); }); } }
   window.addEventListener('scroll', req, { passive: true });
-  window.addEventListener('resize', req);
+  window.addEventListener('resize', function () { setWorkMode(); req(); });
   onScroll();
 
   // Slow constant drift on the marquee so it never sits still.
@@ -353,14 +395,15 @@
     }, { threshold: 0.5 }).observe(dots[0].parentNode);
   } else dots.forEach(function (d) { d.classList.add('on'); });
 
-  // Case cards: the round "View" badge follows the pointer.
-  $$('.proj-vis').forEach(function (v) {
-    v.addEventListener('pointermove', function (e) {
-      var r = v.getBoundingClientRect();
-      v.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-      v.style.setProperty('--my', (e.clientY - r.top) + 'px');
-    });
-  });
+  // Stacked layout: reveal each card as it scrolls into view.
+  if (io) {
+    var wio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting && !hs) { reveal(e.target, 0); wio.unobserve(e.target); }
+      });
+    }, { threshold: 0.25 });
+    wCards.forEach(function (c) { wio.observe(c); });
+  } else wCards.forEach(function (c) { reveal(c, 0); });
 
   /* ---------- enquiry form (static site: hands off to the mail client) ---------- */
 
