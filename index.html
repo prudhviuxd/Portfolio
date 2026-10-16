@@ -12,8 +12,8 @@
    restoration off here means there is nothing to correct.
 
    Only for a navigation we started by clicking a link, which transitions.js
-   flags on the way out. Arriving any other way — back, forward, a reload,
-   a pasted URL — keeps the browser's own restoring, so returning to a page
+   flags on the way out. Arriving any other way, back, forward, a reload,
+   a pasted URL, keeps the browser's own restoring, so returning to a page
    still lands where you left it. */
 (function(){try{
   if(!('scrollRestoration' in history)) return;
@@ -40,7 +40,7 @@
 <link rel="stylesheet" href="assets/css/scroll3d.css">
 <link rel="stylesheet" href="assets/css/atmos.css">
 <link rel="stylesheet" href="assets/css/transitions.css">
-<noscript><style>.rv,.rv-s>*{opacity:1!important;transform:none!important;}</style></noscript>
+<noscript><style>.rv.rv-s>*{opacity:1!important;transform:none!important;}</style></noscript>
 </head>
 <body>
 

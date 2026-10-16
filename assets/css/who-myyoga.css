@@ -1,5 +1,5 @@
 /* ============================================================
-   WHO · myYoga case study — page-scoped design system
+   WHO · myYoga case study, page-scoped design system
    Teal / blue accent on near-black, per the source design.
    ============================================================ */
 
@@ -48,7 +48,7 @@
 }
 .theme-who .w-h2.center{ text-align: center; }
 
-/* The two serif beats of the story — "The Process", "The END" */
+/* The two serif beats of the story, "The Process", "The END" */
 .theme-who .w-serif{
   font-family: var(--who-serif);
   font-size: clamp(36px, 4.6vw, 60px);
@@ -75,7 +75,7 @@
 .theme-who .w-inner{ position: relative; z-index: 2; }
 
 /* ---------- Back bar ---------- */
-/* Clears the fixed masthead (67px) — at the old 22px this sat behind it
+/* Clears the fixed masthead (67px), at the old 22px this sat behind it
    and was unreachable. text-align is reset because the hero centres its
    content and a back link belongs on the left. */
 .theme-who .w-back{
@@ -263,7 +263,7 @@
 .theme-who .w-bgsec > .w-bgimg img{
   width: 100%; height: 100%; object-fit: cover;
   object-position: center top;
-  /* backdrops are enlarged from small sources — a soft blur keeps them
+  /* backdrops are enlarged from small sources, a soft blur keeps them
      out-of-focus (as in the reference) and hides any upscaling artefacts */
   filter: blur(3px) saturate(.9);
   transform: scale(1.04);
@@ -273,7 +273,7 @@
   position: absolute; inset: 0;
   background: linear-gradient(180deg, var(--who-bg) 0%, rgba(8,9,10,.82) 22%, rgba(8,9,10,.86) 74%, var(--who-bg) 100%);
 }
-/* high-resolution source — only a touch of defocus needed */
+/* high-resolution source, only a touch of defocus needed */
 .theme-who .w-bgsec.warm > .w-bgimg img{
   opacity: .62;
   filter: saturate(1.02);
@@ -653,7 +653,7 @@
 .w-next a:hover{ color: var(--who-teal); }
 
 /* ============================================================
-   Screen showcase — frameless, elevated app screens
+   Screen showcase, frameless, elevated app screens
    ============================================================ */
 
 /* glow pool sitting behind a group of screens */
@@ -683,7 +683,7 @@
     0 2px 4px rgba(0,0,0,.34),
     0 14px 32px rgba(0,0,0,.46),
     0 44px 84px rgba(0,0,0,.55);
-  transition: transform .55s cubic-bezier(.2,.8,.2,1), box-shadow .55s ease;
+  transition: transform .55s cubic-bezier(.2.8.2,1), box-shadow .55s ease;
   transform-style: preserve-3d;
 }
 .scr img{ width: 100%; height: auto; display: block; }
@@ -745,7 +745,7 @@
   gap: 26px;
   align-items: start;
 }
-/* offset via margin, not transform — .stagger owns the transform here */
+/* offset via margin, not transform, .stagger owns the transform here */
 .scr-quad .scr-cell:nth-child(even){ margin-top: 38px; }
 .scr-quad .scr:hover{ transform: translateY(-10px); }
 

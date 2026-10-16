@@ -1,5 +1,5 @@
 // Mobile nav toggle.
-// Sole owner of the .open class — study.js used to toggle it too, so on
+// Sole owner of the .open class, study.js used to toggle it too, so on
 // case-study pages both handlers fired on one click and cancelled out.
 document.querySelectorAll('.nav-toggle').forEach((btn) => {
   btn.addEventListener('click', () => {

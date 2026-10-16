@@ -44,7 +44,7 @@
 
   var sections = main.querySelectorAll('section');
   Array.prototype.forEach.call(sections, function (section) {
-    /* The hero is above the fold — it should already be there. */
+    /* The hero is above the fold, it should already be there. */
     if (section.classList.contains('w-hero')) return;
 
     /* Reveal the row inside the container, not the container itself:

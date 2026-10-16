@@ -1,5 +1,5 @@
 /* ============================================================
-   CHROME — homepage
+   CHROME, homepage
    Kinetic dark UI. Oversized grotesque, iridescent chrome,
    bento modules, scroll-driven motion.
    ============================================================ */
@@ -21,20 +21,36 @@
 }
 
 :root{
-  --bg:        #08080B;
-  --bg-2:      #0C0C11;
-  --surface:   rgba(255,255,255,.038);
-  --surface-2: rgba(255,255,255,.06);
-  --line:      rgba(255,255,255,.10);
-  --line-2:    rgba(255,255,255,.055);
+  /* Ground is warm graphite, not blue-black. Almost every dark site
+     sits on a blue-dominant black; shifting the cast warm costs
+     nothing and stops this one reading like the rest of them. */
+  --bg:        #0A0A09;
+  --bg-2:      #100F0E;
+  --surface:   rgba(244,241,235,.036);
+  --surface-2: rgba(244,241,235,.058);
+  --line:      rgba(244,241,235,.055);
+  --line-2:    rgba(244,241,235,.026);
 
-  --text:      #F4F4F6;
-  --text-2:    #ADB0B8;   /* 8.6:1 */
-  --text-3:    #83878F;   /* 5.2:1 */
+  /* Warm-neutral whites. Rhodium reflects slightly warm, not blue. */
+  --text:      #F3F1EC;
+  --text-2:    #ABA79F;   /* 8.4:1 on --bg */
+  --text-3:    #817D75;   /* 5.1:1 on --bg */
 
-  --cy:        #4FD8E8;   /* electric cyan */
-  --vi:        #A98BFF;   /* violet */
-  --mg:        #FF7BC8;   /* magenta */
+  /* The metal ramp. Rhodium is the most reflective of the platinum
+     group and has essentially no hue: its signature is specular, not
+     chromatic. So the chrome here is achromatic by decision, and all
+     the colour on this site comes from the work itself, each case
+     study carries its client's real brand. */
+  --m-hi:      #F0EDE6;   /* specular highlight */
+  --m-mid:     #B4B0A7;   /* polished face */
+  --m-low:     #6F6B63;   /* shadowed edge */
+
+  /* The old hue names stay as aliases so nothing downstream breaks,
+     but they now resolve to the metal ramp rather than cyan/violet/
+     magenta. */
+  --cy:        var(--m-hi);
+  --vi:        var(--m-mid);
+  --mg:        var(--m-low);
 
   --display:"Bricolage", "Helvetica Neue", sans-serif;
   --body:"Instrument", "Helvetica Neue", sans-serif;
@@ -84,7 +100,7 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 @keyframes drift1{ 0%,100%{ transform:translate(0,0) scale(1);} 50%{ transform:translate(6vw,7vh) scale(1.12);} }
 @keyframes drift2{ 0%,100%{ transform:translate(0,0) scale(1);} 50%{ transform:translate(-7vw,5vh) scale(1.08);} }
 
-main,.masthead,.chrome-footer{ position:relative; z-index:2; }
+main.masthead.chrome-footer{ position:relative; z-index:2; }
 
 /* ---------- shell ---------- */
 .shell{ width:100%; max-width:var(--maxw); margin:0 auto; padding:0 var(--gut); }
@@ -124,7 +140,8 @@ main,.masthead,.chrome-footer{ position:relative; z-index:2; }
 
 /* iridescent chrome fill */
 .chrome{
-  background:linear-gradient(96deg,#FFFFFF 0%,var(--cy) 14%,#EDEFF4 27%,var(--vi) 41%,#FFFFFF 54%,var(--mg) 68%,#E4E8F0 81%,var(--cy) 100%);
+  /* Light crossing a polished face: six stops of one metal, not six hues. */
+  background:linear-gradient(96deg,#CFCBC2 0%,#F4F1EA 15%,#FFFFFF 28%,#A9A59C 44%,#F7F4EE 58%,#908C84 72%,#EDEAE3 86%,#C6C2B9 100%);
   background-size:150% 100%;
   -webkit-background-clip:text; background-clip:text; color:transparent;
 }
@@ -139,9 +156,9 @@ main,.masthead,.chrome-footer{ position:relative; z-index:2; }
   background:rgba(8,8,11,.6);
   backdrop-filter:blur(20px) saturate(160%);
   border-bottom:1px solid var(--line-2);
-  transition:transform .45s cubic-bezier(.6,0,.2,1);
+  transition:transform .45s cubic-bezier(.6,0.2,1);
 }
-/* .masthead.up (retract on scroll) is gone — the header stays pinned. */
+/* .masthead.up (retract on scroll) is gone, the header stays pinned. */
 .mast-in{
   display:flex; align-items:center; justify-content:space-between; gap:20px;
   padding:14px var(--gut); max-width:var(--maxw); margin:0 auto;
@@ -178,11 +195,11 @@ main,.masthead,.chrome-footer{ position:relative; z-index:2; }
   .pill i{ animation:blip 2.6s ease-out infinite; }
 }
 @keyframes blip{
-  0%{ box-shadow:0 0 0 0 rgba(79,216,232,.6);} 70%{ box-shadow:0 0 0 8px rgba(79,216,232,0);} 100%{ box-shadow:0 0 0 0 rgba(79,216,232,0);}
+  0%{ box-shadow:0 0 0 0 rgba(240,237,230,.55);} 70%{ box-shadow:0 0 0 8px rgba(240,237,230,0);} 100%{ box-shadow:0 0 0 0 rgba(240,237,230,0);}
 }
 .burger{ display:none; width:42px; height:42px; border-radius:12px; border:1px solid var(--line); align-items:center; justify-content:center; }
 .burger span{ display:block; width:16px; height:1.5px; background:var(--text); position:relative; }
-.burger span::before,.burger span::after{ content:""; position:absolute; left:0; width:16px; height:1.5px; background:var(--text); }
+.burger span::before.burger span::after{ content:""; position:absolute; left:0; width:16px; height:1.5px; background:var(--text); }
 .burger span::before{ top:-5px; } .burger span::after{ top:5px; }
 
 /* ---------- hero ---------- */
@@ -190,8 +207,7 @@ main,.masthead,.chrome-footer{ position:relative; z-index:2; }
    HERO
    The page's one job is a first impression, so the composition
    carries it: headline left, proof right, nothing stranded at the
-   foot of the section. The type is treated as polished metal —
-   light crosses it once on arrival and then it sits still, which
+   foot of the section. The type is treated as polished metal, light crosses it once on arrival and then it sits still, which
    is the headline's own argument made visible.
    ============================================================ */
 .hero{ padding-top:clamp(48px,6vw,88px); padding-bottom:clamp(36px,5vw,72px); }
@@ -215,13 +231,13 @@ main,.masthead,.chrome-footer{ position:relative; z-index:2; }
 .hero-eyebrow i{ width:14px; height:1px; background:var(--line); display:inline-block; }
 .hx-live{
   width:7px; height:7px; border-radius:50%; flex:none;
-  background:var(--cy); box-shadow:0 0 0 4px rgba(79,216,232,.14);
+  background:var(--cy); box-shadow:0 0 0 4px rgba(240,237,230,.14);
 }
 @media (prefers-reduced-motion: no-preference){
   .hx-live{ animation:hx-pulse 2.6s ease-in-out infinite; }
 }
 @keyframes hx-pulse{
-  50%{ box-shadow:0 0 0 7px rgba(79,216,232,.05); }
+  50%{ box-shadow:0 0 0 7px rgba(240,237,230,.05); }
 }
 
 /* ---------- headline ---------- */
@@ -244,7 +260,7 @@ main,.masthead,.chrome-footer{ position:relative; z-index:2; }
 }
 @media (prefers-reduced-motion: no-preference){
   html.js .hero-title.in .ln-in:not(.chrome){
-    animation:hx-sheen 1.6s cubic-bezier(.32,.72,.2,1) forwards;
+    animation:hx-sheen 1.6s cubic-bezier(.32.72.2,1) forwards;
     animation-delay:calc(var(--l,0) * 105ms + 240ms);
   }
 }
@@ -284,7 +300,7 @@ main,.masthead,.chrome-footer{ position:relative; z-index:2; }
   font-family:var(--mono); font-size:9.5px; letter-spacing:.16em;
   text-transform:uppercase; color:var(--text-3); margin-top:8px;
 }
-.plate-head-2{ margin-top:clamp(4px,.6vw,8px); }
+.plate-head-2{ margin-top:clamp(4px.6vw,8px); }
 /* The quieter half: scope reads as a spec list, so it supports the
    outcome figures above without competing with them. */
 .plate-scope{ margin:0; display:flex; flex-direction:column; gap:10px; }
@@ -331,7 +347,7 @@ main,.masthead,.chrome-footer{ position:relative; z-index:2; }
   font-family:var(--mono); font-size:11px; font-weight:500;
   letter-spacing:.14em; text-transform:uppercase;
   padding:15px 26px; border-radius:100px;
-  transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease, background .3s ease;
+  transition:transform .35s cubic-bezier(.2.8.2,1), box-shadow .35s ease, background .3s ease;
   will-change:transform;
 }
 .btn-a{ background:var(--text); color:#08080B; }
@@ -386,7 +402,7 @@ main,.masthead,.chrome-footer{ position:relative; z-index:2; }
 .lens-fill{
   position:absolute; top:4px; bottom:4px; left:4px; width:calc(50% - 4px);
   border-radius:100px; background:var(--text);
-  transition:transform .5s cubic-bezier(.6,0,.2,1);
+  transition:transform .5s cubic-bezier(.6,0.2,1);
 }
 .lens[data-lens="leader"] .lens-fill{ transform:translateX(100%); }
 [data-panel]{ display:none; }
@@ -399,11 +415,11 @@ main,.masthead,.chrome-footer{ position:relative; z-index:2; }
   background:linear-gradient(160deg,rgba(255,255,255,.055),rgba(255,255,255,.014));
   padding:clamp(22px,2.4vw,32px);
   position:relative; overflow:hidden;
-  transition:border-color .4s ease, transform .5s cubic-bezier(.2,.8,.2,1);
+  transition:border-color .4s ease, transform .5s cubic-bezier(.2.8.2,1);
 }
 .card::before{
   content:""; position:absolute; inset:0; pointer-events:none; opacity:0;
-  background:radial-gradient(360px circle at var(--mx,50%) var(--my,50%),rgba(79,216,232,.13),transparent 72%);
+  background:radial-gradient(360px circle at var(--mx,50%) var(--my,50%),rgba(240,237,230,.10),transparent 72%);
   transition:opacity .4s ease;
 }
 .card:hover{ border-color:rgba(255,255,255,.2); }
@@ -418,7 +434,7 @@ main,.masthead,.chrome-footer{ position:relative; z-index:2; }
 .card .ico{
   width:38px; height:38px; border-radius:11px; margin-bottom:16px;
   display:flex; align-items:center; justify-content:center;
-  background:linear-gradient(140deg,rgba(79,216,232,.2),rgba(169,139,255,.14));
+  background:linear-gradient(140deg,rgba(244,241,235,.10),rgba(244,241,235,.03));
   border:1px solid var(--line); color:var(--cy);
 }
 .sp3{ grid-column:span 3; } .sp4{ grid-column:span 4; }
@@ -454,7 +470,7 @@ main,.masthead,.chrome-footer{ position:relative; z-index:2; }
   border:1px solid var(--line); border-radius:var(--r);
   background:linear-gradient(160deg,rgba(255,255,255,.055),rgba(255,255,255,.014));
   overflow:hidden;
-  transition:border-color .4s ease, transform .5s cubic-bezier(.2,.8,.2,1);
+  transition:border-color .4s ease, transform .5s cubic-bezier(.2.8.2,1);
 }
 .case:hover{ border-color:rgba(255,255,255,.22); transform:translateY(-5px); }
 .case-vis{
@@ -486,7 +502,7 @@ main,.masthead,.chrome-footer{ position:relative; z-index:2; }
   font-family:var(--mono); font-size:10px; letter-spacing:.14em;
   text-transform:uppercase; color:var(--text);
 }
-.case-go svg{ transition:transform .4s cubic-bezier(.2,.8,.2,1); }
+.case-go svg{ transition:transform .4s cubic-bezier(.2.8.2,1); }
 .case:hover .case-go svg{ transform:translateX(5px); }
 
 /* ---------- also shipped ---------- */
@@ -518,7 +534,7 @@ main,.masthead,.chrome-footer{ position:relative; z-index:2; }
   padding:26px 16px; text-align:center;
   font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
   color:var(--text-3); background:var(--surface);
-  transition:color .35s ease, border-color .35s ease, transform .4s cubic-bezier(.2,.8,.2,1);
+  transition:color .35s ease, border-color .35s ease, transform .4s cubic-bezier(.2.8.2,1);
 }
 .logo:hover{ color:var(--text); border-color:var(--line); transform:translateY(-3px); }
 
@@ -527,8 +543,8 @@ main,.masthead,.chrome-footer{ position:relative; z-index:2; }
   border:1px solid var(--line); border-radius:28px;
   padding:clamp(34px,5vw,70px);
   background:
-    radial-gradient(90% 130% at 12% 0%, rgba(169,139,255,.16), transparent 60%),
-    radial-gradient(80% 120% at 92% 100%, rgba(79,216,232,.14), transparent 62%),
+    radial-gradient(90% 130% at 12% 0%, rgba(244,241,235,.07), transparent 60%),
+    radial-gradient(80% 120% at 92% 100%, rgba(240,237,230,.14), transparent 62%),
     linear-gradient(160deg, rgba(255,255,255,.05), rgba(255,255,255,.012));
   position:relative; overflow:hidden;
 }
@@ -538,7 +554,7 @@ main,.masthead,.chrome-footer{ position:relative; z-index:2; }
   display:flex; align-items:center; justify-content:space-between; gap:14px;
   padding:17px 20px; border-radius:14px;
   border:1px solid var(--line-2); background:rgba(255,255,255,.03);
-  transition:background .3s ease, border-color .3s ease, transform .4s cubic-bezier(.2,.8,.2,1);
+  transition:background .3s ease, border-color .3s ease, transform .4s cubic-bezier(.2.8.2,1);
 }
 .lk:hover{ background:rgba(255,255,255,.06); border-color:var(--line); transform:translateY(-2px); }
 .lk .lv{ font-size:15px; }
@@ -552,9 +568,9 @@ main,.masthead,.chrome-footer{ position:relative; z-index:2; }
 .chrome-footer a:hover{ color:var(--text); }
 
 /* ---------- reveal ---------- */
-.rv{ opacity:0; transform:translateY(24px); transition:opacity .8s cubic-bezier(.2,.8,.2,1), transform .8s cubic-bezier(.2,.8,.2,1); }
+.rv{ opacity:0; transform:translateY(24px); transition:opacity .8s cubic-bezier(.2.8.2,1), transform .8s cubic-bezier(.2.8.2,1); }
 .rv.in{ opacity:1; transform:none; }
-.rv-s > *{ opacity:0; transform:translateY(22px) scale(.985); transition:opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1); }
+.rv-s > *{ opacity:0; transform:translateY(22px) scale(.985); transition:opacity .7s cubic-bezier(.2.8.2,1), transform .7s cubic-bezier(.2.8.2,1); }
 .rv-s.in > *{ opacity:1; transform:none; }
 .rv-s.in > *:nth-child(1){ transition-delay:.04s; }
 .rv-s.in > *:nth-child(2){ transition-delay:.10s; }
@@ -566,17 +582,17 @@ main,.masthead,.chrome-footer{ position:relative; z-index:2; }
 .rv-s.in > *:nth-child(8){ transition-delay:.46s; }
 
 @media (prefers-reduced-motion: reduce){
-  .rv,.rv-s > *{ opacity:1 !important; transform:none !important; transition:none !important; }
-  .mq-t,.aura b,.chrome{ animation:none !important; }
-  .btn,.card,.logo,.lk{ transition:none; }
+  .rv.rv-s > *{ opacity:1 !important; transform:none !important; transition:none !important; }
+  .mq-t.aura b.chrome{ animation:none !important; }
+  .btn.card.logo.lk{ transition:none; }
 }
 
 /* ---------- responsive ---------- */
 @media (max-width:1100px){
   .cases{ grid-template-columns:repeat(2,1fr); }
   .also-list li{ grid-template-columns:150px 1fr 120px; }
-  .sp3,.sp4,.sp5{ grid-column:span 6; }
-  .sp7,.sp8{ grid-column:span 12; }
+  .sp3.sp4.sp5{ grid-column:span 6; }
+  .sp7.sp8{ grid-column:span 12; }
   .item{ grid-template-columns:56px minmax(0,1fr) 118px 26px; }
   .item .blurb{ display:none; }
   .logos{ grid-template-columns:repeat(3,1fr); }
@@ -590,8 +606,8 @@ main,.masthead,.chrome-footer{ position:relative; z-index:2; }
 }
 @media (max-width:760px){
   :root{ --gut:18px; --r:16px; }
-  .grid12,.bento{ grid-template-columns:1fr; }
-  .sp3,.sp4,.sp5,.sp6,.sp7,.sp8,.sp12{ grid-column:1 / -1; }
+  .grid12.bento{ grid-template-columns:1fr; }
+  .sp3.sp4.sp5.sp6.sp7.sp8.sp12{ grid-column:1 / -1; }
   .mast-nav{
     position:fixed; inset:58px 0 auto 0; flex-direction:column; align-items:stretch; gap:0;
     background:rgba(12,12,17,.97); backdrop-filter:blur(20px);
@@ -613,3 +629,50 @@ main,.masthead,.chrome-footer{ position:relative; z-index:2; }
   .also-list em{ text-align:left; }
   .facts{ gap:20px; }
 }
+
+/* ============================================================
+   SURFACES, NOT OUTLINES
+
+   Every panel on this page was a 1px stroke around a flat fill,
+   which is the look of a wireframe rather than a finished surface,
+   and it is the first thing that reads as machine-made. The strokes
+   are now a whisper and the separation comes from tone and from a
+   shadow that behaves like contact with a ground. Borders are kept
+   only where they carry meaning: table rules, the glance bar, the
+   masthead edge.
+   ============================================================ */
+.card,
+.logo,
+.stat,
+.hero-plate,
+.pcar-item,
+.narr-card,
+.sk-card{
+  border-color:transparent;
+  background:
+    linear-gradient(168deg, rgba(244,241,235,.055) 0%, rgba(244,241,235,.016) 58%, rgba(244,241,235,.008) 100%);
+  box-shadow:
+    0 1px 0 0 rgba(244,241,235,.055) inset,
+    0 18px 40px -28px rgba(0,0,0,.9);
+}
+.card:hover,
+.logo:hover{
+  border-color:transparent;
+  background:
+    linear-gradient(168deg, rgba(244,241,235,.082) 0%, rgba(244,241,235,.024) 58%, rgba(244,241,235,.01) 100%);
+}
+
+/* The chips were pills with a stroke; now they are set on the ground
+   with weight alone. */
+.chip{
+  border-color:transparent;
+  background:rgba(244,241,235,.045);
+}
+
+/* The CTA pair keeps one filled button and one that is only type,
+   so the pair reads as a hierarchy rather than two outlined boxes. */
+.btn-b{
+  border-color:transparent;
+  background:rgba(244,241,235,.05);
+}
+.btn-b:hover{ background:rgba(244,241,235,.085); }

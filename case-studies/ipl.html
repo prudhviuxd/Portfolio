@@ -12,8 +12,8 @@
    restoration off here means there is nothing to correct.
 
    Only for a navigation we started by clicking a link, which transitions.js
-   flags on the way out. Arriving any other way — back, forward, a reload,
-   a pasted URL — keeps the browser's own restoring, so returning to a page
+   flags on the way out. Arriving any other way, back, forward, a reload,
+   a pasted URL, keeps the browser's own restoring, so returning to a page
    still lands where you left it. */
 (function(){try{
   if(!('scrollRestoration' in history)) return;

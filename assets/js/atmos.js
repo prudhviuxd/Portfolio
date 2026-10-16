@@ -1,5 +1,5 @@
 /* ============================================================
-   Atmosphere — drives the two values the CSS can't compute:
+   Atmosphere, drives the two values the CSS can't compute:
    the specular highlight's position and the plate's scroll
    parallax. Everything else in the layer animates in CSS.
    ============================================================ */

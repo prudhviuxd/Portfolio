@@ -1,10 +1,12 @@
 /* ============================================================
-   Atmosphere — the homepage's ambient ground.
+   Atmosphere, the homepage's ambient ground.
 
    The page's thesis is rhodium: a surface light moves across
-   but never tarnishes. So this layer is specular, not
-   astronomical — wide iridescent sweeps drifting over a faintly
-   engraved plate, with a highlight that tracks the pointer.
+   but never tarnishes. Rhodium has no hue, so neither does this
+   layer. Three sweeps of the same metal lit from three angles,
+   drifting over a faintly engraved plate, with a highlight that
+   tracks the pointer. An iridescent version of this read as a
+   stock AI nebula; a colourless one reads as light on steel.
    No blur filters: the gradients carry their own softness, which
    costs the compositor nothing.
    ============================================================ */
@@ -31,21 +33,21 @@
   width: 86vmax; height: 86vmax;
   left: -26vmax; top: -34vmax;
   background: radial-gradient(circle at 50% 50%,
-    rgba(79,216,232,.20) 0%, rgba(79,216,232,.07) 34%, rgba(79,216,232,0) 66%);
+    rgba(240,237,230,.085) 0%, rgba(240,237,230,.028) 34%, rgba(240,237,230,0) 66%);
   animation: atmos-a 38s ease-in-out infinite alternate;
 }
 .atmos .s2{
   width: 74vmax; height: 74vmax;
   right: -24vmax; top: 16vmax;
   background: radial-gradient(circle at 50% 50%,
-    rgba(169,139,255,.19) 0%, rgba(169,139,255,.06) 36%, rgba(169,139,255,0) 68%);
+    rgba(180,176,167,.075) 0%, rgba(180,176,167,.024) 36%, rgba(180,176,167,0) 68%);
   animation: atmos-b 47s ease-in-out infinite alternate;
 }
 .atmos .s3{
   width: 66vmax; height: 66vmax;
   left: 18vmax; bottom: -30vmax;
   background: radial-gradient(circle at 50% 50%,
-    rgba(255,123,200,.15) 0%, rgba(255,123,200,.05) 38%, rgba(255,123,200,0) 70%);
+    rgba(140,134,124,.085) 0%, rgba(140,134,124,.028) 38%, rgba(140,134,124,0) 70%);
   animation: atmos-c 43s ease-in-out infinite alternate;
 }
 
@@ -67,7 +69,7 @@
    never reads as a wireframe grid. */
 .atmos .plate{
   position: absolute;
-  /* inset:0, not a negative bleed — a fixed layer that overhangs the
+  /* inset:0, not a negative bleed, a fixed layer that overhangs the
      viewport still widens the document's scrollable area. */
   inset: 0;
   border-radius: 0;
@@ -90,8 +92,8 @@
   border-radius: 0;
   background: radial-gradient(
     38vmax circle at var(--atmos-mx, 50%) var(--atmos-my, 26%),
-    rgba(255,255,255,.055) 0%,
-    rgba(160,220,255,.028) 32%,
+    rgba(255,253,248,.06) 0%,
+    rgba(236,232,224,.03) 32%,
     transparent 64%);
   transition: opacity .6s ease;
 }
@@ -106,7 +108,7 @@
     linear-gradient(180deg, transparent 52%, rgba(0,0,0,.42) 100%);
 }
 
-/* Coarse pointers get no specular highlight — there is no pointer
+/* Coarse pointers get no specular highlight, there is no pointer
    to track, and the extra paint is not free on a phone. */
 @media (hover: none){
   .atmos .spec{ display: none; }

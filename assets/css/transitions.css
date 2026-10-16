@@ -4,7 +4,7 @@
    Two halves, deliberately built on different mechanisms:
 
    ENTER is pure CSS on body::before. It cannot get stuck, because
-   nothing has to run to uncover the page — if the JS never loads,
+   nothing has to run to uncover the page, if the JS never loads,
    the animation still completes. The homepage is excluded: it has
    its own preloader, and two curtains is one too many.
 
@@ -15,7 +15,7 @@
 /* ---------- ENTER: lift the veil ----------
    :has() scopes this to pages without the homepage preloader, which plays
    its own opening. motion.js therefore keeps .pre in the DOM after it
-   finishes — remove it and this selector starts matching, playing a second
+   finishes, remove it and this selector starts matching, playing a second
    curtain on the homepage.
    Where :has() is unsupported the selector drops out entirely and
    the page just appears, which is a fine outcome. */
@@ -44,9 +44,10 @@ body:not(:has(> .pre))::before{
   transform: scaleY(0);
   transform-origin: 50% 100%;
   will-change: transform;
-  /* overridden per-link with the card's own colour, so leaving the
-     WHO card floods teal and the MTN card floods amber */
-  background: linear-gradient(160deg, #4FD8E8, #A98BFF);
+  /* Overridden per-link with the card's own colour, so leaving the
+     WHO card floods teal and the MTN card floods amber. The default
+     below is the house metal, used when a link carries no crest. */
+  background: linear-gradient(160deg, #E9E5DD, #8E8A82);
 }
 
 html.pt-out .pt{

@@ -1,5 +1,5 @@
 /* ============================================================
-   Page transitions — the exit half.
+   Page transitions, the exit half.
 
    Intercepts same-origin navigations, floods the screen with the
    colour of whatever was clicked, then navigates. The enter half
@@ -40,8 +40,8 @@
        permanently 0 while the surrounding panel holds the position, so
        scrollTo and scrollRestoration are both no-ops and the new page
        appears wherever the previous one was left. A framed document is
-       allowed to pull itself into view in its parent — it still cannot
-       read the parent's scroll — so that is the one lever available. */
+       allowed to pull itself into view in its parent, it still cannot
+       read the parent's scroll, so that is the one lever available. */
     var framed = false;
     try { framed = window.top !== window.self; } catch (e) { framed = true; }
 
@@ -63,8 +63,8 @@
     }
 
     /* Hold the correction for as long as the enter veil is covering the
-       page, and not one frame longer. Layout settles in pieces — fonts,
-       images, the frame being resized by its host — and each can move us
+       page, and not one frame longer. Layout settles in pieces, fonts,
+       images, the frame being resized by its host, and each can move us
        again, so re-assert rather than correct once and hope. Stopping
        before the veil lifts is the point: the reader sees the page
        arrive at the top, never sees it travel there. */

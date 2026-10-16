@@ -1,5 +1,5 @@
 /* ============================================================
-   Design tokens — shared across the whole site
+   Design tokens, shared across the whole site
    ============================================================ */
 :root{
   --bg: #0a0a0b;
@@ -309,7 +309,7 @@ button{ font-family: inherit; cursor: pointer; }
   opacity: 0;
   transform: perspective(1000px) translateY(48px) rotateX(10deg) scale(.97);
   transform-origin: 50% 100%;
-  transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1);
+  transition: opacity .9s cubic-bezier(.2.7.2,1), transform .9s cubic-bezier(.2.7.2,1);
   will-change: opacity, transform;
 }
 .reveal.in{

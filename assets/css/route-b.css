@@ -1,5 +1,5 @@
 /* ============================================================
-   ROUTE B — orientation first
+   ROUTE B, orientation first
    Board findings applied: statement not slogan, portrait in the
    hero, work directly below the fold, colour rationed to ONE
    saturated moment on an otherwise achromatic page.
@@ -18,7 +18,7 @@ body{ background:var(--n-0); }
 /* ---------- hero ---------- */
 .b-hero{ padding-top:clamp(96px,13vw,150px); padding-bottom:clamp(48px,6vw,76px); }
 .b-grid{
-  display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,.85fr);
+  display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0.85fr);
   gap:clamp(30px,5vw,72px); align-items:end;
 }
 

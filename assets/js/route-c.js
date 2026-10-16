@@ -1,4 +1,4 @@
-/* Route C — the ambient field and the cursor-following work preview. */
+/* Route C, the ambient field and the cursor-following work preview. */
 (function () {
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 

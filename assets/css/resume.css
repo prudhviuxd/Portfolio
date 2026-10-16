@@ -1,5 +1,5 @@
 /* ============================================================
-   Résumé — screen + print
+   Résumé, screen + print
    Inherits the chrome system; denser, more scannable.
    ============================================================ */
 
@@ -18,7 +18,7 @@
 .cv-contact{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px 26px; }
 .cv-contact li{ display:flex; flex-direction:column; gap:3px; }
 .cv-contact .mono{ font-size:9px; letter-spacing:.16em; }
-.cv-contact a,.cv-contact span:not(.mono){ font-size:13.5px; color:var(--text-2); }
+.cv-contact a.cv-contact span:not(.mono){ font-size:13.5px; color:var(--text-2); }
 .cv-contact a:hover{ color:var(--cy); }
 
 /* ---------- sections ---------- */
@@ -64,9 +64,9 @@
 
 /* placeholders the owner must replace */
 .cv-todo{
-  border:1px dashed rgba(255,123,200,.45);
+  border:1px dashed rgba(140,134,124,.45);
   border-radius:12px; padding:14px 16px; margin-bottom:18px;
-  background:rgba(255,123,200,.05);
+  background:rgba(140,134,124,.05);
 }
 .cv-todo .mono{ color:var(--mg); display:block; margin-bottom:6px; }
 .cv-todo p{ font-size:13.5px; line-height:1.6; color:var(--text-2); }
@@ -118,7 +118,7 @@
 }
 
 /* ============================================================
-   PRINT — this is the deliverable PDF
+   PRINT, this is the deliverable PDF
    ============================================================ */
 @media print{
   @page{ size:A4; margin:14mm 13mm; }
@@ -130,13 +130,13 @@
     background:#fff !important; color:#111 !important;
     font-size:10.5pt; line-height:1.45;
   }
-  .rv,.rv-s>*{ opacity:1 !important; transform:none !important; }
+  .rv.rv-s>*{ opacity:1 !important; transform:none !important; }
 
   .cv{ max-width:none; padding:0 !important; }
   .shell{ padding:0 !important; }
 
   /* flatten the gradient text, it prints as nothing */
-  .chrome,.cv-figs b{
+  .chrome.cv-figs b{
     background:none !important; -webkit-text-fill-color:#111 !important;
     color:#111 !important;
   }
@@ -148,24 +148,24 @@
     color:#111 !important; border-bottom:1px solid #bbb !important;
     font-size:8.5pt; letter-spacing:.16em;
   }
-  .cv-lede,.cv-bullets li,.cv-proj p,.cv-skills p,.cv-contact a,
-  .cv-contact span:not(.mono),.cv-more li{ color:#333 !important; }
+  .cv-lede.cv-bullets li.cv-proj p.cv-skills p.cv-contact a,
+  .cv-contact span:not(.mono).cv-more li{ color:#333 !important; }
   /* bold runs inherit white from the dark theme, force them dark on paper */
-  .cv-proj p b,.cv-more b,.cv-bullets em,.cv-lede b{ color:#000 !important; }
+  .cv-proj p b.cv-more b.cv-bullets em.cv-lede b{ color:#000 !important; }
   /* keep the compact 3-column layout on paper */
   .cv-more li{ display:grid !important; grid-template-columns:130px 1fr 110px !important; gap:12px !important; }
   .cv-more em{ text-align:right !important; }
-  .cv-figs span,.cv-more em,.cv-proj h3 .mono,.cv-role-head .mono,
-  .cv-contact .mono,.cv-more-h{ color:#555 !important; }
-  .cv-link,.cv-foot a,.cv-skills h4{ color:#111 !important; }
+  .cv-figs span.cv-more em.cv-proj h3 .mono.cv-role-head .mono,
+  .cv-contact .mono.cv-more-h{ color:#555 !important; }
+  .cv-link.cv-foot a.cv-skills h4{ color:#111 !important; }
   .cv-bullets li::before{ background:#111 !important; }
-  .cv-head,.cv-h,.cv-role-item,.cv-proj,.cv-more li,.cv-foot{ border-color:#ccc !important; }
+  .cv-head.cv-h.cv-role-item.cv-proj.cv-more li.cv-foot{ border-color:#ccc !important; }
 
   a{ text-decoration:none; }
   .cv-contact a[href^="http"]::after{ content:""; }
 
   /* keep blocks intact across page breaks */
-  .cv-sec,.cv-role-item,.cv-proj,.cv-head{ break-inside:avoid; page-break-inside:avoid; }
+  .cv-sec.cv-role-item.cv-proj.cv-head{ break-inside:avoid; page-break-inside:avoid; }
   .cv-sec{ padding-top:12pt; }
 
   /* placeholders stay obvious on paper too */

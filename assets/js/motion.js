@@ -1,5 +1,5 @@
 /* ============================================================
-   MOTION — the interaction engine
+   MOTION, the interaction engine
    Line splitting, scroll-driven reveals, inertia scrolling,
    a pinned work stack and velocity skew. No dependencies.
    ============================================================ */
@@ -147,7 +147,7 @@
 
     if (mark) {
       requestAnimationFrame(function () {
-        mark.style.transition = 'transform .9s cubic-bezier(.16,1,.3,1)';
+        mark.style.transition = 'transform .9s cubic-bezier(.16,1.3,1)';
         mark.style.transform = 'none';
       });
     }

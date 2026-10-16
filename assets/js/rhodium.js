@@ -1,4 +1,4 @@
-/* Rhodium Specimen — homepage behaviour */
+/* Rhodium Specimen, homepage behaviour */
 (function () {
   'use strict';
 

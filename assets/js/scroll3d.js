@@ -1,5 +1,5 @@
 /* ============================================================
-   SCROLL3D — the scrub engine
+   SCROLL3D, the scrub engine
    One rAF loop. Each registered element gets a 0..1 progress
    derived from its position in the viewport, and its transform
    is rewritten every frame. Nothing here is a one-shot trigger,
@@ -74,7 +74,7 @@
     px = lerp(px, tpx, 0.06);
     py = lerp(py, tpy, 0.06);
 
-    /* 1 — layered parallax --------------------------------------
+    /* 1, layered parallax --------------------------------------
        Off once the layout stacks. A layer can travel ±104px, which is
        depth between columns but a collision between rows: the hero
        plate was riding up into the buttons above it. */
@@ -94,7 +94,7 @@
       el.style.transform = 'translate3d(0,' + y.toFixed(2) + 'px,' + z.toFixed(1) + 'px)';
     });
 
-    /* 2 — scroll-driven 3D -------------------------------------- */
+    /* 2, scroll-driven 3D -------------------------------------- */
     s3ds.forEach(function (el) {
       var r = el.getBoundingClientRect();
       if (r.bottom < -300 || r.top > vh + 300) return;
@@ -114,7 +114,7 @@
       if (o.fade) el.style.opacity = t.toFixed(3);
     });
 
-    /* 3 — floating panel UI ------------------------------------- */
+    /* 3, floating panel UI ------------------------------------- */
     floats.forEach(function (group) {
       var gr = group.getBoundingClientRect();
       if (gr.bottom < -300 || gr.top > vh + 300) return;
@@ -133,7 +133,7 @@
       });
     });
 
-    /* 4 — perspective carousel ---------------------------------- */
+    /* 4, perspective carousel ---------------------------------- */
     if (innerWidth >= 900) carousels.forEach(function (car) {
       var r = car.getBoundingClientRect();
       if (r.bottom < -200 || r.top > vh + 200) return;
@@ -166,7 +166,7 @@
       if (num) num.textContent = String(Math.round(active) + 1).padStart(2, '0');
     });
 
-    /* 5 — scroll narrative -------------------------------------- */
+    /* 5, scroll narrative -------------------------------------- */
     narrs.forEach(function (narr) {
       var r = narr.getBoundingClientRect();
       if (r.bottom < -200 || r.top > vh + 200) return;

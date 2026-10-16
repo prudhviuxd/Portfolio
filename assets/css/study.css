@@ -1,5 +1,5 @@
 /* ============================================================
-   STUDY — chrome continuity layer for /case-studies/*
+   STUDY, chrome continuity layer for /case-studies/*
    Loads LAST. Re-points the original tokens at the chrome
    palette and restyles shared structure, so the case studies
    read as the same site as the homepage.
@@ -24,20 +24,25 @@
 
 /* ---------- retoken ---------- */
 :root{
-  --bg:#08080B; --bg-soft:#0C0C11; --surface:#101017; --surface-2:#15151d;
-  --border:rgba(255,255,255,.10); --border-soft:rgba(255,255,255,.055);
+  --bg:#0A0A09; --bg-soft:#100F0E; --surface:#141311; --surface-2:#1A1917;
+  --border:rgba(244,241,235,.085); --border-soft:rgba(244,241,235,.045);
 
-  --text:#F4F4F6; --text-muted:#ADB0B8; --text-dim:#83878F;
+  --text:#F3F1EC; --text-muted:#ABA79F; --text-dim:#817D75;
 
-  --cy:#4FD8E8; --vi:#A98BFF; --mg:#FF7BC8;
-  /* per-project accent, one variable, swapped on <main> */
-  --acc:var(--cy);
+  /* The metal ramp, matching the homepage: the chrome carries no hue. */
+  --m-hi:#F0EDE6; --m-mid:#B4B0A7; --m-low:#6F6B63;
+  --cy:var(--m-hi); --vi:var(--m-mid); --mg:var(--m-low);
+
+  /* Per-project accent. Each case study shows its client's real colour
+     rather than being flattened to one house hue: the chrome is
+     colourless precisely so the work can carry the colour. */
+  --acc:var(--m-mid);
 
   /* the old names stay, they now resolve to chrome */
   --pink:var(--acc); --pink-soft:var(--acc);
   --orange:var(--vi); --amber:var(--vi); --teal:var(--cy); --blue:var(--cy);
-  --gradient-brand:linear-gradient(96deg,#FFF,var(--cy) 40%,var(--vi) 80%);
-  --gradient-brand-soft:linear-gradient(120deg,rgba(79,216,232,.14),rgba(169,139,255,.14));
+  --gradient-brand:linear-gradient(96deg,#F7F4EE,#B4B0A7 46%,#8A867E 100%);
+  --gradient-brand-soft:linear-gradient(120deg,rgba(244,241,235,.10),rgba(244,241,235,.03));
 
   --display:"Bricolage","Helvetica Neue",sans-serif;
   --body:"Instrument","Helvetica Neue",sans-serif;
@@ -58,18 +63,18 @@ body::after{
   opacity:.35; mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
 }
-::selection{ background:var(--cy); color:#04121a; }
-:focus-visible{ outline:2px solid var(--cy); outline-offset:3px; border-radius:4px; }
+::selection{ background:var(--acc); color:#0A0A09; }
+:focus-visible{ outline:2px solid var(--acc); outline-offset:3px; border-radius:4px; }
 
 /* per-project accent swap, the entire per-page colour budget */
-main[data-acc="cy"]{ --acc:var(--cy); }
-main[data-acc="vi"]{ --acc:var(--vi); }
-main[data-acc="mg"]{ --acc:var(--mg); }
+main[data-acc="cy"]{ --acc:#2FB8A0; }   /* WHO mYoga, its own teal */
+main[data-acc="vi"]{ --acc:#4C8DD9; }   /* IPL, tournament blue */
+main[data-acc="mg"]{ --acc:#E8A317; }   /* MTN, brand amber */
 
 /* WHO page tokens fold into the same system */
 .theme-who{
-  --who-teal:var(--cy); --who-teal-soft:var(--cy);
-  --who-blue:var(--cy); --who-pink:var(--mg);
+  --who-teal:#2FB8A0; --who-teal-soft:#37C7AC;
+  --who-blue:#2E8FC4; --who-pink:#C9638F;
   --who-bg:var(--bg); --who-panel:#0C0C11; --who-panel-2:#101017;
   --who-line:var(--border); --who-line-soft:var(--border-soft);
   background:var(--bg);
@@ -77,7 +82,7 @@ main[data-acc="mg"]{ --acc:var(--mg); }
 
 /* ---------- iridescent fill, one phrase per viewport ---------- */
 .chrome{
-  background:linear-gradient(96deg,#FFFFFF 0%,var(--cy) 14%,#EDEFF4 27%,var(--vi) 41%,#FFFFFF 54%,var(--mg) 68%,#E4E8F0 81%,var(--cy) 100%);
+  background:linear-gradient(96deg,#CFCBC2 0%,#F4F1EA 15%,#FFFFFF 28%,#A9A59C 44%,#F7F4EE 58%,#908C84 72%,#EDEAE3 86%,#C6C2B9 100%);
   background-size:150% 100%;
   -webkit-background-clip:text; background-clip:text; color:transparent;
 }
@@ -90,7 +95,7 @@ main[data-acc="mg"]{ --acc:var(--mg); }
 .progress{
   position:fixed; top:0; left:0; height:2px; width:100%; z-index:60;
   transform:scaleX(0); transform-origin:0 50%;
-  background:linear-gradient(90deg,var(--cy),var(--vi) 50%,var(--mg));
+  background:var(--acc);   /* the reading bar takes the project's colour */
   will-change:transform;
 }
 
@@ -113,7 +118,7 @@ main[data-acc="mg"]{ --acc:var(--mg); }
 }
 .brand-mark{
   width:9px; height:9px; padding:0; border-radius:50%; flex:none;
-  background:linear-gradient(120deg,var(--cy),var(--vi));
+  background:var(--acc);
   font-size:0; color:transparent; overflow:hidden; border:0;
 }
 /* Desktop only. base.css turns this row into a fixed overlay panel
@@ -272,7 +277,7 @@ main[data-acc="mg"]{ --acc:var(--mg); }
 }
 
 /* ============================================================
-   WHO · mYoga — treatments the source design calls for that the
+   WHO · mYoga, treatments the source design calls for that the
    shared chrome above would otherwise flatten. Scoped to the page,
    so the other case studies keep the unified treatment.
    ============================================================ */
@@ -295,7 +300,7 @@ main[data-acc="mg"]{ --acc:var(--mg); }
 /* Section headings sit a step above the shared scale. */
 .theme-who .w-h2{ font-size:clamp(26px,3.9vw,46px); }
 
-/* "The Process" and "The END" are set in a serif — a deliberate
+/* "The Process" and "The END" are set in a serif, a deliberate
    pause in the narrative, and the one serif on the page. */
 .theme-who .w-serif{
   font-family:var(--who-serif);
@@ -313,3 +318,24 @@ main[data-acc="mg"]{ --acc:var(--mg); }
 /* The next-project title is the largest type on the page.
    .w-next is only used by this page. */
 .w-next a{ font-size:clamp(34px,6.2vw,82px); }
+
+/* ---------- surfaces, not outlines (see rhodium.css) ---------- */
+.shot,
+.stat-box,
+.media-frame,
+.theme-mtn .skill-grid li,
+.theme-mtn .resp-list li,
+.theme-who .w-panel,
+.theme-who .w-stat,
+.theme-who .w-metric{
+  border-color:transparent;
+  background:
+    linear-gradient(168deg, rgba(244,241,235,.05) 0%, rgba(244,241,235,.015) 58%, rgba(244,241,235,.007) 100%);
+  box-shadow:
+    0 1px 0 0 rgba(244,241,235,.05) inset,
+    0 18px 40px -28px rgba(0,0,0,.9);
+}
+/* The metric cards keep their accent wash: that colour is the work's,
+   not the chrome's, so it stays. */
+.theme-who .w-metric.teal,
+.theme-who .w-metric.pink{ box-shadow:0 18px 40px -28px rgba(0,0,0,.9); }
