@@ -68,26 +68,6 @@
   --gut: 26px;
   --maxw: 1400px;
   --r: 20px;
-  --r-panel: 30px;
-
-  /* ---------- section fields ----------
-     Structure borrowed from iventions.com: one ground carries a family
-     of tinted fields, one per section, while a single accent runs
-     unchanged through all of them. Theirs are pale on warm bone; these
-     are the same system inverted.
-
-     Each field was generated in OKLCH at a fixed lightness step off the
-     ground, so every room sits the same distance from home and only the
-     hue moves. Where two rooms share a hue neighbourhood, chroma
-     separates them, which is how the source separates bone from sand
-     from peach. Hues are taken from their own tokens.
-
-     Body text clears 16.7:1 on every field, muted text 7.9:1. */
-  --fld-sand:   #150C09;   /* H 40  · the quietest room, for Work   */
-  --fld-violet: #100F1E;   /* H 284 · from --primary-purple #8072FF */
-  --fld-cyan:   #011416;   /* H 201 · from --primary-blue   #D1F3F5 */
-  --fld-peach:  #1B0E04;   /* H 58  · from --primary-orange #FFDDC4 */
-  --fld-lime:   #0F1304;   /* H 123 · from --primary-yellow #E0FF98 */
 }
 
 *,*::before,*::after{ box-sizing:border-box; }
@@ -797,35 +777,3 @@ main.masthead.chrome-footer{ position:relative; z-index:2; }
 }
 .tex-brushed::before{ background-image:url("../img/texture/brushed-wide.jpg"); }
 .tex-lime::before{    background-image:url("../img/texture/brushed-lime.jpg"); opacity:.34; }
-
-/* ---------- the rooms ----------
-   A section carrying .fld paints its own ground and rounds its corners,
-   so the page reads as a stack of rooms rather than one long scroll.
-   The shell is already a centred 1400px box, so no markup changes and
-   no full-bleed overflow: the page ground shows past the rounded
-   corners, which is what gives the panel an edge to be seen against.
-
-   The surface and line tokens are deliberately NOT overridden per room.
-   They are translucent warm white, so a card inside the violet room
-   picks up violet and a card inside the peach room picks up peach,
-   from the same two declarations. */
-.fld{
-  position:relative;
-  border-radius:var(--r-panel);
-  background-color:var(--room, transparent);
-}
-.fld-sand  { --room:var(--fld-sand);   }
-.fld-violet{ --room:var(--fld-violet); }
-.fld-cyan  { --room:var(--fld-cyan);   }
-.fld-peach { --room:var(--fld-peach);  }
-.fld-lime  { --room:var(--fld-lime);   }
-
-/* A room needs breathing space from the one above it, or the rounded
-   corners have nothing to round against. */
-.fld + .fld{ margin-top:clamp(10px,1.4vw,22px); }
-
-/* Below the panel width the rounding reads as a mistake rather than a
-   decision, so the rooms go square and full-bleed. */
-@media (max-width:620px){
-  .fld{ border-radius:0; }
-}
