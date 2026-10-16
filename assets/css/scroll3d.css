@@ -144,7 +144,7 @@ html.js [data-float] > *{ will-change:transform, opacity; }
   html.js [data-s3d],
   html.js [data-float] > *{ transform:none !important; opacity:1 !important; }
 
-  .pcar-vp.narr-vp{ position:static !important; height:auto !important; min-height:0 !important; overflow:visible !important; }
+  .pcar-vp, .narr-vp{ position:static !important; height:auto !important; min-height:0 !important; overflow:visible !important; }
   .pcar{ height:auto !important; }
   .pcar-stage{ width:100%; height:auto; display:grid; gap:18px; }
   .pcar-item{ position:static !important; transform:none !important; opacity:1 !important; box-shadow:none; }

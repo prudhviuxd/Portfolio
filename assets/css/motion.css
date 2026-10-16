@@ -30,7 +30,7 @@ html.js .pre{
 }
 html.pre-done .pre{
   transform:translateY(-101%);
-  transition:transform 1s cubic-bezier(.76,0.24,1);
+  transition:transform 1s cubic-bezier(.76,0,.24,1);
 }
 html.js:not(.pre-done) body{ overflow:hidden; }
 
@@ -40,7 +40,7 @@ html.js:not(.pre-done) body{ overflow:hidden; }
 html.js .ln-in{ transform:translateY(110%); opacity:0; }
 html.js .in .ln-in{
   transform:none; opacity:1;
-  transition:transform 1.05s cubic-bezier(.16,1.3,1), opacity .7s ease;
+  transition:transform 1.05s cubic-bezier(.16,1,.3,1), opacity .7s ease;
 }
 /* the 3D part, each line pivots up from below the page plane */
 [data-split][data-3d] .ln-mask{ perspective:900px; }
@@ -48,7 +48,7 @@ html.js [data-split][data-3d] .ln-in{ transform:translateY(110%) rotateX(-52deg)
 /* .in lands on the heading itself, so this must not be a descendant selector */
 html.js [data-split][data-3d].in .ln-in{
   transform:none;
-  transition:transform 1.05s cubic-bezier(.16,1.3,1), opacity .7s ease;
+  transition:transform 1.05s cubic-bezier(.16,1,.3,1), opacity .7s ease;
 }
 
 /* ---------- generic fx ---------- */
@@ -58,7 +58,7 @@ html.js [data-fx="fade"]{ opacity:0; }
 html.js [data-fx="wipe"]{ opacity:0; transform:translateY(18px) scale(.985); }
 html.js [data-fx].in{
   opacity:1; transform:none;
-  transition:opacity .8s ease, transform 1s cubic-bezier(.16,1.3,1);
+  transition:opacity .8s ease, transform 1s cubic-bezier(.16,1,.3,1);
 }
 
 /* ---------- 3D card entrance ---------- */
@@ -69,7 +69,7 @@ html.js [data-cards] > *{
 }
 html.js [data-cards].in > *{
   opacity:1; transform:none;
-  transition:opacity .7s ease, transform 1.15s cubic-bezier(.16,1.3,1);
+  transition:opacity .7s ease, transform 1.15s cubic-bezier(.16,1,.3,1);
   transition-delay:calc(var(--i,0) * 95ms);
 }
 
@@ -233,12 +233,12 @@ html.js [data-cards].in > *{
 html.js [data-rows] .sk-item{ opacity:0; transform:translateY(16px); }
 html.js [data-rows].in .sk-item{
   opacity:1; transform:none;
-  transition:opacity .6s ease, transform .8s cubic-bezier(.16,1.3,1);
+  transition:opacity .6s ease, transform .8s cubic-bezier(.16,1,.3,1);
   transition-delay:calc(var(--i,0) * 62ms);
 }
 html.js [data-rows].in .sk-rule i{
   width:100%;
-  transition:width 1s cubic-bezier(.16,1.3,1);
+  transition:width 1s cubic-bezier(.16,1,.3,1);
   transition-delay:calc(var(--i,0) * 62ms);
 }
 

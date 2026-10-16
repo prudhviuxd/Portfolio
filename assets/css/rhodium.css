@@ -26,15 +26,15 @@
      nothing and stops this one reading like the rest of them. */
   --bg:        #0A0A09;
   --bg-2:      #100F0E;
-  --surface:   rgba(244,241,235,.036);
-  --surface-2: rgba(244,241,235,.058);
-  --line:      rgba(244,241,235,.055);
-  --line-2:    rgba(244,241,235,.026);
+  --surface:   rgba(244,241,235,.05);
+  --surface-2: rgba(244,241,235,.082);
+  --line:      rgba(244,241,235,.075);
+  --line-2:    rgba(244,241,235,.04);
 
   /* Warm-neutral whites. Rhodium reflects slightly warm, not blue. */
   --text:      #F3F1EC;
   --text-2:    #ABA79F;   /* 8.4:1 on --bg */
-  --text-3:    #817D75;   /* 5.1:1 on --bg */
+  --text-3:    #8E8A82;   /* 6.0:1 on --bg */
 
   /* The metal ramp. Rhodium is the most reflective of the platinum
      group and has essentially no hue: its signature is specular, not
@@ -53,6 +53,11 @@
   --acc:       #D4FF3F;
   --acc-deep:  #A8CC22;   /* for text on light, and pressed states */
   --acc-dim:   rgba(212,255,63,.14);
+  /* Interaction states. The accent was only ever a static mark;
+     putting it on the hover edge makes the page answer back in
+     its own colour instead of a generic white glow. */
+  --line-hot:    rgba(212,255,63,.42);
+  --surface-hot: rgba(212,255,63,.07);
 
   /* The old hue names stay as aliases so nothing downstream breaks,
      but they now resolve to the metal ramp rather than cyan/violet/
@@ -109,7 +114,7 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 @keyframes drift1{ 0%,100%{ transform:translate(0,0) scale(1);} 50%{ transform:translate(6vw,7vh) scale(1.12);} }
 @keyframes drift2{ 0%,100%{ transform:translate(0,0) scale(1);} 50%{ transform:translate(-7vw,5vh) scale(1.08);} }
 
-main.masthead.chrome-footer{ position:relative; z-index:2; }
+main, .masthead, .chrome-footer{ position:relative; z-index:2; }
 
 /* ---------- shell ---------- */
 .shell{ width:100%; max-width:var(--maxw); margin:0 auto; padding:0 var(--gut); }
@@ -165,7 +170,7 @@ main.masthead.chrome-footer{ position:relative; z-index:2; }
   background:rgba(8,8,11,.6);
   backdrop-filter:blur(20px) saturate(160%);
   border-bottom:1px solid var(--line-2);
-  transition:transform .45s cubic-bezier(.6,0.2,1);
+  transition:transform .45s cubic-bezier(.6,0,.2,1);
 }
 /* .masthead.up (retract on scroll) is gone, the header stays pinned. */
 .mast-in{
@@ -269,7 +274,7 @@ main.masthead.chrome-footer{ position:relative; z-index:2; }
 }
 @media (prefers-reduced-motion: no-preference){
   html.js .hero-title.in .ln-in:not(.chrome){
-    animation:hx-sheen 1.6s cubic-bezier(.32.72.2,1) forwards;
+    animation:hx-sheen 1.6s cubic-bezier(.32,.72,.2,1) forwards;
     animation-delay:calc(var(--l,0) * 105ms + 240ms);
   }
 }
@@ -356,7 +361,7 @@ main.masthead.chrome-footer{ position:relative; z-index:2; }
   font-family:var(--mono); font-size:11px; font-weight:500;
   letter-spacing:.14em; text-transform:uppercase;
   padding:15px 26px; border-radius:100px;
-  transition:transform .35s cubic-bezier(.2.8.2,1), box-shadow .35s ease, background .3s ease;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease, background .3s ease;
   will-change:transform;
 }
 .btn-a{ background:var(--text); color:#08080B; }
@@ -411,7 +416,7 @@ main.masthead.chrome-footer{ position:relative; z-index:2; }
 .lens-fill{
   position:absolute; top:4px; bottom:4px; left:4px; width:calc(50% - 4px);
   border-radius:100px; background:var(--text);
-  transition:transform .5s cubic-bezier(.6,0.2,1);
+  transition:transform .5s cubic-bezier(.6,0,.2,1);
 }
 .lens[data-lens="leader"] .lens-fill{ transform:translateX(100%); }
 [data-panel]{ display:none; }
@@ -424,14 +429,14 @@ main.masthead.chrome-footer{ position:relative; z-index:2; }
   background:linear-gradient(160deg,rgba(255,255,255,.055),rgba(255,255,255,.014));
   padding:clamp(22px,2.4vw,32px);
   position:relative; overflow:hidden;
-  transition:border-color .4s ease, transform .5s cubic-bezier(.2.8.2,1);
+  transition:border-color .4s ease, transform .5s cubic-bezier(.2,.8,.2,1);
 }
 .card::before{
   content:""; position:absolute; inset:0; pointer-events:none; opacity:0;
   background:radial-gradient(360px circle at var(--mx,50%) var(--my,50%),rgba(240,237,230,.10),transparent 72%);
   transition:opacity .4s ease;
 }
-.card:hover{ border-color:rgba(255,255,255,.2); }
+.card:hover{ border-color:var(--line-hot); }
 .card:hover::before{ opacity:1; }
 .card .big{
   font-family:var(--display); font-weight:800;
@@ -479,9 +484,9 @@ main.masthead.chrome-footer{ position:relative; z-index:2; }
   border:1px solid var(--line); border-radius:var(--r);
   background:linear-gradient(160deg,rgba(255,255,255,.055),rgba(255,255,255,.014));
   overflow:hidden;
-  transition:border-color .4s ease, transform .5s cubic-bezier(.2.8.2,1);
+  transition:border-color .4s ease, transform .5s cubic-bezier(.2,.8,.2,1);
 }
-.case:hover{ border-color:rgba(255,255,255,.22); transform:translateY(-5px); }
+.case:hover{ border-color:var(--line-hot); transform:translateY(-5px); }
 .case-vis{
   aspect-ratio:16/10; position:relative;
   display:flex; align-items:flex-end; padding:16px;
@@ -511,7 +516,7 @@ main.masthead.chrome-footer{ position:relative; z-index:2; }
   font-family:var(--mono); font-size:10px; letter-spacing:.14em;
   text-transform:uppercase; color:var(--text);
 }
-.case-go svg{ transition:transform .4s cubic-bezier(.2.8.2,1); }
+.case-go svg{ transition:transform .4s cubic-bezier(.2,.8,.2,1); }
 .case:hover .case-go svg{ transform:translateX(5px); }
 
 /* ---------- also shipped ---------- */
@@ -543,9 +548,9 @@ main.masthead.chrome-footer{ position:relative; z-index:2; }
   padding:26px 16px; text-align:center;
   font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
   color:var(--text-3); background:var(--surface);
-  transition:color .35s ease, border-color .35s ease, transform .4s cubic-bezier(.2.8.2,1);
+  transition:color .35s ease, border-color .35s ease, transform .4s cubic-bezier(.2,.8,.2,1);
 }
-.logo:hover{ color:var(--text); border-color:var(--line); transform:translateY(-3px); }
+.logo:hover{ color:var(--text); border-color:var(--line-hot); background:var(--surface-hot); transform:translateY(-3px); }
 
 /* ---------- contact ---------- */
 .cta{
@@ -563,9 +568,9 @@ main.masthead.chrome-footer{ position:relative; z-index:2; }
   display:flex; align-items:center; justify-content:space-between; gap:14px;
   padding:17px 20px; border-radius:14px;
   border:1px solid var(--line-2); background:rgba(255,255,255,.03);
-  transition:background .3s ease, border-color .3s ease, transform .4s cubic-bezier(.2.8.2,1);
+  transition:background .3s ease, border-color .3s ease, transform .4s cubic-bezier(.2,.8,.2,1);
 }
-.lk:hover{ background:rgba(255,255,255,.06); border-color:var(--line); transform:translateY(-2px); }
+.lk:hover{ background:var(--surface-hot); border-color:var(--line-hot); transform:translateY(-2px); }
 .lk .lv{ font-size:15px; }
 .lk .ll{ font-family:var(--mono); font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--text-3); display:block; margin-bottom:5px; }
 .lk .ar{ color:var(--cy); flex:none; }
@@ -577,9 +582,9 @@ main.masthead.chrome-footer{ position:relative; z-index:2; }
 .chrome-footer a:hover{ color:var(--text); }
 
 /* ---------- reveal ---------- */
-.rv{ opacity:0; transform:translateY(24px); transition:opacity .8s cubic-bezier(.2.8.2,1), transform .8s cubic-bezier(.2.8.2,1); }
+.rv{ opacity:0; transform:translateY(24px); transition:opacity .8s cubic-bezier(.2,.8,.2,1), transform .8s cubic-bezier(.2,.8,.2,1); }
 .rv.in{ opacity:1; transform:none; }
-.rv-s > *{ opacity:0; transform:translateY(22px) scale(.985); transition:opacity .7s cubic-bezier(.2.8.2,1), transform .7s cubic-bezier(.2.8.2,1); }
+.rv-s > *{ opacity:0; transform:translateY(22px) scale(.985); transition:opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1); }
 .rv-s.in > *{ opacity:1; transform:none; }
 .rv-s.in > *:nth-child(1){ transition-delay:.04s; }
 .rv-s.in > *:nth-child(2){ transition-delay:.10s; }
@@ -591,17 +596,17 @@ main.masthead.chrome-footer{ position:relative; z-index:2; }
 .rv-s.in > *:nth-child(8){ transition-delay:.46s; }
 
 @media (prefers-reduced-motion: reduce){
-  .rv.rv-s > *{ opacity:1 !important; transform:none !important; transition:none !important; }
-  .mq-t.aura b.chrome{ animation:none !important; }
-  .btn.card.logo.lk{ transition:none; }
+  .rv, .rv-s > *{ opacity:1 !important; transform:none !important; transition:none !important; }
+  .mq-t, .aura b, .chrome{ animation:none !important; }
+  .btn, .card, .logo, .lk{ transition:none; }
 }
 
 /* ---------- responsive ---------- */
 @media (max-width:1100px){
   .cases{ grid-template-columns:repeat(2,1fr); }
   .also-list li{ grid-template-columns:150px 1fr 120px; }
-  .sp3.sp4.sp5{ grid-column:span 6; }
-  .sp7.sp8{ grid-column:span 12; }
+  .sp3, .sp4, .sp5{ grid-column:span 6; }
+  .sp7, .sp8{ grid-column:span 12; }
   .item{ grid-template-columns:56px minmax(0,1fr) 118px 26px; }
   .item .blurb{ display:none; }
   .logos{ grid-template-columns:repeat(3,1fr); }
@@ -615,8 +620,8 @@ main.masthead.chrome-footer{ position:relative; z-index:2; }
 }
 @media (max-width:760px){
   :root{ --gut:18px; --r:16px; }
-  .grid12.bento{ grid-template-columns:1fr; }
-  .sp3.sp4.sp5.sp6.sp7.sp8.sp12{ grid-column:1 / -1; }
+  .grid12, .bento{ grid-template-columns:1fr; }
+  .sp3, .sp4, .sp5, .sp6, .sp7, .sp8, .sp12{ grid-column:1 / -1; }
   .mast-nav{
     position:fixed; inset:58px 0 auto 0; flex-direction:column; align-items:stretch; gap:0;
     background:rgba(12,12,17,.97); backdrop-filter:blur(20px);

@@ -136,7 +136,7 @@
   .shell{ padding:0 !important; }
 
   /* flatten the gradient text, it prints as nothing */
-  .chrome.cv-figs b{
+  .chrome, .cv-figs b{
     background:none !important; -webkit-text-fill-color:#111 !important;
     color:#111 !important;
   }
@@ -148,24 +148,24 @@
     color:#111 !important; border-bottom:1px solid #bbb !important;
     font-size:8.5pt; letter-spacing:.16em;
   }
-  .cv-lede.cv-bullets li.cv-proj p.cv-skills p.cv-contact a,
+  .cv-lede, .cv-bullets li, .cv-proj p, .cv-skills p, .cv-contact a,
   .cv-contact span:not(.mono).cv-more li{ color:#333 !important; }
   /* bold runs inherit white from the dark theme, force them dark on paper */
   .cv-proj p b.cv-more b.cv-bullets em.cv-lede b{ color:#000 !important; }
   /* keep the compact 3-column layout on paper */
   .cv-more li{ display:grid !important; grid-template-columns:130px 1fr 110px !important; gap:12px !important; }
   .cv-more em{ text-align:right !important; }
-  .cv-figs span.cv-more em.cv-proj h3 .mono.cv-role-head .mono,
-  .cv-contact .mono.cv-more-h{ color:#555 !important; }
-  .cv-link.cv-foot a.cv-skills h4{ color:#111 !important; }
+  .cv-figs span, .cv-more em, .cv-proj h3 .mono, .cv-role-head .mono,
+  .cv-contact .mono, .cv-more-h{ color:#555 !important; }
+  .cv-link, .cv-foot a, .cv-skills h4{ color:#111 !important; }
   .cv-bullets li::before{ background:#111 !important; }
-  .cv-head.cv-h.cv-role-item.cv-proj.cv-more li.cv-foot{ border-color:#ccc !important; }
+  .cv-head, .cv-h, .cv-role-item, .cv-proj, .cv-more li, .cv-foot{ border-color:#ccc !important; }
 
   a{ text-decoration:none; }
   .cv-contact a[href^="http"]::after{ content:""; }
 
   /* keep blocks intact across page breaks */
-  .cv-sec.cv-role-item.cv-proj.cv-head{ break-inside:avoid; page-break-inside:avoid; }
+  .cv-sec, .cv-role-item, .cv-proj, .cv-head{ break-inside:avoid; page-break-inside:avoid; }
   .cv-sec{ padding-top:12pt; }
 
   /* placeholders stay obvious on paper too */

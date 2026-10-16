@@ -19,7 +19,7 @@
 
 /* ---------- Nav scroll states ---------- */
 .nav{
-  transition: transform .35s cubic-bezier(.65,0.35,1), background .3s ease, box-shadow .3s ease;
+  transition: transform .35s cubic-bezier(.65,0,.35,1), background .3s ease, box-shadow .3s ease;
 }
 .nav.nav-hidden{ transform: translateY(-100%); }
 .nav.nav-scrolled{
@@ -58,7 +58,7 @@ html.has-custom-cursor, html.has-custom-cursor a, html.has-custom-cursor button{
 }
 
 /* ---------- Magnetic elements ---------- */
-.magnetic{ transition: transform .25s cubic-bezier(.2.8.2,1); will-change: transform; }
+.magnetic{ transition: transform .25s cubic-bezier(.2,.8,.2,1); will-change: transform; }
 
 /* ---------- Button shine sweep ---------- */
 .btn-primary{ position: relative; overflow: hidden; }
@@ -91,7 +91,7 @@ html.has-custom-cursor, html.has-custom-cursor a, html.has-custom-cursor button{
 
 /* ---------- Project card tilt + sheen ---------- */
 .project-card{ transform-style: preserve-3d; perspective: 800px; }
-.project-thumb{ transition: transform .5s cubic-bezier(.2.8.2,1); }
+.project-thumb{ transition: transform .5s cubic-bezier(.2,.8,.2,1); }
 .project-card:hover .project-thumb{ transform: scale(1.06); }
 .project-thumb::after{
   content: "";
@@ -107,7 +107,7 @@ html.has-custom-cursor, html.has-custom-cursor a, html.has-custom-cursor button{
   opacity: 0;
   transform: perspective(900px) translateY(32px) rotateX(12deg) scale(.96);
   transform-origin: 50% 100%;
-  transition: opacity .7s cubic-bezier(.2.7.2,1), transform .7s cubic-bezier(.2.7.2,1);
+  transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1);
 }
 .stagger.in > *{ opacity: 1; transform: perspective(900px) translateY(0) rotateX(0deg) scale(1); }
 @media (prefers-reduced-motion: reduce){
@@ -124,7 +124,7 @@ html.has-custom-cursor, html.has-custom-cursor a, html.has-custom-cursor button{
 
 /* ---------- Hero load-in ---------- */
 @media (prefers-reduced-motion: no-preference){
-  .load-in{ opacity: 0; animation: loadIn .8s cubic-bezier(.2.8.2,1) forwards; }
+  .load-in{ opacity: 0; animation: loadIn .8s cubic-bezier(.2,.8,.2,1) forwards; }
   .load-in:nth-child(1){ animation-delay: .05s; }
   .load-in:nth-child(2){ animation-delay: .15s; }
   .load-in:nth-child(3){ animation-delay: .28s; }
