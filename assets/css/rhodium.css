@@ -45,6 +45,15 @@
   --m-mid:     #B4B0A7;   /* polished face */
   --m-low:     #6F6B63;   /* shadowed edge */
 
+  /* The one saturated colour in the house palette. It sits in the hue
+     gap none of the clients occupy: WHO holds teal, MTN amber, IPL
+     blue, so lime never competes with the work it frames. Used as a
+     signal, never as a wash: the live dot, the section numbers, one
+     word in the headline, the primary action. */
+  --acc:       #D4FF3F;
+  --acc-deep:  #A8CC22;   /* for text on light, and pressed states */
+  --acc-dim:   rgba(212,255,63,.14);
+
   /* The old hue names stay as aliases so nothing downstream breaks,
      but they now resolve to the metal ramp rather than cyan/violet/
      magenta. */
@@ -676,3 +685,95 @@ main.masthead.chrome-footer{ position:relative; z-index:2; }
   background:rgba(244,241,235,.05);
 }
 .btn-b:hover{ background:rgba(244,241,235,.085); }
+
+/* ============================================================
+   THE SIGNAL
+
+   Lime appears in six places and nowhere else. Restraint is what
+   makes it read as a decision rather than decoration: the moment it
+   coats a surface it stops being a signal.
+   ============================================================ */
+
+/* 1. the live dot and the availability pill */
+.hx-live{ background:var(--acc); box-shadow:0 0 0 4px rgba(212,255,63,.13); }
+@media (prefers-reduced-motion: no-preference){
+  .hx-live{ animation:hx-pulse 2.6s ease-in-out infinite; }
+}
+@keyframes hx-pulse{ 50%{ box-shadow:0 0 0 7px rgba(212,255,63,.05); } }
+.pill{ color:var(--acc); }
+.pill i{ background:var(--acc); }
+.wordmark .dot{ background:var(--acc); }
+
+/* 2. one word in the headline. The other two lines stay metal, so the
+      eye lands here first and the line reads as the page's claim. */
+.hero-title .ln-in.chrome{
+  background:linear-gradient(174deg,#E8FF8A 0%,var(--acc) 42%,#B9E62F 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  animation:none;
+}
+
+/* 3. the section numbers, small and repeated, which is what makes the
+      colour feel systematic rather than sprinkled */
+.sec-head .mono,
+.sk-head .mono{ color:var(--acc); }
+
+/* 4. the primary action */
+.btn-a{ background:var(--acc); color:#13180A; }
+.btn-a:hover{ background:#E2FF68; box-shadow:0 12px 34px rgba(212,255,63,.22); }
+
+/* 5. links and focus */
+.nav-links a:not(.btn):hover,
+.mast-nav a:hover{ color:var(--acc); }
+::selection{ background:var(--acc); color:#13180A; }
+:focus-visible{ outline:2px solid var(--acc); outline-offset:3px; }
+
+/* 6. the active section marker */
+.dots b.on, .dots .on{ background:var(--acc); }
+
+/* ============================================================
+   THE WORK, SHOWN
+
+   The project crests were flat colour. They now carry the real
+   screen, with the client's colour kept as a wash over it so each
+   card still reads as that brand at a glance. The image is the
+   thing that stops this page reading as grey.
+   ============================================================ */
+.case-vis{ position:relative; overflow:hidden; }
+.case-shot{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:cover; object-position:center top;
+  opacity:.92;
+  transition:opacity .5s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1);
+  transform:scale(1.02);
+}
+.case:hover .case-shot{ opacity:1; transform:scale(1.06); }
+/* The client's colour returns as a thin wash over the screen rather than
+   a blend mode through it: luminosity flattened the real screens to one
+   hue, which defeated the point of showing them. */
+.case-vis::after{
+  content:"";
+  position:absolute; inset:0; z-index:0;
+  background:linear-gradient(170deg, rgba(10,10,9,0) 38%, rgba(10,10,9,.72) 100%);
+  pointer-events:none;
+}
+.case-org{ position:relative; z-index:1; }
+
+/* ---------- material behind two sections ----------
+   Used at low opacity and masked out at the edges, so it reads as
+   the page sitting on a surface rather than as a pasted-in photo. */
+.sec-tex{ position:relative; isolation:isolate; }
+/* The paths live here, not in a custom property on the element: a url()
+   inside a custom property resolves against the stylesheet that declares
+   it, so an inline --tex on the section resolved to assets/css/assets/... */
+.sec-tex::before{
+  content:"";
+  position:absolute; inset:0; z-index:-1;
+  background-size:cover;
+  background-position:center;
+  opacity:.5;
+  -webkit-mask-image:radial-gradient(130% 80% at 50% 50%, #000 12%, transparent 74%);
+          mask-image:radial-gradient(130% 80% at 50% 50%, #000 12%, transparent 74%);
+}
+.tex-brushed::before{ background-image:url("../img/texture/brushed-wide.jpg"); }
+.tex-lime::before{    background-image:url("../img/texture/brushed-lime.jpg"); opacity:.34; }
