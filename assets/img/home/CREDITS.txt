@@ -14,3 +14,8 @@ ink-drift.jpg
   https://www.rawpixel.com/image/5920107/photo-image-background-public-domain-blue
 
 Found via the Openverse API (api.openverse.org), filtered to cc0/pdm.
+
+facets.jpg       "Black Background" — CC0
+silk.jpg         "Abstract Waves" — CC0
+dusk-trails.jpg  "Night Buildings" — CC0
+All three via the Openverse API, cc0/pdm filter.

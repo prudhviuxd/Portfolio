@@ -139,11 +139,60 @@
      on the same property is what makes a page stutter. */
   function reveal(el) { el.classList.add('in'); }
 
+  /* Can this document actually scroll?
+
+     Embedded in a frame sized to the full height of its content —
+     which is how this page is previewed — it cannot. innerHeight
+     equals the entire page, window.scrollY never leaves 0, and the
+     surrounding panel does the scrolling. Every scroll-driven
+     effect is inert in that context, and worse, anything waiting
+     on a scroll to reveal itself never arrives.
+
+     So scroll is treated as an enhancement, never a requirement. */
+  function docScrolls() {
+    /* scrollHeight > innerHeight is not a reliable test here. In a
+       content-sized frame the document still reports a scrollHeight
+       far larger than the frame, because vh-based rules re-expand
+       it once the viewport becomes the full page height. The only
+       honest check is to try to move it and see whether it moves. */
+    var el = document.scrollingElement || document.documentElement;
+    var prev = el.style.scrollBehavior;
+    el.style.scrollBehavior = 'auto';          /* never animate the probe */
+    var y0 = window.scrollY;
+    window.scrollTo(0, y0 + 12);
+    var moved = Math.abs(window.scrollY - y0) > 1;
+    window.scrollTo(0, y0);
+    el.style.scrollBehavior = prev;
+    return moved;
+  }
+  var scrollable = docScrolls();
+
   function watch(el, amount) {
-    if (reduce) { reveal(el); return; }
+    if (reduce || !scrollable) { reveal(el); return; }
     inView(el, function () { reveal(el); },
            { amount: amount || 0.15, margin: '0px 0px -8% 0px' });
   }
+
+  /* Safety net. If the frame is resized after load, or an observer
+     never fires for any other reason, nothing stays invisible. */
+  function revealAll() {
+    document.querySelectorAll('.rv, .rv-s, .reveal, [data-fx], [data-split], [data-cards], [data-rows]')
+      .forEach(reveal);
+  }
+  /* Framed, the host may size this frame to the full height of the
+     content, in which case our own window never scrolls and nothing
+     waiting on a scroll ever arrives. Rather than try to model the
+     host, treat being framed as reason enough: reveal everything
+     shortly after load. A direct visit is not framed and keeps its
+     scroll-triggered entrances. */
+  var framed = (function () {
+    try { return window.top !== window.self; } catch (e) { return true; }
+  })();
+  if (framed) setTimeout(revealAll, 1200);
+  setTimeout(function () { if (!docScrolls()) revealAll(); }, 2200);
+  addEventListener('resize', function () {
+    if (!docScrolls()) revealAll();
+  }, { passive: true });
 
   /* Armed after the splits, so a heading is already in lines before
      .in lands on it. Arming first means the class arrives before the
@@ -275,6 +324,10 @@
     document.querySelectorAll('.shot').forEach(function (el) {
       var host = el.closest('.shot-host') || el.parentElement;
       if (!host) return;
+      /* Nothing to scrub against when the document does not scroll.
+         The ambient keyframe on .shot::before carries the motion
+         there, so the background is alive either way. */
+      if (!scrollable) return;
       /* The hero's wash sits behind live type, so it moves less: a
          big zoom there competes with the headline instead of
          sitting under it. */
