@@ -264,6 +264,27 @@
       );
     });
 
+    /* Immersive backdrops: each photograph zooms against the scroll,
+       scrubbed off the section's own travel through the viewport
+       rather than run on a timer, so it tracks the scroll exactly
+       and reverses when you scroll back up.
+
+       Scale never drops below 1. These are cover backgrounds, so
+       anything under 1 pulls the element's own edges into frame
+       and you see the page behind the photograph. */
+    document.querySelectorAll('.shot').forEach(function (el) {
+      var host = el.closest('.shot-host') || el.parentElement;
+      if (!host) return;
+      /* The hero's wash sits behind live type, so it moves less: a
+         big zoom there competes with the headline instead of
+         sitting under it. */
+      var deep = el.classList.contains('shot-ink');
+      scroll(
+        animate(el, { scale: deep ? [1.04, 1.14] : [1.06, 1.26] }, { ease: 'linear' }),
+        { target: host, offset: ['start end', 'end start'] }
+      );
+    });
+
     /* The marquee leans into the scroll and settles when it stops.
        Velocity comes from Motion's scroll info, not a hand-rolled
        delta, so it is already smoothed. */

@@ -43,12 +43,29 @@ body::after{ display:none !important; }
 
 .shot-host{ position:relative; isolation:isolate; }
 
+/* The backdrops bleed to 100vw and then scale past that, which
+   extends the document's scrollable width by (scale-1)/2 of the
+   viewport on each side. clip rather than hidden: hidden would
+   make this a scroll container and break position:sticky further
+   up the tree, clip does not. */
+body{ overflow-x:clip; }
+
 .shot{
   position:absolute; inset:0; z-index:-1;
+  /* Full-bleed. The shell is a centred 1400px box, so an inset
+     backdrop reads as a framed picture sitting inside the page.
+     Breaking it to the viewport edge is what makes it a room
+     rather than a rectangle. vw rather than % because the parent
+     is the shell, not the page. */
+  left:50%; right:auto; width:100vw; margin-left:-50vw;
   overflow:hidden;
-  border-radius:inherit;
   background-size:cover;
   background-position:center;
+  /* The zoom is a transform on this element, so give the
+     compositor warning and an origin to scale about. */
+  transform-origin:50% 50%;
+  will-change:transform;
+  backface-visibility:hidden;
   /* Fades out at the edges so the photograph belongs to the page
      rather than sitting in it as a rectangle. */
   -webkit-mask-image:radial-gradient(125% 92% at 50% 48%, #000 34%, transparent 86%);
