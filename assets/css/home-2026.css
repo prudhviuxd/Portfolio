@@ -1,167 +1,37 @@
 /* ============================================================
-   HOME — immersive backdrops
+   HOME — flat ground
 
    Loaded by index.html and nothing else, so everything here is
    scoped to the homepage. Case studies, résumé and route pages
    are untouched.
 
-   The important constraint, learned the hard way: this page is
-   often embedded in a frame that is sized to the full height of
-   its content. In that case the frame's own window never
-   scrolls — window.scrollY is permanently 0 and the surrounding
-   panel does the scrolling. Anything driven by scroll position
-   is therefore dead on arrival in that context.
-
-   So the motion here is built in two independent layers:
-
-     .shot::before   the photograph, with a slow ambient drift
-                     that runs on a CSS keyframe and needs no
-                     scroll at all. This is what guarantees the
-                     background is alive everywhere.
-
-     .shot           the scroll-linked zoom, applied by engine.js
-                     only when the document can actually scroll.
-
-   They are separate elements on purpose. Both animate transform,
-   and an inline transform from script would silently beat a CSS
-   animation if they shared a node.
+   Every section background is gone: the photographs, and the
+   four procedural layers that were under them. What is left is
+   the ground colour and the type.
    ============================================================ */
 
-/* ---------- strip the old procedural layers ---------- */
+/* ---------- the procedural layers stay off ---------- */
 body::after{ display:none !important; }      /* SVG film grain      */
 .atmos .plate{ display:none !important; }    /* 92px ruled grid     */
 .sec-tex::before{ display:none !important; } /* brushed-metal wash  */
 
-/* The blobs were tinted from the metal ramp, which is what made
-   the page read grey. They now carry the hues the photographs
-   actually contain. */
+/* The page-level ambient blobs. Still here, and still the only
+   thing on the page that is not flat. They were tinted from the
+   metal ramp, which is what made everything read grey; these are
+   the two hues the page actually uses. One line to remove. */
 .aura b:nth-child(1){ background:#C2702A; opacity:.085; }
 .aura b:nth-child(2){ background:#2B5C86; opacity:.075; }
 .aura b:nth-child(3){ background:#8A6A3C; opacity:.05; }
 
-/* The backdrops bleed past the shell and then scale past that,
-   which extends the document's scrollable width. clip, not
-   hidden: hidden would make this a scroll container and break
-   position:sticky above it. */
-body{ overflow-x:clip; }
-
-/* ---------- the backdrop ---------- */
-
-.shot-host{ position:relative; isolation:isolate; }
-
-.shot{
-  position:absolute; inset:0; z-index:-1;
-  /* Full bleed. The shell is a centred 1400px box, so an inset
-     backdrop reads as a framed picture sitting inside the page
-     instead of a room the section is standing in. */
-  left:50%; right:auto; width:100vw; margin-left:-50vw;
-  overflow:hidden;
-  transform-origin:50% 50%;
-  will-change:transform;
-  backface-visibility:hidden;
-  /* Feathered, so the photograph belongs to the page rather than
-     sitting on it as a rectangle with edges. */
-  -webkit-mask-image:radial-gradient(128% 94% at 50% 48%, #000 36%, transparent 88%);
-          mask-image:radial-gradient(128% 94% at 50% 48%, #000 36%, transparent 88%);
-}
-
-/* The photograph itself, inset negative so there is room to drift
-   without pulling its own edges into frame. */
-.shot::before{
-  content:"";
-  position:absolute; inset:-8%;
-  background-size:cover;
-  background-position:center;
-  will-change:transform;
-  animation:ambient 34s ease-in-out infinite alternate;
-}
-
-/* The scrim. This is load-bearing, not decoration: it is what
-   keeps body copy above the AA floor on a photograph whose own
-   luminance varies across the frame. Measured against the
-   brightest pixel in each image, .80 puts muted text at 5.2:1
-   on the aerial and 5.9:1 on the trails. */
-.shot::after{
-  content:"";
-  position:absolute; inset:0;
-  background:
-    linear-gradient(180deg, rgba(9,9,11,.94) 0%, rgba(9,9,11,.80) 38%, rgba(9,9,11,.92) 100%),
-    radial-gradient(90% 70% at 50% 50%, rgba(9,9,11,.30) 0%, rgba(9,9,11,.80) 100%);
-}
-
-/* A slow breath. Deliberately long and asymmetric so it never
-   reads as a loop, and small enough to sit under type. */
-@keyframes ambient{
-  from{ transform:scale(1.00) translate3d(0,0,0); }
-  to  { transform:scale(1.12) translate3d(-1.5%, -1%, 0); }
-}
-
-/* Each section gets its own image. Offsets are per-image, chosen
-   so the part of the frame with the most going on sits where the
-   section has the least type over it. */
-.shot-ink    { }
-.shot-ink::before   { background-image:url("../img/home/ink-drift.jpg"); background-position:70% 45%; }
-.shot-trails::before{ background-image:url("../img/home/light-trails.jpg"); background-position:center 60%; }
-.shot-facets::before{ background-image:url("../img/home/facets.jpg"); }
-.shot-silk::before  { background-image:url("../img/home/silk.jpg"); }
-.shot-dusk::before  { background-image:url("../img/home/dusk-trails.jpg"); background-position:center 62%; }
-.shot-city::before  { background-image:url("../img/home/city-aerial-night.jpg"); }
-
-/* The hero wash sits behind live type rather than under it, so it
-   stays quiet: lower opacity, tighter mask, no scrim of its own. */
-.shot-ink{
-  -webkit-mask-image:radial-gradient(72% 72% at 74% 42%, #000 0%, transparent 74%);
-          mask-image:radial-gradient(72% 72% at 74% 42%, #000 0%, transparent 74%);
-}
-.shot-ink::before{ opacity:.55; }
-.shot-ink::after{ background:none; }
-
-/* Per-image scrim. A single global value over-darkens the images
-   that are already dark: facets all but vanished under it. Each
-   alpha below is solved against that image's own brightest pixel
-   for the same 5.2:1 on muted body copy, so every photograph is
-   as present as its own luminance allows and none of them is
-   carrying text that fails. */
-.shot-trails::after{ background:
-  linear-gradient(180deg,rgba(9,9,11,.90) 0%,rgba(9,9,11,.76) 38%,rgba(9,9,11,.88) 100%),
-  radial-gradient(90% 70% at 50% 50%,rgba(9,9,11,.30) 0%,rgba(9,9,11,.80) 100%); }
-.shot-city::after{ background:
-  linear-gradient(180deg,rgba(9,9,11,.89) 0%,rgba(9,9,11,.75) 38%,rgba(9,9,11,.87) 100%),
-  radial-gradient(90% 70% at 50% 50%,rgba(9,9,11,.30) 0%,rgba(9,9,11,.80) 100%); }
-.shot-facets::after{ background:
-  linear-gradient(180deg,rgba(9,9,11,.79) 0%,rgba(9,9,11,.65) 38%,rgba(9,9,11,.77) 100%),
-  radial-gradient(90% 70% at 50% 50%,rgba(9,9,11,.30) 0%,rgba(9,9,11,.80) 100%); }
-.shot-dusk::after{ background:
-  linear-gradient(180deg,rgba(9,9,11,.88) 0%,rgba(9,9,11,.74) 38%,rgba(9,9,11,.86) 100%),
-  radial-gradient(90% 70% at 50% 50%,rgba(9,9,11,.30) 0%,rgba(9,9,11,.80) 100%); }
-/* Work holds the project carousel, which needs the quietest
-   ground on the page, so it keeps a heavier hand than the solver
-   strictly requires. */
-.shot-silk::after{ background:
-  linear-gradient(180deg,rgba(9,9,11,.90) 0%,rgba(9,9,11,.78) 40%,rgba(9,9,11,.90) 100%),
-  radial-gradient(90% 70% at 50% 50%,rgba(9,9,11,.30) 0%,rgba(9,9,11,.80) 100%); }
-
-@media (max-width:720px){
-  /* Narrower frame means more of each photograph's bright centre
-     ends up under the text, so the scrim works harder. */
-  .shot::after{
-    background:linear-gradient(180deg, rgba(9,9,11,.95) 0%, rgba(9,9,11,.86) 45%, rgba(9,9,11,.95) 100%);
-  }
-  .shot-ink::before{ opacity:.38; }
-}
-
-@media (prefers-reduced-motion: reduce){
-  .shot::before{ animation:none; }
-}
-
-/* ---------- colour follows the photography ---------- */
-
+/* ---------- ground ---------- */
 body{ background:#09090B; }
 
+/* ---------- type colour ---------- */
+
 /* The chrome ramp was three neutral greys, which is what made the
-   page feel colourless once the lime was spent. It now runs warm,
-   sampled off the sodium lights in the aerial shot. Lime is
-   untouched: it stays the single signal. */
+   page read colourless once the lime was spent. It runs warm now,
+   so the big numerals and the second line of each headline carry
+   colour of their own. Lime is untouched: it stays the one signal. */
 .chrome{
   background:linear-gradient(104deg, #FFF4E2 0%, #F0C98A 34%, #C98A47 68%, #8A6A4A 100%);
   -webkit-background-clip:text; background-clip:text; color:transparent;

@@ -207,6 +207,29 @@
   document.querySelectorAll('.rv, .rv-s, .reveal, [data-fx], [data-split], [data-cards], [data-rows]')
     .forEach(function (el) { watch(el, 0.12); });
 
+  /* IntersectionObserver can miss an element that crosses the
+     viewport while the page is still settling under loading images.
+     The element then sits above the fold, already scrolled past,
+     and never arrives. A cheap sweep on scroll closes that gap:
+     anything whose top is above the fold has been seen, so reveal
+     it regardless of whether the observer ever fired. */
+  var sweepQueued = false;
+  function sweep() {
+    sweepQueued = false;
+    var vh = innerHeight;
+    document.querySelectorAll(
+      '.rv:not(.in), .rv-s:not(.in), .reveal:not(.in), [data-fx]:not(.in),' +
+      '[data-split]:not(.in), [data-cards]:not(.in), [data-rows]:not(.in)'
+    ).forEach(function (el) {
+      if (el.getBoundingClientRect().top < vh * 0.95) reveal(el);
+    });
+  }
+  addEventListener('scroll', function () {
+    if (sweepQueued) return;
+    sweepQueued = true;
+    requestAnimationFrame(sweep);
+  }, { passive: true });
+
   /* Case-study pages carry no reveal classes of their own, so give
      every row in a section one. Backdrops and the back link stay put,
      and anything already on screen is shown without a delay so the
