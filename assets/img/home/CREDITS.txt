@@ -1,0 +1,16 @@
+Homepage imagery — all CC0 (public domain). No attribution required;
+provenance recorded here as a matter of practice.
+
+light-trails.jpg
+  "Light trail long exposure effect" — CC0
+  https://www.rawpixel.com/image/3285011/free-photo-image-light-curve-public-domain
+
+city-aerial-night.jpg
+  "Paris Aerial" by Joe deSousa — CC0
+  https://stocksnap.io/photo/paris-aerial-WMH53WWA3J
+
+ink-drift.jpg
+  "Blue smoke background" — CC0
+  https://www.rawpixel.com/image/5920107/photo-image-background-public-domain-blue
+
+Found via the Openverse API (api.openverse.org), filtered to cc0/pdm.

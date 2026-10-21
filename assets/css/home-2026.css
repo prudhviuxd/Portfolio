@@ -1,0 +1,120 @@
+/* ============================================================
+   HOME — imagery pass
+
+   Loaded by index.html and nothing else, so every rule here is
+   scoped to the homepage by virtue of where it is included. The
+   case studies, the résumé and the route pages are untouched.
+
+   Two changes:
+
+   1. The procedural texture layers come off. There were four of
+      them stacked: an SVG film grain over the whole page, a 92px
+      ruled plate, three blurred blobs, and brushed-metal photos
+      masked into two sections. Together they read as noise rather
+      than material.
+
+   2. Real photography replaces them in the two places that were
+      carrying texture, with a proper scrim rather than a faint
+      wash. The images are CC0 and the palette now follows them:
+      the chrome ramp warms toward the city lights instead of
+      sitting on neutral grey.
+   ============================================================ */
+
+/* ---------- 1. strip the procedural layers ---------- */
+
+/* the film grain over the entire page */
+body::after{ display:none !important; }
+
+/* the ruled plate inside the atmosphere layer */
+.atmos .plate{ display:none !important; }
+
+/* the brushed-metal washes */
+.sec-tex::before{ display:none !important; }
+
+/* The blobs stay, but they were tinted from the metal ramp, which
+   is what made the whole page read grey. They now carry the two
+   colours the photography actually contains, at an opacity low
+   enough to be atmosphere rather than a gradient. */
+.aura b:nth-child(1){ background:#C2702A; opacity:.085; }
+.aura b:nth-child(2){ background:#2B5C86; opacity:.075; }
+.aura b:nth-child(3){ background:#8A6A3C; opacity:.05; }
+
+/* ---------- 2. photographic section backdrops ---------- */
+
+.shot-host{ position:relative; isolation:isolate; }
+
+.shot{
+  position:absolute; inset:0; z-index:-1;
+  overflow:hidden;
+  border-radius:inherit;
+  background-size:cover;
+  background-position:center;
+  /* Fades out at the edges so the photograph belongs to the page
+     rather than sitting in it as a rectangle. */
+  -webkit-mask-image:radial-gradient(125% 92% at 50% 48%, #000 34%, transparent 86%);
+          mask-image:radial-gradient(125% 92% at 50% 48%, #000 34%, transparent 86%);
+}
+
+/* The scrim. Type sits on this, so it is doing real work, not
+   decoration: it is what keeps body copy above 7:1 on a photo
+   whose own luminance varies across the frame. */
+.shot::after{
+  content:"";
+  position:absolute; inset:0;
+  background:
+    /* The .80 at the 38% stop is not a taste decision. Measured
+       against the brightest pixel in each photograph, .66 left
+       muted body copy at 3.6:1, under the 4.5:1 AA floor. .80
+       puts it at 5.2:1 on the aerial and 5.9:1 on the trails,
+       which is headroom rather than a pass mark. */
+    linear-gradient(180deg, rgba(9,9,11,.94) 0%, rgba(9,9,11,.80) 38%, rgba(9,9,11,.92) 100%),
+    radial-gradient(90% 70% at 50% 50%, rgba(9,9,11,.30) 0%, rgba(9,9,11,.80) 100%);
+}
+
+.shot-trails{ background-image:url("../img/home/light-trails.jpg"); background-position:center 60%; }
+.shot-city{   background-image:url("../img/home/city-aerial-night.jpg"); }
+
+/* The hero keeps its own ground; this one is only a breath of
+   colour behind the headline, well under the type. */
+.shot-ink{
+  background-image:url("../img/home/ink-drift.jpg");
+  opacity:.5;
+  -webkit-mask-image:radial-gradient(70% 70% at 76% 42%, #000 0%, transparent 72%);
+          mask-image:radial-gradient(70% 70% at 76% 42%, #000 0%, transparent 72%);
+}
+.shot-ink::after{ background:none; }
+
+@media (max-width:720px){
+  /* On a phone the scrim has to work harder: the frame is narrower,
+     so more of the photograph's bright centre sits under the text. */
+  .shot::after{
+    background:linear-gradient(180deg, rgba(9,9,11,.94) 0%, rgba(9,9,11,.82) 45%, rgba(9,9,11,.94) 100%);
+  }
+  .shot-ink{ opacity:.34; }
+}
+
+/* ---------- 3. colour follows the photography ---------- */
+
+/* The ground goes a half-step deeper so the lit parts of a
+   photograph have somewhere to be bright against. */
+body{ background:#09090B; }
+
+/* The chrome ramp was three neutral greys, which is what made the
+   page feel colourless once the lime was spent. It now runs warm,
+   sampled off the sodium lights in the aerial shot, so the big
+   numerals and the second line of each headline carry colour of
+   their own. Lime is untouched: it stays the single signal. */
+.chrome{
+  background:linear-gradient(104deg, #FFF4E2 0%, #F0C98A 34%, #C98A47 68%, #8A6A4A 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+/* The hero's focal word stays lime. It is the one place the accent
+   earns the headline, and warming it would cost the page its mark. */
+.hero-title .ln-in.chrome{
+  background:linear-gradient(174deg,#E8FF8A 0%,var(--acc) 42%,#B9E62F 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+
+/* Section eyebrows and the plate rules pick up the same warmth at
+   low saturation, so the grid of small type is not pure grey. */
+.plate-rule{ background:linear-gradient(90deg, rgba(240,201,138,.34), transparent); }
