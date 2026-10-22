@@ -1,30 +1,54 @@
 /* ============================================================
-   HOME — flat ground
+   HOME — a generated ground
 
    Loaded by index.html and nothing else, so everything here is
    scoped to the homepage. Case studies, résumé and route pages
    are untouched.
 
-   Every section background is gone: the photographs, and the
-   four procedural layers that were under them. What is left is
-   the ground colour and the type.
+   Every section background is still gone. What replaced them is
+   one layer, not six: a canvas band across the hero, drawn in
+   assets/js/backdrop.js. Below the band the page is the ground
+   colour and the type, which is where it was left.
+
+   The band is bounded in px rather than sized to the viewport on
+   purpose. This page is sometimes embedded in a frame sized to
+   the full height of its content, and in that frame both `vh`
+   and `position: fixed` resolve against the whole document: a
+   viewport-fixed backdrop would glue itself to the top of a
+   40,000px page and be absent from all of it. clamp() holds the
+   band to a sane height whatever `vh` reports, and `object-fit:
+   cover` keeps the drawing's aspect ratio inside it.
    ============================================================ */
 
 /* ---------- the procedural layers stay off ---------- */
 body::after{ display:none !important; }      /* SVG film grain      */
-.atmos .plate{ display:none !important; }    /* 92px ruled grid     */
+.atmos{ display:none !important; }           /* orbs, specular, grid */
 .sec-tex::before{ display:none !important; } /* brushed-metal wash  */
 
-/* The page-level ambient blobs. Still here, and still the only
-   thing on the page that is not flat. They were tinted from the
-   metal ramp, which is what made everything read grey; these are
-   the two hues the page actually uses. One line to remove. */
-.aura b:nth-child(1){ background:#C2702A; opacity:.085; }
-.aura b:nth-child(2){ background:#2B5C86; opacity:.075; }
-.aura b:nth-child(3){ background:#8A6A3C; opacity:.05; }
+/* The page-level ambient blobs are gone too. Soft tinted glow and
+   fine linework fight each other: the blobs were what made the
+   dark read muddy rather than deep. The canvas carries the only
+   colour on the page now, and it carries it in small amounts. */
+.aura{ display:none !important; }
 
 /* ---------- ground ---------- */
-body{ background:#09090B; }
+/* Near-black with a faint blue cast, rather than a neutral grey.
+   A cool ground is what lets a warm glint read as warm. */
+body{ background:#060709; }
+
+/* ---------- the backdrop band ---------- */
+canvas.bd{
+  position:absolute;
+  top:0; left:0;
+  width:100%;
+  height:clamp(620px, 94vh, 1000px);
+  z-index:0;
+  pointer-events:none;
+  object-fit:cover;
+  /* No hard edge where the band stops. */
+  -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 54%,transparent 100%);
+          mask-image:linear-gradient(180deg,#000 0%,#000 54%,transparent 100%);
+}
 
 /* ---------- type colour ---------- */
 
