@@ -42,6 +42,7 @@
   var floats    = [].slice.call(document.querySelectorAll('[data-float]'));
   var carousels = [].slice.call(document.querySelectorAll('[data-carousel]'));
   var narrs     = [].slice.call(document.querySelectorAll('[data-narrative]'));
+  var portraits = [].slice.call(document.querySelectorAll('[data-portrait]'));
 
   s3ds.forEach(function (el) { el._o = parseOpts(el.dataset.s3d); });
 
@@ -131,6 +132,17 @@
           ' rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg)';
         panel.classList.toggle('lit', Math.abs(s) < 0.42);
       });
+    });
+
+    /* 3b, the hero portrait ------------------------------------
+       data-layer already gives the figure its scroll parallax, but a
+       page framed at its own content height never scrolls, and that
+       parallax is then a constant offset. The pointer is live either
+       way, so the drift rides the inner image and the portrait keeps
+       its depth in both cases. One transform per node. */
+    portraits.forEach(function (el) {
+      el.style.transform =
+        'translate3d(' + (px * 15).toFixed(2) + 'px,' + (py * 11).toFixed(2) + 'px,0)';
     });
 
     /* 4, perspective carousel ---------------------------------- */
