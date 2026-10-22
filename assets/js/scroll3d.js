@@ -134,15 +134,19 @@
       });
     });
 
-    /* 3b, the hero portrait ------------------------------------
-       data-layer already gives the figure its scroll parallax, but a
-       page framed at its own content height never scrolls, and that
-       parallax is then a constant offset. The pointer is live either
-       way, so the drift rides the inner image and the portrait keeps
-       its depth in both cases. One transform per node. */
+    /* 3b, the portrait inside the credential card ---------------
+       data-layer already gives the card its scroll parallax, but a page
+       framed at its own content height never scrolls and that parallax
+       is then a constant offset. The pointer is live either way, so the
+       drift rides the image inside its crop, which also reads as real
+       depth: the face moves against the frame holding it. One transform
+       per node, so the card keeps its own. */
     portraits.forEach(function (el) {
+      /* scaled up a touch so the drift never pulls an edge into the
+         frame it is cropped by */
       el.style.transform =
-        'translate3d(' + (px * 15).toFixed(2) + 'px,' + (py * 11).toFixed(2) + 'px,0)';
+        'translate3d(' + (px * 9).toFixed(2) + 'px,' + (py * 7).toFixed(2) + 'px,0)'
+        + ' scale(1.07)';
     });
 
     /* 4, perspective carousel ---------------------------------- */

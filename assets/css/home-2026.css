@@ -66,34 +66,71 @@ canvas.bd{
 }
 .plate-rule{ background:linear-gradient(90deg, rgba(240,201,138,.34), transparent); }
 
-/* ---------- the hero portrait ---------- */
-/* Out of flow inside the text column, so nothing about the hero grid
-   changes. It sits against that column's right edge, clear of the
-   outcomes plate at every scroll position: the plate is sticky and
-   travels down its own column, so the space beneath it is not free. */
-.hero-main{ position:relative; }
+/* ---------- the credential card ---------- */
+/* The right column was six numbers in a box with no hierarchy, and the
+   hero never stated whose portfolio this is: the headline is a metaphor
+   and the lede is first person, so the name appeared only in the
+   masthead. The column is now one unit that answers both questions in
+   order, face, name, then the record it is backing.
 
-.portrait{
-  position:absolute;
-  right:0;
-  bottom:-30px;
-  width:clamp(156px, 14vw, 206px);
-  aspect-ratio:1;
-  margin:0;
-  pointer-events:none;
-  z-index:1;
-  will-change:transform;
+   Nothing was deleted to make room. The three scope figures moved from
+   three full-width rows, where they competed with the three outcomes
+   above them, into one subordinate row, which is what they are. */
+
+.plate-face{
+  position:relative;
+  /* cancel the card's own padding so the image is full bleed to its
+     edges; this clamp is the card's padding from rhodium.css */
+  margin:calc(-1 * clamp(18px,1.8vw,24px)) calc(-1 * clamp(18px,1.8vw,24px)) 0;
+  border-radius:calc(var(--r) - 1px) calc(var(--r) - 1px) 0 0;
+  overflow:hidden;
+  aspect-ratio:1.15;
 }
-.portrait img{
+.plate-face img{
   display:block;
   width:100%; height:100%;
+  object-fit:cover;
+  object-position:50% 50%;
   will-change:transform;
 }
 
-/* Below this the right column is too short to hold the portrait clear of
-   the plate above it, and at 980 the layout stacks outright. */
-@media (max-width:1200px){ .portrait{ display:none; } }
+/* Scrim for the name. Measured against the actual pixels under the
+   caption: at this strength the worst case is 8.9:1, so it clears AAA
+   wherever the face happens to fall. */
+.plate-face::after{
+  content:"";
+  position:absolute; inset:0;
+  background:linear-gradient(180deg,
+    transparent 52%, rgba(8,9,12,.66) 80%, rgba(8,9,12,.92) 100%);
+  pointer-events:none;
+}
+.plate-face figcaption{
+  position:absolute; left:0; right:0; bottom:0;
+  z-index:1;
+  padding:12px 14px;
+  display:flex; flex-direction:column; gap:3px;
+}
+.pf-name{
+  font-family:var(--display); font-weight:700;
+  font-size:clamp(15px,1.22vw,18px); letter-spacing:-.015em;
+  line-height:1.08; color:var(--m-hi);
+}
+.pf-role{
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--text-2);
+}
+
+/* Scope, as a subordinate row. home-2026.css loads after rhodium.css,
+   so these win on order at equal specificity. */
+.plate-scope{ flex-direction:row; gap:10px; }
+.plate-scope > div{
+  flex:1; min-width:0;
+  flex-direction:column; align-items:flex-start;
+  justify-content:flex-start; gap:2px;
+}
+.plate-scope dd{ font-size:17px; color:var(--m-mid); }
+.plate-scope dt{ font-size:8.5px; line-height:1.32; letter-spacing:.11em; }
 
 @media (prefers-reduced-motion: reduce){
-  .portrait, .portrait img{ transform:none !important; }
+  .plate-face img{ transform:none !important; }
 }

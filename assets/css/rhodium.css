@@ -314,7 +314,7 @@ main, .masthead, .chrome-footer{ position:relative; z-index:2; }
   font-family:var(--mono); font-size:9.5px; letter-spacing:.16em;
   text-transform:uppercase; color:var(--text-3); margin-top:8px;
 }
-.plate-head-2{ margin-top:clamp(4px.6vw,8px); }
+.plate-head-2{ margin-top:clamp(4px,.6vw,8px); }
 /* The quieter half: scope reads as a spec list, so it supports the
    outcome figures above without competing with them. */
 .plate-scope{ margin:0; display:flex; flex-direction:column; gap:10px; }

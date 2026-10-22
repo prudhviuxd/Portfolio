@@ -114,23 +114,24 @@
           <a href="#contact" class="btn btn-b magnet">Start a conversation</a>
         </div>
 
-        <!-- Out of flow, so the hero grid is untouched. It hangs off the
-             right edge of the text column, which is the one lane the
-             sticky outcomes plate never crosses: that plate slides down
-             its own column as the page scrolls, so anything parked under
-             it gets caught. data-layer gives the figure the scroll
-             parallax the headline and plate already use; the inner image
-             carries a pointer drift, because one node cannot hold two
-             transforms and a frame sized to its content never scrolls. -->
-        <figure class="portrait" data-layer="0.26">
-          <img src="assets/img/me/portrait.webp" alt="Prudhvi Raj PJ"
-               data-portrait width="480" height="480" decoding="async">
-        </figure>
       </div>
 
       <!-- The proof, lifted up beside the headline instead of stranded at the
            foot of the section, so the first screen has a second place to land. -->
-      <aside class="hero-plate rv-s" data-layer="0.55" aria-label="Career outcomes">
+      <aside class="hero-plate rv-s" data-layer="0.55" aria-label="Prudhvi Raj PJ, record">
+        <!-- The hero never said whose portfolio this is: the headline is a
+             metaphor and the lede is first person. The face and the name
+             answer that before the proof does, which is the job this
+             column should have been doing all along. -->
+        <figure class="plate-face">
+          <img src="assets/img/me/portrait.webp" alt="Prudhvi Raj PJ"
+               data-portrait width="800" height="640" decoding="async">
+          <figcaption>
+            <span class="pf-name">Prudhvi Raj PJ</span>
+            <span class="pf-role">Design Leader &middot; Hyderabad, IN</span>
+          </figcaption>
+        </figure>
+
         <div class="plate-head">
           <span class="plate-k">Outcomes</span>
           <span class="plate-rule" aria-hidden="true"></span>
@@ -144,9 +145,9 @@
           <span class="plate-rule" aria-hidden="true"></span>
         </div>
         <dl class="plate-scope">
-          <div><dt>Designers led</dt><dd>18</dd></div>
-          <div><dt>Continents shipped to</dt><dd>4</dd></div>
-          <div><dt>Industries</dt><dd>10+</dd></div>
+          <div><dd>18</dd><dt>Designers</dt></div>
+          <div><dd>4</dd><dt>Continents</dt></div>
+          <div><dd>10+</dd><dt>Industries</dt></div>
         </dl>
       </aside>
 
