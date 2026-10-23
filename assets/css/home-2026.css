@@ -342,3 +342,9 @@ canvas.bd{
   }
   .sph-panel{ display:flex; flex-direction:column; gap:30px; }
 }
+
+/* The hero eyebrow sits over the sky now, not over flat ground, and it
+   was the dimmest text on the page: --text-3 measured 3.12:1 against the
+   lit cloud once the layout stacks and the line runs the full width.
+   Text over imagery needs more weight than text over a flat fill. */
+.hero-eyebrow{ color:var(--m-mid); }
