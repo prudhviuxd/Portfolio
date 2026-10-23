@@ -56,6 +56,79 @@
      Sized to the band's own aspect so nothing is cropped, and capped
      so the cost does not follow the viewport. */
   var W = 1000, H = 620;
+  /* The sky gradient, the vignette, the halo, the fall-off, the text
+     guard and the moonlight are all static: they depend on the layout,
+     not on time, yet they were six full-canvas gradient fills every
+     frame. At a 1400px buffer that cost dropped the page to 14fps. They
+     are baked into two layers here instead, one that sits under the
+     cloud and one over it, and rebuilt only when the size changes. */
+  var underCv = null, overCv = null;
+  /* The cloud is six scaled draws a frame, and at full buffer size that
+     is nearly seven million blended pixels. It is also the softest thing
+     on the canvas, so it is composited at half resolution and scaled up
+     once; at this blur the difference is invisible and the cost is a
+     quarter. */
+  var cloudCv = null, cloudCtx = null;
+  function bakeLayers() {
+    underCv = document.createElement('canvas');
+    underCv.width = W; underCv.height = H;
+    var u = underCv.getContext('2d');
+
+    var g = u.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0,    rgba(SKY_TOP, 1));
+    g.addColorStop(0.46, rgba(SKY_MID, 1));
+    g.addColorStop(1,    rgba(SKY_LOW, 1));
+    u.fillStyle = g; u.fillRect(0, 0, W, H);
+
+    var vg = u.createRadialGradient(moon.x, moon.y, 0, moon.x, moon.y, Math.max(W, H) * 0.92);
+    vg.addColorStop(0, 'rgba(0,0,0,0)');
+    vg.addColorStop(0.55, 'rgba(0,0,0,0.16)');
+    vg.addColorStop(1, 'rgba(3,5,8,0.62)');
+    u.fillStyle = vg; u.fillRect(0, 0, W, H);
+
+    var halo = u.createRadialGradient(moon.x, moon.y, 0, moon.x, moon.y, W * 0.38);
+    halo.addColorStop(0,    'rgba(226,234,248,' + (0.38 * lightScale).toFixed(3) + ')');
+    halo.addColorStop(0.16, 'rgba(188,200,222,' + (0.21 * lightScale).toFixed(3) + ')');
+    halo.addColorStop(0.45, 'rgba(150,146,150,' + (0.09 * lightScale).toFixed(3) + ')');
+    halo.addColorStop(1,    'rgba(120,110,108,0)');
+    u.fillStyle = halo; u.fillRect(0, 0, W, H);
+
+    cloudCv = document.createElement('canvas');
+    cloudCv.width = Math.max(2, Math.round(W / 2));
+    cloudCv.height = Math.max(2, Math.round(H / 2));
+    cloudCtx = cloudCv.getContext('2d');
+
+    overCv = document.createElement('canvas');
+    overCv.width = W; overCv.height = H;
+    var o = overCv.getContext('2d');
+
+    var fall = o.createRadialGradient(moon.x, moon.y, 0, moon.x, moon.y, W * 0.58);
+    fall.addColorStop(0,    'rgba(6,8,12,0)');
+    fall.addColorStop(0.34, 'rgba(6,8,12,' + (0.16 + (1 - lightScale) * 0.24).toFixed(3) + ')');
+    fall.addColorStop(0.66, 'rgba(6,8,12,' + (0.46 + (1 - lightScale) * 0.22).toFixed(3) + ')');
+    fall.addColorStop(1,    'rgba(5,7,10,0.80)');
+    o.fillStyle = fall; o.fillRect(0, 0, W, H);
+
+    var wide = lightScale < 0.7;
+    var gx = W * (wide ? 0.46 : 0.24);
+    var gy = H * (wide ? 0.40 : 0.62);
+    var guard = o.createRadialGradient(gx, gy, 0, gx, gy, W * (wide ? 1.10 : 0.70));
+    guard.addColorStop(0,    'rgba(5,7,10,0.93)');
+    guard.addColorStop(0.42, 'rgba(5,7,10,0.72)');
+    guard.addColorStop(0.75, 'rgba(5,7,10,0.30)');
+    guard.addColorStop(1,    'rgba(5,7,10,0)');
+    o.fillStyle = guard; o.fillRect(0, 0, W, H);
+
+    o.globalCompositeOperation = 'screen';
+    var lit = o.createRadialGradient(moon.x, moon.y, 0, moon.x, moon.y, W * 0.27);
+    lit.addColorStop(0,    'rgba(255,250,242,' + (0.60 * lightScale).toFixed(3) + ')');
+    lit.addColorStop(0.22, 'rgba(210,206,204,' + (0.30 * lightScale).toFixed(3) + ')');
+    lit.addColorStop(0.55, rgba(CLOUD_W, (0.16 * lightScale).toFixed(3)));
+    lit.addColorStop(1,    'rgba(0,0,0,0)');
+    o.fillStyle = lit; o.fillRect(0, 0, W, H);
+    o.globalCompositeOperation = 'source-over';
+  }
+
   function resize() {
     var r = canvas.getBoundingClientRect();
     if (!r.width || !r.height) return;
@@ -64,13 +137,17 @@
        narrow screen, and object-fit:cover then zoomed the bright half
        of the sky straight over the body text. */
     var aspect = r.height / r.width;
-    if (aspect <= 1) { W = 1000; H = Math.max(240, Math.round(1000 * aspect)); }
-    else             { H = 900;  W = Math.max(240, Math.round(900 / aspect)); }
+    /* Raised from 1000. The moon is the one thing here with detail worth
+       resolving, and at a 1000px buffer on a 1440px band it was being
+       drawn at 68px and then stretched, which is where the blockiness
+       came from. */
+    if (aspect <= 1) { W = 1400; H = Math.max(240, Math.round(1400 * aspect)); }
+    else             { H = 1150; W = Math.max(240, Math.round(1150 / aspect)); }
     canvas.width = W;
     canvas.height = H;
     buildClouds();
-    if (!TEX) buildMoonTexture();
     place();
+    bakeLayers();
   }
 
   /* ---------- tileable value-noise fBm ---------- */
@@ -160,134 +237,33 @@
   }
 
   /* ---------- the moon's surface ----------
-     An equirectangular map of the whole sphere, built once, so the
-     moon can actually turn. Spinning a flat disc reads as a coin on a
-     table; rotating a sphere moves features across the face and
-     compresses them toward the limb, which is the thing the eye
-     recognises.
+     An equirectangular map of the sphere, derived from the reference
+     photograph rather than invented. The generated version before this
+     scattered maria evenly over the whole globe, and evenly-spotted is
+     exactly what a football looks like: the real moon is asymmetric,
+     a few large connected seas on one face and cratered highland
+     elsewhere, and no amount of tuning random blobs produces that.
 
-     Proportions are taken from the reference photograph, which
-     measures roughly 23% maria, 28% highland and 12% bright ray
-     material, with only gentle limb darkening until the very edge.
+     The map is built offline from the photograph by un-projecting its
+     near face, folding the usable inner band back over the far face,
+     and lifting the far side's seas toward highland, because the real
+     far side has almost none.
      ------------------------------------------------------------- */
-  var TEX = null, TW = 640, TH = 320;
-  function buildMoonTexture() {
-    var cv = document.createElement('canvas');
-    cv.width = TW; cv.height = TH;
-    var m = cv.getContext('2d');
-
-    function rnd(a, b) { return a + Math.random() * (b - a); }
-
-    /* highland base */
-    m.fillStyle = '#E8E5DF';
-    m.fillRect(0, 0, TW, TH);
-
-    /* Draw a feature at a longitude and latitude. Equirectangular
-       stretches horizontally toward the poles, so the ellipse widens by
-       1/cos(lat), and anything near a seam is drawn twice so it wraps. */
-    function blob(lon, lat, rad, paint) {
-      var x = (lon / (Math.PI * 2) + 0.5) * TW;
-      var y = (0.5 - lat / Math.PI) * TH;
-      var sx = Math.min(4.5, 1 / Math.max(0.22, Math.cos(lat)));
-      for (var pass = -1; pass <= 1; pass++) {
-        var px = x + pass * TW;
-        if (px < -rad * sx - 8 || px > TW + rad * sx + 8) continue;
-        m.save();
-        m.translate(px, y);
-        m.scale(sx, 1);
-        paint(m, rad);
-        m.restore();
-      }
-    }
-    /* uniform over the sphere, so features do not bunch at the poles */
-    function randLatLon() {
-      return [rnd(-Math.PI, Math.PI), Math.asin(rnd(-1, 1))];
-    }
-
-    /* maria: broad, soft, dark */
-    /* Fewer groups, each built from many overlapping lobes packed
-       tightly. Scattering small lobes widely gave speckle; the real
-       maria are a handful of large masses with ragged edges. */
-    for (var s1 = 0; s1 < 11; s1++) {
-      var p = randLatLon();
-      /* more, smaller lobes: a few large circles read as spots on a cow,
-         where the real maria have ragged, irregular outlines */
-      var lobes = 7 + ((Math.random() * 6) | 0);
-      for (var l = 0; l < lobes; l++) {
-        var rr = rnd(19, 46);
-        var dl = rnd(-0.17, 0.17), db = rnd(-0.11, 0.11);
-        (function (lon, lat, rr) {
-          blob(lon, lat, rr, function (c, r) {
-            var g = c.createRadialGradient(0, 0, 0, 0, 0, r);
-            var a2 = rnd(0.32, 0.56);
-            g.addColorStop(0, 'rgba(86,88,95,' + a2.toFixed(3) + ')');
-            g.addColorStop(0.72, 'rgba(94,96,103,' + (a2 * 0.58).toFixed(3) + ')');
-            g.addColorStop(1, 'rgba(94,96,103,0)');
-            c.fillStyle = g;
-            c.beginPath(); c.arc(0, 0, r, 0, Math.PI * 2); c.fill();
-          });
-        })(p[0] + dl, p[1] + db, rr);
-      }
-    }
-
-    /* Highland mottling. The reference is 17.5% mid-tone; a flat base
-       has none, which left the bright areas looking like blank paper
-       with specks on it. */
-    for (var mo = 0; mo < 46; mo++) {
-      var mp = randLatLon();
-      blob(mp[0], mp[1], rnd(14, 44), function (c, r) {
-        var g = c.createRadialGradient(0, 0, 0, 0, 0, r);
-        var a3 = rnd(0.05, 0.15);
-        g.addColorStop(0, 'rgba(142,142,148,' + a3.toFixed(3) + ')');
-        g.addColorStop(1, 'rgba(142,142,148,0)');
-        c.fillStyle = g;
-        c.beginPath(); c.arc(0, 0, r, 0, Math.PI * 2); c.fill();
-      });
-    }
-
-    /* craters: dark floor, lit rim, shadowed opposite wall */
-    for (var c1 = 0; c1 < 145; c1++) {
-      var q = randLatLon();
-      /* below about three pixels a crater stops reading as a ring and
-         starts reading as a speck of dirt */
-      var cr = rnd(3.6, 10);
-      if (Math.random() < 0.14) cr *= rnd(1.8, 3.1);
-      blob(q[0], q[1], cr, function (c, r) {
-        var g = c.createRadialGradient(0, 0, 0, 0, 0, r);
-        g.addColorStop(0,   'rgba(104,104,110,' + rnd(0.14, 0.30).toFixed(3) + ')');
-        g.addColorStop(0.72,'rgba(118,118,124,' + rnd(0.07, 0.16).toFixed(3) + ')');
-        g.addColorStop(1,   'rgba(118,118,124,0)');
-        c.fillStyle = g;
-        c.beginPath(); c.arc(0, 0, r, 0, Math.PI * 2); c.fill();
-
-        c.lineWidth = Math.max(0.6, r * 0.2);
-        c.strokeStyle = 'rgba(255,255,252,' + rnd(0.28, 0.5).toFixed(3) + ')';
-        c.beginPath(); c.arc(0, 0, r * 0.9, Math.PI * 0.78, Math.PI * 1.86); c.stroke();
-        c.strokeStyle = 'rgba(92,92,98,' + rnd(0.14, 0.3).toFixed(3) + ')';
-        c.beginPath(); c.arc(0, 0, r * 0.9, Math.PI * 1.92, Math.PI * 2.84); c.stroke();
-      });
-    }
-
-    /* ray systems: the bright streaks around young craters */
-    for (var ry = 0; ry < 4; ry++) {
-      var o = randLatLon();
-      blob(o[0], o[1], 10, function (c) {
-        for (var k = 0; k < 22; k++) {
-          var ang = Math.random() * Math.PI * 2;
-          var len = rnd(18, 86);
-          c.strokeStyle = 'rgba(255,255,253,' + rnd(0.05, 0.14).toFixed(3) + ')';
-          c.lineWidth = rnd(0.7, 2.4);
-          c.beginPath(); c.moveTo(0, 0);
-          c.lineTo(Math.cos(ang) * len, Math.sin(ang) * len);
-          c.stroke();
-        }
-        c.fillStyle = 'rgba(255,255,255,0.5)';
-        c.beginPath(); c.arc(0, 0, 3.4, 0, Math.PI * 2); c.fill();
-      });
-    }
-
-    TEX = m.getImageData(0, 0, TW, TH).data;
-  }
+  var TEX = null, TW = 1024, TH = 512;
+  (function loadMoonMap() {
+    var img = new Image();
+    img.onload = function () {
+      TW = img.naturalWidth; TH = img.naturalHeight;
+      var c = document.createElement('canvas');
+      c.width = TW; c.height = TH;
+      var g = c.getContext('2d');
+      g.drawImage(img, 0, 0);
+      /* A file:// page taints the canvas and this throws; the sphere
+         falls back to a plain disc rather than failing outright. */
+      try { TEX = g.getImageData(0, 0, TW, TH).data; } catch (e) { TEX = null; }
+    };
+    img.src = 'assets/img/sky/moon-map.webp';
+  })();
 
   /* ---------- the moon ----------
      Placed from the masthead's measured height, so it clears the
@@ -389,7 +365,16 @@
      whole thing costs less than one of the cloud layers. */
   var sphereCv = null, sphereCtx = null, sphereImg = null, sphereR = 0;
   function drawSphere(angle) {
-    if (!TEX) return;
+    if (!TEX) {
+      var g2 = ctx.createRadialGradient(
+        moon.x - moon.r * 0.3, moon.y - moon.r * 0.3, moon.r * 0.1,
+        moon.x, moon.y, moon.r);
+      g2.addColorStop(0, '#FBF9F5');
+      g2.addColorStop(1, '#D7D3CB');
+      ctx.fillStyle = g2;
+      ctx.beginPath(); ctx.arc(moon.x, moon.y, moon.r, 0, Math.PI * 2); ctx.fill();
+      return;
+    }
     var R = Math.round(moon.r);
     var D = R * 2 + 2;
     if (!sphereCv || sphereR !== R) {
@@ -445,23 +430,8 @@
   function draw(t) {
     var time = t / 1000;
 
-    /* --- sky --- */
-    var g = ctx.createLinearGradient(0, 0, 0, H);
-    g.addColorStop(0,    rgba(SKY_TOP, 1));
-    g.addColorStop(0.46, rgba(SKY_MID, 1));
-    g.addColorStop(1,    rgba(SKY_LOW, 1));
     ctx.globalCompositeOperation = 'source-over';
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, W, H);
-
-    /* the reference is darkest in its far corners; that fall-off is
-       most of why it reads as sky rather than as a gradient */
-    var vg = ctx.createRadialGradient(moon.x, moon.y, 0, moon.x, moon.y, Math.max(W, H) * 0.92);
-    vg.addColorStop(0, 'rgba(0,0,0,0)');
-    vg.addColorStop(0.55, 'rgba(0,0,0,0.16)');
-    vg.addColorStop(1, 'rgba(3,5,8,0.62)');
-    ctx.fillStyle = vg;
-    ctx.fillRect(0, 0, W, H);
+    ctx.drawImage(underCv, 0, 0);
 
     /* --- stars, behind the cloud --- */
     for (var i = 0; i < stars.length; i++) {
@@ -473,80 +443,24 @@
       ctx.fill();
     }
 
-    /* --- the glow the moon casts into the cloud ---
-       Drawn before the cloud so the cloud sits inside the halo. */
-    var halo = ctx.createRadialGradient(moon.x, moon.y, 0, moon.x, moon.y, W * 0.38);
-    halo.addColorStop(0,    'rgba(226,234,248,' + (0.38 * lightScale).toFixed(3) + ')');
-    halo.addColorStop(0.16, 'rgba(188,200,222,' + (0.21 * lightScale).toFixed(3) + ')');
-    halo.addColorStop(0.45, 'rgba(150,146,150,' + (0.09 * lightScale).toFixed(3) + ')');
-    halo.addColorStop(1,    'rgba(120,110,108,0)');
-    ctx.fillStyle = halo;
-    ctx.fillRect(0, 0, W, H);
-
-    /* --- cloud layers --- */
+    /* --- cloud layers, composited at half size --- */
+    var cw = cloudCv.width, ch = cloudCv.height;
+    cloudCtx.clearRect(0, 0, cw, ch);
     for (var L = 0; L < layers.length; L++) {
       var la = layers[L];
       if (!reduce) la.x += la.speed;
       var lw = la.c.width;
-      var span = W * 1.18;                       /* drawn a little oversize */
-      var sh = H * 1.0;
+      var span = cw * 1.18;
       var ox = -((la.x * (span / lw)) % span);
-      /* a slow vertical sway, different phase per layer, so the field
-         churns instead of sliding past like a backdrop on rails */
-      var oy = Math.sin(time * (0.055 + L * 0.021) + L * 2.1) * (H * 0.022);
-
-      ctx.globalAlpha = Math.min(1, 0.14 + 0.88 * lightScale);
-      ctx.drawImage(la.c, ox, oy, span, sh);
-      ctx.drawImage(la.c, ox + span, oy, span, sh);
+      var oy = Math.sin(time * (0.055 + L * 0.021) + L * 2.1) * (ch * 0.022);
+      cloudCtx.globalAlpha = Math.min(1, 0.14 + 0.88 * lightScale);
+      cloudCtx.drawImage(la.c, ox, oy, span, ch);
+      cloudCtx.drawImage(la.c, ox + span, oy, span, ch);
     }
-    ctx.globalAlpha = 1;
+    cloudCtx.globalAlpha = 1;
+    ctx.drawImage(cloudCv, 0, 0, W, H);
 
-    /* --- fall-off ---
-       The vignette above runs before the cloud, so it never touched
-       it: cloud was coming out equally bright across the whole band
-       and the headline was landing on it at 2.19:1, the eyebrow at
-       1.35:1. Light falls away from the moon, so the cloud has to
-       as well. This is both why the reference looks calm and how the
-       type stays readable over it. */
-    var fall = ctx.createRadialGradient(moon.x, moon.y, 0, moon.x, moon.y, W * 0.58);
-    fall.addColorStop(0,    'rgba(6,8,12,0)');
-    fall.addColorStop(0.34, 'rgba(6,8,12,' + (0.16 + (1 - lightScale) * 0.24).toFixed(3) + ')');
-    fall.addColorStop(0.66, 'rgba(6,8,12,' + (0.46 + (1 - lightScale) * 0.22).toFixed(3) + ')');
-    fall.addColorStop(1,    'rgba(5,7,10,0.80)');
-    ctx.fillStyle = fall;
-    ctx.fillRect(0, 0, W, H);
-
-    /* Hold the sky down where the words are, not across the whole left
-       side. A flat left-hand wash killed the cloud everywhere and the
-       band went back to being a dark rectangle with a moon in it. This
-       sits over the headline, lede and buttons specifically, so the top
-       strip and the gap between the headline and the card stay lit. */
-    /* Stacked, the text runs the full width, so the guard has to as
-       well: centred at 0.24W with a 0.70W reach it left the right-hand
-       end of the eyebrow outside it, at 3.68:1. */
-    var wide = lightScale < 0.7;
-    var gx = W * (wide ? 0.46 : 0.24);
-    var gy = H * (wide ? 0.40 : 0.62);
-    var guard = ctx.createRadialGradient(gx, gy, 0, gx, gy, W * (wide ? 1.10 : 0.70));
-    guard.addColorStop(0,    'rgba(5,7,10,0.93)');
-    guard.addColorStop(0.42, 'rgba(5,7,10,0.72)');
-    guard.addColorStop(0.75, 'rgba(5,7,10,0.30)');
-    guard.addColorStop(1,    'rgba(5,7,10,0)');
-    ctx.fillStyle = guard;
-    ctx.fillRect(0, 0, W, H);
-
-    /* --- moonlight on the cloud ---
-       Screened over the top so whatever cloud happens to be near the
-       disc brightens, and warms, exactly as it does in the reference. */
-    ctx.globalCompositeOperation = 'screen';
-    var lit = ctx.createRadialGradient(moon.x, moon.y, 0, moon.x, moon.y, W * 0.27);
-    lit.addColorStop(0,    'rgba(255,250,242,' + (0.60 * lightScale).toFixed(3) + ')');
-    lit.addColorStop(0.22, 'rgba(210,206,204,' + (0.30 * lightScale).toFixed(3) + ')');
-    lit.addColorStop(0.55, rgba(CLOUD_W, (0.16 * lightScale).toFixed(3)));
-    lit.addColorStop(1,    'rgba(0,0,0,0)');
-    ctx.fillStyle = lit;
-    ctx.fillRect(0, 0, W, H);
-    ctx.globalCompositeOperation = 'source-over';
+    ctx.drawImage(overCv, 0, 0);
 
     /* --- falling stars ---
        Drawn after the cloud and the fall-off, not before. Behind them
