@@ -136,32 +136,23 @@ canvas.bd{
 }
 
 /* ============================================================
-   WHAT I ACTUALLY DO — rebuilt
+   WHAT I ACTUALLY DO — a 3D ring
 
-   The section was 3,750px tall at 1440, 4.2 screens, 36% of the
-   whole homepage, and what it spent that on was an inventory:
-   30 capability rows of equal weight, where "UX strategy" and
-   "Card sorting" looked like peers. Two sections above it the
-   page says "Outcomes, not artefacts", so it was also arguing
-   against itself.
+   The grid before this was honest but inert. This turns the same
+   four areas on a real circle in the XZ plane.
 
-   It carried one more problem that nobody could see: the filter
-   bar was role="tablist" with no role="tab" children, no
-   aria-selected, no aria-controls and no tabpanel anywhere, and
-   clicking a "tab" only scrolled. Assistive tech was told about
-   four tabs that did not exist. That bar is gone rather than
-   repaired: once the four areas fit on one screen together there
-   is nothing left for it to do.
+   What the ring must not cost: the capabilities. All 30 are still
+   in the DOM and still findable with ctrl-F, and the four area
+   names sit permanently under the stage as labelled controls, so
+   nothing is hidden behind a gesture. A carousel that buries its
+   own table of contents is the version of this pattern that
+   deserves its bad reputation.
 
-   What replaced it: four cards that can be compared side by
-   side, each leading with what the area means, then the evidence
-   for it, then the capabilities as a quiet tag list. Every one
-   of the 30 is still in the DOM and still findable with ctrl-F;
-   they just no longer outrank the proof.
-
-   Every evidence line is drawn from content already on this
-   site, not invented: the hero plate, the impact cards and the
-   three case studies.
+   The stage carries no data-cards attribute on purpose. That
+   attribute transitions transform with a per-child delay, and
+   this ring rewrites every card's transform every frame, so each
+   write would restart the delay and the whole thing would freeze
+   while the inline values kept changing.
    ============================================================ */
 
 .sk-intro{
@@ -172,79 +163,144 @@ canvas.bd{
   color:var(--text-2);
 }
 
-.sk-grid{
-  display:grid;
-  grid-template-columns:repeat(2, minmax(0,1fr));
-  gap:clamp(14px,1.4vw,20px);
+.skc{ --cw:clamp(286px, 31vw, 430px); position:relative; }
+
+.skc-stage{
+  position:relative;
+  min-height:clamp(300px, 23vw, 350px);   /* pre-script fallback only; the script measures the real height */
+  perspective:1250px;          /* the JS assumes this exact value */
+  transform-style:preserve-3d;
 }
 
-.sk-card{
+.skc-card{
+  position:absolute;
+  left:50%; top:50%;
+  width:var(--cw);
+  margin-left:calc(var(--cw) / -2);
   display:flex; flex-direction:column;
-  gap:clamp(12px,1.1vw,16px);
-  padding:clamp(20px,2.1vw,30px);
+  gap:clamp(10px,.95vw,14px);
+  padding:clamp(20px,2vw,28px);
   border:1px solid var(--line);
   border-radius:var(--r);
-  background:linear-gradient(168deg, rgba(244,241,235,.045), rgba(244,241,235,.012));
-  transition:border-color .45s cubic-bezier(.2,.8,.2,1),
-             background .45s cubic-bezier(.2,.8,.2,1),
-             transform .45s cubic-bezier(.2,.8,.2,1);
+  background:linear-gradient(168deg, rgba(20,21,25,.96), rgba(13,14,17,.96));
+  box-shadow:0 40px 80px -40px rgba(0,0,0,.9);
+  backface-visibility:hidden;
+  will-change:transform, opacity, filter;
+  transition:border-color .5s cubic-bezier(.2,.8,.2,1);
 }
-@media (hover:hover){
-  .sk-card:hover{
-    border-color:var(--line-hot);
-    background:linear-gradient(168deg, rgba(244,241,235,.065), rgba(244,241,235,.016));
-    transform:translateY(-3px);
-  }
-}
+/* The front card is the only one being read, so it is the only one
+   that earns the accent. */
+.skc-card.is-front{ border-color:var(--line-hot); }
 
-.sk-top{ display:flex; align-items:baseline; gap:12px; }
-.sk-card .sk-idx{
+/* before the script runs, show one card rather than a stack of four */
+.skc:not(.skc-ready) .skc-card{ opacity:0; }
+.skc:not(.skc-ready) .skc-card:first-child{ opacity:1; transform:translateY(-50%); }
+
+.skc-card .sk-top{ display:flex; align-items:baseline; gap:12px; }
+.skc-card .sk-idx{
   font-family:var(--mono); font-size:10px; letter-spacing:.16em;
   color:var(--acc); flex:none;
 }
-.sk-card .sk-title{
+.skc-card .sk-title{
   font-family:var(--display); font-weight:700;
-  font-size:clamp(19px,1.95vw,27px); letter-spacing:-.02em;
+  font-size:clamp(20px,2vw,28px); letter-spacing:-.02em;
   line-height:1.05; margin:0; color:var(--m-hi);
 }
-.sk-card .sk-desc{
-  margin:0; font-size:clamp(14px,1.05vw,15.5px);
-  line-height:1.62; color:var(--text-2);
+.skc-card .sk-desc{
+  margin:0; font-size:clamp(13.5px,1vw,15px);
+  line-height:1.6; color:var(--text-2);
 }
-
-/* The evidence line is the point of the card, so it is the only
-   thing here carrying the accent rule and the brighter ink. */
-.sk-proof{
-  margin:0;
-  padding-left:14px;
+.skc-card .sk-proof{
+  margin:0; padding-left:13px;
   border-left:2px solid var(--line-hot);
-  font-size:clamp(14px,1.05vw,15.5px);
-  line-height:1.6;
+  font-size:clamp(13.5px,1vw,15px); line-height:1.58;
   color:var(--m-hi);
 }
-.sk-proof-k{
+.skc-card .sk-proof-k{
   display:block;
   font-family:var(--mono); font-size:9px; letter-spacing:.17em;
-  text-transform:uppercase; color:var(--acc);
-  margin-bottom:5px;
+  text-transform:uppercase; color:var(--acc); margin-bottom:5px;
 }
-
-/* All 30 capabilities, subordinate. A tag list reads as a set of
-   things, where 30 full-width rules read as 30 claims. */
-.sk-tags{
+.skc-card .sk-tags{
   list-style:none; margin:2px 0 0; padding:0;
-  display:flex; flex-wrap:wrap; gap:6px;
+  display:flex; flex-wrap:wrap; gap:5px;
+  /* No overflow:hidden here. It clipped the tail of the longer lists,
+     and worse, it made the card's scrollHeight report the clipped
+     height, so the stage measured itself against content it was
+     already hiding. Four of Research's eight tags never rendered. */
 }
-.sk-tags li{
-  font-family:var(--mono); font-size:10px; letter-spacing:.07em;
+.skc-card .sk-tags li{
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.06em;
   color:var(--text-3);
-  padding:5px 10px;
+  padding:4px 9px;
   border:1px solid var(--line-2);
   border-radius:999px;
   white-space:nowrap;
 }
 
-@media (max-width:860px){
-  .sk-grid{ grid-template-columns:minmax(0,1fr); }
-  .sk-tags li{ white-space:normal; }
+/* ---------- controls ----------
+   The four names stay visible whatever the ring is doing, so the
+   section still answers "what are the areas" at a glance. */
+.skc-ui{
+  display:flex; align-items:center; justify-content:center;
+  gap:clamp(8px,1vw,16px);
+  margin-top:clamp(16px,1.8vw,26px);
+  flex-wrap:wrap;
+}
+.skc-arrow{
+  width:38px; height:38px; flex:none;
+  display:grid; place-items:center;
+  border:1px solid var(--line); border-radius:50%;
+  background:transparent; color:var(--text-2);
+  cursor:pointer;
+  transition:color .3s ease, border-color .3s ease, background .3s ease;
+}
+.skc-arrow:hover{ color:var(--m-hi); border-color:var(--line-hot); background:var(--surface-hot); }
+
+.skc-dots{
+  list-style:none; margin:0; padding:0;
+  display:flex; flex-wrap:wrap; gap:6px; justify-content:center;
+}
+.skc-dots button{
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.14em;
+  text-transform:uppercase;
+  padding:8px 14px; border-radius:999px;
+  border:1px solid var(--line-2);
+  background:transparent; color:var(--text-3);
+  cursor:pointer;
+  transition:color .3s ease, border-color .3s ease, background .3s ease;
+}
+.skc-dots button:hover{ color:var(--text-2); border-color:var(--line); }
+.skc-dots button[aria-current="true"]{
+  color:var(--bg); background:var(--acc); border-color:var(--acc);
+}
+
+/* the live region is for screen readers only */
+.skc-live{
+  position:absolute; width:1px; height:1px;
+  margin:-1px; padding:0; overflow:hidden;
+  clip:rect(0 0 0 0); white-space:nowrap; border:0;
+}
+
+/* ---------- narrow ---------- */
+@media (max-width:760px){
+  .skc{ --cw:min(86vw, 360px); }
+
+  .skc-card .sk-tags li{ white-space:normal; }
+}
+
+/* ---------- reduced motion ----------
+   No ring, no turning: the four cards become an ordinary column
+   and every one of them is readable at once. */
+@media (prefers-reduced-motion: reduce){
+  .skc-stage{
+    height:auto; perspective:none;
+    display:flex; flex-direction:column; gap:16px;
+  }
+  .skc-card{
+    position:static; width:auto; margin:0; max-height:none;
+    transform:none !important; opacity:1 !important;
+    filter:none !important;
+  }
+  .skc-ui{ display:none; }
 }

@@ -202,77 +202,101 @@
         still here, but the proof is the point.</p>
     </div>
 
-    <div class="sk-grid" data-cards>
-      <article class="sk-card">
-        <header class="sk-top">
-          <span class="sk-idx">01</span>
-          <h3 class="sk-title">Leadership</h3>
-        </header>
-        <p class="sk-desc">Setting direction and building the people who deliver it. This is where most of my week goes.</p>
-        <p class="sk-proof"><span class="sk-proof-k">Evidence</span>Teams of up to 18 designers across four continents. Design&nbsp;ops work saved 200+ man-hours per release cycle.</p>
-        <ul class="sk-tags">
-          <li>UX strategy</li>
-          <li>Team leadership and mentorship</li>
-          <li>Stakeholder management to C level</li>
-          <li>Design ops</li>
-          <li>Delivery estimation</li>
-          <li>RFP and POC submission</li>
-          <li>Cross-functional collaboration</li>
-        </ul>
-      </article>
-      <article class="sk-card">
-        <header class="sk-top">
-          <span class="sk-idx">02</span>
-          <h3 class="sk-title">Research</h3>
-        </header>
-        <p class="sk-desc">Turning an uncertain brief into evidence a team can act on, and going back to it while pixels move.</p>
-        <p class="sk-proof"><span class="sk-proof-k">Evidence</span>Four weeks in living rooms and on commutes surfaced the second-screen behaviour no survey had reported.</p>
-        <ul class="sk-tags">
-          <li>User interviews</li>
-          <li>Surveys</li>
-          <li>Ethnographic and demographic studies</li>
-          <li>Competitor and SWOT analysis</li>
-          <li>Feature benchmarking</li>
-          <li>Card sorting</li>
-          <li>Behavioural analytics</li>
-          <li>KPI definition</li>
-        </ul>
-      </article>
-      <article class="sk-card">
-        <header class="sk-top">
-          <span class="sk-idx">03</span>
-          <h3 class="sk-title">Design</h3>
-        </header>
-        <p class="sk-desc">From the shape of the information to the states nobody demos. Empty, error, offline, slow connection.</p>
-        <p class="sk-proof"><span class="sk-proof-k">Evidence</span>WHO mYoga shipped offline-first and voice-guided in 10 languages, and passed 2.1M+ downloads.</p>
-        <ul class="sk-tags">
-          <li>Information architecture</li>
-          <li>User flows and journey mapping</li>
-          <li>Personas</li>
-          <li>Wireframing</li>
-          <li>UI design</li>
-          <li>Design systems</li>
-          <li>Service blueprints</li>
-          <li>Accessibility, WCAG</li>
-          <li>UX writing</li>
-        </ul>
-      </article>
-      <article class="sk-card">
-        <header class="sk-top">
-          <span class="sk-idx">04</span>
-          <h3 class="sk-title">Validation</h3>
-        </header>
-        <p class="sk-desc">Proof that the thing works, agreed before the argument rather than after it.</p>
-        <p class="sk-proof"><span class="sk-proof-k">Evidence</span>Restructuring the IPL app's tabs returned +22% session length and 15 seconds faster to first score.</p>
-        <ul class="sk-tags">
-          <li>Usability testing, moderated and unmoderated</li>
-          <li>A/B testing</li>
-          <li>Eye tracking</li>
-          <li>Heat maps</li>
-          <li>Beta testing</li>
-          <li>Design-implementation QA</li>
-        </ul>
-      </article>
+    <!-- A ring of four, turning in real 3D. Note what is NOT on the stage:
+         no data-cards. That attribute transitions transform with a per-child
+         delay, and this carousel writes transform on every card every frame,
+         so each write would restart the delay, the transition would never
+         begin and the ring would freeze while the inline values kept moving.
+         The same trap cost a day on the orbit field. -->
+    <div class="skc" data-skc>
+      <div class="skc-stage" role="group" aria-roledescription="carousel" aria-label="Skill areas">
+        <article class="skc-card" id="skc-0" aria-roledescription="slide" aria-label="Leadership, 1 of 4">
+          <header class="sk-top">
+            <span class="sk-idx">01</span>
+            <h3 class="sk-title">Leadership</h3>
+          </header>
+          <p class="sk-desc">Setting direction and building the people who deliver it. This is where most of my week goes.</p>
+          <p class="sk-proof"><span class="sk-proof-k">Evidence</span>Teams of up to 18 designers across four continents. Design&nbsp;ops work saved 200+ man-hours per release cycle.</p>
+          <ul class="sk-tags">
+            <li>UX strategy</li>
+            <li>Team leadership and mentorship</li>
+            <li>Stakeholder management to C level</li>
+            <li>Design ops</li>
+            <li>Delivery estimation</li>
+            <li>RFP and POC submission</li>
+            <li>Cross-functional collaboration</li>
+          </ul>
+        </article>
+        <article class="skc-card" id="skc-1" aria-roledescription="slide" aria-label="Research, 2 of 4">
+          <header class="sk-top">
+            <span class="sk-idx">02</span>
+            <h3 class="sk-title">Research</h3>
+          </header>
+          <p class="sk-desc">Turning an uncertain brief into evidence a team can act on, and going back to it while pixels move.</p>
+          <p class="sk-proof"><span class="sk-proof-k">Evidence</span>Four weeks in living rooms and on commutes surfaced the second-screen behaviour no survey had reported.</p>
+          <ul class="sk-tags">
+            <li>User interviews</li>
+            <li>Surveys</li>
+            <li>Ethnographic and demographic studies</li>
+            <li>Competitor and SWOT analysis</li>
+            <li>Feature benchmarking</li>
+            <li>Card sorting</li>
+            <li>Behavioural analytics</li>
+            <li>KPI definition</li>
+          </ul>
+        </article>
+        <article class="skc-card" id="skc-2" aria-roledescription="slide" aria-label="Design, 3 of 4">
+          <header class="sk-top">
+            <span class="sk-idx">03</span>
+            <h3 class="sk-title">Design</h3>
+          </header>
+          <p class="sk-desc">From the shape of the information to the states nobody demos. Empty, error, offline, slow connection.</p>
+          <p class="sk-proof"><span class="sk-proof-k">Evidence</span>WHO mYoga shipped offline-first and voice-guided in 10 languages, and passed 2.1M+ downloads.</p>
+          <ul class="sk-tags">
+            <li>Information architecture</li>
+            <li>User flows and journey mapping</li>
+            <li>Personas</li>
+            <li>Wireframing</li>
+            <li>UI design</li>
+            <li>Design systems</li>
+            <li>Service blueprints</li>
+            <li>Accessibility, WCAG</li>
+            <li>UX writing</li>
+          </ul>
+        </article>
+        <article class="skc-card" id="skc-3" aria-roledescription="slide" aria-label="Validation, 4 of 4">
+          <header class="sk-top">
+            <span class="sk-idx">04</span>
+            <h3 class="sk-title">Validation</h3>
+          </header>
+          <p class="sk-desc">Proof that the thing works, agreed before the argument rather than after it.</p>
+          <p class="sk-proof"><span class="sk-proof-k">Evidence</span>Restructuring the IPL app's tabs returned +22% session length and 15 seconds faster to first score.</p>
+          <ul class="sk-tags">
+            <li>Usability testing, moderated and unmoderated</li>
+            <li>A/B testing</li>
+            <li>Eye tracking</li>
+            <li>Heat maps</li>
+            <li>Beta testing</li>
+            <li>Design-implementation QA</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="skc-ui">
+        <button class="skc-arrow" type="button" data-skc-prev aria-label="Previous area">
+          <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M16 5H1M5.5 1 1 5l4.5 4"/></svg>
+        </button>
+        <ol class="skc-dots">
+          <li><button type="button" data-skc-go="0" aria-label="Show Leadership"><span>Leadership</span></button></li>
+          <li><button type="button" data-skc-go="1" aria-label="Show Research"><span>Research</span></button></li>
+          <li><button type="button" data-skc-go="2" aria-label="Show Design"><span>Design</span></button></li>
+          <li><button type="button" data-skc-go="3" aria-label="Show Validation"><span>Validation</span></button></li>
+        </ol>
+        <button class="skc-arrow" type="button" data-skc-next aria-label="Next area">
+          <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M0 5h15M10.5 1 15 5l-4.5 4"/></svg>
+        </button>
+      </div>
+      <p class="skc-live" aria-live="polite"></p>
     </div>
   </section>
 
@@ -435,6 +459,7 @@
 <script src="assets/js/engine.js"></script>
 <script src="assets/js/scroll3d.js"></script>
 <script src="assets/js/transitions.js"></script>
+<script src="assets/js/skills-carousel.js"></script>
 <script src="assets/js/backdrop.js"></script>
 </body>
 </html>
