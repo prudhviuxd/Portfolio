@@ -189,3 +189,18 @@
   .orb-in{ animation:none; }
   .orb{ transform:none !important; }
 }
+
+/* ---------- the reveal must not transition transform ----------
+   rhodium.css gives .rv-s > * a transform transition with a
+   per-child transition-delay. The orbit rewrites each orb's
+   transform every frame, and every rewrite restarts that delay, so
+   the delay never elapses, the transition never starts, and the
+   rendered transform freezes at its last settled value. The inline
+   style keeps updating and nothing moves, which is a hard thing to
+   see because the element looks correct in the DOM.
+
+   The orbs are animated from JS, so only opacity belongs in a
+   transition here. The shorthand also resets the inherited delay. */
+.orbit.rv-s > .orb{
+  transition:opacity .7s cubic-bezier(.2,.8,.2,1);
+}

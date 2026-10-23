@@ -45,14 +45,19 @@
   var portraits = [].slice.call(document.querySelectorAll('[data-portrait]'));
 
   s3ds.forEach(function (el) { el._o = parseOpts(el.dataset.s3d); });
+  layers.forEach(function (el) { if (el.dataset.orb) el._flee = { x: 0, y: 0 }; });
 
   /* pointer, only used to add a little life to the floating panels */
   var px = 0, py = 0, tpx = 0, tpy = 0;
-  if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
+  var mx = -1e4, my = -1e4, finePointer = matchMedia('(hover:hover) and (pointer:fine)').matches;
+  if (finePointer) {
     addEventListener('mousemove', function (e) {
       tpx = (e.clientX / innerWidth - 0.5) * 2;
       tpy = (e.clientY / innerHeight - 0.5) * 2;
+      mx = e.clientX; my = e.clientY;          /* raw, for the orbit's evasion */
     }, { passive: true });
+    /* pointer gone: let everything settle back */
+    addEventListener('mouseleave', function () { mx = my = -1e4; }, { passive: true });
   }
 
   /* carousels and narratives need scroll length to travel through */
@@ -101,6 +106,69 @@
          the small dim satellites, barely move at all. */
       var ox = 0, od = parseFloat(el.dataset.orb);
       if (od) { ox = px * od * 7; y += py * od * 5; }
+
+      /* ---- evasion ----------------------------------------------
+         The orbit field is pointer-events:none, so there is nothing
+         to land on and no :hover to fire. That is the point: the
+         shapes are driven by proximity alone, so the closer the
+         cursor gets the harder they leave, and they cannot be
+         caught because there was never a target.
+
+         Measured from offsetLeft/offsetTop rather than the rect this
+         loop already has, because the rect includes the transform
+         written on the previous frame and feeding that back turns a
+         dodge into a runaway.
+
+         Easing is deliberately asymmetric. It leaves quickly and
+         returns slowly, which reads as something alive avoiding
+         you; symmetric easing just reads as a spring. */
+      if (od && el._flee) {
+        var f = el._flee, host = el.offsetParent;
+        var tx = 0, ty = 0;
+        if (host && mx > -1e3) {
+          var hr = host.getBoundingClientRect();
+          var bw = el.offsetWidth, bh = el.offsetHeight;
+          var bx = hr.left + el.offsetLeft + bw / 2;
+          var by = hr.top + el.offsetTop + bh / 2;
+          var dx = bx - mx, dy = by - my;
+          var dist = Math.sqrt(dx * dx + dy * dy) || 1;
+          var reach = bw / 2 + 190;
+          if (dist < reach) {
+            /* Squared falloff, so it is calm far out and urgent up close.
+               Scaled by the shape's own radius: staying uncatchable means
+               keeping the centre further from the cursor than the radius,
+               so a large circle has to travel further than a small one to
+               achieve the same escape. A fixed magnitude leaves the
+               biggest shape catchable. */
+            var k = (1 - dist / reach);
+            var push = k * k * (bw / 2 * 1.15 + 72);
+            tx = (dx / dist) * push;
+            ty = (dy / dist) * push;
+          }
+        }
+        var rate = (Math.abs(tx) + Math.abs(ty)) > (Math.abs(f.x) + Math.abs(f.y)) ? 0.30 : 0.055;
+        f.x += (tx - f.x) * rate;
+        f.y += (ty - f.y) * rate;
+
+        /* keep the playground: a fleeing shape must not land on the
+           headline or leave the field it belongs to */
+        if (host) {
+          var hw = host.clientWidth, hh = host.clientHeight;
+          var lx = el.offsetLeft + f.x, ly = el.offsetTop + f.y;
+          /* The field is the playground, but the hero's own padding
+             above it is free space and the largest shape needs it: a
+             circle this size, cornered against the top of the field,
+             cannot put its radius between itself and the cursor and so
+             becomes catchable. Left stays tight, because that is the
+             direction the headline is in. */
+          if (lx < -10) f.x = -10 - el.offsetLeft;
+          if (lx + el.offsetWidth > hw + 24) f.x = hw + 24 - el.offsetWidth - el.offsetLeft;
+          if (ly < -80) f.y = -80 - el.offsetTop;
+          if (ly + el.offsetHeight > hh + 30) f.y = hh + 30 - el.offsetHeight - el.offsetTop;
+        }
+        ox += f.x; y += f.y;
+      }
+
       el.style.transform =
         'translate3d(' + ox.toFixed(2) + 'px,' + y.toFixed(2) + 'px,' + z.toFixed(1) + 'px)';
     });
