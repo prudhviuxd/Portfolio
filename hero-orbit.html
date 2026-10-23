@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prudhvi Raj PJ, Design Leader &amp; UX Strategist &mdash; orbit variant</title>
+<meta name="description" content="Prudhvi Raj PJ, a design leader advancing UX maturity and AI innovation across enterprise and consumer products.">
+<script>
+/* Runs before first paint, on purpose. The browser applies a remembered
+   scroll position during load, so correcting it from a script at the end
+   of the body shows the reader the old position and then a jump. Turning
+   restoration off here means there is nothing to correct.
+
+   Only for a navigation we started by clicking a link, which transitions.js
+   flags on the way out. Arriving any other way, back, forward, a reload,
+   a pasted URL, keeps the browser's own restoring, so returning to a page
+   still lands where you left it. */
+(function(){try{
+  if(!('scrollRestoration' in history)) return;
+  var flagged = null;
+  try{ flagged = sessionStorage.getItem('pt:top');
+       if(flagged) sessionStorage.removeItem('pt:top'); }catch(e){}
+  if(!flagged || location.hash) return;
+  var n = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+  if(n && n.type === 'back_forward') return;
+  window.__ptLinkNav = true;
+  history.scrollRestoration = 'manual';
+  /* Framed, the panel around us holds the scroll, and it is already sitting
+     where the previous page was left. Pull ourselves to the top of it here,
+     before this document paints, so the first frame the reader sees is the
+     top of the page rather than its middle. */
+  try{
+    if(window.top !== window.self && document.documentElement.scrollIntoView)
+      document.documentElement.scrollIntoView({block:'start', behavior:'instant'});
+  }catch(e){}
+}catch(e){}})();
+</script>
+<link rel="stylesheet" href="assets/css/rhodium.css">
+<link rel="stylesheet" href="assets/css/motion.css">
+<link rel="stylesheet" href="assets/css/scroll3d.css">
+<link rel="stylesheet" href="assets/css/atmos.css">
+<link rel="stylesheet" href="assets/css/transitions.css">
+<link rel="stylesheet" href="assets/css/home-2026.css">
+<link rel="stylesheet" href="assets/css/hero-orbit.css">
+<noscript><style>.rv.rv-s>*{opacity:1!important;transform:none!important;}</style></noscript>
+</head>
+<body>
+
+<canvas class="bd" aria-hidden="true"></canvas>
+
+<div class="atmos" aria-hidden="true">
+  <i class="s1"></i><i class="s2"></i><i class="s3"></i>
+  <span class="plate"></span>
+  <span class="spec"></span>
+  <span class="vign"></span>
+</div>
+
+<div class="pre" aria-hidden="true">
+  <div class="pre-mark"><span>Prudhvi&nbsp;Raj&nbsp;PJ</span></div>
+  <div class="pre-bar"><i></i></div>
+  <div class="pre-num">000</div>
+</div>
+
+<nav class="dots" aria-label="Section navigation"></nav>
+
+<div class="aura" aria-hidden="true" data-layer="0.85"><b></b><b></b><b></b></div>
+
+<header class="masthead">
+  <div class="mast-in">
+    <a href="#top" class="wordmark"><span class="dot"></span>Prudhvi&nbsp;Raj&nbsp;PJ</a>
+    <nav class="mast-nav" id="nav">
+      <a href="#impact">Impact</a>
+      <a href="#work">Work</a>
+      <a href="#contact">Contact</a>
+      <a href="resume.html">R&eacute;sum&eacute;</a>
+      <span class="pill"><i aria-hidden="true"></i>Open to work</span>
+    </nav>
+    <button class="burger" id="burger" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav"><span></span></button>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ======================= HERO ======================= -->
+  <section class="hero shell" id="intro" data-label="Intro" data-depth>
+    <div class="hero-grid">
+
+      <div class="hero-main">
+        <p class="hero-eyebrow rv" data-layer="0.32">
+          <span class="hx-live" aria-hidden="true"></span>
+          Design leader
+          <i aria-hidden="true"></i> 12 years
+          <i aria-hidden="true"></i> Enterprise &amp; AI
+          <i aria-hidden="true"></i> Hyderabad, IN
+        </p>
+
+        <h1 class="d-xl hero-title" data-split data-3d data-layer="0.12">
+          <span class="ln">Design that</span>
+          <span class="ln ind chrome">doesn't</span>
+          <span class="ln">tarnish</span>
+        </h1>
+
+        <p class="lede rv" data-layer="0.2">
+          I'm a design leader with 12 years across enterprise, telecom, banking
+          and public health. I lead teams of up to 18 designers, own UX strategy
+          with C-level stakeholders, and ship products used by millions, most
+          recently for WHO, MTN and the IPL.
+        </p>
+
+        <div class="cta-row rv">
+          <a href="#work" class="btn btn-a magnet">
+            See the work
+            <svg width="15" height="10" viewBox="0 0 15 10" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M0 5h13M9.5 1.5 13 5l-3.5 3.5"/></svg>
+          </a>
+          <a href="#contact" class="btn btn-b magnet">Start a conversation</a>
+        </div>
+
+      </div>
+
+      <!-- The proof, lifted up beside the headline instead of stranded at the
+           foot of the section, so the first screen has a second place to land. -->
+      <!-- VARIANT: the record as a constellation rather than a card.
+           Each shape is two nodes on purpose. The outer .orb carries the
+           scroll parallax and pointer drift written from JS; the inner
+           .orb-in carries the CSS float keyframe. One node cannot hold
+           both, because an inline transform silently beats a CSS
+           animation, which is how the earlier motion work on this page
+           went quiet. Every orb floats on its own period so the group
+           never pulses in unison, which is what makes a set of circles
+           read as levitating rather than as a loading spinner. -->
+      <div class="orbit rv-s" aria-label="Prudhvi Raj PJ, record">
+
+        <figure class="orb orb-face" data-layer="0.40" data-orb="2.0"
+                style="--d:clamp(148px,15.4vw,222px); --x:48.4%; --y:5.7%; --t:9.5s; --dl:-1.2s">
+          <span class="orb-in"><img src="assets/img/me/orb.webp" alt="Prudhvi Raj PJ"
+                width="440" height="440" decoding="async"></span>
+        </figure>
+
+        <div class="orb orb-stat orb-lg" data-layer="0.34" data-orb="1.5"
+             style="--d:clamp(118px,12.2vw,174px); --x:41.4%; --y:44.3%; --t:11s; --dl:-4s">
+          <span class="orb-in"><b class="chrome">2.1M+</b><i>Users reached</i></span>
+        </div>
+
+        <div class="orb orb-stat" data-layer="0.30" data-orb="1.2"
+             style="--d:clamp(104px,10.8vw,154px); --x:6.4%; --y:25.3%; --t:8.5s; --dl:-2.6s">
+          <span class="orb-in"><b class="chrome">100+</b><i>Projects shipped</i></span>
+        </div>
+
+        <div class="orb orb-stat" data-layer="0.30" data-orb="1.2"
+             style="--d:clamp(100px,10.4vw,148px); --x:12.8%; --y:65.2%; --t:10.2s; --dl:-6.4s">
+          <span class="orb-in"><b class="chrome">80%</b><i>Churn reduced</i></span>
+        </div>
+
+        <!-- satellites: the scope figures, deliberately quiet -->
+        <div class="orb orb-sat" data-layer="0.20" data-orb="0.55"
+             style="--d:clamp(62px,6.3vw,90px); --x:83.5%; --y:45%; --t:7.6s; --dl:-3.3s">
+          <span class="orb-in"><b>18</b><i>Designers</i></span>
+        </div>
+        <div class="orb orb-sat" data-layer="0.18" data-orb="0.50"
+             style="--d:clamp(58px,5.9vw,84px); --x:28.8%; --y:7.7%; --t:8.9s; --dl:-5.1s">
+          <span class="orb-in"><b>4</b><i>Continents</i></span>
+        </div>
+        <div class="orb orb-sat" data-layer="0.22" data-orb="0.60"
+             style="--d:clamp(60px,6.1vw,87px); --x:75.1%; --y:75.4%; --t:9.8s; --dl:-7.7s">
+          <span class="orb-in"><b>10+</b><i>Industries</i></span>
+        </div>
+
+        <figcaption class="orb-id">
+          <span class="pf-name">Prudhvi Raj PJ</span>
+          <span class="pf-role">Design Leader &middot; Hyderabad, IN</span>
+        </figcaption>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================= MARQUEE ======================= -->
+  <div class="mq" aria-hidden="true">
+    <div class="mq-t">
+      <span>UX Strategy</span><i></i><span>Design Systems</span><i></i><span>AI Products</span><i></i><span>Team Leadership</span><i></i><span>Research Ops</span><i></i><span>Service Design</span><i></i>
+      <span>UX Strategy</span><i></i><span>Design Systems</span><i></i><span>AI Products</span><i></i><span>Team Leadership</span><i></i><span>Research Ops</span><i></i><span>Service Design</span><i></i>
+    </div>
+  </div>
+
+  <!-- ======================= IMPACT ======================= -->
+  <section class="sec shell" id="impact" data-label="Impact">
+    <div class="sec-head">
+      <div class="rv">
+        <h2 class="d-lg hl" data-split data-3d>Outcomes,<br>not artefacts</h2>
+      </div>
+      <div class="rv">
+        <div class="lens" data-lens="leader" role="tablist" aria-label="View by role">
+          <span class="lens-fill" aria-hidden="true"></span>
+          <button role="tab" data-lens-btn="designer" aria-selected="false">Designer</button>
+          <button role="tab" data-lens-btn="leader" aria-selected="true">Leader</button>
+        </div>
+      </div>
+    </div>
+
+    <div data-panel="leader" class="on">
+      <div class="bento" data-float>
+        <div class="card sp4"><div class="big chrome" data-count="100">100+</div><div class="cap">POCs &amp; RFPs submitted</div></div>
+        <div class="card sp4"><div class="big chrome" data-count="200">200+</div><div class="cap">Man-hours saved via design ops</div></div>
+        <div class="card sp4"><div class="big chrome" data-count="80">80%</div><div class="cap">Reduction in churn</div></div>
+      </div>
+    </div>
+
+    <div data-panel="designer">
+      <div class="bento" data-float>
+        <div class="card sp4"><div class="big chrome" data-count="100">100+</div><div class="cap">Projects delivered end to end</div></div>
+        <div class="card sp4"><div class="big chrome" data-count="10">10+</div><div class="cap">Domains, telecom to healthcare</div></div>
+        <div class="card sp4"><div class="big chrome" data-count="80">80%</div><div class="cap">Client satisfaction on delivery</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= SKILL SET ======================= -->
+  <section class="sk shell" id="skills" data-label="Skill set">
+    <div class="sk-head">
+      <h2 class="d-lg hl" data-split data-3d>What I actually do</h2>
+      <div class="sk-nav" role="tablist" aria-label="Skill areas">
+        <button type="button">Leadership</button>
+        <button type="button">Research</button>
+        <button type="button">Design</button>
+        <button type="button">Validation</button>
+      </div>
+    </div>
+
+    <div class="sk-panels">
+      <article class="sk-panel">
+        <div class="sk-vis" data-s3d="rx:16,tz:-160,ty:26">
+          <span class="sk-idx">01</span>
+          <span class="sk-count">7 capabilities</span>
+        </div>
+        <div class="sk-body">
+          <h3 class="sk-title">Leadership</h3>
+          <p class="sk-desc">Setting direction and building the people who deliver it. This is where most of my week goes.</p>
+          <span class="sk-lbl mono">Core capabilities</span>
+          <div class="sk-list" data-rows>
+          <div class="sk-item"><p>UX strategy</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>Team leadership and mentorship</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>Stakeholder management to C&nbsp;level</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>Design ops</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>Delivery estimation</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>RFP and POC submission</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>Cross-functional collaboration</p></div>
+          </div>
+        </div>
+      </article>
+      <article class="sk-panel">
+        <div class="sk-vis" data-s3d="rx:16,tz:-160,ty:26">
+          <span class="sk-idx">02</span>
+          <span class="sk-count">8 capabilities</span>
+        </div>
+        <div class="sk-body">
+          <h3 class="sk-title">Research</h3>
+          <p class="sk-desc">Turning an uncertain brief into evidence a team can act on, and going back to it while pixels move.</p>
+          <span class="sk-lbl mono">Core capabilities</span>
+          <div class="sk-list" data-rows>
+          <div class="sk-item"><p>User interviews</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>Surveys</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>Ethnographic and demographic studies</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>Competitor and SWOT analysis</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>Feature benchmarking</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>Card sorting</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>Behavioural analytics</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>KPI definition</p></div>
+          </div>
+        </div>
+      </article>
+      <article class="sk-panel">
+        <div class="sk-vis" data-s3d="rx:16,tz:-160,ty:26">
+          <span class="sk-idx">03</span>
+          <span class="sk-count">9 capabilities</span>
+        </div>
+        <div class="sk-body">
+          <h3 class="sk-title">Design</h3>
+          <p class="sk-desc">From the shape of the information to the states nobody demos. Empty, error, offline, slow connection.</p>
+          <span class="sk-lbl mono">Core capabilities</span>
+          <div class="sk-list" data-rows>
+          <div class="sk-item"><p>Information architecture</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>User flows and journey mapping</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>Personas</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>Wireframing</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>UI design</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>Design systems</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>Service blueprints</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>Accessibility, WCAG</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>UX writing</p></div>
+          </div>
+        </div>
+      </article>
+      <article class="sk-panel">
+        <div class="sk-vis" data-s3d="rx:16,tz:-160,ty:26">
+          <span class="sk-idx">04</span>
+          <span class="sk-count">6 capabilities</span>
+        </div>
+        <div class="sk-body">
+          <h3 class="sk-title">Validation</h3>
+          <p class="sk-desc">Proof that the thing works, agreed before the argument rather than after it.</p>
+          <span class="sk-lbl mono">Core capabilities</span>
+          <div class="sk-list" data-rows>
+          <div class="sk-item"><p>Usability testing, moderated and unmoderated</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>A/B testing</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>Eye tracking</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>Heat maps</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>Beta testing</p></div>
+          <div class="sk-rule"><i></i></div>
+          <div class="sk-item"><p>Design-implementation QA</p></div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ======================= WORK ======================= -->
+  <section class="sec shell" id="work" data-label="Work">
+    <div class="sec-head">
+      <div class="rv">
+        <h2 class="d-lg hl" data-split data-3d>Three deep,<br><span class="chrome">five more</span></h2>
+      </div>
+      <p class="prose rv" style="max-width:36ch;">Written up in full: the problem, how the team worked, and what shifted. The rest are summarised below.</p>
+    </div>
+
+    <div class="pcar" data-carousel>
+      <div class="pcar-vp">
+        <div class="pcar-stage">
+          <a class="case pcar-item" href="case-studies/who-myyoga.html">
+        <div class="case-vis" style="background:linear-gradient(150deg,#1C9D95,#0D5C6B);">
+          <img class="case-shot" src="assets/img/who-myyoga/Home 1.png" alt="The WHO mYoga home screen, with learning and practice tracks" loading="lazy" decoding="async">
+          <span class="case-org">World Health Organization</span>
+        </div>
+        <div class="case-body">
+          <div class="case-top">
+            <h3 class="d-sm">WHO mYoga</h3>
+            <span class="mono">Case study</span>
+          </div>
+          <dl class="case-meta">
+            <div><dt>Role</dt><dd>UX/UI Consultant, team of 6</dd></div>
+            <div><dt>Problem</dt><dd>Wellbeing apps assumed literacy, bandwidth and a premium device</dd></div>
+            <div><dt>Outcome</dt><dd><b>2.1M+</b> downloads, <b>10</b> languages, offline-first</dd></div>
+          </dl>
+          <span class="case-go">Read the case study
+            <svg width="20" height="9" viewBox="0 0 20 9" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M0 4.5h18M14.5 1 18 4.5 14.5 8"/></svg>
+          </span>
+        </div>
+      </a>
+          <a class="case pcar-item" href="case-studies/my-mtn.html">
+        <div class="case-vis" style="background:linear-gradient(150deg,#FFCC33,#C8871A);">
+          <img class="case-shot" src="assets/img/my-mtn/feature-ott.jpg" alt="My MTN streaming screens showing OTT bundles" loading="lazy" decoding="async">
+          <span class="case-org" style="color:#1A1608;">MTN Nigeria &amp; South Africa</span>
+        </div>
+        <div class="case-body">
+          <div class="case-top">
+            <h3 class="d-sm">My MTN</h3>
+            <span class="mono">Case study</span>
+          </div>
+          <dl class="case-meta">
+            <div><dt>Role</dt><dd>Lead UX Designer, 5 months</dd></div>
+            <div><dt>Problem</dt><dd>Recharge took five screens and drove customers to call centres</dd></div>
+            <div><dt>Outcome</dt><dd>One-tap recharge, <b>OTP removed</b> from the critical path</dd></div>
+          </dl>
+          <span class="case-go">Read the case study
+            <svg width="20" height="9" viewBox="0 0 20 9" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M0 4.5h18M14.5 1 18 4.5 14.5 8"/></svg>
+          </span>
+        </div>
+      </a>
+          <a class="case pcar-item" href="case-studies/ipl.html">
+        <div class="case-vis" style="background:linear-gradient(150deg,#1A3FA8,#0A1440);">
+          
+          <span class="case-org">BCCI &middot; Indian Premier League</span>
+        </div>
+        <div class="case-body">
+          <div class="case-top">
+            <h3 class="d-sm">IPL Mobile</h3>
+            <span class="mono">Case study</span>
+          </div>
+          <dl class="case-meta">
+            <div><dt>Role</dt><dd>Lead Product Designer, team of 5</dd></div>
+            <div><dt>Problem</dt><dd>One app serving the five-minute scroller and the stats obsessive</dd></div>
+            <div><dt>Outcome</dt><dd><b>+22%</b> session length, <b>15s</b> faster to score</dd></div>
+          </dl>
+          <span class="case-go">Read the case study
+            <svg width="20" height="9" viewBox="0 0 20 9" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M0 4.5h18M14.5 1 18 4.5 14.5 8"/></svg>
+          </span>
+        </div>
+      </a>
+        </div>
+        <div class="pcar-hud">
+          <span class="pcar-n">01</span>
+          <span class="pcar-track"><i></i></span>
+          <span>Scroll</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="also rv">
+      <div class="also-head">
+        <span class="mono">Also shipped</span>
+        <span class="mono">Write-ups on request</span>
+      </div>
+      <ul class="also-list">
+        <li><b>GATI</b><span>Allcargo logistics ecosystem, multiple connected apps</span><em>Logistics</em></li>
+        <li><b>Citi Star</b><span>Enterprise dashboards for balance-sheet processing</span><em>Banking</em></li>
+        <li><b>SCB Support AI</b><span>Data-heavy internal tooling with AI assistance</span><em>Banking &middot; AI</em></li>
+        <li><b>Gamer 8</b><span>Saudi Arabia's flagship e-sports platform</span><em>E-sports</em></li>
+        <li><b>SLA DCP</b><span>Digitising property transactions for Singapore Land Authority</span><em>Real estate</em></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ======================= CLIENTS ======================= -->
+  <section class="sec shell">
+    <div class="sec-head">
+      <div class="rv">
+        <h2 class="d-lg hl" data-split data-3d>Teams I've built with</h2>
+      </div>
+    </div>
+    <div class="logos" data-cards data-s3d="rx:10,tz:-120">
+      <div class="logo">Tata IPL</div>
+      <div class="logo">World Health Organization</div>
+      <div class="logo">Allcargo GATI</div>
+      <div class="logo">Mahindra</div>
+      <div class="logo">MTN</div>
+      <div class="logo">Citi</div>
+      <div class="logo">Standard Chartered</div>
+      <div class="logo">Singapore Land Authority</div>
+    </div>
+  </section>
+
+  <!-- ======================= CONTACT ======================= -->
+  <section class="sec shell" id="contact" data-label="Contact">
+    <div class="cta rv">
+      <h2 class="d-lg" data-split data-3d>Let's build<br><span class="chrome">something real</span></h2>
+      <p class="lede" style="margin-top:22px; max-width:46ch;">
+        Open to design leadership roles and selected consulting. If you're
+        weighing a hard product problem, I'd like to hear it.
+      </p>
+
+      <div class="links">
+        <a class="lk magnet" href="mailto:prudhviuxd@gmail.com">
+          <span><span class="ll">Email</span><span class="lv">prudhviuxd@gmail.com</span></span>
+          <span class="ar" aria-hidden="true">&rarr;</span>
+        </a>
+        <a class="lk magnet" href="tel:+919177598417">
+          <span><span class="ll">Phone</span><span class="lv">+91 91775 98417</span></span>
+          <span class="ar" aria-hidden="true">&rarr;</span>
+        </a>
+        <a class="lk magnet" href="https://www.linkedin.com/in/prudhviraj-pj" target="_blank" rel="noopener">
+          <span><span class="ll">LinkedIn</span><span class="lv">/prudhviraj-pj</span></span>
+          <span class="ar" aria-hidden="true">&rarr;</span>
+        </a>
+        <a class="lk magnet" href="https://www.behance.net/prudhviuxd" target="_blank" rel="noopener">
+          <span><span class="ll">Behance</span><span class="lv">/prudhviuxd</span></span>
+          <span class="ar" aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="chrome-footer shell">
+  <div class="foot-in">
+    <p>Prudhvi Raj PJ &middot; Design Leader</p>
+    <p>Hyderabad, India &middot; Working globally</p>
+    <p>&copy; <span id="yr">2026</span> &middot; <a href="#top">Back to top</a></p>
+  </div>
+</footer>
+
+<script src="assets/js/vendor/motion.min.js"></script>
+<script src="assets/js/engine.js"></script>
+<script src="assets/js/scroll3d.js"></script>
+<script src="assets/js/transitions.js"></script>
+<script src="assets/js/backdrop.js"></script>
+</body>
+</html>

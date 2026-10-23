@@ -1,0 +1,191 @@
+/* ============================================================
+   HERO, ORBIT VARIANT
+
+   Loaded only by hero-orbit.html. The shipped homepage keeps its
+   credential card; nothing here touches it.
+
+   The idea: the record as a constellation instead of a panel. A
+   face at the centre of gravity, the three outcomes around it,
+   the scope figures as quiet satellites.
+
+   Two things make circles read as levitating rather than as a
+   row of badges:
+
+   1. They must not move together. Every orb floats on its own
+      period and a negative delay, so the group is permanently
+      out of phase.
+   2. They must sit at different depths. Size, blur, opacity and
+      parallax depth all vary together, so the field has a front
+      and a back rather than being flat.
+   ============================================================ */
+
+/* The column is 230-300px, which is not a field. The orbit is taken
+   out of flow and widened leftward into the gap between the headline
+   and the column, which is dead space in the shipped layout. It is
+   anchored to the right edge and never bleeds past it, so the page
+   cannot gain horizontal scroll.
+
+   An absolutely positioned child of a grid container is not a grid
+   item, so the two-column hero is unchanged: column two simply sits
+   empty while the field floats over it. Its offsets resolve against
+   the grid's padding box, which is why this is a right anchor plus a
+   width rather than a negative left. */
+.hero-grid{ position:relative; }
+
+.orbit{
+  position:absolute;
+  top:0; bottom:0; right:0;
+  width:calc(clamp(230px,21vw,300px) + clamp(0px,14.5vw,214px));
+  pointer-events:none;
+}
+
+.orb{
+  position:absolute;
+  left:var(--x); top:var(--y);
+  width:var(--d); height:var(--d);
+  will-change:transform;
+}
+.orb-in{
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  gap:3px;
+  width:100%; height:100%;
+  border-radius:50%;
+  animation:orb-float var(--t, 9s) ease-in-out var(--dl, 0s) infinite;
+}
+@keyframes orb-float{
+  0%,100%{ transform:translate3d(0,0,0); }
+  50%    { transform:translate3d(0,-10px,0); }
+}
+
+/* ---------- the face ---------- */
+.orb-face{ z-index:3; }
+.orb-face .orb-in{
+  overflow:hidden;
+  box-shadow:
+    0 36px 70px -28px rgba(0,0,0,.92),
+    0 0 0 1px rgba(244,241,235,.10),
+    0 0 46px -12px rgba(212,255,63,.10);
+}
+.orb-face img{ display:block; width:100%; height:100%; object-fit:cover; }
+
+/* ---------- stat orbs ---------- */
+.orb-stat{ z-index:2; }
+.orb-stat .orb-in{
+  text-align:center;
+  padding:10px;
+  background:
+    radial-gradient(118% 108% at 32% 22%,
+      rgba(244,241,235,.115) 0%, rgba(244,241,235,.045) 46%, rgba(244,241,235,.016) 100%);
+  border:1px solid rgba(244,241,235,.145);
+  backdrop-filter:blur(7px);
+  -webkit-backdrop-filter:blur(7px);
+  /* a lit top edge and a dark underside: without them a translucent
+     circle on a dark ground has no surface and reads as a hole */
+  box-shadow:
+    0 26px 52px -26px rgba(0,0,0,.9),
+    inset 0 1.5px 0 rgba(255,255,255,.14),
+    inset 0 -14px 24px -18px rgba(0,0,0,.6);
+}
+.orb-stat b{
+  display:block;
+  font-family:var(--display); font-weight:800;
+  font-size:clamp(20px, 2.35vw, 33px);
+  letter-spacing:-.03em; line-height:1;
+  font-variant-numeric:tabular-nums;
+}
+.orb-stat i{
+  font-family:var(--mono); font-style:normal;
+  font-size:clamp(7.6px, .72vw, 9.4px);
+  letter-spacing:.13em; text-transform:uppercase;
+  color:var(--text-2); line-height:1.25;
+  max-width:92%;
+}
+.orb-lg b{ font-size:clamp(22px, 2.7vw, 38px); }
+
+/* ---------- satellites ---------- */
+/* Further back: dimmer, thinner, and they carry the deepest parallax
+   so they travel most. Scope is supporting detail and should read
+   that way without being hidden. */
+.orb-sat{ z-index:1; }
+.orb-sat .orb-in{
+  text-align:center;
+  background:rgba(244,241,235,.052);
+  border:1px solid rgba(244,241,235,.10);
+  backdrop-filter:blur(5px);
+  -webkit-backdrop-filter:blur(5px);
+  box-shadow:
+    0 18px 34px -22px rgba(0,0,0,.82),
+    inset 0 1px 0 rgba(255,255,255,.085);
+}
+.orb-sat b{
+  display:block;
+  font-family:var(--display); font-weight:700;
+  font-size:clamp(13px, 1.32vw, 18px);
+  letter-spacing:-.02em; line-height:1; color:var(--m-hi);
+  font-variant-numeric:tabular-nums;
+}
+.orb-sat i{
+  font-family:var(--mono); font-style:normal;
+  font-size:clamp(6.4px, .6vw, 7.8px);
+  letter-spacing:.11em; text-transform:uppercase;
+  color:var(--text-3); line-height:1.2;
+}
+
+/* ---------- the name ---------- */
+/* The constellation shows the record but not whose it is, which was
+   the gap that drove the card version. It is stated plainly under
+   the field rather than floated. */
+.orb-id{
+  position:absolute; right:0; bottom:0;
+  display:flex; flex-direction:column; gap:3px;
+  text-align:right;
+}
+.orb-id .pf-name{
+  font-family:var(--display); font-weight:700;
+  font-size:clamp(15px,1.22vw,18px); letter-spacing:-.015em;
+  line-height:1.08; color:var(--m-hi);
+}
+.orb-id .pf-role{
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--text-2);
+}
+
+/* ---------- stacked ---------- */
+/* Absolute placement in a field only works while there is a field.
+   Once the layout stacks the orbs become an ordinary wrapped row,
+   still circles, no longer a composition. */
+@media (max-width:980px){
+  .orbit{
+    position:static;
+    display:flex; flex-wrap:wrap; align-items:center;
+    gap:clamp(10px,2.6vw,18px);
+    pointer-events:auto;
+  }
+  .orb{
+    position:static;
+    width:var(--d); height:var(--d);
+    transform:none !important;
+  }
+  /* The per-orb --d lives in an inline style, which outranks a
+     stylesheet rule, so these need !important or the stacked sizes are
+     silently ignored and every orb keeps its desktop diameter. */
+  .orb-face{ --d:clamp(104px,27vw,150px) !important; }
+  .orb-stat{ --d:clamp(110px,27vw,140px) !important; }
+  .orb-sat { --d:clamp(86px,21vw,106px) !important; }
+  .orb-id{ position:static; text-align:left; width:100%; margin-top:6px; }
+
+  /* The numerals clamp to a desktop minimum, so on a narrow screen the
+     circle shrinks and the type does not. Re-scale it to the viewport
+     here or the figure crowds the curve. */
+  .orb-stat b{ font-size:clamp(17px,5.2vw,26px); }
+  .orb-lg   b{ font-size:clamp(18px,5.6vw,28px); }
+  .orb-stat i{ font-size:clamp(6.8px,1.9vw,8.6px); }
+  .orb-sat  b{ font-size:clamp(12px,3.4vw,16px); }
+  .orb-sat  i{ font-size:clamp(6px,1.6vw,7.2px); }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .orb-in{ animation:none; }
+  .orb{ transform:none !important; }
+}

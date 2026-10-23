@@ -92,7 +92,17 @@
       var c = (r.top + r.height / 2 - vh / 2) / vh;
       var y = -c * d * 190;
       var z = d * 60;
-      el.style.transform = 'translate3d(0,' + y.toFixed(2) + 'px,' + z.toFixed(1) + 'px)';
+      /* An orbit field's shapes also drift with the pointer. That has to
+         be folded into this one transform rather than written to the
+         element separately: the inner node already carries the float
+         keyframe, and a second inline transform here would simply
+         replace this one. Displacement goes as 1/depth, so the shape
+         nearest the front travels most and the ones read as distant,
+         the small dim satellites, barely move at all. */
+      var ox = 0, od = parseFloat(el.dataset.orb);
+      if (od) { ox = px * od * 7; y += py * od * 5; }
+      el.style.transform =
+        'translate3d(' + ox.toFixed(2) + 'px,' + y.toFixed(2) + 'px,' + z.toFixed(1) + 'px)';
     });
 
     /* 2, scroll-driven 3D -------------------------------------- */
