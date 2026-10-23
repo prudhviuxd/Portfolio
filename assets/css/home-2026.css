@@ -162,8 +162,7 @@ canvas.bd{
 .spm-nodes li{
   position:absolute; left:0; top:0;
   will-change:transform;
-  cursor:pointer;
-  max-width:min(34vw, 240px);
+  max-width:min(26vw, 240px);
 }
 .spm-nodes li > span{
   display:block;
@@ -174,7 +173,6 @@ canvas.bd{
   transition:color .35s ease;
 }
 .spm-nodes li.to-left > span{ text-align:right; }
-.spm-nodes li:hover > span{ color:var(--m-hi); }
 
 /* the selected area's branch */
 .spm-nodes li.lit > span{
@@ -197,9 +195,6 @@ canvas.bd{
   opacity:0; transition:opacity .45s cubic-bezier(.2,.8,.2,1);
 }
 .spm-hub-in.is-on{ opacity:1; }
-.spm-hub-num{
-  font-family:var(--mono); font-size:9.5px; letter-spacing:.2em; color:var(--acc);
-}
 .spm-hub-name{
   font-family:var(--display); font-weight:700;
   font-size:clamp(20px,2.3vw,32px); letter-spacing:-.025em;
@@ -269,7 +264,7 @@ canvas.bd{
 
 @media (max-width:700px){
   .spm-stage{ height:clamp(380px, 96vw, 460px); }
-  .spm-nodes li{ max-width:38vw; }
+  .spm-nodes li{ max-width:42vw; }
   .spm-hub-name{ font-size:clamp(17px,5vw,22px); }
 }
 
@@ -293,13 +288,14 @@ canvas.bd{
    Text over imagery needs more weight than text over a flat fill. */
 .hero-eyebrow{ color:var(--m-mid); }
 
-/* Narrow stages label only the selected branch; the rest stay as points
-   on the curve. Thirty labels below 1200px collided 4 to 51 times. */
-.spm-compact .spm-nodes li:not(.lit) > span{
+/* Only the selected branch is on the curve, at every width. Thirty at
+   once was too many to read and collided 4 to 51 times depending on
+   width; the others stay in the document, unpainted and inert, so the
+   text is still there to be found. */
+.spm-nodes li:not(.lit){
   opacity:0;
   pointer-events:none;
 }
-.spm-compact .spm-nodes li:not(.lit){ pointer-events:none; }
 
 /* Below this a spiral is a fiction: a label wide enough to read on a
    phone (135px) in a 354px stage leaves no radius to put it on, so
@@ -323,5 +319,5 @@ canvas.bd{
     border:1px solid var(--line-2); border-radius:999px; padding:5px 10px;
     font-size:10px;
   }
-  .spm-compact .spm-nodes li:not(.lit){ display:none; }
+  .spm-nodes li:not(.lit){ display:none; }
 }

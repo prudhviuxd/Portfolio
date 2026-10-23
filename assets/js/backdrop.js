@@ -280,8 +280,24 @@
     var bw = box.width || 1440;
     lightScale = Math.max(0.34, Math.min(1, (bw - 480) / (1100 - 480)));
 
-    moon.x = W * (bw < 980 ? 0.78 : 0.705);
-    var minY = (hh + 34) * scale + moon.r * 3.2;   /* clear of the header */
+    /* As far right as it can actually go. The right edge of the hero
+       belongs to the credential card, whose top is an opaque portrait:
+       a moon placed over it is not a moon behind glass, it is a moon
+       that has been deleted. So it sits as far across as it can while
+       keeping its disc, and a little air, clear of that card. */
+    var want = bw * (bw < 980 ? 0.82 : 0.78);
+    var plate = document.querySelector('.hero-plate');
+    if (plate && bw >= 980) {
+      var pl = plate.getBoundingClientRect().left - box.left;
+      var rpx = moon.r / scale;                  /* disc radius in screen px */
+      want = Math.min(want, pl - rpx * 1.12 - 14);
+    }
+    moon.x = Math.max(W * 0.46, want * scale);
+    /* Clearance enough for the disc and a little air, not for the whole
+       corona: reserving 3.2 radii pushed the moon down to the middle of
+       the band, which is the opposite of a corner. The corona is soft
+       and may pass behind the header. */
+    var minY = (hh + 26) * scale + moon.r * 1.35;
     moon.y = Math.max(minY, H * 0.20);
   }
 

@@ -50,6 +50,7 @@
   var AREAS = cards.length;
 
   var spin = 0, area = 0, paused = false;
+  var activeIdx = [];      /* which nodes are currently on the curve */
   var W = 0, H = 0, cx = 0, cy = 0, rMin = 0, rMax = 0, flat = 0.60, compact = false;
   var TURNS = 2.45, SPAN = TURNS * Math.PI * 2;
 
@@ -74,7 +75,12 @@
     compact = W < 1200;
     root.classList.toggle('spm-compact', compact);
 
-    var labelRoom = compact ? (W < 700 ? 86 : 150) : 190;
+    /* Derive the room from what a label can actually be, rather than
+       guessing: the CSS caps a label at min(26vw, 240px), and the stem
+       and a margin sit outside that. A guessed 190 let "Cross-functional
+       collaboration" run 34px past the stage, which clips. */
+    var labelMax = Math.min(240, W * 0.26);
+    var labelRoom = labelMax + 34;
     rMax = Math.max(90, Math.min(W / 2 - labelRoom, H / 2 / 0.5 - 26));
     /* Spend whatever vertical room is left. A fixed flatten wasted it and
        left adjacent nodes on the same line: "Design ops" sat on top of
@@ -84,8 +90,11 @@
     rMin = Math.max(compact ? 74 : 42, rMax * (compact ? 0.34 : 0.26));
   }
 
-  function pointAt(i) {
-    var t = i / (N - 1);
+  /* k is a position along the active branch, not an index into all 30.
+     The branch is spread over the whole spiral, so six capabilities and
+     nine both fill the shape instead of leaving most of it empty. */
+  function pointAt(k, count) {
+    var t = count > 1 ? k / (count - 1) : 0.5;
     var th = spin + t * SPAN;
     var rr = rMin + (rMax - rMin) * t;
     return { x: cx + Math.cos(th) * rr, y: cy + Math.sin(th) * rr * flat, th: th, r: rr };
@@ -99,78 +108,85 @@
       c.toggleAttribute('inert', k !== area);
     });
     btns.forEach(function (b, k) { b.setAttribute('aria-current', String(k === area)); });
-    nodes.forEach(function (n, k) { n.classList.toggle('lit', areaOf[k] === area); });
+    activeIdx = [];
+    nodes.forEach(function (n, k) {
+      var on = areaOf[k] === area;
+      n.classList.toggle('lit', on);
+      /* Off the curve entirely: not drawn, not focusable, but still in
+         the document so the text can be found and read. */
+      n.toggleAttribute('inert', !on);
+      if (on) activeIdx.push(k);
+    });
     if (announce && live) live.textContent = btns[area].textContent + ' selected';
   }
 
   function frame() {
     if (!W) measure();
-    if (!reduce && !paused) spin += 0.00085;
+    if (!reduce && !paused) spin += 0.0029;
 
     ctx.clearRect(0, 0, W, H);
+    var count = activeIdx.length;
+    if (!count) { requestAnimationFrame(frame); return; }
 
-    /* --- the spiral itself, drawn as one continuous curve --- */
+    /* --- the spiral, lit, with the glow carried by shadowBlur --- */
+    ctx.save();
+    ctx.shadowColor = 'rgba(212,255,63,0.55)';
+    ctx.shadowBlur = 14;
+    ctx.beginPath();
+    for (var k = 0; k <= 1.0001; k += 0.004) {
+      var th = spin + k * SPAN;
+      var rr = rMin + (rMax - rMin) * k;
+      var x = cx + Math.cos(th) * rr, y = cy + Math.sin(th) * rr * flat;
+      if (k === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = 'rgba(212,255,63,0.42)';
+    ctx.lineWidth = 1.4;
+    ctx.stroke();
+    ctx.restore();
+
     var pts = [];
-    for (var i = 0; i < N; i++) pts.push(pointAt(i));
+    for (var i = 0; i < count; i++) pts.push(pointAt(i, count));
 
-    function strokeRun(from, to, style, width) {
-      ctx.beginPath();
-      /* sample between the nodes so the curve is smooth, not a polygon */
-      for (var k = from; k <= to; k += 0.12) {
-        var t = k / (N - 1);
-        var th = spin + t * SPAN;
-        var rr = rMin + (rMax - rMin) * t;
-        var x = cx + Math.cos(th) * rr, y = cy + Math.sin(th) * rr * flat;
-        if (k === from) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-      }
-      ctx.strokeStyle = style;
-      ctx.lineWidth = width;
-      ctx.stroke();
-    }
-
-    strokeRun(0, N - 1, 'rgba(244,241,235,0.085)', 1);
-
-    /* the selected area's stretch of the spiral, lit */
-    var first = -1, last = -1;
-    for (var a = 0; a < N; a++) {
-      if (areaOf[a] === area) { if (first < 0) first = a; last = a; }
-    }
-    if (first >= 0) strokeRun(first, last, 'rgba(212,255,63,0.52)', 1.6);
-
-    /* --- hub spokes: one wire from the centre to each lit node --- */
-    for (var h = 0; h < N; h++) {
-      if (areaOf[h] !== area) continue;
+    /* --- spokes from the hub, also glowing --- */
+    ctx.save();
+    ctx.shadowColor = 'rgba(212,255,63,0.4)';
+    ctx.shadowBlur = 9;
+    for (var h = 0; h < count; h++) {
       var p = pts[h];
       ctx.beginPath();
       ctx.moveTo(cx, cy);
-      /* bend the spoke so it reads as drawn rather than ruled */
       ctx.quadraticCurveTo((cx + p.x) / 2 + (p.y - cy) * 0.14,
                            (cy + p.y) / 2 - (p.x - cx) * 0.14, p.x, p.y);
-      ctx.strokeStyle = 'rgba(212,255,63,0.13)';
+      ctx.strokeStyle = 'rgba(212,255,63,0.16)';
       ctx.lineWidth = 1;
       ctx.stroke();
     }
+    ctx.restore();
 
-    /* --- nodes and their stems --- */
-    for (var n = 0; n < N; n++) {
+    /* --- nodes, stems and labels --- */
+    for (var n = 0; n < count; n++) {
       var q = pts[n];
-      var lit = areaOf[n] === area;
       var right = Math.cos(q.th) >= 0;
-      var stem = lit ? 16 : 11;
+      var stem = 16;
+
+      ctx.save();
+      ctx.shadowColor = 'rgba(212,255,63,0.7)';
+      ctx.shadowBlur = 10;
 
       ctx.beginPath();
       ctx.moveTo(q.x, q.y);
       ctx.lineTo(q.x + (right ? stem : -stem), q.y);
-      ctx.strokeStyle = lit ? 'rgba(212,255,63,0.45)' : 'rgba(244,241,235,0.14)';
+      ctx.strokeStyle = 'rgba(212,255,63,0.5)';
       ctx.lineWidth = 1;
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.arc(q.x, q.y, lit ? 3.2 : 2, 0, Math.PI * 2);
-      ctx.fillStyle = lit ? 'rgba(212,255,63,0.95)' : 'rgba(244,241,235,0.3)';
+      ctx.arc(q.x, q.y, 3.4, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(212,255,63,0.95)';
       ctx.fill();
+      ctx.restore();
 
-      var el = nodes[n];
+      var el = nodes[activeIdx[n]];
       el.style.transform =
         'translate3d(' + (q.x + (right ? stem + 6 : -stem - 6)).toFixed(1) + 'px,' +
         q.y.toFixed(1) + 'px,0)' + (right ? '' : ' translateX(-100%)') + ' translateY(-50%)';
@@ -183,9 +199,6 @@
   /* ---------- controls ---------- */
   btns.forEach(function (b, k) {
     b.addEventListener('click', function () { setArea(k, true); });
-  });
-  nodes.forEach(function (n) {
-    n.addEventListener('click', function () { setArea(+n.dataset.area, true); });
   });
   ['pointerenter', 'focusin'].forEach(function (ev) {
     root.addEventListener(ev, function () { paused = true; });
