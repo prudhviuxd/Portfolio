@@ -136,171 +136,209 @@ canvas.bd{
 }
 
 /* ============================================================
-   WHAT I ACTUALLY DO — a 3D ring
+   WHAT I ACTUALLY DO — a sphere, and a card worth reading
 
-   The grid before this was honest but inert. This turns the same
-   four areas on a real circle in the XZ plane.
+   Two problems, one answer. A sphere tilts whatever it carries in
+   two axes, so prose cannot ride on it; and the cards were too
+   text-heavy, because every one of them ended in a list of seven
+   to nine capabilities.
 
-   What the ring must not cost: the capabilities. All 30 are still
-   in the DOM and still findable with ctrl-F, and the four area
-   names sit permanently under the stage as labelled controls, so
-   nothing is hidden behind a gesture. A carousel that buries its
-   own table of contents is the version of this pattern that
-   deserves its bad reputation.
+   So the capabilities moved onto the sphere, where short labels
+   are exactly the right payload, and the card kept only what has
+   to be read: who this is, one line of definition, and the
+   evidence. The card lost its tag list and gained air.
 
-   The stage carries no data-cards attribute on purpose. That
-   attribute transitions transform with a per-child delay, and
-   this ring rewrites every card's transform every frame, so each
-   write would restart the delay and the whole thing would freeze
-   while the inline values kept changing.
+   Nothing left the DOM. All 30 labels are still real list items,
+   still findable with ctrl-F, and the four areas are still plain
+   buttons underneath.
    ============================================================ */
 
 .sk-intro{
-  max-width:52ch;
-  margin:14px 0 0;
-  font-size:clamp(15px,1.15vw,17px);
-  line-height:1.62;
-  color:var(--text-2);
+  max-width:54ch; margin:14px 0 0;
+  font-size:clamp(15px,1.15vw,17px); line-height:1.62; color:var(--text-2);
 }
 
-.skc{ --cw:clamp(286px, 31vw, 430px); position:relative; }
+.sph{
+  display:grid;
+  grid-template-columns:minmax(0,1.04fr) minmax(0,1fr);
+  gap:clamp(20px,3vw,54px);
+  align-items:center;
+}
 
-.skc-stage{
+/* ---------- the sphere ---------- */
+.sph-stage{
   position:relative;
-  min-height:clamp(300px, 23vw, 350px);   /* pre-script fallback only; the script measures the real height */
-  perspective:1250px;          /* the JS assumes this exact value */
-  transform-style:preserve-3d;
+  aspect-ratio:1;
+  max-height:min(62vh, 540px);
+  margin-inline:auto;
+  width:100%;
+  perspective:760px;              /* the script assumes this exact value */
+  touch-action:none;              /* a drag must not become a page scroll */
+  /* The stage is a window onto the sphere. Without this, the widest
+     label (289px, "Usability testing, moderated and unmoderated")
+     hangs off the side and takes the whole page with it: 96px of
+     horizontal overflow at 390. */
+  overflow:hidden;
+  cursor:grab;
+  outline-offset:6px;
 }
+.sph-stage.is-dragging{ cursor:grabbing; }
 
-.skc-card{
-  position:absolute;
-  left:50%; top:50%;
-  width:var(--cw);
-  margin-left:calc(var(--cw) / -2);
-  display:flex; flex-direction:column;
-  gap:clamp(10px,.95vw,14px);
-  padding:clamp(20px,2vw,28px);
-  border:1px solid var(--line);
-  border-radius:var(--r);
-  background:linear-gradient(168deg, rgba(20,21,25,.96), rgba(13,14,17,.96));
-  box-shadow:0 40px 80px -40px rgba(0,0,0,.9);
-  backface-visibility:hidden;
-  will-change:transform, opacity, filter;
-  transition:border-color .5s cubic-bezier(.2,.8,.2,1);
-}
-/* The front card is the only one being read, so it is the only one
-   that earns the accent. */
-.skc-card.is-front{ border-color:var(--line-hot); }
+.sph-cloud{ list-style:none; margin:0; padding:0; }
 
-/* before the script runs, show one card rather than a stack of four */
-.skc:not(.skc-ready) .skc-card{ opacity:0; }
-.skc:not(.skc-ready) .skc-card:first-child{ opacity:1; transform:translateY(-50%); }
-
-.skc-card .sk-top{ display:flex; align-items:baseline; gap:12px; }
-.skc-card .sk-idx{
-  font-family:var(--mono); font-size:10px; letter-spacing:.16em;
-  color:var(--acc); flex:none;
+/* Each item is a full-stage layer holding one centred label, so the
+   script can place it with transform alone and never touch layout. */
+.sph-cloud li{
+  position:absolute; inset:0;
+  display:grid; place-items:center;
+  pointer-events:none;            /* only the label itself is interactive */
+  will-change:transform, opacity;
 }
-.skc-card .sk-title{
-  font-family:var(--display); font-weight:700;
-  font-size:clamp(20px,2vw,28px); letter-spacing:-.02em;
-  line-height:1.05; margin:0; color:var(--m-hi);
-}
-.skc-card .sk-desc{
-  margin:0; font-size:clamp(13.5px,1vw,15px);
-  line-height:1.6; color:var(--text-2);
-}
-.skc-card .sk-proof{
-  margin:0; padding-left:13px;
-  border-left:2px solid var(--line-hot);
-  font-size:clamp(13.5px,1vw,15px); line-height:1.58;
-  color:var(--m-hi);
-}
-.skc-card .sk-proof-k{
-  display:block;
-  font-family:var(--mono); font-size:9px; letter-spacing:.17em;
-  text-transform:uppercase; color:var(--acc); margin-bottom:5px;
-}
-.skc-card .sk-tags{
-  list-style:none; margin:2px 0 0; padding:0;
-  display:flex; flex-wrap:wrap; gap:5px;
-  /* No overflow:hidden here. It clipped the tail of the longer lists,
-     and worse, it made the card's scrollHeight report the clipped
-     height, so the stage measured itself against content it was
-     already hiding. Four of Research's eight tags never rendered. */
-}
-.skc-card .sk-tags li{
-  font-family:var(--mono); font-size:9.5px; letter-spacing:.06em;
-  color:var(--text-3);
-  padding:4px 9px;
+.sph-cloud li > span{
+  pointer-events:auto;
+  cursor:pointer;
+  white-space:nowrap;
+  font-family:var(--mono);
+  font-size:clamp(9px,.72vw,10.5px);
+  letter-spacing:.07em;
+  color:var(--text-2);
+  padding:5px 11px;
   border:1px solid var(--line-2);
   border-radius:999px;
-  white-space:nowrap;
-}
-
-/* ---------- controls ----------
-   The four names stay visible whatever the ring is doing, so the
-   section still answers "what are the areas" at a glance. */
-.skc-ui{
-  display:flex; align-items:center; justify-content:center;
-  gap:clamp(8px,1vw,16px);
-  margin-top:clamp(16px,1.8vw,26px);
-  flex-wrap:wrap;
-}
-.skc-arrow{
-  width:38px; height:38px; flex:none;
-  display:grid; place-items:center;
-  border:1px solid var(--line); border-radius:50%;
-  background:transparent; color:var(--text-2);
-  cursor:pointer;
+  background:rgba(12,13,16,.72);
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
   transition:color .3s ease, border-color .3s ease, background .3s ease;
 }
-.skc-arrow:hover{ color:var(--m-hi); border-color:var(--line-hot); background:var(--surface-hot); }
+.sph-cloud li > span:hover{ color:var(--m-hi); border-color:var(--line-hot); }
 
-.skc-dots{
-  list-style:none; margin:0; padding:0;
-  display:flex; flex-wrap:wrap; gap:6px; justify-content:center;
+/* the selected area's capabilities, lit */
+.sph-cloud li.lit > span{
+  color:var(--bg);
+  background:var(--acc);
+  border-color:var(--acc);
 }
-.skc-dots button{
+
+.sph-hint{
+  position:absolute; left:50%; bottom:2px; transform:translateX(-50%);
+  font-family:var(--mono); font-size:9px; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--text-3);
+  opacity:.75; pointer-events:none;
+}
+.sph-stage.is-dragging .sph-hint{ opacity:0; }
+
+/* ---------- the card ----------
+   Short on purpose. The capability list that used to sit here is
+   on the sphere now, so what is left can breathe. */
+.sph-panel{ display:grid; }
+.sph-card{
+  grid-area:1 / 1;
+  display:flex; flex-direction:column;
+  gap:clamp(14px,1.5vw,20px);
+  opacity:0; visibility:hidden;
+  transform:translateY(10px);
+  transition:opacity .5s cubic-bezier(.2,.8,.2,1),
+             transform .5s cubic-bezier(.2,.8,.2,1),
+             visibility 0s linear .5s;
+}
+.sph-card.is-on{
+  opacity:1; visibility:visible; transform:none;
+  transition:opacity .5s cubic-bezier(.2,.8,.2,1),
+             transform .5s cubic-bezier(.2,.8,.2,1),
+             visibility 0s;
+}
+
+.sph-eyebrow{
+  margin:0; display:flex; align-items:baseline; gap:12px;
+  font-family:var(--display); font-weight:700;
+  font-size:clamp(26px,3vw,42px); letter-spacing:-.03em;
+  line-height:1; color:var(--m-hi);
+}
+.sph-num{
+  font-family:var(--mono); font-weight:400;
+  font-size:11px; letter-spacing:.16em; color:var(--acc);
+}
+.sph-def{
+  margin:0; max-width:34ch;
+  font-size:clamp(16px,1.3vw,19px); line-height:1.55; color:var(--text-2);
+}
+
+/* the evidence is the one thing on this card that must land */
+.sph-ev{
+  padding-left:clamp(14px,1.2vw,18px);
+  border-left:2px solid var(--line-hot);
+}
+.sph-ev-k{
+  display:block; margin-bottom:7px;
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--acc);
+}
+.sph-ev p{
+  margin:0; max-width:36ch;
+  font-size:clamp(16px,1.35vw,20px); line-height:1.5;
+  letter-spacing:-.005em; color:var(--m-hi);
+}
+.sph-count{
+  margin:0; font-family:var(--mono); font-size:10px;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--text-3);
+}
+.sph-count b{ color:var(--m-mid); font-weight:400; }
+
+/* ---------- area buttons ---------- */
+.sph-nav{
+  list-style:none; margin:clamp(22px,2.6vw,38px) 0 0; padding:0;
+  display:flex; flex-wrap:wrap; gap:7px; justify-content:center;
+}
+.sph-nav button{
   font-family:var(--mono); font-size:9.5px; letter-spacing:.14em;
   text-transform:uppercase;
-  padding:8px 14px; border-radius:999px;
+  padding:9px 16px; border-radius:999px;
   border:1px solid var(--line-2);
-  background:transparent; color:var(--text-3);
-  cursor:pointer;
+  background:transparent; color:var(--text-3); cursor:pointer;
   transition:color .3s ease, border-color .3s ease, background .3s ease;
 }
-.skc-dots button:hover{ color:var(--text-2); border-color:var(--line); }
-.skc-dots button[aria-current="true"]{
+.sph-nav button:hover{ color:var(--text-2); border-color:var(--line); }
+.sph-nav button[aria-current="true"]{
   color:var(--bg); background:var(--acc); border-color:var(--acc);
 }
 
-/* the live region is for screen readers only */
-.skc-live{
-  position:absolute; width:1px; height:1px;
-  margin:-1px; padding:0; overflow:hidden;
-  clip:rect(0 0 0 0); white-space:nowrap; border:0;
+.sph-live{
+  position:absolute; width:1px; height:1px; margin:-1px; padding:0;
+  overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
 }
 
-/* ---------- narrow ---------- */
-@media (max-width:760px){
-  .skc{ --cw:min(86vw, 360px); }
-
-  .skc-card .sk-tags li{ white-space:normal; }
+/* ---------- stacked ---------- */
+@media (max-width:860px){
+  .sph{ grid-template-columns:minmax(0,1fr); gap:clamp(18px,4vw,30px); }
+  .sph-stage{ max-height:min(56vh, 400px); order:2; }
+  .sph-panel{ order:1; }
+  /* Narrow stages cannot hold a 260px label on one line, so the long
+     ones wrap instead of being clipped against the edge. */
+  .sph-cloud li > span{
+    white-space:normal; text-align:center;
+    max-width:min(60vw, 200px); line-height:1.3;
+  }
+  .sph-def{ max-width:none; }
+  .sph-ev p{ max-width:none; }
 }
 
 /* ---------- reduced motion ----------
-   No ring, no turning: the four cards become an ordinary column
-   and every one of them is readable at once. */
+   No sphere at all: the labels become an ordinary wrapped list and
+   every card is laid out in full. */
 @media (prefers-reduced-motion: reduce){
-  .skc-stage{
-    height:auto; perspective:none;
-    display:flex; flex-direction:column; gap:16px;
+  .sph-stage{
+    aspect-ratio:auto; max-height:none; perspective:none; cursor:auto;
   }
-  .skc-card{
-    position:static; width:auto; margin:0; max-height:none;
-    transform:none !important; opacity:1 !important;
-    filter:none !important;
+  .sph-cloud{ display:flex; flex-wrap:wrap; gap:6px; }
+  .sph-cloud li{
+    position:static; inset:auto; display:inline-flex;
+    transform:none !important; opacity:1 !important; filter:none !important;
   }
-  .skc-ui{ display:none; }
+  .sph-cloud li > span{ pointer-events:auto !important; }
+  .sph-hint{ display:none; }
+  .sph-card{
+    position:static; opacity:1 !important; visibility:visible !important;
+    transform:none !important;
+  }
+  .sph-panel{ display:flex; flex-direction:column; gap:30px; }
 }
