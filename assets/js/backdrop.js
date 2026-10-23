@@ -50,7 +50,7 @@
   var SKY_MID  = [22, 31, 45];
   var SKY_LOW  = [7, 9, 13];       /* meets the page ground                */
   var CLOUD    = [122, 134, 152];  /* cold cloud                           */
-  var CLOUD_W  = [150, 126, 110];  /* the warm side, near the light        */
+  var CLOUD_W  = [146, 158, 180];  /* the lit side: silver, not sodium     */
 
   /* ---------- buffer ----------
      Sized to the band's own aspect so nothing is cropped, and capped
@@ -89,8 +89,8 @@
     var halo = u.createRadialGradient(moon.x, moon.y, 0, moon.x, moon.y, W * 0.38);
     halo.addColorStop(0,    'rgba(226,234,248,' + (0.38 * lightScale).toFixed(3) + ')');
     halo.addColorStop(0.16, 'rgba(188,200,222,' + (0.21 * lightScale).toFixed(3) + ')');
-    halo.addColorStop(0.45, 'rgba(150,146,150,' + (0.09 * lightScale).toFixed(3) + ')');
-    halo.addColorStop(1,    'rgba(120,110,108,0)');
+    halo.addColorStop(0.45, 'rgba(140,152,178,' + (0.09 * lightScale).toFixed(3) + ')');
+    halo.addColorStop(1,    'rgba(104,120,150,0)');
     u.fillStyle = halo; u.fillRect(0, 0, W, H);
 
     cloudCv = document.createElement('canvas');
@@ -121,8 +121,8 @@
 
     o.globalCompositeOperation = 'screen';
     var lit = o.createRadialGradient(moon.x, moon.y, 0, moon.x, moon.y, W * 0.27);
-    lit.addColorStop(0,    'rgba(255,250,242,' + (0.60 * lightScale).toFixed(3) + ')');
-    lit.addColorStop(0.22, 'rgba(210,206,204,' + (0.30 * lightScale).toFixed(3) + ')');
+    lit.addColorStop(0,    'rgba(232,242,255,' + (0.60 * lightScale).toFixed(3) + ')');
+    lit.addColorStop(0.22, 'rgba(196,210,232,' + (0.30 * lightScale).toFixed(3) + ')');
     lit.addColorStop(0.55, rgba(CLOUD_W, (0.16 * lightScale).toFixed(3)));
     lit.addColorStop(1,    'rgba(0,0,0,0)');
     o.fillStyle = lit; o.fillRect(0, 0, W, H);
@@ -407,19 +407,41 @@
 
         var lat = Math.asin(Math.max(-1, Math.min(1, y1)));
         var lon = Math.atan2(x2, z2);
-        var u = ((lon / (Math.PI * 2) + 0.5) * TW) | 0;
-        var v = ((0.5 - lat / Math.PI) * TH) | 0;
-        if (u < 0) u = 0; else if (u >= TW) u = TW - 1;
-        if (v < 0) v = 0; else if (v >= TH) v = TH - 1;
-        var ti = (v * TW + u) * 4;
+
+        /* Bilinear, not nearest. Rounding to the nearest texel was the
+           whole glitter: a 1024px map on a 90px disc means every screen
+           pixel spans about ten texels, so as the sphere turns each one
+           snaps from texel to texel and the surface crawls with
+           sparkles. Interpolating makes the moon slide smoothly under
+           its own detail instead. Longitude wraps at the seam,
+           latitude clamps at the poles.
+
+           One channel is enough: the map is built grey, so the slight
+           warmth is reapplied here as a multiplier rather than carried
+           through three more texel reads. */
+        var fu = (lon / (Math.PI * 2) + 0.5) * TW - 0.5;
+        var fv = (0.5 - lat / Math.PI) * TH - 0.5;
+        var u0 = Math.floor(fu), v0 = Math.floor(fv);
+        var du = fu - u0, dv = fv - v0;
+        var u1 = ((u0 + 1) % TW + TW) % TW;
+        u0 = (u0 % TW + TW) % TW;
+        var v1 = v0 + 1;
+        if (v0 < 0) v0 = 0; else if (v0 >= TH) v0 = TH - 1;
+        if (v1 < 0) v1 = 0; else if (v1 >= TH) v1 = TH - 1;
+        var r0 = v0 * TW, r1 = v1 * TW;
+        var ta = TEX[(r0 + u0) * 4], tb = TEX[(r0 + u1) * 4];
+        var tc = TEX[(r1 + u0) * 4], td = TEX[(r1 + u1) * 4];
+        var top = ta + (tb - ta) * du;
+        var bot = tc + (td - tc) * du;
+        var g = top + (bot - top) * dv;
 
         /* lunar limb darkening is mild until the very edge */
         var lim = 0.86 + 0.14 * nz;
         var edge = d2 > 0.965 ? Math.max(0, 1 - (d2 - 0.965) / 0.035) : 1;
 
-        out[o]     = TEX[ti]     * lim;
-        out[o + 1] = TEX[ti + 1] * lim;
-        out[o + 2] = TEX[ti + 2] * lim;
+        out[o]     = g * lim;
+        out[o + 1] = g * lim * 0.997;
+        out[o + 2] = g * lim * 0.985;
         out[o + 3] = 255 * edge;
       }
     }
@@ -436,7 +458,10 @@
     /* --- stars, behind the cloud --- */
     for (var i = 0; i < stars.length; i++) {
       var s = stars[i];
-      var tw = 0.55 + 0.45 * Math.sin(time * 0.5 + s.tw);
+      /* Barely breathing, not blinking. At 0.45 amplitude every star
+         pulsed to half brightness twice a second and the whole sky
+         flickered; real stars scintillate far more finely than that. */
+      var tw = 0.90 + 0.10 * Math.sin(time * 0.22 + s.tw);
       ctx.beginPath();
       ctx.arc(s.nx * W, s.ny * H, s.r, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(214,226,244,' + (s.a * tw).toFixed(3) + ')';
@@ -485,14 +510,15 @@
         ctx.strokeStyle = tail;
         ctx.lineWidth = 1.8;
         ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(hx, hy); ctx.stroke();
-        /* a small halo under the head, so it reads as a point of light
-           rather than the end of a line */
-        var hg = ctx.createRadialGradient(hx, hy, 0, hx, hy, 7);
-        hg.addColorStop(0, 'rgba(255,255,255,' + (0.95 * fade).toFixed(3) + ')');
-        hg.addColorStop(0.35, 'rgba(226,238,255,' + (0.4 * fade).toFixed(3) + ')');
-        hg.addColorStop(1, 'rgba(200,220,255,0)');
+        /* The head used to carry a 7px white halo at 0.95 alpha, which
+           made each one flare like a camera flash. A streak that simply
+           ends bright is what a meteor looks like; the glint is the
+           thing that looked cheap. */
+        var hg = ctx.createRadialGradient(hx, hy, 0, hx, hy, 3.4);
+        hg.addColorStop(0, 'rgba(236,244,255,' + (0.5 * fade).toFixed(3) + ')');
+        hg.addColorStop(1, 'rgba(206,222,248,0)');
         ctx.fillStyle = hg;
-        ctx.beginPath(); ctx.arc(hx, hy, 7, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(hx, hy, 3.4, 0, Math.PI * 2); ctx.fill();
       }
     }
 
@@ -500,15 +526,24 @@
        A warm rim just outside a hard white centre, which is the one
        detail that makes it read as moon rather than as a dot. */
     var corona = ctx.createRadialGradient(moon.x, moon.y, moon.r * 1.0, moon.x, moon.y, moon.r * 3.1);
-    corona.addColorStop(0,   'rgba(255,216,170,0.40)');
-    corona.addColorStop(0.3, 'rgba(228,150,88,0.19)');
-    corona.addColorStop(1,   'rgba(214,122,70,0)');
+    /* Cool, because the sky is cool. These stops were amber, carried
+       over from a reference photograph shot through warm haze, and on a
+       blue-black sky an orange ring around a white disc reads as a
+       sticker rather than as light. Matched to SKY_TOP instead, and
+       faded out on a near-sky hue so the gradient has no visible rim. */
+    corona.addColorStop(0,   'rgba(198,216,246,0.30)');
+    corona.addColorStop(0.3, 'rgba(146,170,210,0.14)');
+    corona.addColorStop(1,   'rgba(104,130,170,0)');
     ctx.fillStyle = corona;
     ctx.beginPath();
     ctx.arc(moon.x, moon.y, moon.r * 2.9, 0, Math.PI * 2);
     ctx.fill();
 
-    drawSphere(reduce ? 0.6 : time * 0.016);
+    /* One turn in about eighty seconds. The old rate, 0.016 rad/s, was
+       one turn per six and a half minutes: arithmetically rotating and
+       humanly static, which is the same thing as not rotating. Slow
+       enough to stay calm, fast enough to be seen moving. */
+    drawSphere(reduce ? 0.6 : time * 0.078);
 
     if (running) requestAnimationFrame(draw);
   }
