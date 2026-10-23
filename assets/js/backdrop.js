@@ -69,6 +69,7 @@
     canvas.width = W;
     canvas.height = H;
     buildClouds();
+    if (!moonTex) buildMoon();
     place();
   }
 
@@ -78,6 +79,9 @@
     for (var i = 0; i < a.length; i++) a[i] = Math.random();
     return a;
   }
+  /* Domain warping: sample the noise at coordinates that are themselves
+     displaced by noise. Plain fBm gives soft wool; warping drags it into
+     filaments and curls, which is the difference between cloud and smoke. */
   function octave(nx, ny, gw, gh, g) {
     var x = nx * gw, y = ny * gh;
     var x0 = Math.floor(x), y0 = Math.floor(y);
@@ -96,9 +100,10 @@
     layers = [];
     var specs = [
       /* w,   h,   base grid, octaves, cut,  gain, speed,  warm */
-      [320, 200, 3, 5, 0.30, 1.25, 0.0085, 0.55],
-      [288, 180, 4, 5, 0.38, 0.95, 0.0145, 0.35],
-      [256, 160, 6, 4, 0.47, 0.66, 0.0235, 0.18]
+      /* w,  h,  grid, oct, cut, gain, speed,  warm, warp */
+      [320, 200, 3, 5, 0.30, 1.25, 0.0150, 0.55, 0.26],
+      [288, 180, 4, 5, 0.38, 0.95, 0.0255, 0.35, 0.20],
+      [256, 160, 6, 4, 0.47, 0.66, 0.0410, 0.18, 0.14]
     ];
     for (var s = 0; s < specs.length; s++) {
       var sp = specs[s];
@@ -110,6 +115,10 @@
         var gw = base * (1 << o), gh = Math.max(2, Math.round(gw * lh / lw));
         grids.push(lattice(gw, gh)); gws.push(gw); ghs.push(gh);
       }
+      /* two extra fields that do nothing but bend the sample coordinates */
+      var wgw = base * 2, wgh = Math.max(2, Math.round(wgw * lh / lw));
+      var warpA = lattice(wgw, wgh), warpB = lattice(wgw, wgh);
+      var WARP = sp[8];
 
       var off = document.createElement('canvas');
       off.width = lw; off.height = lh;
@@ -119,7 +128,11 @@
 
       for (var y = 0; y < lh; y++) {
         for (var x = 0; x < lw; x++) {
-          var nx = x / lw, ny = y / lh;
+          var nx0 = x / lw, ny0 = y / lh;
+          var dx = octave(nx0, ny0, wgw, wgh, warpA) - 0.5;
+          var dy = octave(nx0 + 0.41, ny0 + 0.17, wgw, wgh, warpB) - 0.5;
+          var nx = nx0 + dx * WARP;
+          var ny = Math.max(0, Math.min(0.999, ny0 + dy * WARP));
           var amp = 1, sum = 0, norm = 0;
           for (var k = 0; k < oct; k++) {
             sum += octave(nx, ny, gws[k], ghs[k], grids[k]) * amp;
@@ -132,7 +145,7 @@
 
           /* thin the clouds out toward the foot of the band so the
              section below can stay flat */
-          a *= 1 - Math.pow(ny, 2.2) * 0.58;
+          a *= 1 - Math.pow(ny0, 2.2) * 0.58;
 
           var i = (y * lw + x) * 4;
           d[i]     = CLOUD[0];
@@ -144,6 +157,99 @@
       octx.putImageData(img, 0, 0);
       layers.push({ c: off, speed: sp[6], warm: sp[7], x: Math.random() * lw });
     }
+  }
+
+  /* ---------- the moon's surface ----------
+     Drawn once into a texture rather than per frame. A full moon is
+     almost flat lit, so the detail cannot come from cast shadows: it
+     comes from the maria, which are large and low contrast, and from
+     crater rims catching light while their floors stay dark. Overdo
+     either and it stops being a moon and starts being a golf ball. */
+  var moonTex = null;
+  function buildMoon() {
+    var T = 256, R = T / 2;
+    var cv = document.createElement('canvas');
+    cv.width = T; cv.height = T;
+    var m = cv.getContext('2d');
+
+    m.save();
+    m.beginPath(); m.arc(R, R, R - 1, 0, Math.PI * 2); m.clip();
+
+    /* body, with the limb a little dimmer than the centre */
+    var base = m.createRadialGradient(R * 0.88, R * 0.84, R * 0.1, R, R, R);
+    base.addColorStop(0,    '#FFFEFC');
+    base.addColorStop(0.62, '#F6F3ED');
+    base.addColorStop(0.9,  '#E4E0D8');
+    base.addColorStop(1,    '#D2CEC6');
+    m.fillStyle = base;
+    m.fillRect(0, 0, T, T);
+
+    function rnd(a, b) { return a + Math.random() * (b - a); }
+    function inDisc(pad) {
+      /* uniform over the disc, so detail does not bunch in the middle */
+      var t = Math.random() * Math.PI * 2;
+      var rr = Math.sqrt(Math.random()) * (R - pad);
+      return [R + Math.cos(t) * rr, R + Math.sin(t) * rr];
+    }
+
+    /* maria: a handful of broad, soft, barely-there darker seas */
+    for (var s1 = 0; s1 < 7; s1++) {
+      var p0 = inDisc(R * 0.3);
+      var lobes = 3 + ((Math.random() * 3) | 0);
+      for (var l = 0; l < lobes; l++) {
+        var lr = rnd(R * 0.14, R * 0.34);
+        var lx = p0[0] + rnd(-R * 0.16, R * 0.16);
+        var ly = p0[1] + rnd(-R * 0.16, R * 0.16);
+        var g2 = m.createRadialGradient(lx, ly, 0, lx, ly, lr);
+        var a2 = rnd(0.07, 0.155);
+        g2.addColorStop(0, 'rgba(118,120,126,' + a2.toFixed(3) + ')');
+        g2.addColorStop(1, 'rgba(118,120,126,0)');
+        m.fillStyle = g2;
+        m.beginPath(); m.arc(lx, ly, lr, 0, Math.PI * 2); m.fill();
+      }
+    }
+
+    /* craters: dark floor, lit rim up-left, soft shadow down-right */
+    /* Fewer and larger. Fifty-eight small ones scaled down to a hundred
+       pixels on screen stopped reading as craters and started reading as
+       pepper; the eye needs a handful of resolvable features, not a
+       uniform speckle. */
+    for (var c1 = 0; c1 < 24; c1++) {
+      var p = inDisc(6);
+      var cr = rnd(R * 0.035, R * 0.105);
+      if (Math.random() < 0.22) cr *= 1.65;         /* a few large ones */
+
+      var floor = m.createRadialGradient(p[0], p[1], 0, p[0], p[1], cr);
+      floor.addColorStop(0,   'rgba(108,108,114,' + rnd(0.15, 0.28).toFixed(3) + ')');
+      floor.addColorStop(0.7, 'rgba(122,122,128,' + rnd(0.07, 0.15).toFixed(3) + ')');
+      floor.addColorStop(1,   'rgba(126,126,130,0)');
+      m.fillStyle = floor;
+      m.beginPath(); m.arc(p[0], p[1], cr, 0, Math.PI * 2); m.fill();
+
+      m.lineWidth = Math.max(0.5, cr * 0.17);
+      m.strokeStyle = 'rgba(255,255,253,' + rnd(0.24, 0.46).toFixed(3) + ')';
+      m.beginPath(); m.arc(p[0], p[1], cr * 0.93, Math.PI * 0.80, Math.PI * 1.85); m.stroke();
+
+      m.strokeStyle = 'rgba(96,96,100,' + rnd(0.10, 0.22).toFixed(3) + ')';
+      m.beginPath(); m.arc(p[0], p[1], cr * 0.93, Math.PI * 1.9, Math.PI * 2.85); m.stroke();
+    }
+
+    /* two ray systems, the bright streaks thrown out by young craters */
+    for (var ry = 0; ry < 2; ry++) {
+      var o = inDisc(R * 0.45);
+      for (var k = 0; k < 13; k++) {
+        var ang = Math.random() * Math.PI * 2;
+        var len = rnd(R * 0.18, R * 0.62);
+        m.strokeStyle = 'rgba(255,255,252,' + rnd(0.04, 0.10).toFixed(3) + ')';
+        m.lineWidth = rnd(0.6, 2.1);
+        m.beginPath();
+        m.moveTo(o[0], o[1]);
+        m.lineTo(o[0] + Math.cos(ang) * len, o[1] + Math.sin(ang) * len);
+        m.stroke();
+      }
+    }
+    m.restore();
+    moonTex = cv;
   }
 
   /* ---------- the moon ----------
@@ -162,7 +268,12 @@
     var header = document.querySelector('.masthead');
     var hh = header ? header.getBoundingClientRect().height : 70;
 
-    moon.r = Math.max(9, Math.min(15, W * 0.0132));
+    /* Big enough to read as a body with a surface. At 13px it was a
+       dot, and no amount of crater detail survives a dot. */
+    /* Smaller on a narrow screen: there the hero stacks, the eyebrow
+       runs the full width under it, and a big bright disc took that
+       line to 4.44:1. */
+    moon.r = Math.max(16, Math.min(46, W * (W < 560 ? 0.028 : 0.034)));
     /* Right of centre rather than hard into the corner: the corner
        belongs to the credential card, and a bright disc behind a
        translucent card is a legibility problem, not a mood. */
@@ -238,10 +349,13 @@
       var span = W * 1.18;                       /* drawn a little oversize */
       var sh = H * 1.0;
       var ox = -((la.x * (span / lw)) % span);
+      /* a slow vertical sway, different phase per layer, so the field
+         churns instead of sliding past like a backdrop on rails */
+      var oy = Math.sin(time * (0.055 + L * 0.021) + L * 2.1) * (H * 0.022);
 
       ctx.globalAlpha = Math.min(1, 0.14 + 0.88 * lightScale);
-      ctx.drawImage(la.c, ox, 0, span, sh);
-      ctx.drawImage(la.c, ox + span, 0, span, sh);
+      ctx.drawImage(la.c, ox, oy, span, sh);
+      ctx.drawImage(la.c, ox + span, oy, span, sh);
     }
     ctx.globalAlpha = 1;
 
@@ -295,30 +409,23 @@
     /* --- the disc ---
        A warm rim just outside a hard white centre, which is the one
        detail that makes it read as moon rather than as a dot. */
-    var corona = ctx.createRadialGradient(moon.x, moon.y, moon.r * 0.6, moon.x, moon.y, moon.r * 2.9);
-    corona.addColorStop(0,   'rgba(255,214,166,0.52)');
-    corona.addColorStop(0.3, 'rgba(228,150,88,0.26)');
+    var corona = ctx.createRadialGradient(moon.x, moon.y, moon.r * 1.0, moon.x, moon.y, moon.r * 3.1);
+    corona.addColorStop(0,   'rgba(255,216,170,0.40)');
+    corona.addColorStop(0.3, 'rgba(228,150,88,0.19)');
     corona.addColorStop(1,   'rgba(214,122,70,0)');
     ctx.fillStyle = corona;
     ctx.beginPath();
     ctx.arc(moon.x, moon.y, moon.r * 2.9, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.beginPath();
-    ctx.arc(moon.x, moon.y, moon.r, 0, Math.PI * 2);
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fill();
-
-    /* the faintest terminator, so the disc is not a flat sticker */
-    var sh2 = ctx.createRadialGradient(
-      moon.x - moon.r * 0.35, moon.y - moon.r * 0.35, 0,
-      moon.x, moon.y, moon.r);
-    sh2.addColorStop(0, 'rgba(255,255,255,0)');
-    sh2.addColorStop(1, 'rgba(226,216,206,0.5)');
-    ctx.fillStyle = sh2;
-    ctx.beginPath();
-    ctx.arc(moon.x, moon.y, moon.r, 0, Math.PI * 2);
-    ctx.fill();
+    if (moonTex) {
+      ctx.drawImage(moonTex, moon.x - moon.r, moon.y - moon.r, moon.r * 2, moon.r * 2);
+    } else {
+      ctx.beginPath();
+      ctx.arc(moon.x, moon.y, moon.r, 0, Math.PI * 2);
+      ctx.fillStyle = '#F6F4F0';
+      ctx.fill();
+    }
 
     if (running) requestAnimationFrame(draw);
   }

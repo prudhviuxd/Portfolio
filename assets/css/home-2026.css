@@ -136,21 +136,12 @@ canvas.bd{
 }
 
 /* ============================================================
-   WHAT I ACTUALLY DO — a sphere, and a card worth reading
+   WHAT I ACTUALLY DO — a spiral mind map
 
-   Two problems, one answer. A sphere tilts whatever it carries in
-   two axes, so prose cannot ride on it; and the cards were too
-   text-heavy, because every one of them ended in a list of seven
-   to nine capabilities.
-
-   So the capabilities moved onto the sphere, where short labels
-   are exactly the right payload, and the card kept only what has
-   to be read: who this is, one line of definition, and the
-   evidence. The card lost its tag list and gained air.
-
-   Nothing left the DOM. All 30 labels are still real list items,
-   still findable with ctrl-F, and the four areas are still plain
-   buttons underneath.
+   Thirty capabilities on one turning spiral, wired to a hub. The
+   wires are canvas; the labels are list items. That split is
+   deliberate: the drawing is generated, the content stays text,
+   so it is selectable, searchable and read in document order.
    ============================================================ */
 
 .sk-intro{
@@ -158,138 +149,107 @@ canvas.bd{
   font-size:clamp(15px,1.15vw,17px); line-height:1.62; color:var(--text-2);
 }
 
-.sph{
-  display:grid;
-  grid-template-columns:minmax(0,1.04fr) minmax(0,1fr);
-  gap:clamp(20px,3vw,54px);
-  align-items:center;
-}
+.spm{ margin-top:clamp(18px,2.4vw,34px); }
 
-/* ---------- the sphere ---------- */
-.sph-stage{
+.spm-stage{
   position:relative;
-  aspect-ratio:1;
-  max-height:min(62vh, 540px);
-  margin-inline:auto;
-  width:100%;
-  perspective:760px;              /* the script assumes this exact value */
-  touch-action:none;              /* a drag must not become a page scroll */
-  /* The stage is a window onto the sphere. Without this, the widest
-     label (289px, "Usability testing, moderated and unmoderated")
-     hangs off the side and takes the whole page with it: 96px of
-     horizontal overflow at 390. */
-  overflow:hidden;
-  cursor:grab;
-  outline-offset:6px;
+  height:clamp(450px, 45vw, 620px);
+  overflow:hidden;            /* a long label must never take the page with it */
 }
-.sph-stage.is-dragging{ cursor:grabbing; }
+.spm-wires{ position:absolute; inset:0; pointer-events:none; }
 
-.sph-cloud{ list-style:none; margin:0; padding:0; }
-
-/* Each item is a full-stage layer holding one centred label, so the
-   script can place it with transform alone and never touch layout. */
-.sph-cloud li{
-  position:absolute; inset:0;
-  display:grid; place-items:center;
-  pointer-events:none;            /* only the label itself is interactive */
-  will-change:transform, opacity;
-}
-.sph-cloud li > span{
-  pointer-events:auto;
+.spm-nodes{ list-style:none; margin:0; padding:0; }
+.spm-nodes li{
+  position:absolute; left:0; top:0;
+  will-change:transform;
   cursor:pointer;
-  white-space:nowrap;
+  max-width:min(34vw, 240px);
+}
+.spm-nodes li > span{
+  display:block;
   font-family:var(--mono);
-  font-size:clamp(9px,.72vw,10.5px);
+  font-size:clamp(8.4px,.68vw,10px);
+  letter-spacing:.06em; line-height:1.3;
+  color:var(--text-3);
+  transition:color .35s ease;
+}
+.spm-nodes li.to-left > span{ text-align:right; }
+.spm-nodes li:hover > span{ color:var(--m-hi); }
+
+/* the selected area's branch */
+.spm-nodes li.lit > span{
+  color:var(--m-hi);
+  font-size:clamp(9.4px,.76vw,11px);
   letter-spacing:.07em;
-  color:var(--text-2);
-  padding:5px 11px;
-  border:1px solid var(--line-2);
-  border-radius:999px;
-  background:rgba(12,13,16,.72);
-  backdrop-filter:blur(3px);
-  -webkit-backdrop-filter:blur(3px);
-  transition:color .3s ease, border-color .3s ease, background .3s ease;
-}
-.sph-cloud li > span:hover{ color:var(--m-hi); border-color:var(--line-hot); }
-
-/* the selected area's capabilities, lit */
-.sph-cloud li.lit > span{
-  color:var(--bg);
-  background:var(--acc);
-  border-color:var(--acc);
 }
 
-.sph-hint{
-  position:absolute; left:50%; bottom:2px; transform:translateX(-50%);
-  font-family:var(--mono); font-size:9px; letter-spacing:.2em;
-  text-transform:uppercase; color:var(--text-3);
-  opacity:.75; pointer-events:none;
+/* ---------- the hub ---------- */
+.spm-hub{
+  position:absolute; left:50%; top:50%;
+  transform:translate(-50%,-50%);
+  text-align:center;
+  pointer-events:none;
+  display:grid;
 }
-.sph-stage.is-dragging .sph-hint{ opacity:0; }
-
-/* ---------- the card ----------
-   Short on purpose. The capability list that used to sit here is
-   on the sphere now, so what is left can breathe. */
-.sph-panel{ display:grid; }
-.sph-card{
+.spm-hub-in{
   grid-area:1 / 1;
-  display:flex; flex-direction:column;
-  gap:clamp(14px,1.5vw,20px);
-  opacity:0; visibility:hidden;
-  transform:translateY(10px);
-  transition:opacity .5s cubic-bezier(.2,.8,.2,1),
-             transform .5s cubic-bezier(.2,.8,.2,1),
-             visibility 0s linear .5s;
+  display:flex; flex-direction:column; align-items:center; gap:3px;
+  opacity:0; transition:opacity .45s cubic-bezier(.2,.8,.2,1);
 }
-.sph-card.is-on{
-  opacity:1; visibility:visible; transform:none;
-  transition:opacity .5s cubic-bezier(.2,.8,.2,1),
-             transform .5s cubic-bezier(.2,.8,.2,1),
-             visibility 0s;
+.spm-hub-in.is-on{ opacity:1; }
+.spm-hub-num{
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.2em; color:var(--acc);
 }
-
-.sph-eyebrow{
-  margin:0; display:flex; align-items:baseline; gap:12px;
+.spm-hub-name{
   font-family:var(--display); font-weight:700;
-  font-size:clamp(26px,3vw,42px); letter-spacing:-.03em;
+  font-size:clamp(20px,2.3vw,32px); letter-spacing:-.025em;
   line-height:1; color:var(--m-hi);
 }
-.sph-num{
-  font-family:var(--mono); font-weight:400;
-  font-size:11px; letter-spacing:.16em; color:var(--acc);
-}
-.sph-def{
-  margin:0; max-width:34ch;
-  font-size:clamp(16px,1.3vw,19px); line-height:1.55; color:var(--text-2);
+.spm-hub-count{
+  font-family:var(--mono); font-size:9px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--text-3);
 }
 
-/* the evidence is the one thing on this card that must land */
-.sph-ev{
-  padding-left:clamp(14px,1.2vw,18px);
-  border-left:2px solid var(--line-hot);
+/* ---------- the evidence ---------- */
+.spm-panel{ display:grid; margin-top:clamp(10px,1.4vw,20px); }
+.spm-card{
+  grid-area:1 / 1;
+  max-width:62ch; margin-inline:auto; text-align:center;
+  display:flex; flex-direction:column; gap:12px;
+  opacity:0; visibility:hidden; transform:translateY(8px);
+  transition:opacity .45s cubic-bezier(.2,.8,.2,1),
+             transform .45s cubic-bezier(.2,.8,.2,1),
+             visibility 0s linear .45s;
 }
-.sph-ev-k{
-  display:block; margin-bottom:7px;
+.spm-card.is-on{
+  opacity:1; visibility:visible; transform:none;
+  transition:opacity .45s cubic-bezier(.2,.8,.2,1),
+             transform .45s cubic-bezier(.2,.8,.2,1), visibility 0s;
+}
+.spm-def{
+  margin:0; font-size:clamp(15px,1.2vw,17.5px);
+  line-height:1.55; color:var(--text-2);
+}
+.spm-ev{
+  margin-inline:auto; max-width:54ch;
+  padding-top:12px; border-top:1px solid var(--line-hot);
+}
+.spm-ev-k{
+  display:block; margin-bottom:6px;
   font-family:var(--mono); font-size:9.5px; letter-spacing:.18em;
   text-transform:uppercase; color:var(--acc);
 }
-.sph-ev p{
-  margin:0; max-width:36ch;
-  font-size:clamp(16px,1.35vw,20px); line-height:1.5;
-  letter-spacing:-.005em; color:var(--m-hi);
+.spm-ev p{
+  margin:0; font-size:clamp(15px,1.25vw,19px); line-height:1.5;
+  color:var(--m-hi);
 }
-.sph-count{
-  margin:0; font-family:var(--mono); font-size:10px;
-  letter-spacing:.14em; text-transform:uppercase; color:var(--text-3);
-}
-.sph-count b{ color:var(--m-mid); font-weight:400; }
 
 /* ---------- area buttons ---------- */
-.sph-nav{
-  list-style:none; margin:clamp(22px,2.6vw,38px) 0 0; padding:0;
+.spm-nav{
+  list-style:none; margin:clamp(18px,2.2vw,30px) 0 0; padding:0;
   display:flex; flex-wrap:wrap; gap:7px; justify-content:center;
 }
-.sph-nav button{
+.spm-nav button{
   font-family:var(--mono); font-size:9.5px; letter-spacing:.14em;
   text-transform:uppercase;
   padding:9px 16px; border-radius:999px;
@@ -297,54 +257,71 @@ canvas.bd{
   background:transparent; color:var(--text-3); cursor:pointer;
   transition:color .3s ease, border-color .3s ease, background .3s ease;
 }
-.sph-nav button:hover{ color:var(--text-2); border-color:var(--line); }
-.sph-nav button[aria-current="true"]{
+.spm-nav button:hover{ color:var(--text-2); border-color:var(--line); }
+.spm-nav button[aria-current="true"]{
   color:var(--bg); background:var(--acc); border-color:var(--acc);
 }
 
-.sph-live{
+.spm-live{
   position:absolute; width:1px; height:1px; margin:-1px; padding:0;
   overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
 }
 
-/* ---------- stacked ---------- */
-@media (max-width:860px){
-  .sph{ grid-template-columns:minmax(0,1fr); gap:clamp(18px,4vw,30px); }
-  .sph-stage{ max-height:min(56vh, 400px); order:2; }
-  .sph-panel{ order:1; }
-  /* Narrow stages cannot hold a 260px label on one line, so the long
-     ones wrap instead of being clipped against the edge. */
-  .sph-cloud li > span{
-    white-space:normal; text-align:center;
-    max-width:min(60vw, 200px); line-height:1.3;
-  }
-  .sph-def{ max-width:none; }
-  .sph-ev p{ max-width:none; }
+@media (max-width:700px){
+  .spm-stage{ height:clamp(380px, 96vw, 460px); }
+  .spm-nodes li{ max-width:38vw; }
+  .spm-hub-name{ font-size:clamp(17px,5vw,22px); }
 }
 
 /* ---------- reduced motion ----------
-   No sphere at all: the labels become an ordinary wrapped list and
-   every card is laid out in full. */
+   No spiral: the wires go, and the capabilities become a plain
+   wrapped list under each area's evidence. */
 @media (prefers-reduced-motion: reduce){
-  .sph-stage{
-    aspect-ratio:auto; max-height:none; perspective:none; cursor:auto;
+  .spm-stage{ height:auto; min-height:0; }
+  .spm-wires, .spm-hub{ display:none; }
+  .spm-nodes{ display:flex; flex-wrap:wrap; gap:6px; justify-content:center; }
+  .spm-nodes li{
+    position:static; transform:none !important; max-width:none;
   }
-  .sph-cloud{ display:flex; flex-wrap:wrap; gap:6px; }
-  .sph-cloud li{
-    position:static; inset:auto; display:inline-flex;
-    transform:none !important; opacity:1 !important; filter:none !important;
+  .spm-nodes li > span{
+    border:1px solid var(--line-2); border-radius:999px; padding:5px 10px;
   }
-  .sph-cloud li > span{ pointer-events:auto !important; }
-  .sph-hint{ display:none; }
-  .sph-card{
-    position:static; opacity:1 !important; visibility:visible !important;
-    transform:none !important;
-  }
-  .sph-panel{ display:flex; flex-direction:column; gap:30px; }
 }
-
 /* The hero eyebrow sits over the sky now, not over flat ground, and it
    was the dimmest text on the page: --text-3 measured 3.12:1 against the
    lit cloud once the layout stacks and the line runs the full width.
    Text over imagery needs more weight than text over a flat fill. */
 .hero-eyebrow{ color:var(--m-mid); }
+
+/* Narrow stages label only the selected branch; the rest stay as points
+   on the curve. Thirty labels below 1200px collided 4 to 51 times. */
+.spm-compact .spm-nodes li:not(.lit) > span{
+  opacity:0;
+  pointer-events:none;
+}
+.spm-compact .spm-nodes li:not(.lit){ pointer-events:none; }
+
+/* Below this a spiral is a fiction: a label wide enough to read on a
+   phone (135px) in a 354px stage leaves no radius to put it on, so
+   labels landed outside the stage and on the hub. The branch becomes a
+   plain wrapped list instead, with the hub above it. Same content, same
+   controls, no pretend geometry. */
+@media (max-width:700px){
+  .spm-stage{
+    height:auto; overflow:visible;
+    display:flex; flex-direction:column; align-items:center; gap:14px;
+  }
+  .spm-wires{ display:none; }
+  .spm-hub{ position:static; transform:none; }
+  .spm-nodes{
+    display:flex; flex-wrap:wrap; gap:6px; justify-content:center;
+  }
+  .spm-nodes li{
+    position:static; transform:none !important; max-width:none;
+  }
+  .spm-nodes li > span{
+    border:1px solid var(--line-2); border-radius:999px; padding:5px 10px;
+    font-size:10px;
+  }
+  .spm-compact .spm-nodes li:not(.lit){ display:none; }
+}
