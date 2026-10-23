@@ -50,6 +50,11 @@
   var AREAS = cards.length;
 
   var spin = 0, area = 0, paused = false;
+  /* Walk the four areas on a timer. Long enough to read a branch and its
+     evidence before it moves on, and it stops the moment a pointer or a
+     focus ring arrives, because nothing is more annoying than a panel
+     that changes while you are reading it. */
+  var DWELL = 7400, lastStep = 0;
   var activeIdx = [];      /* which nodes are currently on the curve */
   var W = 0, H = 0, cx = 0, cy = 0, rMin = 0, rMax = 0, flat = 0.60, compact = false;
   var TURNS = 2.45, SPAN = TURNS * Math.PI * 2;
@@ -117,12 +122,17 @@
       n.toggleAttribute('inert', !on);
       if (on) activeIdx.push(k);
     });
+    lastStep = performance.now();
     if (announce && live) live.textContent = btns[area].textContent + ' selected';
   }
 
-  function frame() {
+  function frame(t) {
     if (!W) measure();
-    if (!reduce && !paused) spin += 0.0029;
+    if (!lastStep) lastStep = t || 0;
+    if (!reduce && !paused) {
+      spin += 0.0029;
+      if (t - lastStep > DWELL) { setArea(area + 1, false); }
+    }
 
     ctx.clearRect(0, 0, W, H);
     var count = activeIdx.length;
@@ -200,13 +210,19 @@
   btns.forEach(function (b, k) {
     b.addEventListener('click', function () { setArea(k, true); });
   });
-  ['pointerenter', 'focusin'].forEach(function (ev) {
-    root.addEventListener(ev, function () { paused = true; });
+  function setPaused(v) {
+    if (paused === v) return;
+    paused = v;
+    root.classList.toggle('is-paused', v);
+    if (!v) lastStep = performance.now();
+  }
+  ['pointerenter', 'mouseenter', 'focusin'].forEach(function (ev) {
+    root.addEventListener(ev, function () { setPaused(true); });
   });
-  ['pointerleave', 'focusout'].forEach(function (ev) {
+  ['pointerleave', 'mouseleave', 'focusout'].forEach(function (ev) {
     root.addEventListener(ev, function () {
       if (ev === 'focusout' && root.contains(document.activeElement)) return;
-      paused = false;
+      setPaused(false);
     });
   });
 

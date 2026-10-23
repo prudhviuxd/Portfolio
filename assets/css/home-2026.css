@@ -155,6 +155,12 @@ canvas.bd{
   position:relative;
   height:clamp(450px, 45vw, 620px);
   overflow:hidden;            /* a long label must never take the page with it */
+  /* A quiet ground for the map: a cool wash that echoes the hero's sky,
+     with the faintest warmth of the accent gathered at the hub. Kept
+     well under the type so nothing here costs legibility. */
+  background:
+    radial-gradient(44% 54% at 50% 50%, rgba(212,255,63,.040) 0%, rgba(212,255,63,0) 62%),
+    radial-gradient(78% 86% at 50% 48%, rgba(38,54,80,.40) 0%, rgba(8,10,15,0) 74%);
 }
 .spm-wires{ position:absolute; inset:0; pointer-events:none; }
 

@@ -297,8 +297,15 @@
        corona: reserving 3.2 radii pushed the moon down to the middle of
        the band, which is the opposite of a corner. The corona is soft
        and may pass behind the header. */
-    var minY = (hh + 26) * scale + moon.r * 1.35;
-    moon.y = Math.max(minY, H * 0.20);
+    var minY = (hh + 14) * scale + moon.r * 1.02;
+    /* The floor, not the header, was holding the moon down: at 1440 the
+       header allowed y=90 and the old clamp forced 118.
+
+       It only lifts where the text is not underneath. Once the hero
+       stacks, the eyebrow runs the full width just below the header, so
+       raising the moon drops its corona straight onto that line: it
+       measured 2.32:1 at 390 before this was conditional. */
+    moon.y = Math.max(minY, H * (bw < 980 ? 0.20 : 0.12));
   }
 
   /* ---------- stars ---------- */
@@ -313,6 +320,27 @@
       });
     }
   })();
+
+  /* ---------- falling stars ----------
+     Rare on purpose. A sky with a meteor every second is a screensaver;
+     the pleasure of the real thing is that you have to be looking. */
+  var falls = [], nextFall = 2200;
+  function spawnFall(now) {
+    var fromRight = Math.random() < 0.72;
+    falls.push({
+      x: (fromRight ? 0.55 + Math.random() * 0.5 : Math.random() * 0.35),
+      /* Kept to the upper sky. A streak that runs down into the copy
+         is a bright object crossing text, which both looks wrong and
+         momentarily costs contrast where it lands. */
+      y: Math.random() * 0.17,
+      vx: (fromRight ? -1 : 1) * (0.34 + Math.random() * 0.26),
+      vy: 0.11 + Math.random() * 0.12,
+      len: 0.07 + Math.random() * 0.09,
+      life: 0, dur: 900 + Math.random() * 700,
+      born: now
+    });
+    nextFall = 3200 + Math.random() * 7000;
+  }
 
   function rgba(c, a) { return 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')'; }
 
@@ -400,7 +428,7 @@
        end of the eyebrow outside it, at 3.68:1. */
     var wide = lightScale < 0.7;
     var gx = W * (wide ? 0.46 : 0.24);
-    var gy = H * (wide ? 0.52 : 0.62);
+    var gy = H * (wide ? 0.40 : 0.62);
     var guard = ctx.createRadialGradient(gx, gy, 0, gx, gy, W * (wide ? 1.10 : 0.70));
     guard.addColorStop(0,    'rgba(5,7,10,0.93)');
     guard.addColorStop(0.42, 'rgba(5,7,10,0.72)');
@@ -422,6 +450,40 @@
     ctx.fillRect(0, 0, W, H);
     ctx.globalCompositeOperation = 'source-over';
 
+    /* --- falling stars ---
+       Drawn after the cloud and the fall-off, not before. Behind them
+       the darkening passes, which run up to 0.8 alpha, took the streak
+       down below visible: it was being rendered and then buried. */
+    if (!reduce) {
+      if (t > nextFall) { spawnFall(t); nextFall = t + 3200 + Math.random() * 7000; }
+      for (var f = falls.length - 1; f >= 0; f--) {
+        var fs = falls[f];
+        var k = (t - fs.born) / fs.dur;
+        if (k >= 1) { falls.splice(f, 1); continue; }
+        /* ease out, so it arrives fast and settles rather than stopping dead */
+        var e = 1 - Math.pow(1 - k, 2.6);
+        var hx = (fs.x + fs.vx * e) * W;
+        var hy = (fs.y + fs.vy * e) * H;
+        var tx = hx - fs.vx * fs.len * W;
+        var ty = hy - fs.vy * fs.len * H;
+        var fade = Math.sin(Math.PI * k);          /* in and out */
+        var tail = ctx.createLinearGradient(tx, ty, hx, hy);
+        tail.addColorStop(0, 'rgba(206,222,248,0)');
+        tail.addColorStop(1, 'rgba(240,247,255,' + (0.85 * fade).toFixed(3) + ')');
+        ctx.strokeStyle = tail;
+        ctx.lineWidth = 1.8;
+        ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(hx, hy); ctx.stroke();
+        /* a small halo under the head, so it reads as a point of light
+           rather than the end of a line */
+        var hg = ctx.createRadialGradient(hx, hy, 0, hx, hy, 7);
+        hg.addColorStop(0, 'rgba(255,255,255,' + (0.95 * fade).toFixed(3) + ')');
+        hg.addColorStop(0.35, 'rgba(226,238,255,' + (0.4 * fade).toFixed(3) + ')');
+        hg.addColorStop(1, 'rgba(200,220,255,0)');
+        ctx.fillStyle = hg;
+        ctx.beginPath(); ctx.arc(hx, hy, 7, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+
     /* --- the disc ---
        A warm rim just outside a hard white centre, which is the one
        detail that makes it read as moon rather than as a dot. */
@@ -435,7 +497,14 @@
     ctx.fill();
 
     if (moonTex) {
-      ctx.drawImage(moonTex, moon.x - moon.r, moon.y - moon.r, moon.r * 2, moon.r * 2);
+      /* A real moon is tidally locked and does not turn for us, so this
+         is a liberty; kept slow enough (about one turn every nine
+         minutes) to register as drift rather than as spin. */
+      ctx.save();
+      ctx.translate(moon.x, moon.y);
+      ctx.rotate(reduce ? 0 : time * 0.0115);
+      ctx.drawImage(moonTex, -moon.r, -moon.r, moon.r * 2, moon.r * 2);
+      ctx.restore();
     } else {
       ctx.beginPath();
       ctx.arc(moon.x, moon.y, moon.r, 0, Math.PI * 2);
