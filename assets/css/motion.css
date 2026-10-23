@@ -145,90 +145,16 @@ html.js [data-cards].in > *{
 .sk-head{ margin-bottom:clamp(28px,3.6vw,48px); }
 .sk-head .mono{ display:block; margin-bottom:14px; color:var(--text-3); }
 
-.sk-nav{
-  display:flex; flex-wrap:wrap; gap:8px; margin-top:26px;
-}
-.sk-nav button{
-  padding:9px 16px; border-radius:999px; border:1px solid var(--line-2);
-  font-family:var(--mono); font-size:10px; letter-spacing:.16em;
-  text-transform:uppercase; color:var(--text-3);
-  transition:color .25s ease, border-color .25s ease, background .25s ease;
-}
-.sk-nav button:hover{ color:var(--text-2); border-color:var(--line); }
-.sk-nav button[aria-current="true"]{
-  color:var(--text); border-color:transparent; background:var(--surface-2);
-}
 
-.sk-panels{ display:grid; gap:18px; }
 
-.sk-panel{
-  display:grid; grid-template-columns:minmax(0.82fr) minmax(0,1.18fr);
-  border:1px solid var(--line-2); border-radius:var(--r); overflow:hidden;
-  background:var(--bg-2);
-}
 @media (min-width:900px){
-  .sk-panel{ position:sticky; top:calc(94px + var(--i,0) * 12px); min-height:min(78vh,660px); }
-  .sk-panels{ padding-bottom:clamp(60px,14vh,180px); }
 }
 
 /* left plate, an index and an atmosphere, no stock imagery */
-.sk-vis{
-  position:relative; display:flex; flex-direction:column; justify-content:space-between;
-  padding:clamp(24px,2.6vw,38px); overflow:hidden;
-  background:
-    radial-gradient(120% 100% at 20% 0%, rgba(240,237,230,.14), transparent 62%),
-    radial-gradient(110% 90% at 90% 100%, rgba(180,176,167,.13), transparent 58%),
-    linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.012));
-}
-.sk-panel:nth-child(2) .sk-vis{
-  background:
-    radial-gradient(120% 100% at 20% 0%, rgba(180,176,167,.15), transparent 62%),
-    radial-gradient(110% 90% at 90% 100%, rgba(140,134,124,.11), transparent 58%),
-    linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.012));
-}
-.sk-panel:nth-child(3) .sk-vis{
-  background:
-    radial-gradient(120% 100% at 20% 0%, rgba(140,134,124,.13), transparent 62%),
-    radial-gradient(110% 90% at 90% 100%, rgba(240,237,230,.12), transparent 58%),
-    linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.012));
-}
-.sk-panel:nth-child(4) .sk-vis{
-  background:
-    radial-gradient(120% 100% at 20% 0%, rgba(240,237,230,.12), transparent 62%),
-    radial-gradient(110% 90% at 90% 100%, rgba(180,176,167,.15), transparent 58%),
-    linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.012));
-}
-.sk-idx{
-  font-family:var(--display); font-weight:800; line-height:.82;
-  font-size:clamp(56px,8vw,124px); letter-spacing:-.06em;
-  background:linear-gradient(96deg,#FFF,var(--cy) 42%,var(--vi) 82%);
-  -webkit-background-clip:text; background-clip:text; color:transparent;
-}
-.sk-count{
-  font-family:var(--mono); font-size:9.5px; letter-spacing:.2em;
-  text-transform:uppercase; color:var(--text-3);
-}
 
 /* right block */
-.sk-body{ padding:clamp(26px,3vw,46px); display:flex; flex-direction:column; }
-.sk-title{
-  font-family:var(--display); font-weight:700;
-  font-size:clamp(25px,3.2vw,40px); letter-spacing:-.04em; line-height:1.02;
-}
-.sk-desc{
-  margin-top:14px; max-width:46ch; font-size:15.5px; line-height:1.65; color:var(--text-2);
-}
-.sk-lbl{ display:block; margin:clamp(24px,3vw,40px) 0 4px; color:var(--text-3); }
 
 /* the capability rows, and the rule that draws between them */
-.sk-list{ margin-top:6px; }
-.sk-item{ padding:13px 0; font-size:15.5px; color:var(--text); }
-.sk-item:first-child{ padding-top:0; }
-.sk-rule{ position:relative; height:1px; }
-.sk-rule i{
-  position:absolute; left:0; top:0; height:1px; width:0; display:block;
-  background:linear-gradient(90deg,var(--cy),rgba(180,176,167,.35) 60%,transparent);
-}
 
 html.js [data-rows] .sk-item{ opacity:0; transform:translateY(16px); }
 html.js [data-rows].in .sk-item{
@@ -243,11 +169,8 @@ html.js [data-rows].in .sk-rule i{
 }
 
 @media (max-width:900px){
-  .sk-panel{ grid-template-columns:1fr; }
-  .sk-vis{ min-height:170px; flex-direction:row; align-items:flex-end; }
 }
 @media (prefers-reduced-motion:reduce){
   html.js [data-rows] .sk-item{ opacity:1 !important; transform:none !important; }
   html.js [data-rows] .sk-rule i{ width:100% !important; transition:none !important; }
-  .sk-panel{ position:static !important; }
 }
