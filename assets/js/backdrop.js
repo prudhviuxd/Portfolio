@@ -278,8 +278,12 @@
   function place() {
     var box = canvas.getBoundingClientRect();
     var scale = W / Math.max(1, box.width);     /* screen px -> buffer px */
+    /* The header's BOTTOM edge in the band's own space, not its height.
+       The masthead floats 50px down now, so its height alone understates
+       where it actually ends and the moon would ride up behind it. */
     var header = document.querySelector('.masthead');
-    var hh = header ? header.getBoundingClientRect().height : 70;
+    var hr = header ? header.getBoundingClientRect() : null;
+    var hh = hr ? Math.max(0, hr.bottom - box.top) : 70;
 
     /* Big enough to read as a body with a surface. At 13px it was a
        dot, and no amount of crater detail survives a dot. */
@@ -318,7 +322,14 @@
        stacks, the eyebrow runs the full width just below the header, so
        raising the moon drops its corona straight onto that line: it
        measured 2.32:1 at 390 before this was conditional. */
-    moon.y = Math.max(minY, H * (bw < 980 ? 0.20 : 0.12));
+    /* The floor has to travel with the header. On a narrow screen the
+       moon sits BELOW the eyebrow, so when the floating header pushed
+       that line 15px down the text walked into the moon while the moon
+       stayed put: the eyebrow went 6.85 -> 4.89. Everything under the
+       header moves with it, so the floor does too, measured against the
+       70px the flush bar used to be. */
+    var floor = H * (bw < 980 ? 0.20 : 0.12) + Math.max(0, hh - 70) * scale;
+    moon.y = Math.max(minY, floor);
   }
 
   /* ---------- stars ---------- */
@@ -477,10 +488,17 @@
       var lw = la.c.width;
       var span = cw * 1.18;
       var ox = -((la.x * (span / lw)) % span);
-      var oy = Math.sin(time * (0.055 + L * 0.021) + L * 2.1) * (ch * 0.022);
+      /* The layer bobs vertically, so it must be drawn TALLER than the
+         canvas or it uncovers a strip at whichever end it has drifted
+         away from. Drawn at exactly ch, the gap was up to ch*0.022 and
+         its edge slid up and down with the bob: that was the moving
+         line across the top of the sky. Overdraw by the bob's own
+         amplitude at both ends and the layer always covers. */
+      var bob = ch * 0.022;
+      var oy = Math.sin(time * (0.055 + L * 0.021) + L * 2.1) * bob;
       cloudCtx.globalAlpha = Math.min(1, 0.14 + 0.88 * lightScale);
-      cloudCtx.drawImage(la.c, ox, oy, span, ch);
-      cloudCtx.drawImage(la.c, ox + span, oy, span, ch);
+      cloudCtx.drawImage(la.c, ox, oy - bob, span, ch + bob * 2);
+      cloudCtx.drawImage(la.c, ox + span, oy - bob, span, ch + bob * 2);
     }
     cloudCtx.globalAlpha = 1;
     ctx.drawImage(cloudCv, 0, 0, W, H);

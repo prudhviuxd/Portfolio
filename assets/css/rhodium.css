@@ -164,19 +164,54 @@ main, .masthead, .chrome-footer{ position:relative; z-index:2; }
 }
 @keyframes shift{ to{ background-position:150% 0; } }
 
-/* ---------- masthead ---------- */
+/* ---------- masthead ----------
+   A floating pill rather than a full-bleed bar: it sits 50px down from
+   the top, takes three quarters of the width and leaves sky visible
+   around it, and it stays at that same 50px as the page scrolls.
+
+   The offset is PADDING on the wrapper, not margin on the pill. The
+   masthead is the first in-flow child of body, so a top margin collapsed
+   straight through body and carried the absolutely-positioned sky canvas
+   down with it, leaving a bare strip above the hero.
+
+   The wrapper spans the full width but takes no pointer events, so the
+   sky either side of the pill stays clickable; only the pill itself is
+   interactive. */
 .masthead{
+  --mast-gap:50px;
+  --mast-w:75%;
   position:sticky; top:0; z-index:60;
-  background:rgba(8,8,11,.6);
-  backdrop-filter:blur(20px) saturate(160%);
-  border-bottom:1px solid var(--line-2);
+  padding-top:var(--mast-gap);
+  pointer-events:none;
   transition:transform .45s cubic-bezier(.6,0,.2,1);
 }
 /* .masthead.up (retract on scroll) is gone, the header stays pinned. */
 .mast-in{
+  pointer-events:auto;
+  position:relative;                 /* the mobile dropdown hangs off this */
   display:flex; align-items:center; justify-content:space-between; gap:20px;
-  padding:14px var(--gut); max-width:var(--maxw); margin:0 auto;
+  width:var(--mast-w); margin:0 auto;
+  /* Enough side padding that the wordmark clears the curve. */
+  padding:13px clamp(20px,2.2vw,32px);
+  /* .6 was carried over from the full-bleed bar. As a floating pill it
+     has hard edges and spends more of its life over bright content, and
+     the nav links measured 4.85:1 over the lit sky -- above AA, but not
+     by much. .74 keeps the glass and buys the headroom back. */
+  background:rgba(8,8,11,.74);
+  -webkit-backdrop-filter:blur(22px) saturate(160%);
+          backdrop-filter:blur(22px) saturate(160%);
+  border:1px solid var(--line-2);
+  /* 60px as asked. The row is about 65px tall, and CSS scales opposing
+     radii down when they would overlap, so this lands as a true pill --
+     the most rounded a bar this height can be. */
+  border-radius:60px;
+  /* Floating means reading as above the sky, not cut into it. */
+  box-shadow:0 20px 48px -26px rgba(0,0,0,.92);
 }
+/* Three quarters is right on a wide screen and far too narrow on a
+   phone, where the wordmark and the burger need the whole width. */
+@media (max-width:1100px){ .masthead{ --mast-w:86%; } }
+@media (max-width:760px){ .masthead{ --mast-gap:16px; --mast-w:calc(100% - 32px); } }
 .wordmark{
   display:flex; align-items:center; gap:11px;
   font-family:var(--display); font-weight:800; font-size:16px;
@@ -213,7 +248,7 @@ main, .masthead, .chrome-footer{ position:relative; z-index:2; }
 }
 .burger{ display:none; width:42px; height:42px; border-radius:12px; border:1px solid var(--line); align-items:center; justify-content:center; }
 .burger span{ display:block; width:16px; height:1.5px; background:var(--text); position:relative; }
-.burger span::before.burger span::after{ content:""; position:absolute; left:0; width:16px; height:1.5px; background:var(--text); }
+.burger span::before, .burger span::after{ content:""; position:absolute; left:0; width:16px; height:1.5px; background:var(--text); }
 .burger span::before{ top:-5px; } .burger span::after{ top:5px; }
 
 /* ---------- hero ---------- */
@@ -224,7 +259,11 @@ main, .masthead, .chrome-footer{ position:relative; z-index:2; }
    foot of the section. The type is treated as polished metal, light crosses it once on arrival and then it sits still, which
    is the headline's own argument made visible.
    ============================================================ */
-.hero{ padding-top:clamp(48px,6vw,88px); padding-bottom:clamp(36px,5vw,72px); }
+/* The floating header occupies 114px of flow where the flush bar took
+   65, which pushed the hero CTA below the fold at 1440x900. The pill
+   already supplies the visual separation this padding used to, so it
+   gives back what the header took: about 49px wide, about 16 narrow. */
+.hero{ padding-top:clamp(32px,2.6vw,40px); padding-bottom:clamp(36px,5vw,72px); }
 
 .hero-grid{
   display:grid;
@@ -622,13 +661,24 @@ main, .masthead, .chrome-footer{ position:relative; z-index:2; }
   :root{ --gut:18px; --r:16px; }
   .grid12, .bento{ grid-template-columns:1fr; }
   .sp3, .sp4, .sp5, .sp6, .sp7, .sp8, .sp12{ grid-column:1 / -1; }
+  /* Hung off the pill itself rather than pinned to a hardcoded 58px,
+     which assumed the old flush bar and now sat behind the floating one.
+     The masthead is sticky, so it is already a containing block. */
   .mast-nav{
-    position:fixed; inset:58px 0 auto 0; flex-direction:column; align-items:stretch; gap:0;
-    background:rgba(12,12,17,.97); backdrop-filter:blur(20px);
-    border-bottom:1px solid var(--line); padding:10px var(--gut) 20px; display:none;
+    position:absolute; top:calc(100% + 10px); left:0; right:0;
+    flex-direction:column; align-items:stretch; gap:0;
+    /* Opaque, and with no backdrop-filter of its own. The panel sits
+       inside .mast-in, which already filters its backdrop; nesting a
+       second one composited the blurred page back over the panel and
+       the hero headline ghosted straight through it. A dropdown wants
+       to be solid anyway. */
+    background:#0C0C11;
+    border:1px solid var(--line); border-radius:22px;
+    padding:8px 22px 16px; display:none;
   }
   .mast-nav.open{ display:flex; }
   .mast-nav a{ padding:14px 4px; border-radius:0; border-bottom:1px solid var(--line-2); }
+  .mast-nav a:last-of-type{ border-bottom:0; }
   .mast-nav .pill{ margin-top:14px; align-self:flex-start; }
   .burger{ display:flex; }
   .hero h1 .ind{ padding-left:0; }
