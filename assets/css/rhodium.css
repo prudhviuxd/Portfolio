@@ -259,11 +259,12 @@ main, .masthead, .chrome-footer{ position:relative; z-index:2; }
    foot of the section. The type is treated as polished metal, light crosses it once on arrival and then it sits still, which
    is the headline's own argument made visible.
    ============================================================ */
-/* The floating header occupies 114px of flow where the flush bar took
-   65, which pushed the hero CTA below the fold at 1440x900. The pill
-   already supplies the visual separation this padding used to, so it
-   gives back what the header took: about 49px wide, about 16 narrow. */
-.hero{ padding-top:clamp(32px,2.6vw,40px); padding-bottom:clamp(36px,5vw,72px); }
+/* Back to the original. This was cut to about 40px because the floating
+   header took 49px of flow and pushed the hero CTA below the fold; losing
+   the eyebrow line since then gave that room back, so the hero -- and the
+   credential card on the right, which moved 44px up with it -- returns to
+   where it sat. Re-measured: the CTA ends at 818 in a 900px viewport. */
+.hero{ padding-top:clamp(48px,6vw,88px); padding-bottom:clamp(36px,5vw,72px); }
 
 .hero-grid{
   display:grid;

@@ -5,7 +5,12 @@
    desaturated blue sky around #293446, clouds that run warm
    (#82706E) where the light catches them and cold (#3B4254)
    where it does not, and only three per cent of the frame
-   brighter than 140. A small hard moon in a large soft dark.
+   brighter than 140.
+
+   The moon itself is gone now, by request. What it stood for
+   stays: the sky is still lit from one point off to the right,
+   so the cloud has a side that catches and a side that does not,
+   and the light reads as coming from somewhere out of frame.
 
    That ratio is the whole look. The temptation with a night sky
    is to light it up; the photograph earns its calm by keeping
@@ -27,8 +32,9 @@
    2. The noise tiles horizontally. Its lattice wraps modulo the
       grid, so a layer can drift forever without a seam.
 
-   3. The moon's position is computed from the masthead's real
-      height, not guessed, so it can never sit under the header
+   3. The light's position is computed from the masthead's real
+      height, not guessed, so the brightest part of the sky is
+      never the part sitting under the header
       at any viewport.
 
    4. It drifts on its own clock, never on scroll. This page is
@@ -98,15 +104,18 @@
     g.addColorStop(1,    rgba(SKY_LOW, 1));
     u.fillStyle = g; u.fillRect(0, 0, W, H);
 
-    var vg = u.createRadialGradient(moon.x, moon.y, 0, moon.x, moon.y, Math.max(W, H) * 0.92);
+    var vg = u.createRadialGradient(light.x, light.y, 0, light.x, light.y, Math.max(W, H) * 0.92);
     vg.addColorStop(0, 'rgba(0,0,0,0)');
     vg.addColorStop(0.55, 'rgba(0,0,0,0.16)');
     vg.addColorStop(1, 'rgba(3,5,8,0.62)');
     u.fillStyle = vg; u.fillRect(0, 0, W, H);
 
-    var halo = u.createRadialGradient(moon.x, moon.y, 0, moon.x, moon.y, W * 0.38);
-    halo.addColorStop(0,    'rgba(226,234,248,' + (0.38 * lightScale).toFixed(3) + ')');
-    halo.addColorStop(0.16, 'rgba(188,200,222,' + (0.21 * lightScale).toFixed(3) + ')');
+    /* Opened out and taken down at the core. At 0.38 this was the bloom
+       around a bright disc; with no disc inside it, that intensity reads
+       as a hole punched in the sky rather than as glow. */
+    var halo = u.createRadialGradient(light.x, light.y, 0, light.x, light.y, W * 0.44);
+    halo.addColorStop(0,    'rgba(226,234,248,' + (0.19 * lightScale).toFixed(3) + ')');
+    halo.addColorStop(0.16, 'rgba(188,200,222,' + (0.15 * lightScale).toFixed(3) + ')');
     halo.addColorStop(0.45, 'rgba(140,152,178,' + (0.09 * lightScale).toFixed(3) + ')');
     halo.addColorStop(1,    'rgba(104,120,150,0)');
     u.fillStyle = halo; u.fillRect(0, 0, W, H);
@@ -120,7 +129,7 @@
     overCv.width = W; overCv.height = H;
     var o = overCv.getContext('2d');
 
-    var fall = o.createRadialGradient(moon.x, moon.y, 0, moon.x, moon.y, W * 0.58);
+    var fall = o.createRadialGradient(light.x, light.y, 0, light.x, light.y, W * 0.58);
     fall.addColorStop(0,    'rgba(6,8,12,0)');
     fall.addColorStop(0.34, 'rgba(6,8,12,' + (0.16 + (1 - lightScale) * 0.24).toFixed(3) + ')');
     fall.addColorStop(0.66, 'rgba(6,8,12,' + (0.46 + (1 - lightScale) * 0.22).toFixed(3) + ')');
@@ -138,7 +147,7 @@
     o.fillStyle = guard; o.fillRect(0, 0, W, H);
 
     o.globalCompositeOperation = 'screen';
-    var lit = o.createRadialGradient(moon.x, moon.y, 0, moon.x, moon.y, W * 0.27);
+    var lit = o.createRadialGradient(light.x, light.y, 0, light.x, light.y, W * 0.27);
     lit.addColorStop(0,    'rgba(232,242,255,' + (0.60 * lightScale).toFixed(3) + ')');
     lit.addColorStop(0.22, 'rgba(196,210,232,' + (0.30 * lightScale).toFixed(3) + ')');
     lit.addColorStop(0.55, rgba(CLOUD_W, (0.16 * lightScale).toFixed(3)));
@@ -184,12 +193,12 @@
        narrow screen, and object-fit:cover then zoomed the bright half
        of the sky straight over the body text. */
     var aspect = r.height / r.width;
-    /* Raised from 1000. The moon is the one thing here with detail worth
-       resolving, and at a 1000px buffer on a 1440px band it was being
-       drawn at 68px and then stretched, which is where the blockiness
-       came from. */
-    if (aspect <= 1) { W = 1400; H = Math.max(240, Math.round(1400 * aspect)); }
-    else             { H = 1150; W = Math.max(240, Math.round(1150 / aspect)); }
+    /* Back down to 1000. The buffer was raised to 1400 only so the moon's
+       craters had pixels to resolve; with no disc to draw, the sky is all
+       soft gradient and cloud, which does not need them. Fewer pixels to
+       composite every frame. */
+    if (aspect <= 1) { W = 1000; H = Math.max(240, Math.round(1000 * aspect)); }
+    else             { H = 860;  W = Math.max(240, Math.round(860 / aspect)); }
     canvas.width = W;
     canvas.height = H;
     buildClouds();
@@ -283,39 +292,13 @@
     }
   }
 
-  /* ---------- the moon's surface ----------
-     An equirectangular map of the sphere, derived from the reference
-     photograph rather than invented. The generated version before this
-     scattered maria evenly over the whole globe, and evenly-spotted is
-     exactly what a football looks like: the real moon is asymmetric,
-     a few large connected seas on one face and cratered highland
-     elsewhere, and no amount of tuning random blobs produces that.
-
-     The map is built offline from the photograph by un-projecting its
-     near face, folding the usable inner band back over the far face,
-     and lifting the far side's seas toward highland, because the real
-     far side has almost none.
-     ------------------------------------------------------------- */
-  var TEX = null, TW = 1024, TH = 512;
-  (function loadMoonMap() {
-    var img = new Image();
-    img.onload = function () {
-      TW = img.naturalWidth; TH = img.naturalHeight;
-      var c = document.createElement('canvas');
-      c.width = TW; c.height = TH;
-      var g = c.getContext('2d');
-      g.drawImage(img, 0, 0);
-      /* A file:// page taints the canvas and this throws; the sphere
-         falls back to a plain disc rather than failing outright. */
-      try { TEX = g.getImageData(0, 0, TW, TH).data; } catch (e) { TEX = null; }
-    };
-    img.src = 'assets/img/sky/moon-map.webp';
-  })();
-
-  /* ---------- the moon ----------
-     Placed from the masthead's measured height, so it clears the
-     header whatever the viewport does. */
-  var moon = { x: 0, y: 0, r: 0 };
+  /* ---------- the light ----------
+     There is no moon any more, but the sky still needs somewhere to be
+     lit from: the halo, the fall-off and the lit edge on the cloud all
+     radiate from this point. `r` is no longer a disc, only the scale the
+     clearances are expressed in. Still placed off the masthead's measured
+     height so the brightest part of the sky never sits under the header. */
+  var light = { x: 0, y: 0, r: 0 };
   /* How much lit sky the layout can afford. Wide, the text sits in the
      left column and the moon has the right half to itself. Once the hero
      stacks, the headline and eyebrow run the full width and pass straight
@@ -337,7 +320,7 @@
     /* Smaller on a narrow screen: there the hero stacks, the eyebrow
        runs the full width under it, and a big bright disc took that
        line to 4.44:1. */
-    moon.r = Math.max(16, Math.min(46, W * (W < 560 ? 0.028 : 0.034)));
+    light.r = Math.max(16, Math.min(46, W * (W < 560 ? 0.028 : 0.034)));
     /* Right of centre rather than hard into the corner: the corner
        belongs to the credential card, and a bright disc behind a
        translucent card is a legibility problem, not a mood. */
@@ -353,15 +336,15 @@
     var plate = document.querySelector('.hero-plate');
     if (plate && bw >= 980) {
       var pl = plate.getBoundingClientRect().left - box.left;
-      var rpx = moon.r / scale;                  /* disc radius in screen px */
+      var rpx = light.r / scale;                  /* disc radius in screen px */
       want = Math.min(want, pl - rpx * 1.12 - 14);
     }
-    moon.x = Math.max(W * 0.46, want * scale);
+    light.x = Math.max(W * 0.46, want * scale);
     /* Clearance enough for the disc and a little air, not for the whole
        corona: reserving 3.2 radii pushed the moon down to the middle of
        the band, which is the opposite of a corner. The corona is soft
        and may pass behind the header. */
-    var minY = (hh + 14) * scale + moon.r * 1.02;
+    var minY = (hh + 14) * scale + light.r * 1.02;
     /* The floor, not the header, was holding the moon down: at 1440 the
        header allowed y=90 and the old clamp forced 118.
 
@@ -376,7 +359,7 @@
        header moves with it, so the floor does too, measured against the
        70px the flush bar used to be. */
     var floor = H * (bw < 980 ? 0.20 : 0.12) + Math.max(0, hh - 70) * scale;
-    moon.y = Math.max(minY, floor);
+    light.y = Math.max(minY, floor);
   }
 
   /* ---------- stars ---------- */
@@ -415,97 +398,6 @@
   }
 
   function rgba(c, a) { return 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')'; }
-
-  /* Project the sphere for this frame. For every pixel inside the disc
-     we go backwards: screen point to a point on the unit sphere, rotate
-     it about the polar axis, convert to latitude and longitude, and read
-     the map. A hundred-pixel moon is only a few thousand pixels, so the
-     whole thing costs less than one of the cloud layers. */
-  var sphereCv = null, sphereCtx = null, sphereImg = null, sphereR = 0;
-  function drawSphere(angle) {
-    if (!TEX) {
-      var g2 = ctx.createRadialGradient(
-        moon.x - moon.r * 0.3, moon.y - moon.r * 0.3, moon.r * 0.1,
-        moon.x, moon.y, moon.r);
-      g2.addColorStop(0, '#FBF9F5');
-      g2.addColorStop(1, '#D7D3CB');
-      ctx.fillStyle = g2;
-      ctx.beginPath(); ctx.arc(moon.x, moon.y, moon.r, 0, Math.PI * 2); ctx.fill();
-      return;
-    }
-    var R = Math.round(moon.r);
-    var D = R * 2 + 2;
-    if (!sphereCv || sphereR !== R) {
-      sphereCv = document.createElement('canvas');
-      sphereCv.width = D; sphereCv.height = D;
-      sphereCtx = sphereCv.getContext('2d');
-      sphereImg = sphereCtx.createImageData(D, D);
-      sphereR = R;
-    }
-    var out = sphereImg.data;
-    var ca = Math.cos(angle), sa = Math.sin(angle);
-    /* a slight axial tilt, so the rotation is legible rather than a
-       featureless band sliding sideways */
-    var TILT = 0.26, ct = Math.cos(TILT), st = Math.sin(TILT);
-
-    for (var y = 0; y < D; y++) {
-      var ny = (y - R) / R;
-      for (var x = 0; x < D; x++) {
-        var nx = (x - R) / R;
-        var d2 = nx * nx + ny * ny;
-        var o = (y * D + x) * 4;
-        if (d2 >= 1) { out[o + 3] = 0; continue; }
-        var nz = Math.sqrt(1 - d2);
-
-        /* tilt about X, then spin about Y */
-        var y1 = ny * ct - nz * st;
-        var z1 = ny * st + nz * ct;
-        var x2 = nx * ca + z1 * sa;
-        var z2 = -nx * sa + z1 * ca;
-
-        var lat = Math.asin(Math.max(-1, Math.min(1, y1)));
-        var lon = Math.atan2(x2, z2);
-
-        /* Bilinear, not nearest. Rounding to the nearest texel was the
-           whole glitter: a 1024px map on a 90px disc means every screen
-           pixel spans about ten texels, so as the sphere turns each one
-           snaps from texel to texel and the surface crawls with
-           sparkles. Interpolating makes the moon slide smoothly under
-           its own detail instead. Longitude wraps at the seam,
-           latitude clamps at the poles.
-
-           One channel is enough: the map is built grey, so the slight
-           warmth is reapplied here as a multiplier rather than carried
-           through three more texel reads. */
-        var fu = (lon / (Math.PI * 2) + 0.5) * TW - 0.5;
-        var fv = (0.5 - lat / Math.PI) * TH - 0.5;
-        var u0 = Math.floor(fu), v0 = Math.floor(fv);
-        var du = fu - u0, dv = fv - v0;
-        var u1 = ((u0 + 1) % TW + TW) % TW;
-        u0 = (u0 % TW + TW) % TW;
-        var v1 = v0 + 1;
-        if (v0 < 0) v0 = 0; else if (v0 >= TH) v0 = TH - 1;
-        if (v1 < 0) v1 = 0; else if (v1 >= TH) v1 = TH - 1;
-        var r0 = v0 * TW, r1 = v1 * TW;
-        var ta = TEX[(r0 + u0) * 4], tb = TEX[(r0 + u1) * 4];
-        var tc = TEX[(r1 + u0) * 4], td = TEX[(r1 + u1) * 4];
-        var top = ta + (tb - ta) * du;
-        var bot = tc + (td - tc) * du;
-        var g = top + (bot - top) * dv;
-
-        /* lunar limb darkening is mild until the very edge */
-        var lim = 0.86 + 0.14 * nz;
-        var edge = d2 > 0.965 ? Math.max(0, 1 - (d2 - 0.965) / 0.035) : 1;
-
-        out[o]     = g * lim;
-        out[o + 1] = g * lim * 0.997;
-        out[o + 2] = g * lim * 0.985;
-        out[o + 3] = 255 * edge;
-      }
-    }
-    sphereCtx.putImageData(sphereImg, 0, 0);
-    ctx.drawImage(sphereCv, moon.x - R, moon.y - R);
-  }
 
   function draw(t) {
     var time = t / 1000;
@@ -587,28 +479,10 @@
       }
     }
 
-    /* --- the disc ---
-       A warm rim just outside a hard white centre, which is the one
-       detail that makes it read as moon rather than as a dot. */
-    var corona = ctx.createRadialGradient(moon.x, moon.y, moon.r * 1.0, moon.x, moon.y, moon.r * 3.1);
-    /* Cool, because the sky is cool. These stops were amber, carried
-       over from a reference photograph shot through warm haze, and on a
-       blue-black sky an orange ring around a white disc reads as a
-       sticker rather than as light. Matched to SKY_TOP instead, and
-       faded out on a near-sky hue so the gradient has no visible rim. */
-    corona.addColorStop(0,   'rgba(198,216,246,0.30)');
-    corona.addColorStop(0.3, 'rgba(146,170,210,0.14)');
-    corona.addColorStop(1,   'rgba(104,130,170,0)');
-    ctx.fillStyle = corona;
-    ctx.beginPath();
-    ctx.arc(moon.x, moon.y, moon.r * 2.9, 0, Math.PI * 2);
-    ctx.fill();
-
-    /* One turn in about eighty seconds. The old rate, 0.016 rad/s, was
-       one turn per six and a half minutes: arithmetically rotating and
-       humanly static, which is the same thing as not rotating. Slow
-       enough to stay calm, fast enough to be seen moving. */
-    drawSphere(reduce ? 0.6 : time * 0.078);
+    /* The moon is gone: no disc, no corona. What stays is the light it
+       stood for -- the halo, the fall-off and the lit edge on the cloud
+       are all still anchored to `light`, so the sky keeps a direction to
+       be lit from and reads as moonlight from somewhere off-frame. */
 
     /* The fade out to the page, dithered. Last, so it takes the moon and
        the meteors with it exactly as the CSS mask used to. */
