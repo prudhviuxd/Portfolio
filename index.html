@@ -45,7 +45,20 @@
 </head>
 <body>
 
-<canvas class="bd" aria-hidden="true"></canvas>
+<!-- Hero backdrop. Ported from the Prisma hero: video, noise, gradient,
+     rounded panel. Only the background changed; the hero's own content is
+     untouched. To go back to the generated sky, restore the line
+     <canvas class="bd" aria-hidden="true"></canvas> here and re-enable the
+     backdrop.js script at the foot of this file. -->
+<div class="hero-bg" aria-hidden="true">
+  <video class="hero-bg-v" autoplay loop muted playsinline preload="metadata"
+         poster="assets/video/hero-poster.jpg">
+    <source src="assets/video/hero-loop.webm" type="video/webm">
+    <source src="assets/video/hero-loop.mp4" type="video/mp4">
+  </video>
+  <div class="hero-bg-noise"></div>
+  <div class="hero-bg-grad"></div>
+</div>
 
 <div class="atmos" aria-hidden="true">
   <i class="s1"></i><i class="s2"></i><i class="s3"></i>
@@ -454,6 +467,6 @@
 <script src="assets/js/scroll3d.js"></script>
 <script src="assets/js/transitions.js"></script>
 <script src="assets/js/skills-spiral.js"></script>
-<script src="assets/js/backdrop.js"></script>
+<!-- <script src="assets/js/backdrop.js"></script>  the generated sky, off while the video hero is in -->
 </body>
 </html>
