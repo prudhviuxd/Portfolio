@@ -68,7 +68,25 @@
      on the canvas, so it is composited at half resolution and scaled up
      once; at this blur the difference is invisible and the cost is a
      quarter. */
-  var cloudCv = null, cloudCtx = null;
+  var cloudCv = null, cloudCtx = null, fadeCv = null;
+  /* ---------- dither ----------
+     Eight bits per channel cannot carry a long, dark gradient. The steps
+     land as straight horizontal contours across the sky -- the lines in
+     the hero. A little noise per pixel scatters each step edge, and the
+     eye integrates the scatter back into a smooth ramp. Baked once, never
+     animated, so it can never shimmer. */
+  function dither(cv, amt, withAlpha) {
+    var g = cv.getContext('2d');
+    var im = g.getImageData(0, 0, cv.width, cv.height);
+    var d = im.data;                       /* clamped, so no range checks */
+    for (var i = 0; i < d.length; i += 4) {
+      var nz = (Math.random() - 0.5) * amt;
+      d[i] += nz; d[i + 1] += nz; d[i + 2] += nz;
+      if (withAlpha) d[i + 3] += nz;
+    }
+    g.putImageData(im, 0, 0);
+  }
+
   function bakeLayers() {
     underCv = document.createElement('canvas');
     underCv.width = W; underCv.height = H;
@@ -127,6 +145,35 @@
     lit.addColorStop(1,    'rgba(0,0,0,0)');
     o.fillStyle = lit; o.fillRect(0, 0, W, H);
     o.globalCompositeOperation = 'source-over';
+
+    dither(underCv, 4.5, false);   /* opaque, so RGB only */
+    dither(overCv, 4.5, true);     /* its gradients live in the alpha too */
+
+    /* The band used to fade out with a CSS mask-image. A mask is a
+       gradient like any other, and its 255 alpha steps posterised into
+       straight lines down the lower hero: measured at 20 contours with
+       the mask and 1 without it. Same ramp, built here instead so it can
+       be dithered, and applied with destination-out at the end of the
+       frame. */
+    fadeCv = document.createElement('canvas');
+    fadeCv.width = W; fadeCv.height = H;
+    var fg = fadeCv.getContext('2d');
+    var fim = fg.createImageData(W, H);
+    var fd = fim.data;
+    var fStart = H * 0.54, fSpan = Math.max(1, H - fStart);
+    for (var fy = 0; fy < H; fy++) {
+      /* Nothing above the ramp: leave those rows at a hard zero. Dithering
+         them erased a percent or so at random across the whole upper sky,
+         which put grain on the moon -- its measured roughness went 2.21
+         to 3.04. The clamp also made the noise one-sided there, so it was
+         a slight constant erase rather than nothing. */
+      if (fy <= fStart) continue;
+      var base = ((fy - fStart) / fSpan) * 255;
+      for (var fx = 0; fx < W; fx++) {
+        fd[(fy * W + fx) * 4 + 3] = base + (Math.random() - 0.5) * 7;
+      }
+    }
+    fg.putImageData(fim, 0, 0);
   }
 
   function resize() {
@@ -562,6 +609,14 @@
        humanly static, which is the same thing as not rotating. Slow
        enough to stay calm, fast enough to be seen moving. */
     drawSphere(reduce ? 0.6 : time * 0.078);
+
+    /* The fade out to the page, dithered. Last, so it takes the moon and
+       the meteors with it exactly as the CSS mask used to. */
+    if (fadeCv) {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.drawImage(fadeCv, 0, 0);
+      ctx.globalCompositeOperation = 'source-over';
+    }
 
     if (running) requestAnimationFrame(draw);
   }

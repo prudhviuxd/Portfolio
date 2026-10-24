@@ -45,9 +45,9 @@ canvas.bd{
   z-index:0;
   pointer-events:none;
   object-fit:cover;
-  /* No hard edge where the band stops. */
-  -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 54%,transparent 100%);
-          mask-image:linear-gradient(180deg,#000 0%,#000 54%,transparent 100%);
+  /* The fade lives in backdrop.js now. As a CSS mask its 255 alpha steps
+     posterised into about twenty straight horizontal lines across the
+     lower hero; the canvas can dither the same ramp, a mask cannot. */
 }
 
 /* ---------- type colour ---------- */
@@ -292,7 +292,6 @@ canvas.bd{
    was the dimmest text on the page: --text-3 measured 3.12:1 against the
    lit cloud once the layout stacks and the line runs the full width.
    Text over imagery needs more weight than text over a flat fill. */
-.hero-eyebrow{ color:var(--m-mid); }
 
 /* Only the selected branch is on the curve, at every width. Thirty at
    once was too many to read and collided 4 to 51 times depending on
