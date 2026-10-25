@@ -196,6 +196,22 @@
   }
 
   function resize() {
+    /* The band is the hero's background, so it ends where the hero ends.
+       Sized by a viewport clamp it had no idea how tall the hero actually
+       was: once the orbit column went in, the hero came down to 796 while
+       the band stayed at 893 and spilled 97px past it, straight over the
+       marquee below -- whose 1px border-top then read as a hard straight
+       line across a soft sky. Measuring the section fixes that at every
+       width instead of trimming the clamp until it happens to fit.
+
+       The CSS clamp stays as the fallback, and it still matters: this page
+       is sometimes framed at its whole content height, and a section that
+       has not laid out yet reports nothing worth using. */
+    var hero = document.querySelector('.hero');
+    if (hero) {
+      var hh = hero.getBoundingClientRect().height;
+      if (hh > 200) canvas.style.height = Math.round(hh) + 'px';
+    }
     var r = canvas.getBoundingClientRect();
     if (!r.width || !r.height) return;
     /* Cap the pixel budget by shrinking the long side, never by
