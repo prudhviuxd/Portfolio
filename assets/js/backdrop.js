@@ -110,12 +110,22 @@
     vg.addColorStop(1, 'rgba(3,5,8,0.62)');
     u.fillStyle = vg; u.fillRect(0, 0, W, H);
 
-    /* Opened out and taken down at the core. At 0.38 this was the bloom
-       around a bright disc; with no disc inside it, that intensity reads
-       as a hole punched in the sky rather than as glow. */
-    var halo = u.createRadialGradient(light.x, light.y, 0, light.x, light.y, W * 0.44);
-    halo.addColorStop(0,    'rgba(226,234,248,' + (0.19 * lightScale).toFixed(3) + ')');
-    halo.addColorStop(0.16, 'rgba(188,200,222,' + (0.15 * lightScale).toFixed(3) + ')');
+    /* Opened out rather than dimmed. Taking the core from .38 to .19 when
+       the disc went stopped it reading as a hole, but it also pulled about
+       seven levels of light off the whole right-hand side, which is where
+       the portrait and the credential card live: measured on the composited
+       page, the card's surface went 33.4 to 25.8 and the sky beside it 28.4
+       to 21.1. The card is 94.5% transparent, so it has no tone of its own
+       to fall back on and simply went flat with everything else.
+
+       So the light comes back up, and the width does the work the disc used
+       to: spread over .46 of the frame there is no edge sharp enough to read
+       as a missing object, but there is still a lit side and an unlit one.
+       Tuned until the card's surface reads at the level it did with the
+       moon present, averaged over six frames because both skies drift. */
+    var halo = u.createRadialGradient(light.x, light.y, 0, light.x, light.y, W * 0.46);
+    halo.addColorStop(0,    'rgba(226,234,248,' + (0.285 * lightScale).toFixed(3) + ')');
+    halo.addColorStop(0.16, 'rgba(188,200,222,' + (0.195 * lightScale).toFixed(3) + ')');
     halo.addColorStop(0.45, 'rgba(140,152,178,' + (0.09 * lightScale).toFixed(3) + ')');
     halo.addColorStop(1,    'rgba(104,120,150,0)');
     u.fillStyle = halo; u.fillRect(0, 0, W, H);
