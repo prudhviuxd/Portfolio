@@ -41,6 +41,7 @@
 <link rel="stylesheet" href="assets/css/atmos.css">
 <link rel="stylesheet" href="assets/css/transitions.css">
 <link rel="stylesheet" href="assets/css/home-2026.css">
+<link rel="stylesheet" href="assets/css/hero-orbit.css">
 <noscript><style>.rv.rv-s>*{opacity:1!important;transform:none!important;}</style></noscript>
 </head>
 <body>
@@ -110,38 +111,48 @@
 
       <!-- The proof, lifted up beside the headline instead of stranded at the
            foot of the section, so the first screen has a second place to land. -->
-      <aside class="hero-plate rv-s" data-layer="0.55" aria-label="Prudhvi Raj PJ, record">
-        <!-- The hero never said whose portfolio this is: the headline is a
-             metaphor and the lede is first person. The face and the name
-             answer that before the proof does, which is the job this
-             column should have been doing all along. -->
-        <figure class="plate-face">
-          <img src="assets/img/me/portrait.webp" alt="Prudhvi Raj PJ"
-               data-portrait width="800" height="640" decoding="async">
-          <figcaption>
-            <span class="pf-name">Prudhvi Raj PJ</span>
-            <span class="pf-role">Design Leader &middot; Hyderabad, IN</span>
-          </figcaption>
+      <div class="orbit rv-s" aria-label="Prudhvi Raj PJ, record">
+
+        <figure class="orb orb-face" data-layer="0.40" data-orb="2.0"
+                style="--d:clamp(148px,15.4vw,222px); --x:48.4%; --y:5.7%; --t:9.5s; --dl:-1.2s">
+          <span class="orb-in"><img src="assets/img/me/orb.webp" alt="Prudhvi Raj PJ"
+                width="440" height="440" decoding="async"></span>
         </figure>
 
-        <div class="plate-head">
-          <span class="plate-k">Outcomes</span>
-          <span class="plate-rule" aria-hidden="true"></span>
+        <div class="orb orb-stat orb-lg" data-layer="0.34" data-orb="1.5"
+             style="--d:clamp(118px,12.2vw,174px); --x:41.4%; --y:44.3%; --t:11s; --dl:-4s">
+          <span class="orb-in"><b class="chrome">2.1M+</b><i>Users reached</i></span>
         </div>
-        <div class="r"><div class="rn chrome" data-count="100">100+</div><div class="rk">Projects shipped</div></div>
-        <div class="r"><div class="rn chrome">2.1M+</div><div class="rk">Users reached</div></div>
-        <div class="r"><div class="rn chrome" data-count="80">80%</div><div class="rk">Churn reduced</div></div>
 
-        <div class="plate-head plate-head-2">
-          <span class="plate-k">Scope</span>
-          <span class="plate-rule" aria-hidden="true"></span>
+        <div class="orb orb-stat" data-layer="0.30" data-orb="1.2"
+             style="--d:clamp(104px,10.8vw,154px); --x:6.4%; --y:25.3%; --t:8.5s; --dl:-2.6s">
+          <span class="orb-in"><b class="chrome">100+</b><i>Projects shipped</i></span>
         </div>
-        <dl class="plate-scope">
-          <div><dd>18</dd><dt>Designers</dt></div>
-          <div><dd>4</dd><dt>Continents</dt></div>
-          <div><dd>10+</dd><dt>Industries</dt></div>
-        </dl>
-      </aside>
+
+        <div class="orb orb-stat" data-layer="0.30" data-orb="1.2"
+             style="--d:clamp(100px,10.4vw,148px); --x:12.8%; --y:65.2%; --t:10.2s; --dl:-6.4s">
+          <span class="orb-in"><b class="chrome">80%</b><i>Churn reduced</i></span>
+        </div>
+
+        <!-- satellites: the scope figures, deliberately quiet -->
+        <div class="orb orb-sat" data-layer="0.20" data-orb="0.55"
+             style="--d:clamp(62px,6.3vw,90px); --x:83.5%; --y:45%; --t:7.6s; --dl:-3.3s">
+          <span class="orb-in"><b>18</b><i>Designers</i></span>
+        </div>
+        <div class="orb orb-sat" data-layer="0.18" data-orb="0.50"
+             style="--d:clamp(58px,5.9vw,84px); --x:28.8%; --y:7.7%; --t:8.9s; --dl:-5.1s">
+          <span class="orb-in"><b>4</b><i>Continents</i></span>
+        </div>
+        <div class="orb orb-sat" data-layer="0.22" data-orb="0.60"
+             style="--d:clamp(60px,6.1vw,87px); --x:75.1%; --y:75.4%; --t:9.8s; --dl:-7.7s">
+          <span class="orb-in"><b>10+</b><i>Industries</i></span>
+        </div>
+
+        <figcaption class="orb-id">
+          <span class="pf-name">Prudhvi Raj PJ</span>
+          <span class="pf-role">Design Leader &middot; Hyderabad, IN</span>
+        </figcaption>
+      </div>
 
     </div>
   </section>
