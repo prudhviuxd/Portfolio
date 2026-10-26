@@ -74,7 +74,7 @@
      on the canvas, so it is composited at half resolution and scaled up
      once; at this blur the difference is invisible and the cost is a
      quarter. */
-  var cloudCv = null, cloudCtx = null, fadeCv = null;
+  var cloudCv = null, cloudCtx = null, fadeCv = null, fadeTop = 0;
   /* ---------- dither ----------
      Eight bits per channel cannot carry a long, dark gradient. The steps
      land as straight horizontal contours across the sky -- the lines in
@@ -165,6 +165,18 @@
     o.fillStyle = lit; o.fillRect(0, 0, W, H);
     o.globalCompositeOperation = 'source-over';
 
+    /* Stars, baked rather than redrawn. The twinkle was already damped to
+       a tenth of its old amplitude after it read as glitter, and that last
+       tenth is not worth seventy path fills a frame. They belong under the
+       cloud, which is where this layer sits. */
+    for (var si = 0; si < stars.length; si++) {
+      var st = stars[si];
+      u.beginPath();
+      u.arc(st.nx * W, st.ny * H, st.r, 0, Math.PI * 2);
+      u.fillStyle = 'rgba(214,226,244,' + st.a.toFixed(3) + ')';
+      u.fill();
+    }
+
     dither(underCv, 4.5, false);   /* opaque, so RGB only */
     dither(overCv, 4.5, true);     /* its gradients live in the alpha too */
 
@@ -180,6 +192,7 @@
     var fim = fg.createImageData(W, H);
     var fd = fim.data;
     var fStart = H * 0.54, fSpan = Math.max(1, H - fStart);
+    fadeTop = Math.floor(fStart);
     for (var fy = 0; fy < H; fy++) {
       /* Nothing above the ramp: leave those rows at a hard zero. Dithering
          them erased a percent or so at random across the whole upper sky,
@@ -219,12 +232,16 @@
        narrow screen, and object-fit:cover then zoomed the bright half
        of the sky straight over the body text. */
     var aspect = r.height / r.width;
-    /* Back down to 1000. The buffer was raised to 1400 only so the moon's
-       craters had pixels to resolve; with no disc to draw, the sky is all
-       soft gradient and cloud, which does not need them. Fewer pixels to
-       composite every frame. */
-    if (aspect <= 1) { W = 1000; H = Math.max(240, Math.round(1000 * aspect)); }
-    else             { H = 860;  W = Math.max(240, Math.round(860 / aspect)); }
+    /* Track the real device pixels instead of a fixed number. At a flat
+       1000 the band was drawn at 1000 and shown across 1440 CSS px, which
+       on a 2x screen is 2880 device px: everything in it, the dither
+       included, was being magnified 2.9 times, and any one-pixel
+       imperfection with it. Capped so the cost does not run away on a
+       large display. */
+    var dpr = Math.min(2, window.devicePixelRatio || 1);
+    var cap = Math.max(900, Math.min(1450, Math.round(Math.max(r.width, r.height) * dpr)));
+    if (aspect <= 1) { W = cap; H = Math.max(240, Math.round(cap * aspect)); }
+    else             { H = cap; W = Math.max(240, Math.round(cap / aspect)); }
     canvas.width = W;
     canvas.height = H;
     buildClouds();
@@ -256,7 +273,7 @@
   /* ---------- cloud layers ---------- */
   var layers = [];
   function buildClouds() {
-    layers = [];
+    layers = [];        /* patterns die with them; they are remade on first use */
     var specs = [
       /* w,   h,   base grid, octaves, cut,  gain, speed,  warm */
       /* w,  h,  grid, oct, cut, gain, speed,  warm, warp */
@@ -314,7 +331,7 @@
         }
       }
       octx.putImageData(img, 0, 0);
-      layers.push({ c: off, speed: sp[6], warm: sp[7], x: Math.random() * lw });
+      layers.push({ c: off, pat: null, speed: sp[6], warm: sp[7], x: Math.random() * lw });
     }
   }
 
@@ -431,19 +448,6 @@
     ctx.globalCompositeOperation = 'source-over';
     ctx.drawImage(underCv, 0, 0);
 
-    /* --- stars, behind the cloud --- */
-    for (var i = 0; i < stars.length; i++) {
-      var s = stars[i];
-      /* Barely breathing, not blinking. At 0.45 amplitude every star
-         pulsed to half brightness twice a second and the whole sky
-         flickered; real stars scintillate far more finely than that. */
-      var tw = 0.90 + 0.10 * Math.sin(time * 0.22 + s.tw);
-      ctx.beginPath();
-      ctx.arc(s.nx * W, s.ny * H, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(214,226,244,' + (s.a * tw).toFixed(3) + ')';
-      ctx.fill();
-    }
-
     /* --- cloud layers, composited at half size --- */
     var cw = cloudCv.width, ch = cloudCv.height;
     cloudCtx.clearRect(0, 0, cw, ch);
@@ -453,6 +457,20 @@
       var lw = la.c.width;
       var span = cw * 1.18;
       var ox = -((la.x * (span / lw)) % span);
+      /* Tiled as a repeating pattern rather than as two drawImage calls.
+         The noise is periodic, so the two copies joined at the right
+         value -- but drawImage clamps at the source edge, so the last
+         column of one copy was interpolated against itself instead of
+         against the first column of the next. That is a one-pixel
+         discontinuity repeated down the full height of the frame, which
+         is the kind of thing an eye reads as a straight line long before
+         a per-column statistic calls it significant. A pattern wraps its
+         own sampling, so the join is continuous by construction.
+
+         Clipping the two draws would have traded the seam for an
+         antialiased clip edge, and overlapping them would have doubled
+         the alpha into a bright line; neither is better than the bug. */
+      if (!la.pat) la.pat = cloudCtx.createPattern(la.c, 'repeat-x');
       /* The layer bobs vertically, so it must be drawn TALLER than the
          canvas or it uncovers a strip at whichever end it has drifted
          away from. Drawn at exactly ch, the gap was up to ch*0.022 and
@@ -462,8 +480,15 @@
       var bob = ch * 0.022;
       var oy = Math.sin(time * (0.055 + L * 0.021) + L * 2.1) * bob;
       cloudCtx.globalAlpha = Math.min(1, 0.14 + 0.88 * lightScale);
-      cloudCtx.drawImage(la.c, ox, oy - bob, span, ch + bob * 2);
-      cloudCtx.drawImage(la.c, ox + span, oy - bob, span, ch + bob * 2);
+      if (la.pat) {
+        var sx = span / lw, sy = (ch + bob * 2) / la.c.height;
+        cloudCtx.save();
+        cloudCtx.translate(ox, oy - bob);
+        cloudCtx.scale(sx, sy);
+        cloudCtx.fillStyle = la.pat;
+        cloudCtx.fillRect(-ox / sx, -(oy - bob) / sy, cw / sx, ch / sy);
+        cloudCtx.restore();
+      }
     }
     cloudCtx.globalAlpha = 1;
     ctx.drawImage(cloudCv, 0, 0, W, H);
@@ -513,8 +538,12 @@
     /* The fade out to the page, dithered. Last, so it takes the moon and
        the meteors with it exactly as the CSS mask used to. */
     if (fadeCv) {
+      /* Only the ramp. Above it the fade's alpha is a hard zero, so those
+         rows erase nothing and cost a full-width pass over half the frame
+         to do it. */
       ctx.globalCompositeOperation = 'destination-out';
-      ctx.drawImage(fadeCv, 0, 0);
+      ctx.drawImage(fadeCv, 0, fadeTop, W, H - fadeTop,
+                            0, fadeTop, W, H - fadeTop);
       ctx.globalCompositeOperation = 'source-over';
     }
 
