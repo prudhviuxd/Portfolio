@@ -11,6 +11,11 @@
   font-weight:400; font-display:swap;
 }
 @font-face{
+  font-family:"Familjen";
+  src:url("../fonts/familjen-bold.woff2") format("woff2");
+  font-weight:700; font-display:swap;
+}
+@font-face{
   font-family:"Instrument";
   src:url("../fonts/instrument.woff2") format("woff2-variations");
   font-weight:400 700; font-display:swap;
@@ -157,6 +162,7 @@ ul{list-style:none}
 .js .hero-title .ln:nth-child(2)>span{transition-delay:.08s}
 .ready .hero-title .ln:not(.rot)>span{transform:none}
 /* typewriter caret: sits after whichever line is being typed */
+.hero-title .rot{font-weight:700;letter-spacing:-.055em}
 .hero-title .caret{display:inline-block;width:.06em;height:.78em;margin-left:.06em;vertical-align:-.04em;
   background:#e8a165;border-radius:1px;animation:caret 1s steps(1) infinite}
 .hero-title .caret.typing{animation:none}
@@ -383,6 +389,10 @@ ul{list-style:none}
    WORKSHOPS
    ========================================================= */
 .ws{position:relative;z-index:4;background:var(--bg);padding:120px 0 140px;border-top:1px solid var(--line)}
+.ws .sec-head{position:relative}
+.ws-count{position:absolute;right:0;bottom:0;display:flex;align-items:flex-end;gap:14px;text-align:left}
+.ws-count b{font-family:var(--display);font-weight:400;font-size:clamp(4rem,8vw,8rem);letter-spacing:-.07em;line-height:.8;color:#e8a165}
+.ws-count>span{font-size:13px;text-transform:uppercase;font-weight:500;line-height:1.2;color:var(--ink-2);padding-bottom:6px}
 .ws-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
 .ws-card{
   position:relative; display:flex; flex-direction:column; gap:30px;
@@ -405,6 +415,20 @@ ul{list-style:none}
 .ws-steps{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto}
 .ws-steps li{border:1px solid #3a3a3a;border-radius:40px;padding:7px 14px;font-size:13px;color:var(--ink)}
 .ws-steps li:nth-child(1){border-color:#e8a165;color:#f3c99c}
+
+.yt{
+  display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:28px;
+  margin-top:24px; padding:26px 32px; border:1px solid #232323; border-radius:6px;
+  background:linear-gradient(100deg,#1a1210 0%,#121212 55%); color:var(--ink);
+  transition:border-color .5s,transform .7s var(--out);
+}
+.yt:hover{border-color:#5a3a2a;transform:translateY(-4px)}
+.yt-play{display:grid;place-items:center;width:64px;height:64px;border-radius:50%;background:#e8a165;color:#161616;transition:transform .6s var(--out)}
+.yt:hover .yt-play{transform:scale(1.08)}
+.yt-copy{display:flex;flex-direction:column;gap:6px}
+.yt-k{font-family:var(--mono);font-size:11px;text-transform:uppercase;color:var(--ink-3)}
+.yt-copy b{font-family:var(--display);font-weight:400;font-size:clamp(1.8rem,2.6vw,2.4rem);letter-spacing:-.05em;line-height:1}
+.yt-d{font-size:15px;color:var(--ink-2);line-height:1.35;max-width:52ch}
 
 /* =========================================================
    CONTACT + FOOTER
@@ -483,6 +507,9 @@ ul{list-style:none}
   .contact{padding:90px 0}
   .ws{padding:90px 0}
   .ws-grid{grid-template-columns:1fr}
+  .ws-count{position:static;margin-top:8px}
+  .yt{grid-template-columns:auto 1fr;padding:22px 20px;gap:18px}
+  .yt .btn{grid-column:1/-1}
   .ws-card{padding:24px 20px 28px}
   .contact-l,.form{grid-column:1/-1}
   .form{padding-top:56px}
