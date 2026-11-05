@@ -5,11 +5,42 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My MTN, Case Study | Prudhvi Raj PJ</title>
 <meta name="description" content="My MTN, redesigning MTN's self-care mobile app for recharge, plans and loyalty across Nigeria &amp; South Africa. A UX case study by Prudhvi Raj PJ.">
+<script>
+/* Runs before first paint, on purpose. The browser applies a remembered
+   scroll position during load, so correcting it from a script at the end
+   of the body shows the reader the old position and then a jump. Turning
+   restoration off here means there is nothing to correct.
+
+   Only for a navigation we started by clicking a link, which transitions.js
+   flags on the way out. Arriving any other way, back, forward, a reload,
+   a pasted URL, keeps the browser's own restoring, so returning to a page
+   still lands where you left it. */
+(function(){try{
+  if(!('scrollRestoration' in history)) return;
+  var flagged = null;
+  try{ flagged = sessionStorage.getItem('pt:top');
+       if(flagged) sessionStorage.removeItem('pt:top'); }catch(e){}
+  if(!flagged || location.hash) return;
+  var n = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+  if(n && n.type === 'back_forward') return;
+  window.__ptLinkNav = true;
+  history.scrollRestoration = 'manual';
+  /* Framed, the panel around us holds the scroll, and it is already sitting
+     where the previous page was left. Pull ourselves to the top of it here,
+     before this document paints, so the first frame the reader sees is the
+     top of the page rather than its middle. */
+  try{
+    if(window.top !== window.self && document.documentElement.scrollIntoView)
+      document.documentElement.scrollIntoView({block:'start', behavior:'instant'});
+  }catch(e){}
+}catch(e){}})();
+</script>
 <link rel="stylesheet" href="../assets/css/base.css">
 <link rel="stylesheet" href="../assets/css/case-study.css">
 <link rel="stylesheet" href="../assets/css/my-mtn.css">
 <link rel="stylesheet" href="../assets/css/interactions.css">
 <link rel="stylesheet" href="../assets/css/study.css">
+<link rel="stylesheet" href="../assets/css/transitions.css">
 <noscript><style>.reveal{opacity:1!important;transform:none!important;}</style></noscript>
 </head>
 <body>
@@ -47,12 +78,47 @@
   <!-- ============ AT A GLANCE ============ -->
   <section class="glance">
     <dl class="glance-in">
-      <div><dt>Role</dt><dd class="v"><b>Lead UX Designer</b></dd></div>
-      <div><dt>Timeline</dt><dd class="v">5 months</dd></div>
+      <div><dt>Role</dt><dd class="v"><b>Lead Product Designer</b></dd></div>
+      <div><dt>Client</dt><dd class="v">MTN</dd></div>
+      <div><dt>Year</dt><dd class="v">2021</dd></div>
       <div><dt>Platform</dt><dd class="v">iOS, Android</dd></div>
       <div><dt>Markets</dt><dd class="v">Nigeria, South Africa</dd></div>
-      <div><dt>Scope</dt><dd class="v">Research, IA, wireframes, UI, usability testing</dd></div>
     </dl>
+  </section>
+
+  <!-- ============ ABOUT THE PROJECT ============ -->
+  <section class="cs-section reveal" style="padding-bottom:0;">
+    <div class="container">
+      <div class="cs-two-col top">
+        <div>
+          <div class="cs-label">About the project</div>
+          <h2 class="cs-h2" style="margin-bottom:18px;">Connecting Nigerians,<br>one pixel at a time</h2>
+          <p class="cs-p" style="margin-top:0;">Streamlined mobile experience for MTN&rsquo;s digital platforms, improving user experience and conversion rates.</p>
+        </div>
+        <div>
+          <p class="cs-p" style="margin-top:0;">MTN is a South African multinational mobile telecommunications company operating across Africa and Asia. As of December 2020 it recorded 280 million subscribers, making it the 8th largest mobile network operator in the world and the largest in Africa.</p>
+          <p class="cs-p">Active in over 20 countries, a third of the company&rsquo;s revenue comes from Nigeria, where it holds roughly 35% market share. MTN Nigeria is undergoing a digital transformation, and we began by overhauling their mobile and web experiences.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SKILLS APPLIED ============ -->
+  <section class="cs-section reveal">
+    <div class="container">
+      <div class="cs-label">Skills applied</div>
+      <h2 class="cs-h2" style="margin-bottom:26px;">Eight disciplines, one product</h2>
+      <ul class="skill-grid">
+        <li>Design thinking</li>
+        <li>Information architecture</li>
+        <li>User persona</li>
+        <li>Customer journey mapping</li>
+        <li>Low to high fidelity wireframing</li>
+        <li>Visual &amp; interaction design</li>
+        <li>Design system</li>
+        <li>User testing</li>
+      </ul>
+    </div>
   </section>
 
   <!-- ============ HERO BANNER IMAGE ============ -->
@@ -95,6 +161,16 @@
         <div>
           <h2 class="cs-h2">Solution</h2>
           <p class="cs-p">We rebuilt the core journey around a single question, "what does this customer need right now?", and answered it with a one-tap quick-recharge shortcut for saved numbers and amounts, a redesigned plans screen that groups bundles by use-case rather than tariff code, and a curated OTT &amp; offers hub that surfaces relevant deals instead of generic promotions. Verification was moved out of the critical path wherever biometrics or a trusted device could stand in for OTP. Every change was validated against a simple metric: fewer taps to complete the task a customer opened the app to do.</p>
+
+          <h3 class="resp-h">My roles and responsibilities</h3>
+          <ul class="resp-list">
+            <li>Define UX</li>
+            <li>Wireframes</li>
+            <li>User interface &amp; prototyping</li>
+            <li>Interaction design</li>
+            <li>Usability testing</li>
+            <li>UX governance &amp; experience validation</li>
+          </ul>
         </div>
       </div>
     </div>
@@ -166,15 +242,18 @@
           <p class="cs-p">We started by shadowing recharge behaviour in-store and at kiosks across Lagos and Johannesburg, then paired that with a review of support-ticket transcripts and app analytics to see where the digital journey broke down against the physical one. Contextual interviews with prepaid and postpaid customers helped separate genuine usability friction from one-off complaints, and a competitive teardown of regional telecom apps gave us a baseline for what "simple" should feel like in this category.</p>
         </div>
         <div>
-          <h3 style="font-size:14px; font-weight:700; margin-bottom:14px;">Key Focus Areas</h3>
-          <ul class="process-list" style="display:flex; flex-direction:column; gap:10px;">
-            <li class="cs-p" style="margin-top:0;">Recharge flow</li>
-            <li class="cs-p" style="margin-top:0;">OTT bundles</li>
-            <li class="cs-p" style="margin-top:0;">Data plans</li>
-            <li class="cs-p" style="margin-top:0;">Loyalty rewards</li>
-            <li class="cs-p" style="margin-top:0;">Feedback capture</li>
-            <li class="cs-p" style="margin-top:0;">Accessibility</li>
-          </ul>
+          <h3 class="resp-h" style="margin-top:0;">Focus areas</h3>
+          <p class="cs-p" style="margin-top:0; margin-bottom:16px;">The questions the discovery phase had to answer:</p>
+          <ol class="q-list">
+            <li>What are the current purchase trends in Nigeria?</li>
+            <li>What is bought most often in Nigerian telco, prepaid or postpaid?</li>
+            <li>Which payment method is used most?</li>
+            <li>Who leads Nigerian e-commerce, and why?</li>
+            <li>What counts as a strong NPS in this market?</li>
+            <li>Who buys online, by age and gender?</li>
+            <li>What is the most used lifestyle app in Nigeria?</li>
+            <li>What words do customers actually use for bundles, recharge and VAS?</li>
+          </ol>
         </div>
       </div>
     </div>
@@ -254,6 +333,16 @@
     </div>
   </section>
 
+  <!-- ============ COMPETITIVE BOARD ============ -->
+  <section class="cs-section reveal" style="padding-top:0;">
+    <div class="container">
+      <figure class="shot dense">
+        <img src="../assets/img/my-mtn/competitive-analysis.jpg" alt="Competitive analysis boards: keyword rankings, feature comparison scores and NPS breakdowns across Nigerian telecom apps" loading="lazy" decoding="async">
+        <figcaption>The working boards: keyword rankings, feature scoring and NPS across the Nigerian market.</figcaption>
+      </figure>
+    </div>
+  </section>
+
   <!-- ============ NICHE STATEMENT ============ -->
   <section class="cs-section reveal">
     <div class="container">
@@ -276,8 +365,9 @@
           <span class="media-caption">Interview session</span>
         </div>
         <div>
-          <div class="cs-label">Voice of the customer</div>
-          <h2 class="cs-h2" style="margin-bottom:18px;">What we heard, in their words</h2>
+          <div class="cs-label">Define &middot; Interview synthesis</div>
+          <h2 class="cs-h2" style="margin-bottom:14px;">What we heard, in their words</h2>
+          <p class="cs-p" style="margin-top:0; margin-bottom:20px;">Every participant response was synthesised into themes, opportunities and the tasks a persona needed to carry, their priorities, and their pain points.</p>
           <p class="cs-p" style="font-style:italic; border-left:2px solid var(--border); padding-left:16px;">"I just want to send airtime to my mother without going through five screens every single time."</p>
           <p class="cs-p" style="font-style:italic; border-left:2px solid var(--border); padding-left:16px;">"Half the time I don't even know which data plan is the good deal, the names all sound the same."</p>
           <p class="cs-p" style="font-style:italic; border-left:2px solid var(--border); padding-left:16px;">"When the OTP doesn't arrive I just give up and go to the kiosk downstairs."</p>
@@ -289,23 +379,15 @@
   <!-- ============ COOKING UP A BETTER EXPERIENCE ============ -->
   <section class="cs-section reveal">
     <div class="container">
-      <div class="cs-label" style="text-align:center;">Design</div>
-      <h2 class="cs-h2 center" style="margin-bottom:44px;">Cooking up a better experience</h2>
+      <div class="cs-label" style="text-align:center;">Ideate</div>
+      <h2 class="cs-h2 center" style="margin-bottom:18px;">Cooking up a better experience</h2>
+      <p class="cs-p center" style="max-width:640px; margin:0 auto 40px;">Quick sketches got ideas onto paper first, to settle which elements each screen actually needed. A low-fidelity prototype followed, and went straight into user testing.</p>
 
       <h3 style="font-size:14px; font-weight:700; text-align:center; margin-bottom:24px; color:var(--text-muted); text-transform:uppercase; letter-spacing:.08em;">User flow, Quick Recharge</h3>
-      <div class="media-frame" style="padding:36px 24px; min-height:auto;">
-        <div class="flow-row">
-          <div class="flow-box">Login</div>
-          <span class="flow-arrow">→</span>
-          <div class="flow-box">Dashboard</div>
-          <span class="flow-arrow">→</span>
-          <div class="flow-box">Select Plan</div>
-          <span class="flow-arrow">→</span>
-          <div class="flow-box">Confirm</div>
-          <span class="flow-arrow">→</span>
-          <div class="flow-box">Success</div>
-        </div>
-      </div>
+      <figure class="shot">
+        <img src="../assets/img/my-mtn/personas.jpg" alt="Persona board for Dora Adeosun, a Lagos digital marketer, with goals, frustrations and tech profile" loading="lazy" decoding="async">
+        <figcaption>Persona synthesised from the interviews: goals, frustrations, and the tasks she needs to complete.</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -315,24 +397,14 @@
       <div class="cs-label">Low fidelity</div>
       <h2 class="cs-h2" style="margin-bottom:28px;">Wire frames</h2>
       <div class="grid g-4 stagger">
-        <div class="media-frame" style="aspect-ratio:9/16; min-height:auto; flex-direction:column; padding:14px; gap:8px; align-items:stretch;">
-          <div style="height:14px; border-radius:4px; background:rgba(255,255,255,.12);"></div>
-          <div style="height:34px; border-radius:6px; border:1px solid rgba(255,255,255,.14);"></div>
-          <div style="height:10px; width:70%; border-radius:3px; background:rgba(255,255,255,.1);"></div>
-          <div style="height:10px; width:50%; border-radius:3px; background:rgba(255,255,255,.1);"></div>
-          <div style="flex:1; border-radius:6px; border:1px dashed rgba(255,255,255,.14);"></div>
-          <span class="media-caption" style="position:static; align-self:center; margin-top:auto;">Wireframe 1</span>
-        </div>
-        <div class="media-frame" style="aspect-ratio:9/16; min-height:auto; flex-direction:column; padding:14px; gap:8px; align-items:stretch;">
-          <div style="height:14px; border-radius:4px; background:rgba(255,255,255,.12);"></div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-            <div style="height:40px; border-radius:6px; border:1px solid rgba(255,255,255,.14);"></div>
-            <div style="height:40px; border-radius:6px; border:1px solid rgba(255,255,255,.14);"></div>
-          </div>
-          <div style="height:10px; width:60%; border-radius:3px; background:rgba(255,255,255,.1);"></div>
-          <div style="flex:1; border-radius:6px; border:1px dashed rgba(255,255,255,.14);"></div>
-          <span class="media-caption" style="position:static; align-self:center; margin-top:auto;">Wireframe 2</span>
-        </div>
+        <figure class="shot">
+        <img src="../assets/img/my-mtn/wireframes.jpg" alt="Low-fidelity wireframe set covering the recharge, plans and account journeys" loading="lazy" decoding="async">
+        <figcaption>Low-fidelity frames used for the first round of testing.</figcaption>
+      </figure>
+        <figure class="shot">
+        <img src="../assets/img/my-mtn/user-flow-1.jpg" alt="User flow diagram for the recharge journey" loading="lazy" decoding="async">
+        <figcaption>The primary flow: recharge for yourself, or for someone else.</figcaption>
+      </figure>
         <div class="media-frame" style="aspect-ratio:9/16; min-height:auto; flex-direction:column; padding:14px; gap:8px; align-items:stretch;">
           <div style="height:14px; border-radius:4px; background:rgba(255,255,255,.12);"></div>
           <div style="height:20px; border-radius:999px; border:1px solid rgba(255,255,255,.14);"></div>
@@ -357,42 +429,23 @@
   <section class="cs-section reveal" style="background:#0d0d0e;">
     <div class="container">
       <div class="section-head" style="margin-bottom:44px;">
-        <div class="cs-label" style="text-align:center;">Visual design</div>
+        <div class="cs-label" style="text-align:center;">UI design</div>
         <h2 class="cs-h2 center">A focus on simplicity</h2>
-        <p class="cs-p" style="text-align:center;">A highly curated experience</p>
+        <p class="cs-p center" style="max-width:660px; margin-left:auto; margin-right:auto;">Drawing on a colourful, warm Nigerian visual register but holding to minimal, functional simplicity, the UI answers what customers asked for: a clutter-free, curated look.</p>
       </div>
-      <div class="phone-row p2">
-        <div class="phone-col">
-          <div class="phone">
-            <div class="mock-screen">
-              <div class="mock-topbar"><span class="mtn-chip">MTN</span><div class="mock-avatar"></div></div>
-              <div class="mock-body">
-                <div class="mock-card hero" style="min-height:60px;"></div>
-                <div class="mock-grid2">
-                  <div class="mock-card"></div>
-                  <div class="mock-card"></div>
-                </div>
-                <div class="mock-card"><div class="mock-line" style="width:70%;"></div></div>
-              </div>
-              <div class="mock-nav"><i class="on"></i><i></i><i></i><i></i></div>
-            </div>
-          </div>
-          <div class="phone-caption">Home</div>
-        </div>
-        <div class="phone-col">
-          <div class="phone">
-            <div class="mock-screen">
-              <div class="mock-topbar"><div class="mock-bar" style="width:60px;"></div></div>
-              <div class="mock-body">
-                <div class="mock-card"><div class="mock-line" style="width:80%;"></div><div class="mock-line" style="width:50%; margin-top:6px;"></div></div>
-                <div class="mock-card hero"><div class="mock-line" style="width:60%; background:rgba(20,18,10,.5);"></div></div>
-                <div class="mock-btn" style="margin-top:auto;">Recharge Now</div>
-              </div>
-            </div>
-          </div>
-          <div class="phone-caption">Plans</div>
-        </div>
-      </div>
+      <figure class="shot">
+        <img src="../assets/img/my-mtn/ui-design.jpg" alt="Final UI screens showing the MTN visual language applied across the app" loading="lazy" decoding="async">
+        <figcaption>The visual language applied across the app.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ SOLUTION STATEMENT ============ -->
+  <section class="cs-section reveal">
+    <div class="container">
+      <div class="cs-label" style="text-align:center;">Solution</div>
+      <h2 class="cs-h2 center" style="margin-bottom:18px;">A highly curated experience</h2>
+      <p class="cs-p center" style="max-width:700px; margin-left:auto; margin-right:auto;">The app became MTN&rsquo;s answer to connecting Nigerian users with the world and with each other. It links people to an easy top-up experience and to content matched to their own preferences, to the point that it now competes as a lifestyle choice rather than a utility.</p>
     </div>
   </section>
 
@@ -401,47 +454,10 @@
     <div class="container">
       <div class="cs-label" style="text-align:center;">Feature</div>
       <h2 class="cs-h2 center" style="margin-bottom:32px;">OTT Integration</h2>
-      <div class="phone-row p3">
-        <div class="phone-col">
-          <div class="phone"><div class="mock-screen">
-            <div class="mock-topbar"><div class="mock-bar" style="width:50px;"></div></div>
-            <div class="mock-body">
-              <div class="mock-card hero" style="min-height:50px;"></div>
-              <div class="mock-grid2"><div class="mock-card"></div><div class="mock-card"></div></div>
-              <div class="mock-card"><div class="mock-line" style="width:75%;"></div><div class="mock-line" style="width:45%; margin-top:6px;"></div></div>
-              <div class="mock-card"><div class="mock-line" style="width:65%;"></div><div class="mock-line" style="width:40%; margin-top:6px;"></div></div>
-              <div class="mock-grid2"><div class="mock-card"></div><div class="mock-card"></div></div>
-            </div>
-          </div></div>
-          <div class="phone-caption">Streaming Bundles</div>
-        </div>
-        <div class="phone-col">
-          <div class="phone"><div class="mock-screen">
-            <div class="mock-topbar"><div class="mock-bar" style="width:50px;"></div></div>
-            <div class="mock-body">
-              <div class="mock-card hero" style="min-height:90px;"><div class="mock-line" style="width:55%; background:rgba(20,18,10,.5);"></div></div>
-              <div class="mock-card"><div class="mock-line" style="width:80%;"></div></div>
-              <div class="mock-card"><div class="mock-line" style="width:60%;"></div></div>
-              <div class="mock-card"><div class="mock-line" style="width:70%;"></div><div class="mock-line" style="width:35%; margin-top:6px;"></div></div>
-              <div class="mock-btn">Activate</div>
-            </div>
-          </div></div>
-          <div class="phone-caption">Bundle Details</div>
-        </div>
-        <div class="phone-col">
-          <div class="phone"><div class="mock-screen">
-            <div class="mock-topbar"><div class="mock-bar" style="width:50px;"></div></div>
-            <div class="mock-body" style="align-items:center; justify-content:center; gap:12px;">
-              <div class="mock-dot on" style="width:44px; height:44px;"></div>
-              <div class="mock-line" style="width:60%;"></div>
-              <div class="mock-line" style="width:45%;"></div>
-              <div class="mock-card" style="width:100%;"><div class="mock-line" style="width:70%; margin:0 auto;"></div></div>
-              <div class="mock-btn" style="width:70%;">Done</div>
-            </div>
-          </div></div>
-          <div class="phone-caption">Confirmation</div>
-        </div>
-      </div>
+      <figure class="shot">
+        <img src="../assets/img/my-mtn/feature-ott.jpg" alt="My MTN OTT Integration screens" loading="lazy" decoding="async">
+        <figcaption>Play screen lets a customer move between platforms and browse what is available. Even non-MTN users can sign in and watch.</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -450,47 +466,10 @@
     <div class="container">
       <div class="cs-label" style="text-align:center;">Feature</div>
       <h2 class="cs-h2 center" style="margin-bottom:32px;">Plans &amp; Offers</h2>
-      <div class="phone-row p3">
-        <div class="phone-col">
-          <div class="phone"><div class="mock-screen">
-            <div class="mock-topbar"><div class="mock-bar" style="width:50px;"></div></div>
-            <div class="mock-body">
-              <div class="mock-card"><div class="mock-line" style="width:70%;"></div><div class="mock-line" style="width:40%; margin-top:6px;"></div></div>
-              <div class="mock-card"><div class="mock-line" style="width:70%;"></div><div class="mock-line" style="width:40%; margin-top:6px;"></div></div>
-              <div class="mock-card hero"><div class="mock-line" style="width:50%; background:rgba(20,18,10,.5);"></div></div>
-              <div class="mock-card"><div class="mock-line" style="width:65%;"></div><div class="mock-line" style="width:35%; margin-top:6px;"></div></div>
-              <div class="mock-card"><div class="mock-line" style="width:60%;"></div><div class="mock-line" style="width:40%; margin-top:6px;"></div></div>
-            </div>
-          </div></div>
-          <div class="phone-caption">Plan List</div>
-        </div>
-        <div class="phone-col">
-          <div class="phone"><div class="mock-screen">
-            <div class="mock-topbar"><div class="mock-bar" style="width:50px;"></div></div>
-            <div class="mock-body" style="align-items:center;">
-              <div class="mock-card hero" style="width:100%; min-height:90px;"></div>
-              <div class="mock-card" style="width:100%;"><div class="mock-line" style="width:70%; margin:0 auto;"></div></div>
-              <div class="mock-grid2" style="width:100%;"><div class="mock-card"></div><div class="mock-card"></div></div>
-              <div class="mock-btn" style="width:80%;">Choose Plan</div>
-            </div>
-          </div></div>
-          <div class="phone-caption">Plan Detail</div>
-        </div>
-        <div class="phone-col">
-          <div class="phone"><div class="mock-screen">
-            <div class="mock-topbar"><div class="mock-bar" style="width:50px;"></div></div>
-            <div class="mock-body">
-              <div class="mock-card"><div class="mock-line" style="width:60%;"></div></div>
-              <div class="mock-card"><div class="mock-line" style="width:70%;"></div></div>
-              <div class="mock-card"><div class="mock-line" style="width:50%;"></div></div>
-              <div class="mock-card hero"><div class="mock-line" style="width:55%; background:rgba(20,18,10,.5);"></div></div>
-              <div class="mock-card"><div class="mock-line" style="width:65%;"></div></div>
-              <div class="mock-card"><div class="mock-line" style="width:58%;"></div></div>
-            </div>
-          </div></div>
-          <div class="phone-caption">Offers Feed</div>
-        </div>
-      </div>
+      <figure class="shot">
+        <img src="../assets/img/my-mtn/feature-plans.jpg" alt="My MTN Plans and Offers screens" loading="lazy" decoding="async">
+        <figcaption>Plans are filtered to what this customer actually uses, rather than listing the full tariff catalogue.</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -499,34 +478,10 @@
     <div class="container">
       <div class="cs-label" style="text-align:center;">Feature</div>
       <h2 class="cs-h2 center" style="margin-bottom:32px;">Recharge</h2>
-      <div class="phone-row p2">
-        <div class="phone-col">
-          <div class="phone"><div class="mock-screen">
-            <div class="mock-topbar"><div class="mock-bar" style="width:60px;"></div></div>
-            <div class="mock-body" style="align-items:center;">
-              <div class="mock-pill" style="width:90%; height:38px;"></div>
-              <div class="mock-grid2" style="width:100%;"><div class="mock-card"></div><div class="mock-card"></div></div>
-              <div class="mock-grid2" style="width:100%;"><div class="mock-card"></div><div class="mock-card"></div></div>
-              <div class="mock-card" style="width:100%;"><div class="mock-line" style="width:70%; margin:0 auto;"></div></div>
-              <div class="mock-btn" style="width:90%;">Recharge Now</div>
-            </div>
-          </div></div>
-          <div class="phone-caption">Select Amount</div>
-        </div>
-        <div class="phone-col">
-          <div class="phone"><div class="mock-screen">
-            <div class="mock-topbar"><div class="mock-bar" style="width:60px;"></div></div>
-            <div class="mock-body" style="align-items:center; justify-content:center; gap:14px;">
-              <div class="mock-dot on" style="width:50px; height:50px;"></div>
-              <div class="mock-line" style="width:60%;"></div>
-              <div class="mock-line" style="width:42%;"></div>
-              <div class="mock-card" style="width:100%;"><div class="mock-line" style="width:60%; margin:0 auto;"></div></div>
-              <div class="mock-btn" style="width:70%;">Recharge Successful</div>
-            </div>
-          </div></div>
-          <div class="phone-caption">Success</div>
-        </div>
-      </div>
+      <figure class="shot">
+        <img src="../assets/img/my-mtn/feature-recharge.jpg" alt="My MTN Recharge screens" loading="lazy" decoding="async">
+        <figcaption>Recharge for yourself, or for friends and family, from saved numbers.</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -535,45 +490,10 @@
     <div class="container">
       <div class="cs-label" style="text-align:center;">Feature</div>
       <h2 class="cs-h2 center" style="margin-bottom:32px;">For loyal customers</h2>
-      <div class="phone-row p3">
-        <div class="phone-col">
-          <div class="phone"><div class="mock-screen">
-            <div class="mock-topbar"><div class="mock-bar" style="width:50px;"></div></div>
-            <div class="mock-body" style="align-items:center;">
-              <div class="mock-card hero" style="width:100%; min-height:60px; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center;">2,450 Points</div>
-              <div class="mock-grid2" style="width:100%;"><div class="mock-card"></div><div class="mock-card"></div></div>
-              <div class="mock-card" style="width:100%;"><div class="mock-line" style="width:70%; margin:0 auto;"></div></div>
-              <div class="mock-card" style="width:100%;"><div class="mock-line" style="width:55%; margin:0 auto;"></div></div>
-            </div>
-          </div></div>
-          <div class="phone-caption">Rewards Balance</div>
-        </div>
-        <div class="phone-col">
-          <div class="phone"><div class="mock-screen">
-            <div class="mock-topbar"><div class="mock-bar" style="width:50px;"></div></div>
-            <div class="mock-body">
-              <div class="mock-card"><div class="mock-line" style="width:70%;"></div></div>
-              <div class="mock-card"><div class="mock-line" style="width:60%;"></div></div>
-              <div class="mock-card"><div class="mock-line" style="width:65%;"></div></div>
-              <div class="mock-card"><div class="mock-line" style="width:50%;"></div></div>
-              <div class="mock-btn">Redeem</div>
-            </div>
-          </div></div>
-          <div class="phone-caption">Redeem Rewards</div>
-        </div>
-        <div class="phone-col">
-          <div class="phone"><div class="mock-screen">
-            <div class="mock-topbar"><div class="mock-bar" style="width:50px;"></div></div>
-            <div class="mock-body">
-              <div class="mock-dot-row"><div class="mock-dot on"></div><div class="mock-dot on"></div><div class="mock-dot on"></div><div class="mock-dot"></div></div>
-              <div class="mock-card"><div class="mock-line" style="width:70%;"></div></div>
-              <div class="mock-card"><div class="mock-line" style="width:60%;"></div><div class="mock-line" style="width:40%; margin-top:6px;"></div></div>
-              <div class="mock-card"><div class="mock-line" style="width:55%;"></div></div>
-            </div>
-          </div></div>
-          <div class="phone-caption">Tier Status</div>
-        </div>
-      </div>
+      <figure class="shot">
+        <img src="../assets/img/my-mtn/feature-loyalty.jpg" alt="My MTN For loyal customers screens" loading="lazy" decoding="async">
+        <figcaption>Rewards for loyal customers, including hotel passes and access to special content.</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -582,42 +502,10 @@
     <div class="container">
       <div class="cs-label" style="text-align:center;">Feature</div>
       <h2 class="cs-h2 center" style="margin-bottom:32px;">Feedback</h2>
-      <div class="phone-row p3">
-        <div class="phone-col">
-          <div class="phone"><div class="mock-screen">
-            <div class="mock-topbar"><div class="mock-bar" style="width:50px;"></div></div>
-            <div class="mock-body" style="align-items:center; justify-content:center; gap:12px;">
-              <div class="mock-line" style="width:60%;"></div>
-              <div class="mock-stars"><i></i><i></i><i></i><i></i><i></i></div>
-              <div class="mock-card" style="width:100%;"><div class="mock-line" style="width:70%; margin:0 auto;"></div></div>
-              <div class="mock-btn" style="width:70%;">Next</div>
-            </div>
-          </div></div>
-          <div class="phone-caption">Rate Experience</div>
-        </div>
-        <div class="phone-col">
-          <div class="phone"><div class="mock-screen">
-            <div class="mock-topbar"><div class="mock-bar" style="width:50px;"></div></div>
-            <div class="mock-body">
-              <div class="mock-card" style="flex:1;"><div class="mock-line" style="width:80%;"></div><div class="mock-line" style="width:60%; margin-top:6px;"></div></div>
-              <div class="mock-btn">Submit</div>
-            </div>
-          </div></div>
-          <div class="phone-caption">Share Comments</div>
-        </div>
-        <div class="phone-col">
-          <div class="phone"><div class="mock-screen">
-            <div class="mock-topbar"><div class="mock-bar" style="width:50px;"></div></div>
-            <div class="mock-body" style="align-items:center; justify-content:center; gap:12px;">
-              <div class="mock-dot on" style="width:44px; height:44px;"></div>
-              <div class="mock-line" style="width:55%;"></div>
-              <div class="mock-line" style="width:40%;"></div>
-              <div class="mock-btn" style="width:70%;">Back to Home</div>
-            </div>
-          </div></div>
-          <div class="phone-caption">Thank You</div>
-        </div>
-      </div>
+      <figure class="shot">
+        <img src="../assets/img/my-mtn/feature-feedback.jpg" alt="My MTN Feedback screens" loading="lazy" decoding="async">
+        <figcaption>A short feedback path, so the team can hear what to improve next.</figcaption>
+      </figure>
 
       <div style="max-width:220px;margin:40px auto 0;">
         <div class="phone"><div class="mock-screen">
@@ -673,7 +561,10 @@
   Copyright © 2026. All rights reserved. Made with Love for UX
 </footer>
 
+<script src="../assets/js/vendor/motion.min.js"></script>
+<script src="../assets/js/engine.js"></script>
 <script src="../assets/js/main.js"></script>
 <script src="../assets/js/study.js"></script>
+<script src="../assets/js/transitions.js"></script>
 </body>
 </html>
