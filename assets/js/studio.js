@@ -34,18 +34,53 @@
   });
 
   // Masked line reveal: wrap words, then group them by rendered line.
+  // Words inside a .hl span keep that wrapper, so a highlighted phrase
+  // survives the split; punctuation that touches it ("AI.") stays glued.
   function splitLines(el) {
-    var words = el.textContent.trim().split(/\s+/);
-    el.innerHTML = words.map(function (w) { return '<span class="wd">' + w + '</span>'; }).join(' ');
+    var units = [], prev = '';
+    Array.prototype.forEach.call(el.childNodes, function (node) {
+      var hl = node.nodeType === 1 && node.classList.contains('hl');
+      var text = node.textContent;
+      var glue = units.length && !/\s$/.test(prev) && !/^\s/.test(text);
+      prev = text;
+      text.trim().split(/\s+/).forEach(function (w, i) {
+        if (!w) return;
+        var piece = { t: w, hl: hl };
+        if (i === 0 && glue) units[units.length - 1].push(piece);
+        else units.push([piece]);
+      });
+    });
+    var html = function (u) {
+      return u.map(function (p) { return p.hl ? '<span class="hl">' + p.t + '</span>' : p.t; }).join('');
+    };
+    el.innerHTML = units.map(function (u) { return '<span class="wd">' + html(u) + '</span>'; }).join(' ');
     var lines = [], top = null;
-    $$('.wd', el).forEach(function (w) {
+    $$('.wd', el).forEach(function (w, i) {
       if (w.offsetTop !== top) { lines.push([]); top = w.offsetTop; }
-      lines[lines.length - 1].push(w.textContent);
+      lines[lines.length - 1].push(html(units[i]));
     });
     el.innerHTML = lines.map(function (l) {
       return '<span class="ln"><span>' + l.join(' ') + '</span></span>';
     }).join('');
+    placeGradient(el);
   }
+
+  // One gradient field spans the whole heading; each highlighted word is
+  // told where it sits in that field, so the colour runs on unbroken
+  // across words and line breaks instead of restarting in each one.
+  function placeGradient(el) {
+    var hls = $$('.hl', el);
+    if (!hls.length) return;
+    el.style.setProperty('--W', el.offsetWidth + 'px');
+    el.style.setProperty('--H', el.offsetHeight + 'px');
+    hls.forEach(function (h) {
+      var x = 0, y = 0, n = h;
+      while (n && n !== el) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; }
+      h.style.setProperty('--x', x + 'px');
+      h.style.setProperty('--y', y + 'px');
+    });
+  }
+  window.addEventListener('resize', function () { $$('[data-lines]').forEach(placeGradient); });
 
   // About copy: one span per word, lit as the reader scrolls through it.
   var aboutWords = [];

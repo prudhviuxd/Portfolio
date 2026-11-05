@@ -182,31 +182,31 @@ ul{list-style:none}
 .hero-in a,.hero-in .hero-card{pointer-events:auto}
 .hero-top{display:grid;grid-template-columns:minmax(0,1fr) clamp(260px,27vw,420px);column-gap:clamp(32px,4vw,72px);align-items:start}
 .hero-title{margin-left:-.05em;font-size:clamp(3.2rem,7.3vw,8.4rem);line-height:.88;letter-spacing:-.065em;max-width:12.5ch}
-/* Hero gradient: a warm amber band (from the portrait) travels through
-   the headline. Each line runs a beat behind the one above, so the
-   light moves down the block diagonally rather than in one slab. */
-.hero-title .ln>span{
-  background:linear-gradient(100deg,
-    var(--ink) 0%, var(--ink) 30%,
-    #f3dcb8 40%, #f0a35e 47%, #d9733a 50%, #f0a35e 53%, #f3dcb8 60%,
-    var(--ink) 70%, var(--ink) 100%);
-  background-size:300% 100%;
-  background-position:100% 0;
+/* Hero accent: only "UX maturity, innovation and AI" carries colour.
+   It is one warm field (sand, amber, burnt orange, terracotta, from the
+   portrait) laid across the whole heading and drifting slowly sideways;
+   studio.js gives each word its offset into that field, so the colour
+   flows through the phrase across the line breaks. The tile is twice
+   the heading's width and repeats its first colour at the midpoint, so
+   shifting it by one width loops without a seam. */
+.hero-title{position:relative}
+.hero-title .hl{
+  background-image:linear-gradient(100deg,
+    #f4dcb6 0%, #f0a25a 12%, #dd6f3b 24%, #c4553a 31%, #ef9d5c 40%, #f4dcb6 50%,
+    #f0a25a 62%, #dd6f3b 74%, #c4553a 81%, #ef9d5c 90%, #f4dcb6 100%);
+  background-size:calc(var(--W,100%) * 2) var(--H,100%);
+  background-position:calc(var(--x,0px) * -1) calc(var(--y,0px) * -1);
   -webkit-background-clip:text; background-clip:text;
   -webkit-text-fill-color:transparent; color:transparent;
-  animation:hero-flow 7s cubic-bezier(.45,0,.55,1) infinite;
   padding-bottom:.16em; margin-bottom:-.16em;
+  animation:hero-flow 9s linear infinite;
 }
-.hero-title .ln:nth-child(2)>span{animation-delay:.35s}
-.hero-title .ln:nth-child(3)>span{animation-delay:.7s}
-.hero-title .ln:nth-child(4)>span{animation-delay:1.05s}
-.hero-title .ln:nth-child(5)>span{animation-delay:1.4s}
 @keyframes hero-flow{
-  0%{background-position:100% 0}
-  55%,100%{background-position:0% 0}
+  from{background-position:calc(var(--x,0px) * -1) calc(var(--y,0px) * -1)}
+  to{background-position:calc(var(--x,0px) * -1 - var(--W,100%)) calc(var(--y,0px) * -1)}
 }
 @media (prefers-reduced-motion:reduce){
-  .hero-title .ln>span{animation:none;background-position:50% 0}
+  .hero-title .hl{animation:none}
 }
 .hero-sum{margin-top:32px;max-width:46ch;font-size:16px;line-height:1.3;color:var(--ink-2)}
 .js .hero-sum{opacity:0;transition:opacity 1s .7s}
