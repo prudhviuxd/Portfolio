@@ -1,0 +1,149 @@
+/* =========================================================
+   Site header, menu and back button, shared by every page
+   (home, case studies, resume) so they cannot drift apart.
+   Self-contained: carries its own fonts and tokens, scoped to
+   .hd / .menu / .back-btn so it never touches page styles.
+   ========================================================= */
+
+@font-face{
+  font-family:"Familjen";
+  src:url("../fonts/familjen.woff2") format("woff2");
+  font-weight:400; font-display:swap;
+}
+@font-face{
+  font-family:"Instrument";
+  src:url("../fonts/instrument.woff2") format("woff2-variations");
+  font-weight:400 700; font-display:swap;
+}
+@font-face{
+  font-family:"Martian";
+  src:url("../fonts/martian.woff2") format("woff2");
+  font-weight:300; font-display:swap;
+}
+
+.hd,.menu,.back-btn{
+  --sh-ink:#d8d8d8; --sh-ink-2:#9c9c9c; --sh-ink-3:#6b6b6b; --sh-line:#2c2c2c;
+  --sh-display:"Familjen","Helvetica Neue",Arial,sans-serif;
+  --sh-body:"Instrument","Helvetica Neue",Arial,sans-serif;
+  --sh-mono:"Martian",ui-monospace,Menlo,monospace;
+  --sh-gut:36px; --sh-h:76px;
+  --sh-ease:cubic-bezier(.76,0,.24,1); --sh-out:cubic-bezier(.16,1,.3,1);
+  font-family:var(--sh-body);
+  -webkit-font-smoothing:antialiased;
+}
+.hd *,.menu *,.back-btn *{box-sizing:border-box}
+
+/* ---------- header: translucent bar ---------- */
+.hd{
+  position:fixed; inset:0 0 auto 0; z-index:90; height:var(--sh-h);
+  display:flex; justify-content:space-between; align-items:center;
+  padding:0 var(--sh-gut); color:#f2f2f2;
+  background:rgba(13,13,13,.58);
+  -webkit-backdrop-filter:blur(16px) saturate(140%); backdrop-filter:blur(16px) saturate(140%);
+  border-bottom:1px solid rgba(255,255,255,.07);
+  transition:background .4s;
+}
+.hd a{color:inherit;text-decoration:none}
+.hd-logo{display:inline-flex;align-items:center;gap:10px;font-family:var(--sh-display);font-size:20px;letter-spacing:-.04em;text-transform:uppercase;line-height:1}
+.hd .mono-pj{display:inline-grid;place-items:center;width:30px;height:30px;border:1px solid currentColor;border-radius:50%;font-size:13px;letter-spacing:-.04em;line-height:1;padding-right:1px}
+.hd-r{display:flex;gap:8px;align-items:center}
+
+.hd .pill{
+  display:inline-flex; align-items:center; gap:10px; height:30px; padding:0 15px;
+  border-radius:40px; font-family:var(--sh-body); font-size:14px; font-weight:500;
+  text-transform:uppercase; letter-spacing:-.01em; line-height:1; cursor:pointer;
+  background:none; border:0; color:inherit; transition:background .3s,color .3s,border-color .3s;
+}
+.hd .pill-solid{background:#f2f2f2;color:#0d0d0d}
+.hd .pill-line{border:1px solid rgba(242,242,242,.85);color:#f2f2f2}
+.hd .pill-line:hover{background:rgba(255,255,255,.08)}
+.hd .burger{display:inline-flex;flex-direction:column;gap:3px;width:12px}
+.hd .burger i{display:block;height:1px;background:currentColor;transition:transform .4s var(--sh-ease)}
+.menu-open .hd .burger i:first-child{transform:translateY(2px) rotate(45deg)}
+.menu-open .hd .burger i:last-child{transform:translateY(-2px) rotate(-45deg)}
+
+/* letter roll */
+.hd .roll,.menu .roll{position:relative;display:inline-block;overflow:hidden;vertical-align:top}
+.hd .roll-a,.hd .roll-b,.menu .roll-a,.menu .roll-b{display:block;transition:transform .5s var(--sh-ease)}
+.hd .roll-b,.menu .roll-b{position:absolute;left:0;top:0;transform:translateY(105%)}
+.hd [data-roll]:hover .roll-a,.hd button:hover [data-roll] .roll-a,.menu [data-roll]:hover .roll-a{transform:translateY(-105%)}
+.hd [data-roll]:hover .roll-b,.hd button:hover [data-roll] .roll-b,.menu [data-roll]:hover .roll-b{transform:translateY(0)}
+
+/* ---------- menu panel ---------- */
+.menu{position:fixed;inset:0;z-index:85;visibility:hidden;pointer-events:none;display:flex;justify-content:flex-end;padding:16px;color:var(--sh-ink)}
+.menu a{color:inherit;text-decoration:none}
+.menu ul{list-style:none;margin:0;padding:0}
+.menu p{margin:0}
+.menu-scrim{position:absolute;inset:0;background:rgba(0,0,0,.45);opacity:0;transition:opacity .5s}
+.menu-panel{
+  position:relative; width:min(560px,100%); height:100%;
+  background:#161616; border:1px solid #222; border-radius:6px;
+  padding:110px 40px 32px; display:flex; flex-direction:column; justify-content:space-between;
+  transform:translateX(calc(100% + 24px)); transition:transform .8s var(--sh-ease);
+  overflow-y:auto;
+}
+.menu-open .menu{visibility:visible;pointer-events:auto}
+.menu-open .menu-scrim{opacity:1}
+.menu-open .menu-panel{transform:none}
+.menu-links a{font-family:var(--sh-display);font-size:clamp(3rem,6vw,5rem);letter-spacing:-.06em;line-height:.98}
+.menu-links li{overflow:hidden}
+.menu-links li>a{display:inline-block;transform:translateY(105%);transition:transform .8s var(--sh-out)}
+.menu-open .menu-links li>a{transform:none}
+.menu-open .menu-links li:nth-child(2)>a{transition-delay:.05s}
+.menu-open .menu-links li:nth-child(3)>a{transition-delay:.1s}
+.menu-open .menu-links li:nth-child(4)>a{transition-delay:.15s}
+.menu-open .menu-links li:nth-child(5)>a{transition-delay:.2s}
+.menu-open .menu-links li:nth-child(6)>a{transition-delay:.25s}
+.menu-links .menu-alt{font-size:clamp(1.6rem,2.4vw,2rem);margin-top:18px;color:var(--sh-ink-2)}
+.menu .lbl{font-size:13px;letter-spacing:.02em;text-transform:uppercase;font-weight:500}
+.menu-foot{display:grid;grid-template-columns:1fr auto;gap:28px 20px;margin-top:40px;align-items:end}
+.menu-enq p{font-size:15px;margin-top:6px}
+.menu-enq em{font-style:normal;color:var(--sh-ink-3);margin-right:8px}
+.menu-social{grid-column:1/-1;display:flex;gap:22px;align-items:center;border-top:1px solid var(--sh-line);padding-top:18px}
+.menu-social .lbl{color:var(--sh-ink-3);margin-right:auto}
+.menu .est{display:flex;border:1px solid #333;border-radius:3px;font-size:12px;text-transform:uppercase;line-height:1.1}
+.menu .est-l{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 18px;border-right:1px solid #333}
+.menu .est p{padding:12px 14px;align-self:center}
+
+/* ---------- back button: one style, one place ----------
+   Sits just under the header, its left edge on the same line as
+   the logo, on every page that has somewhere to go back to. */
+.back-btn{
+  position:absolute; z-index:20; top:calc(var(--sh-h) + 22px); left:var(--sh-gut);
+  display:inline-flex; align-items:center; gap:10px; height:34px; padding:0 16px 0 12px;
+  border:1px solid rgba(242,242,242,.28); border-radius:40px;
+  background:rgba(13,13,13,.45); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+  color:#f2f2f2; text-decoration:none;
+  font-family:var(--sh-mono); font-weight:300; font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; line-height:1;
+  transition:border-color .3s,background .3s;
+}
+.back-btn svg{transition:transform .45s var(--sh-out)}
+.back-btn:hover{border-color:rgba(242,242,242,.7);background:rgba(13,13,13,.7)}
+.back-btn:hover svg{transform:translateX(-4px)}
+.back-btn:focus-visible,.hd a:focus-visible,.hd button:focus-visible,.menu a:focus-visible{outline:1px solid #f2f2f2;outline-offset:4px}
+
+@media (max-width:1024px){ .hd,.menu,.back-btn{--sh-gut:24px} }
+@media (max-width:767px){
+  .hd,.menu,.back-btn{--sh-gut:16px; --sh-h:64px}
+  .hd-logo{font-size:17px}
+  .hd .mono-pj{width:28px;height:28px;font-size:12px}
+  .menu{padding:0}
+  .menu-panel{border-radius:0;border:0;padding:96px 20px 24px}
+  .menu-foot{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  .hd *,.menu *,.back-btn,.back-btn *{transition-duration:.01ms!important;transition-delay:0s!important}
+}
+@media print{ .hd,.menu,.back-btn{display:none!important} }
+
+/* ---------- page clearance ----------
+   Case-study heroes and the resume start below the header and the
+   back button; the reading-progress hairline rides on the header. */
+.w-hero,.cs-hero,.theme-who .w-hero{padding-top:170px}
+body main.cv{padding-top:168px}
+.progress{z-index:95}
+@media (max-width:767px){
+  .w-hero,.cs-hero,.theme-who .w-hero{padding-top:140px}
+  .hd #printBtn{display:none}
+  body main.cv{padding-top:150px}
+}

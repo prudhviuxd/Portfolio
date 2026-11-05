@@ -113,25 +113,6 @@
 
   requestAnimationFrame(function () { requestAnimationFrame(function () { root.classList.add('ready'); }); });
 
-  /* ---------- menu ---------- */
-
-  var menuBtn = $('#menuBtn'), menu = $('#menu');
-  function setMenu(open) {
-    root.classList.toggle('menu-open', open);
-    menuBtn.setAttribute('aria-expanded', open);
-    menu.setAttribute('aria-hidden', !open);
-    if (open) { var first = $('.menu-links a', menu); first && first.focus({ preventScroll: true }); }
-  }
-  if (menuBtn && menu) {
-    menuBtn.addEventListener('click', function () { setMenu(!root.classList.contains('menu-open')); });
-    menu.addEventListener('click', function (e) {
-      if (e.target.closest('[data-close]') || e.target.closest('a')) setMenu(false);
-    });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && root.classList.contains('menu-open')) { setMenu(false); menuBtn.focus(); }
-    });
-  }
-
   /* ---------- hero line field ---------- */
 
   var cvs = $('.lines');
