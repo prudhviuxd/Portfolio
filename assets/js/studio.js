@@ -333,20 +333,55 @@
     requestAnimationFrame(drift);
   })();
 
-  /* ---------- hero: cycle the last line, one word at a time ---------- */
+  /* ---------- hero: typewriter on the last line only ----------
+     "Design leader / advancing" stay put; the last line types a word,
+     holds, deletes it and types the next (UX maturity, Innovation, AI)
+     on repeat. The HTML carries the first word, so without JS or with
+     reduced motion the headline still reads in full. */
 
-  var rotW = $$('.rot-w');
-  if (rotW.length) {
-    var rw = 0;
-    rotW[0].classList.add('on');
-    if (!reduced) setInterval(function () {
-      var prev = rotW[rw];
-      prev.classList.remove('on'); prev.classList.add('off');
-      setTimeout(function () { prev.classList.remove('off'); }, 900);
-      rw = (rw + 1) % rotW.length;
-      rotW[rw].classList.add('on');
-    }, 2400);
-  }
+  var rotLine = $('.hero-title .rot');
+  if (rotLine && !reduced) (function () {
+    var words = rotLine.getAttribute('data-type').split('|');
+    var slot = rotLine.firstElementChild;
+    var caret = document.createElement('span');
+    caret.className = 'caret';
+    slot.textContent = '';
+    rotLine.appendChild(caret);
+
+    var wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+    function run(step, speed) {
+      caret.classList.add('typing');
+      return new Promise(function (done) {
+        (function tick() {
+          if (!step()) { caret.classList.remove('typing'); return done(); }
+          setTimeout(tick, speed + Math.random() * speed * 0.5);
+        })();
+      });
+    }
+    function type(text) {
+      return run(function () {
+        var n = slot.textContent.length;
+        if (n >= text.length) return false;
+        slot.textContent = text.slice(0, n + 1); return true;
+      }, 75);
+    }
+    function erase() {
+      return run(function () {
+        var t = slot.textContent;
+        if (!t.length) return false;
+        slot.textContent = t.slice(0, -1); return true;
+      }, 34);
+    }
+
+    var w = 0;
+    (function loop() {
+      type(words[w])
+        .then(function () { return wait(1800); })
+        .then(erase)
+        .then(function () { w = (w + 1) % words.length; return wait(300); })
+        .then(loop);
+    })();
+  })();
 
   /* ---------- key-fact card details ---------- */
 

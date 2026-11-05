@@ -149,17 +149,18 @@ ul{list-style:none}
    from them so it is not read out on every change. */
 .hero-title{position:relative}
 .sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.hero-title .ln{display:block;overflow:hidden;padding-bottom:.16em;margin-bottom:-.16em}
-.hero-title .ln>span{display:inline-block}
-.js .hero-title .ln>span{transform:translateY(110%);transition:transform 1.2s var(--out)}
+.hero-title .ln{display:block;min-height:1.04em;padding-bottom:.16em;margin-bottom:-.16em;white-space:nowrap}
+/* the two fixed lines rise in once; only the last line types */
+.hero-title .ln:not(.rot){overflow:hidden}
+.hero-title .ln:not(.rot)>span{display:inline-block}
+.js .hero-title .ln:not(.rot)>span{transform:translateY(110%);transition:transform 1.2s var(--out)}
 .js .hero-title .ln:nth-child(2)>span{transition-delay:.08s}
-.ready .hero-title .ln>span{transform:none}
-.hero-title .rot{position:relative;height:calc(.88em + .16em)}
-.hero-title .rot-w{position:absolute;left:0;top:0;white-space:nowrap;
-  transform:translateY(110%);opacity:0;
-  transition:transform .9s var(--ease),opacity .5s ease}
-.hero-title .rot-w.on{transform:none;opacity:1;transition:transform .9s var(--ease),opacity .6s ease .1s}
-.hero-title .rot-w.off{transform:translateY(-110%);opacity:0}
+.ready .hero-title .ln:not(.rot)>span{transform:none}
+/* typewriter caret: sits after whichever line is being typed */
+.hero-title .caret{display:inline-block;width:.06em;height:.78em;margin-left:.06em;vertical-align:-.04em;
+  background:#e8a165;border-radius:1px;animation:caret 1s steps(1) infinite}
+.hero-title .caret.typing{animation:none}
+@keyframes caret{50%{opacity:0}}
 .hero-sum{margin-top:32px;max-width:46ch;font-size:16px;line-height:1.3;color:var(--ink-2)}
 .js .hero-sum{opacity:0;transition:opacity 1s .7s}
 .ready .hero-sum{opacity:1}
