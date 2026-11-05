@@ -14,24 +14,11 @@
 
 <a class="skip" href="#main">Skip to content</a>
 
-<!-- ======================= PRELOADER ======================= -->
-<div class="pl" aria-hidden="true">
-  <div class="pl-belts"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-  <div class="pl-center">
-    <div class="pl-box">
-      <span class="plus tl"></span><span class="plus tr"></span><span class="plus bl"></span><span class="plus br"></span>
-      <span class="pl-mark">PR</span>
-    </div>
-    <div class="pl-tag"><span>Research</span><b>&middot;</b><span>Design</span><b>&middot;</b><span>Lead</span></div>
-    <div class="pl-count"><span class="reel"><i>0</i></span><span class="reel"><i>0</i></span><span class="reel"><i>0</i></span></div>
-  </div>
-</div>
-
 <!-- ======================= HEADER ======================= -->
 <header class="hd">
   <a href="#top" class="hd-logo" aria-label="Prudhvi Raj PJ, back to top">
-    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M2 20 11 2l9 18M6.5 11h9" stroke="currentColor" stroke-width="1.8"/></svg>
-    <span>Prudhvi&nbsp;Raj&nbsp;PJ<sup>&reg;</sup></span>
+    <span class="mono-pj" aria-hidden="true">PJ</span>
+    <span>Prudhvi&nbsp;Raj</span>
   </a>
   <div class="hd-r">
     <a href="#contact" class="pill pill-solid" data-roll>Let's talk</a>
@@ -69,7 +56,7 @@
       <div class="menu-social">
         <span class="lbl">Social</span>
         <a href="https://www.linkedin.com/in/prudhviraj-pj" target="_blank" rel="noopener" data-roll>LinkedIn</a>
-        <a href="https://www.behance.net/prudhviuxd" target="_blank" rel="noopener" data-roll>Behance</a>
+        <a href="https://www.behance.net/prudhvirajpj" target="_blank" rel="noopener" data-roll>Behance</a>
       </div>
     </div>
   </nav>
@@ -82,14 +69,21 @@
     <canvas class="lines" aria-hidden="true"></canvas>
     <div class="wrap hero-in">
       <div class="hero-top">
-        <h1 class="hero-title">
-          <span class="ln"><span>Design that</span></span>
-          <span class="ln"><span>doesn't tarnish.</span></span>
-        </h1>
-        <div class="hero-cta">
-          <a href="#work" class="btn" data-btn>See selected work</a>
-          <a href="#contact" class="btn" data-btn>Start a conversation</a>
+        <div class="hero-copy">
+          <h1 class="hero-title" data-lines>Design leader advancing UX maturity, innovation and AI.</h1>
+          <div class="hero-cta">
+            <a href="#work" class="btn" data-btn>See selected work</a>
+            <a href="#contact" class="btn" data-btn>Start a conversation</a>
+          </div>
+          <p class="hero-sum">12 years across enterprise, telecom, banking and public health. Teams of 5&ndash;12 designers, products used by millions, most recently for WHO, MTN and the IPL.</p>
         </div>
+        <figure class="portrait">
+          <span class="plus tl"></span><span class="plus tr"></span><span class="plus bl"></span><span class="plus br"></span>
+          <div class="portrait-in">
+            <img src="assets/img/prudhvi.jpg" srcset="assets/img/prudhvi-540.jpg 540w, assets/img/prudhvi.jpg 900w" sizes="(max-width: 767px) 60vw, 30vw" width="900" height="1200" alt="Portrait of Prudhvi Raj PJ" fetchpriority="high">
+          </div>
+          <figcaption>Prudhvi Raj PJ &middot; Design Leader</figcaption>
+        </figure>
       </div>
 
       <div class="hero-btm">
@@ -108,7 +102,6 @@
             </div>
             <p>12 years leading<br>product design.</p>
           </div>
-          <p class="hero-sum">Design leader for enterprise, telecom, banking and public health. Teams of 5&ndash;12 designers, products used by millions, most recently for WHO, MTN and the IPL.</p>
         </div>
       </div>
     </div>
@@ -195,9 +188,15 @@
 
       <div class="partners">
         <span class="lbl">Teams I've built with</span>
-        <ul>
-          <li>Tata IPL</li><li>World Health Organization</li><li>MTN</li><li>Citi</li>
-          <li>Standard Chartered</li><li>Allcargo GATI</li><li>Mahindra</li><li>Singapore Land Authority</li>
+        <ul class="logos">
+          <li><img src="assets/img/clients/tata-ipl.png" alt="Tata IPL" class="lg-ipl" loading="lazy"></li>
+          <li><img src="assets/img/clients/who.svg" alt="World Health Organization" class="lg-who" loading="lazy"></li>
+          <li><img src="assets/img/clients/mtn.svg" alt="MTN" class="lg-mtn" loading="lazy"></li>
+          <li><img src="assets/img/clients/citi.svg" alt="Citi" class="lg-citi" loading="lazy"></li>
+          <li><img src="assets/img/clients/standard-chartered.svg" alt="Standard Chartered" class="lg-sc" loading="lazy"></li>
+          <li><img src="assets/img/clients/allcargo.png" alt="Allcargo Logistics (GATI)" class="lg-allcargo" loading="lazy"></li>
+          <li><img src="assets/img/clients/mahindra.svg" alt="Mahindra" class="lg-mahindra" loading="lazy"></li>
+          <li><img src="assets/img/clients/sla.png" alt="Singapore Land Authority" class="lg-sla" loading="lazy"></li>
         </ul>
       </div>
     </div>
@@ -349,7 +348,7 @@
           <li><em>E.</em><a href="mailto:prudhviuxd@gmail.com" data-roll>prudhviuxd@gmail.com</a></li>
           <li><em>P.</em><a href="tel:+919177598417" data-roll>+91 91775 98417</a></li>
           <li><em>In.</em><a href="https://www.linkedin.com/in/prudhviraj-pj" target="_blank" rel="noopener" data-roll>/prudhviraj-pj</a></li>
-          <li><em>Be.</em><a href="https://www.behance.net/prudhviuxd" target="_blank" rel="noopener" data-roll>/prudhviuxd</a></li>
+          <li><em>Be.</em><a href="https://www.behance.net/prudhvirajpj" target="_blank" rel="noopener" data-roll>/prudhvirajpj</a></li>
         </ul>
       </div>
       <form class="form" id="enquiry" novalidate>

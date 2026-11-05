@@ -91,46 +91,9 @@
   }
   (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(watch);
 
-  /* ---------- preloader ---------- */
+  /* ---------- entrance (no preloader: content animates in straight away) ---------- */
 
-  var pl = $('.pl');
-  function ready() { root.classList.add('ready'); }
-
-  if (!pl || reduced) {
-    ready();
-  } else {
-    var seen = false;
-    try { seen = sessionStorage.getItem('pl-seen') === '1'; sessionStorage.setItem('pl-seen', '1'); } catch (e) {}
-    var reels = $$('.reel', pl);
-    reels.forEach(function (r) {
-      var s = '';
-      for (var d = 0; d <= 9; d++) s += '<i>' + d + '</i>';
-      r.innerHTML = s;
-      $$('i', r).forEach(function (i) { i.style.transition = 'transform .25s cubic-bezier(.16,1,.3,1)'; });
-    });
-    function setCount(n) {
-      var digits = ('00' + n).slice(-3).split('');
-      reels.forEach(function (r, idx) {
-        $$('i', r).forEach(function (i) { i.style.transform = 'translateY(' + (-digits[idx] * 100) + '%)'; });
-      });
-    }
-    var dur = seen ? 500 : 1700, t0 = null;
-    document.body.style.overflow = 'hidden';
-    requestAnimationFrame(function () { pl.classList.add('go'); });
-    requestAnimationFrame(function step(t) {
-      if (t0 === null) t0 = t;
-      var k = clamp((t - t0) / dur, 0, 1);
-      setCount(Math.round(100 * (1 - Math.pow(1 - k, 2))));
-      if (k < 1) return requestAnimationFrame(step);
-      setTimeout(function () {
-        pl.classList.add('out');
-        $$('.pl-belts i', pl).forEach(function (b, i) { b.style.transitionDelay = (i * 0.045) + 's'; });
-        document.body.style.overflow = '';
-        setTimeout(ready, 350);
-        setTimeout(function () { pl.classList.add('done'); }, 1500);
-      }, 180);
-    });
-  }
+  requestAnimationFrame(function () { requestAnimationFrame(function () { root.classList.add('ready'); }); });
 
   /* ---------- menu ---------- */
 
