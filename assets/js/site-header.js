@@ -34,3 +34,41 @@
     if (e.key === 'Escape' && root.classList.contains('menu-open')) { setMenu(false); btn.focus(); }
   });
 })();
+
+/* Page transitions between our own pages: stripes rise, then navigate. */
+(function () {
+  'use strict';
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  function samePage(u) { return u.pathname === location.pathname && u.search === location.search; }
+
+  document.addEventListener('click', function (e) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target.closest('a[href]');
+    if (!a || a.target === '_blank' || a.hasAttribute('download')) return;
+    var u;
+    try { u = new URL(a.getAttribute('href'), location.href); } catch (err) { return; }
+    if (u.origin !== location.origin || !/\.html$|\/$/.test(u.pathname) || samePage(u)) return;
+
+    e.preventDefault();
+    var o = document.createElement('div');
+    o.className = 'ptx';
+    o.setAttribute('aria-hidden', 'true');
+    for (var i = 0; i < 5; i++) {
+      var s = document.createElement('i');
+      s.style.transitionDelay = (4 - i) * 0.05 + 's';
+      o.appendChild(s);
+    }
+    document.body.appendChild(o);
+    requestAnimationFrame(function () { requestAnimationFrame(function () { o.classList.add('go'); }); });
+    try { sessionStorage.setItem('pt', '1'); } catch (err) {}
+    setTimeout(function () { location.href = u.href; }, 720);
+  });
+
+  // Coming back through the history cache: clear any leftover cover.
+  window.addEventListener('pageshow', function (e) {
+    if (!e.persisted) return;
+    document.querySelectorAll('.ptx').forEach(function (o) { o.remove(); });
+    document.documentElement.classList.remove('pt-in');
+  });
+})();

@@ -3,46 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>try{if(sessionStorage.getItem('pt')==='1'){sessionStorage.removeItem('pt');if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('pt-in')}}catch(e){}</script>
+<script>document.documentElement.classList.add('cm');setTimeout(function(){if(!window.__cm)document.documentElement.classList.add('cm-off')},2500);</script>
 <title>My MTN, Case Study | Prudhvi Raj PJ</title>
 <meta name="description" content="My MTN, redesigning MTN's self-care mobile app for recharge, plans and loyalty across Nigeria &amp; South Africa. A UX case study by Prudhvi Raj PJ.">
-<script>
-/* Runs before first paint, on purpose. The browser applies a remembered
-   scroll position during load, so correcting it from a script at the end
-   of the body shows the reader the old position and then a jump. Turning
-   restoration off here means there is nothing to correct.
-
-   Only for a navigation we started by clicking a link, which transitions.js
-   flags on the way out. Arriving any other way, back, forward, a reload,
-   a pasted URL, keeps the browser's own restoring, so returning to a page
-   still lands where you left it. */
-(function(){try{
-  if(!('scrollRestoration' in history)) return;
-  var flagged = null;
-  try{ flagged = sessionStorage.getItem('pt:top');
-       if(flagged) sessionStorage.removeItem('pt:top'); }catch(e){}
-  if(!flagged || location.hash) return;
-  var n = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
-  if(n && n.type === 'back_forward') return;
-  window.__ptLinkNav = true;
-  history.scrollRestoration = 'manual';
-  /* Framed, the panel around us holds the scroll, and it is already sitting
-     where the previous page was left. Pull ourselves to the top of it here,
-     before this document paints, so the first frame the reader sees is the
-     top of the page rather than its middle. */
-  try{
-    if(window.top !== window.self && document.documentElement.scrollIntoView)
-      document.documentElement.scrollIntoView({block:'start', behavior:'instant'});
-  }catch(e){}
-}catch(e){}})();
-</script>
 <link rel="stylesheet" href="../assets/css/base.css">
 <link rel="stylesheet" href="../assets/css/case-study.css">
 <link rel="stylesheet" href="../assets/css/my-mtn.css">
 <link rel="stylesheet" href="../assets/css/interactions.css">
 <link rel="stylesheet" href="../assets/css/study.css">
-<link rel="stylesheet" href="../assets/css/transitions.css">
 <noscript><style>.reveal{opacity:1!important;transform:none!important;}</style></noscript>
 <link rel="stylesheet" href="../assets/css/site-header.css">
+<link rel="stylesheet" href="../assets/css/case-motion.css">
 </head>
 <body>
 
@@ -598,11 +570,9 @@
   Copyright © 2026. All rights reserved. Made with Love for UX
 </footer>
 
-<script src="../assets/js/vendor/motion.min.js"></script>
-<script src="../assets/js/engine.js"></script>
 <script src="../assets/js/main.js"></script>
 <script src="../assets/js/study.js"></script>
-<script src="../assets/js/transitions.js"></script>
+<script src="../assets/js/case-motion.js"></script>
 <script src="../assets/js/site-header.js"></script>
 </body>
 </html>

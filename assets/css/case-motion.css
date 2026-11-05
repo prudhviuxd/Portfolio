@@ -1,0 +1,56 @@
+/* =========================================================
+   Case-study motion: the homepage's vocabulary, applied to
+   every case study by case-motion.js.
+
+   - headings rise in word by word from behind a mask
+   - kickers, copy and tables fade up out of a light blur
+   - images wipe open from the bottom and settle from a zoom
+   - cards rise in a staggered 3D tilt
+   - stat figures count up (handled in JS)
+   - hero and full-bleed images drift with scroll (JS)
+
+   State is .cm-in, added once per element as it enters view.
+   html.cm is set in the <head>, so the hero is held back until
+   the script is ready; html.cm-off releases everything if the
+   script never runs.
+   ========================================================= */
+
+:root{ --cm-ease:cubic-bezier(.16,1,.3,1); --cm-wipe:cubic-bezier(.76,0,.24,1); }
+
+/* hold the first screen until the motion layer is ready */
+html.cm:not(.cm-ready):not(.cm-off) main > section:first-of-type{opacity:0}
+
+/* ---------- headings: masked words ---------- */
+.cm-mw{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.14em;margin-bottom:-.14em}
+.cm-mi{display:inline-block;transform:translateY(112%);
+  transition:transform 1.1s var(--cm-ease);transition-delay:var(--d,0ms)}
+.cm-in .cm-mi{transform:none}
+
+/* ---------- copy: fade up out of a blur ---------- */
+.cm-fade{opacity:0;transform:translateY(26px);filter:blur(6px);
+  transition:opacity .9s ease,transform 1s var(--cm-ease),filter .9s ease;transition-delay:var(--d,0ms)}
+.cm-fade.cm-in{opacity:1;transform:none;filter:none}
+
+/* ---------- images: wipe open from below ---------- */
+.cm-img{clip-path:inset(100% 0 0 0);transform:scale(1.08);
+  transition:clip-path 1.3s var(--cm-wipe),transform 1.6s var(--cm-ease);transition-delay:var(--d,0ms)}
+.cm-img.cm-in{clip-path:inset(0 0 0 0);transform:none}
+
+/* ---------- cards: staggered 3D rise ---------- */
+.cm-card{opacity:0;transform:perspective(1000px) translateY(56px) rotateX(14deg) scale(.97);transform-origin:50% 100%;
+  transition:opacity .8s ease,transform 1.1s var(--cm-ease);transition-delay:var(--d,0ms)}
+.cm-card.cm-in{opacity:1;transform:none}
+
+/* ---------- hero backdrops drift with scroll ---------- */
+.cm-drift{will-change:transform}
+
+/* the old per-page reveal classes are retired on these pages */
+html.cm .reveal,html.cm .stagger > *{opacity:1;transform:none;transition:none}
+
+@media (prefers-reduced-motion:reduce){
+  .cm-mi,.cm-fade,.cm-img,.cm-card{transform:none!important;opacity:1!important;filter:none!important;clip-path:none!important;transition:none!important}
+  html.cm main > section:first-of-type{opacity:1!important}
+}
+@media print{
+  .cm-mi,.cm-fade,.cm-img,.cm-card{transform:none!important;opacity:1!important;filter:none!important;clip-path:none!important}
+}
