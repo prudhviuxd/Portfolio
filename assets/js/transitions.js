@@ -1,0 +1,183 @@
+/* ============================================================
+   Page transitions, the exit half.
+
+   Intercepts same-origin navigations, floods the screen with the
+   colour of whatever was clicked, then navigates. The enter half
+   is pure CSS (see transitions.css) so a page can never be left
+   covered by a curtain this file failed to remove.
+   ============================================================ */
+(function () {
+  'use strict';
+
+  if (!document.querySelector || !window.matchMedia) return;
+
+  /* ---------- land at the top of a page we navigated to ----------
+     A fresh link navigation should start at the top. Some embeddings
+     (and a browser restoring a position it remembers) can leave the
+     new page part-way down, which reads as the case study opening
+     wherever the homepage happened to be scrolled to.
+
+     Only "navigate" is corrected: back and forward keep the position
+     the reader left, which is what they expect, and a link carrying a
+     #hash is left alone so it can reach its anchor. */
+  (function landAtTop() {
+    if (location.hash) return;
+    /* Set by the head script when this page was reached by clicking a
+       link. Arriving any other way leaves the reader's position alone. */
+    if (!window.__ptLinkNav) return;
+
+    /* Once the reader has started moving the page themselves, their
+       position is theirs. Images can delay "load" well past that, and
+       yanking them back to the top would be worse than the bug. */
+    var userMoved = false;
+    ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach(function (evt) {
+      window.addEventListener(evt, function () { userMoved = true; },
+                              { once: true, passive: true });
+    });
+
+    /* Embedded in a frame, this page may not be the thing that scrolls:
+       a host that sizes the frame to its content leaves our own scrollY
+       permanently 0 while the surrounding panel holds the position, so
+       scrollTo and scrollRestoration are both no-ops and the new page
+       appears wherever the previous one was left. A framed document is
+       allowed to pull itself into view in its parent, it still cannot
+       read the parent's scroll, so that is the one lever available. */
+    var framed = false;
+    try { framed = window.top !== window.self; } catch (e) { framed = true; }
+
+    function toTop() {
+      if (userMoved) return;
+
+      var root = document.documentElement;
+      var prev = root.style.scrollBehavior;
+      root.style.scrollBehavior = 'auto';   /* never animate the correction */
+
+      if (window.scrollY || window.pageYOffset) window.scrollTo(0, 0);
+
+      if (framed && root.scrollIntoView) {
+        try { root.scrollIntoView({ block: 'start', behavior: 'instant' }); }
+        catch (e) { try { root.scrollIntoView(true); } catch (e2) {} }
+      }
+
+      root.style.scrollBehavior = prev;
+    }
+
+    /* Hold the correction for as long as the enter veil is covering the
+       page, and not one frame longer. Layout settles in pieces, fonts,
+       images, the frame being resized by its host, and each can move us
+       again, so re-assert rather than correct once and hope. Stopping
+       before the veil lifts is the point: the reader sees the page
+       arrive at the top, never sees it travel there. */
+    var VEIL_MS = 660;            /* pt-lift is 720ms; finish under it */
+    var started = 0;
+    try { started = performance.now(); } catch (e) { started = 0; }
+
+    function hold() {
+      if (userMoved) return;
+      toTop();
+      var now = started;
+      try { now = performance.now(); } catch (e) { return; }
+      if (now - started < VEIL_MS) requestAnimationFrame(hold);
+    }
+
+    if (window.requestAnimationFrame) hold();
+    else toTop();
+
+    document.addEventListener('DOMContentLoaded', toTop, { once: true });
+  })();
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var DURATION = 580;          /* must match pt-cover in transitions.css */
+  var veil = null;
+  var leaving = false;
+
+  function getVeil() {
+    if (!veil) {
+      veil = document.createElement('div');
+      veil.className = 'pt';
+      veil.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(veil);
+    }
+    return veil;
+  }
+
+  /* A link we should animate away from: same origin, plain left
+     click, not a download, not a jump within this same page. */
+  function isInternalNav(a) {
+    if (!a || !a.getAttribute('href')) return false;
+    if (a.hasAttribute('download')) return false;
+    if (a.target && a.target !== '_self') return false;
+
+    var url;
+    try { url = new URL(a.href, location.href); } catch (e) { return false; }
+
+    if (url.origin !== location.origin) return false;
+    if (/^(mailto|tel|javascript):/i.test(a.getAttribute('href'))) return false;
+    /* an in-page anchor should scroll, not navigate */
+    if (url.pathname === location.pathname && url.search === location.search) return false;
+
+    return true;
+  }
+
+  /* Carry the clicked card's own colour into the flood. The project
+     cards paint their crest with an inline gradient, so reusing it
+     makes the wipe read as that project continuing rather than as a
+     generic page change. */
+  function accentFor(a) {
+    var card = a.classList.contains('case') ? a : (a.closest ? a.closest('.case') : null);
+    if (!card) return '';
+    var crest = card.querySelector('.case-vis');
+    return (crest && crest.style && crest.style.background) || '';
+  }
+
+  /* Flag a link-driven navigation for the next page's head script, which
+     uses it to stop the browser restoring a scroll position onto a page
+     the reader asked for fresh. Capture phase and separate from the
+     animation below, so it is recorded even under reduced motion or if
+     something downstream stops the event. */
+  document.addEventListener('click', function (e) {
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!isInternalNav(a)) return;
+    try { sessionStorage.setItem('pt:top', '1'); } catch (err) { /* private mode */ }
+  }, true);
+
+  document.addEventListener('click', function (e) {
+    if (leaving) { e.preventDefault(); return; }
+    if (e.defaultPrevented) return;
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    if (reduce.matches) return;
+
+    var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!isInternalNav(a)) return;
+
+    e.preventDefault();
+    leaving = true;
+
+    var href = a.href;
+    var accent = accentFor(a);
+    var v = getVeil();
+    if (accent) v.style.background = accent;
+
+    document.documentElement.classList.add('pt-out');
+
+    var navigated = false;
+    function go() {
+      if (navigated) return;
+      navigated = true;
+      location.href = href;
+    }
+
+    /* Prefer the real animation end; the timer is the guarantee. */
+    v.addEventListener('animationend', go, { once: true });
+    setTimeout(go, DURATION + 90);
+  }, false);
+
+  /* Returning via the back button can restore this page from the
+     bfcache mid-transition. Put it back the way we found it. */
+  window.addEventListener('pageshow', function () {
+    leaving = false;
+    document.documentElement.classList.remove('pt-out');
+    if (veil) veil.style.background = '';
+  });
+})();

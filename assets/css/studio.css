@@ -28,8 +28,9 @@
   --ink-3:#6b6b6b;
   --line:#2c2c2c;
   --card:#272727;
-  --light:#d2d2d2;
-  --cream:#e6e4e2;
+  --light:#e3d4bf;
+  --light-2:#f6f0e7;
+  --cream:#efe5d7;
   --dark-font:#434343;
   --display:"Familjen", "Helvetica Neue", Arial, sans-serif;
   --body:"Instrument", "Helvetica Neue", Arial, sans-serif;
@@ -120,10 +121,9 @@ ul{list-style:none}
 .menu-open .burger i:first-child{transform:translateY(2px) rotate(45deg)}
 .menu-open .burger i:last-child{transform:translateY(-2px) rotate(-45deg)}
 
-.plus{position:absolute;width:13px;height:13px}
-.plus::before,.plus::after{content:"";position:absolute;background:#555}
-.plus::before{left:6px;top:0;width:1px;height:13px}
-.plus::after{top:6px;left:0;height:1px;width:13px}
+/* star mark: the ✦ used across the site, drawn as a mask so it takes any colour */
+:root{--star:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M20 0c1.6 11 9 18.4 20 20-11 1.6-18.4 9-20 20C18.4 29 11 21.6 0 20 11 18.4 18.4 11 20 0z'/%3E%3C/svg%3E")}
+.plus{position:absolute;width:13px;height:13px;background:#555;-webkit-mask:var(--star) center/contain no-repeat;mask:var(--star) center/contain no-repeat}
 
 /* =========================================================
    HEADER + MENU
@@ -187,7 +187,7 @@ ul{list-style:none}
 .ready .hero-sum{opacity:1}
 .portrait{position:relative;margin-top:10px;pointer-events:auto}
 .portrait .plus{z-index:2}
-.portrait .plus::before,.portrait .plus::after{background:#8a8a8a}
+.portrait .plus{background:#9a9a9a}
 .portrait .tl{left:-7px;top:-7px}.portrait .tr{right:-7px;top:-7px}
 .portrait .bl{left:-7px;bottom:22px}.portrait .br{right:-7px;bottom:22px}
 .portrait-in{position:relative;aspect-ratio:4/5;max-height:calc(100svh - 300px);width:100%;overflow:hidden;border-radius:3px;background:#2a1a10}
@@ -228,7 +228,7 @@ ul{list-style:none}
 .about-tag{grid-column:1/5;font-size:13px;text-transform:uppercase;font-weight:500;line-height:1.15}
 .about-mission{grid-column:8/12;position:relative;display:flex;flex-direction:column;gap:60px}
 .about-mission .plus{left:-7px;top:-80px}
-.about-mission .plus::before,.about-mission .plus::after{background:#777}
+.about-mission .plus{background:#888}
 .about-mission p{font-size:16px;line-height:1.2}
 
 /* =========================================================
@@ -255,7 +255,7 @@ ul{list-style:none}
 /* =========================================================
    KEY FACTS (light)
    ========================================================= */
-.facts{position:relative;z-index:4;background:linear-gradient(0deg,#fff 0%,var(--light) 100%);color:var(--dark-font);padding:100px 0 160px;margin-top:-1px}
+.facts{position:relative;z-index:4;background:linear-gradient(0deg,var(--light-2) 0%,var(--light) 100%);color:var(--dark-font);padding:100px 0 160px;margin-top:-1px}
 .facts-head{text-align:center;display:flex;flex-direction:column;align-items:center;gap:22px;margin-bottom:64px}
 .facts-head .h1{color:var(--dark-font)}
 .facts-head p{font-size:16px;line-height:1.2}
@@ -276,7 +276,7 @@ ul{list-style:none}
 .fc-circle{width:180px;height:180px;border-radius:50%;background:#fff;display:grid;place-items:center}
 .fc-circle b{font-family:var(--display);font-weight:400;font-size:3.4rem;letter-spacing:-.06em;line-height:1}
 .fc-mid{font-size:15px;line-height:1.2;max-width:24ch}
-.fc-dots{display:grid;grid-template-columns:repeat(4,14px);gap:14px;align-self:center}
+.fc-dots{display:grid;grid-template-columns:repeat(6,14px);gap:12px;align-self:center}
 .fc-dots i{width:14px;height:14px;border-radius:50%;border:1px solid #555;transition:background .4s,border-color .4s}
 .fc-dots i.on{background:var(--ink);border-color:var(--ink)}
 
@@ -316,7 +316,7 @@ ul{list-style:none}
 [data-lines] .ln:nth-child(3)>span{transition-delay:.14s}
 
 /* ---------- pinned horizontal work track (trionn work-section) ---------- */
-.work{position:relative;z-index:4;background:linear-gradient(0deg,var(--light) 0%,#fff 100%);color:var(--dark-font)}
+.work{position:relative;z-index:4;background:linear-gradient(0deg,var(--light) 0%,var(--light-2) 100%);color:var(--dark-font)}
 .work-pin{display:flex;flex-direction:column}
 .work-front{order:1}
 .work-back{order:2;background:var(--bg);color:var(--ink);padding:110px 0 40px}
@@ -361,7 +361,7 @@ ul{list-style:none}
 .work.hs .work-back .wrap{will-change:transform,opacity}
 .work.hs .work-front{position:absolute;inset:0;z-index:2;will-change:transform}
 .work.hs .work-track{flex-direction:row;height:100%;width:max-content;will-change:transform}
-.work.hs .wpanel{width:50vw;flex:none;height:100%;display:flex;align-items:center;background:linear-gradient(0deg,var(--light) 0%,#fff 100%)}
+.work.hs .wpanel{width:50vw;flex:none;height:100%;display:flex;align-items:center;background:linear-gradient(0deg,var(--light) 0%,var(--light-2) 100%)}
 .work.hs .wtitle{padding:80px 40px 0}
 .work.hs .wcard{padding:0}
 .work.hs .wline{top:0;bottom:auto;height:100%;width:1px;transform:scaleY(0);transform-origin:top}
@@ -390,11 +390,9 @@ ul{list-style:none}
 .exp-t{transition:transform .5s var(--out)}
 .exp-row summary:hover .exp-t{transform:translateX(12px)}
 .exp-d{font-size:16px;color:var(--ink-2);line-height:1.3}
-.exp-x{position:relative;width:18px;height:18px;justify-self:end}
-.exp-x::before,.exp-x::after{content:"";position:absolute;background:var(--ink);transition:transform .45s var(--ease)}
-.exp-x::before{left:8.5px;top:0;width:1px;height:18px}
-.exp-x::after{top:8.5px;left:0;height:1px;width:18px}
-.exp-row[open] .exp-x::before{transform:scaleY(0)}
+.exp-x{position:relative;width:18px;height:18px;justify-self:end;background:var(--ink-2);-webkit-mask:var(--star) center/contain no-repeat;mask:var(--star) center/contain no-repeat;transition:transform .6s var(--ease),background .4s}
+.exp-row summary:hover .exp-x{background:var(--ink)}
+.exp-row[open] .exp-x{transform:rotate(135deg) scale(1.15);background:var(--ink)}
 .exp-body{padding:0 0 34px 84px}
 .exp-body ul{display:flex;flex-wrap:wrap;gap:8px;max-width:980px}
 .exp-body li{border:1px solid #3a3a3a;border-radius:40px;padding:8px 16px;font-size:14px;animation:chip .6s var(--out) both}
