@@ -182,32 +182,23 @@ ul{list-style:none}
 .hero-in a,.hero-in .hero-card{pointer-events:auto}
 .hero-top{display:grid;grid-template-columns:minmax(0,1fr) clamp(260px,27vw,420px);column-gap:clamp(32px,4vw,72px);align-items:start}
 .hero-title{margin-left:-.05em;font-size:clamp(3.2rem,7.3vw,8.4rem);line-height:.88;letter-spacing:-.065em;max-width:12.5ch}
-/* Hero accent: only "UX maturity, innovation and AI" carries colour.
-   It is one warm field (sand, amber, burnt orange, terracotta, from the
-   portrait) laid across the whole heading and drifting slowly sideways;
-   studio.js gives each word its offset into that field, so the colour
-   flows through the phrase across the line breaks. The tile is twice
-   the heading's width and repeats its first colour at the midpoint, so
-   shifting it by one width loops without a seam. */
+/* Hero: "Design leader / advancing" hold still while the last line
+   cycles UX maturity -> Innovation -> AI, one word at a time. The full
+   sentence sits in .sr for screen readers; the animated copy is hidden
+   from them so it is not read out on every change. */
 .hero-title{position:relative}
-.hero-title .hl{
-  background-image:linear-gradient(100deg,
-    #f4dcb6 0%, #f0a25a 12%, #dd6f3b 24%, #c4553a 31%, #ef9d5c 40%, #f4dcb6 50%,
-    #f0a25a 62%, #dd6f3b 74%, #c4553a 81%, #ef9d5c 90%, #f4dcb6 100%);
-  background-size:calc(var(--W,100%) * 2) var(--H,100%);
-  background-position:calc(var(--x,0px) * -1) calc(var(--y,0px) * -1);
-  -webkit-background-clip:text; background-clip:text;
-  -webkit-text-fill-color:transparent; color:transparent;
-  padding-bottom:.16em; margin-bottom:-.16em;
-  animation:hero-flow 9s linear infinite;
-}
-@keyframes hero-flow{
-  from{background-position:calc(var(--x,0px) * -1) calc(var(--y,0px) * -1)}
-  to{background-position:calc(var(--x,0px) * -1 - var(--W,100%)) calc(var(--y,0px) * -1)}
-}
-@media (prefers-reduced-motion:reduce){
-  .hero-title .hl{animation:none}
-}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.hero-title .ln{display:block;overflow:hidden;padding-bottom:.16em;margin-bottom:-.16em}
+.hero-title .ln>span{display:inline-block}
+.js .hero-title .ln>span{transform:translateY(110%);transition:transform 1.2s var(--out)}
+.js .hero-title .ln:nth-child(2)>span{transition-delay:.08s}
+.ready .hero-title .ln>span{transform:none}
+.hero-title .rot{position:relative;height:calc(.88em + .16em)}
+.hero-title .rot-w{position:absolute;left:0;top:0;white-space:nowrap;
+  transform:translateY(110%);opacity:0;
+  transition:transform .9s var(--ease),opacity .5s ease}
+.hero-title .rot-w.on{transform:none;opacity:1;transition:transform .9s var(--ease),opacity .6s ease .1s}
+.hero-title .rot-w.off{transform:translateY(-110%);opacity:0}
 .hero-sum{margin-top:32px;max-width:46ch;font-size:16px;line-height:1.3;color:var(--ink-2)}
 .js .hero-sum{opacity:0;transition:opacity 1s .7s}
 .ready .hero-sum{opacity:1}
@@ -427,6 +418,33 @@ ul{list-style:none}
 @keyframes chip{from{opacity:0;transform:translateY(10px)}}
 
 /* =========================================================
+   WORKSHOPS
+   ========================================================= */
+.ws{position:relative;z-index:4;background:var(--bg);padding:120px 0 140px;border-top:1px solid var(--line)}
+.ws-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.ws-card{
+  position:relative; display:flex; flex-direction:column; gap:30px;
+  padding:32px 32px 36px; border:1px solid #232323; border-radius:6px;
+  background:linear-gradient(170deg,#161616 0%,#111 70%);
+  transition:transform .7s var(--out),border-color .5s;
+}
+.ws-card:hover{transform:translateY(-6px);border-color:#3a3a3a}
+.ws-top{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;text-transform:uppercase;color:var(--ink-3)}
+.ws-city{display:flex;align-items:center;gap:18px}
+.ws-city h3{font-family:var(--display);font-weight:400;font-size:clamp(3.4rem,7vw,7rem);letter-spacing:-.07em;line-height:.9}
+.ws-star{width:clamp(22px,2.4vw,34px);height:clamp(22px,2.4vw,34px);flex:none;background:#e8a165;-webkit-mask:var(--star) center/contain no-repeat;mask:var(--star) center/contain no-repeat;transition:transform 1.2s var(--ease)}
+.ws-card:hover .ws-star{transform:rotate(180deg)}
+.ws-client{display:flex;align-items:center;gap:16px;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.ws-client img{height:44px;width:auto;background:#f4efe7;border-radius:4px;padding:6px 8px}
+.ws-mark{display:grid;place-items:center;width:58px;height:44px;border-radius:4px;background:#f4efe7;color:#161616;font-family:var(--display);font-size:22px;letter-spacing:-.05em}
+.ws-client b{display:block;font-weight:600;font-size:16px}
+.ws-client div span{display:block;margin-top:4px;font-family:var(--mono);font-size:11px;text-transform:uppercase;color:var(--ink-3)}
+.ws-desc{font-size:16px;line-height:1.45;color:var(--ink-2);max-width:46ch}
+.ws-steps{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto}
+.ws-steps li{border:1px solid #3a3a3a;border-radius:40px;padding:7px 14px;font-size:13px;color:var(--ink)}
+.ws-steps li:nth-child(1){border-color:#e8a165;color:#f3c99c}
+
+/* =========================================================
    CONTACT + FOOTER
    ========================================================= */
 .contact{position:relative;z-index:4;background:var(--bg);padding:140px 0 140px;border-top:1px solid var(--line)}
@@ -504,6 +522,9 @@ ul{list-style:none}
   .exp-x{grid-column:3;grid-row:1}
   .exp-body{padding:0 0 28px 48px}
   .contact{padding:90px 0}
+  .ws{padding:90px 0}
+  .ws-grid{grid-template-columns:1fr}
+  .ws-card{padding:24px 20px 28px}
   .contact-l,.form{grid-column:1/-1}
   .form{padding-top:56px}
   .form-act .btn{width:auto;min-width:180px}

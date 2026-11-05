@@ -62,25 +62,8 @@
     el.innerHTML = lines.map(function (l) {
       return '<span class="ln"><span>' + l.join(' ') + '</span></span>';
     }).join('');
-    placeGradient(el);
   }
 
-  // One gradient field spans the whole heading; each highlighted word is
-  // told where it sits in that field, so the colour runs on unbroken
-  // across words and line breaks instead of restarting in each one.
-  function placeGradient(el) {
-    var hls = $$('.hl', el);
-    if (!hls.length) return;
-    el.style.setProperty('--W', el.offsetWidth + 'px');
-    el.style.setProperty('--H', el.offsetHeight + 'px');
-    hls.forEach(function (h) {
-      var x = 0, y = 0, n = h;
-      while (n && n !== el) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; }
-      h.style.setProperty('--x', x + 'px');
-      h.style.setProperty('--y', y + 'px');
-    });
-  }
-  window.addEventListener('resize', function () { $$('[data-lines]').forEach(placeGradient); });
 
   // About copy: one span per word, lit as the reader scrolls through it.
   var aboutWords = [];
@@ -368,6 +351,21 @@
     req();
     requestAnimationFrame(drift);
   })();
+
+  /* ---------- hero: cycle the last line, one word at a time ---------- */
+
+  var rotW = $$('.rot-w');
+  if (rotW.length) {
+    var rw = 0;
+    rotW[0].classList.add('on');
+    if (!reduced) setInterval(function () {
+      var prev = rotW[rw];
+      prev.classList.remove('on'); prev.classList.add('off');
+      setTimeout(function () { prev.classList.remove('off'); }, 900);
+      rw = (rw + 1) % rotW.length;
+      rotW[rw].classList.add('on');
+    }, 2400);
+  }
 
   /* ---------- key-fact card details ---------- */
 
