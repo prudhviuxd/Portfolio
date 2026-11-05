@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script>try{if(sessionStorage.getItem('pt')==='1'){sessionStorage.removeItem('pt');if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('pt-in')}}catch(e){}</script>
+<script>(function(){try{var r=document.documentElement;if(sessionStorage.getItem('pt')==='1'){sessionStorage.removeItem('pt');if(!matchMedia('(prefers-reduced-motion: reduce)').matches)r.classList.add('pt-in')}var n=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0];if(location.hash||(n&&n.type!=='navigate'))return;if('scrollRestoration' in history)history.scrollRestoration='manual';var top=function(){window.scrollTo(0,0);if(window.top!==window.self&&r.scrollIntoView)r.scrollIntoView({block:'start',behavior:'instant'})};top();document.addEventListener('DOMContentLoaded',top);window.addEventListener('load',top)}catch(e){}})();</script>
 <title>Prudhvi Raj PJ, Design Leader &amp; UX Strategist</title>
 <meta name="description" content="Prudhvi Raj PJ, a design leader with 12 years across enterprise, telecom, banking and public health. Teams of up to 18 designers, products used by millions.">
 <meta name="theme-color" content="#0d0d0d">
@@ -238,7 +238,7 @@
             <div class="wcard-in">
               <div class="wcard-c">
                 <a class="wcard-img" href="case-studies/who-myyoga.html" style="--c1:#1C9D95;--c2:#0B4C58" aria-label="WHO mYoga case study">
-                  <img src="assets/img/who-myyoga/Home 1.png" alt="" loading="lazy">
+                  <span class="wcard-word">WHO</span>
                   <span class="wcard-tag">2.1M+ active users in 3 months</span>
                 </a>
                 <div class="wcard-body">
@@ -256,8 +256,8 @@
             <span class="wline" aria-hidden="true"></span>
             <div class="wcard-in">
               <div class="wcard-c">
-                <a class="wcard-img" href="case-studies/my-mtn.html" style="--c1:#2a2a2a;--c2:#1b1b1b" aria-label="My MTN case study">
-                  <img class="fill" src="assets/img/my-mtn/feature-ott.jpg" alt="" loading="lazy">
+                <a class="wcard-img" href="case-studies/my-mtn.html" style="--c1:#F2BE2E;--c2:#7A4E0C" aria-label="My MTN case study">
+                  <span class="wcard-word">MTN</span>
                   <span class="wcard-tag">One-tap recharge &middot; OTP removed</span>
                 </a>
                 <div class="wcard-body">
@@ -358,7 +358,7 @@
         <div class="ws-count" aria-hidden="true"><b><span data-count="30">30</span>+</b><span>Workshops<br>facilitated</span></div>
       </div>
 
-      <div class="ws-grid">
+      <div class="ws-grid" data-ws>
         <article class="ws-card">
           <header class="ws-top">
             <span class="ws-n">01</span>
@@ -366,7 +366,7 @@
           </header>
           <div class="ws-city">
             <span class="ws-star" aria-hidden="true"></span>
-            <h3>Singapore</h3>
+            <h3><span>Singapore</span></h3>
           </div>
           <div class="ws-client">
             <img src="assets/img/clients/sla.png" alt="" loading="lazy">
@@ -388,7 +388,7 @@
           </header>
           <div class="ws-city">
             <span class="ws-star" aria-hidden="true"></span>
-            <h3>Riyadh</h3>
+            <h3><span>Riyadh</span></h3>
           </div>
           <div class="ws-client">
             <span class="ws-mark" aria-hidden="true">G8</span>
@@ -404,7 +404,7 @@
         </article>
       </div>
 
-      <a class="yt" href="https://www.youtube.com/@He_Knows_UX/shorts" target="_blank" rel="noopener">
+      <a class="yt" data-ws-yt href="https://www.youtube.com/@He_Knows_UX/shorts" target="_blank" rel="noopener">
         <span class="yt-play" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></span>
         <span class="yt-copy">
           <span class="yt-k">On YouTube &middot; Shorts</span>

@@ -383,6 +383,19 @@
     })();
   })();
 
+  /* ---------- workshops entrance ---------- */
+
+  $$('.ws-steps').forEach(function (ul) {
+    $$('li', ul).forEach(function (li, i) { li.style.setProperty('--i', i); });
+  });
+  $$('[data-ws], [data-ws-yt]').forEach(function (el) {
+    if (!io || reduced) { el.classList.add('on'); return; }
+    new IntersectionObserver(function (e, obs) {
+      if (!e[0].isIntersecting) return;
+      el.classList.add('on'); obs.disconnect();
+    }, { rootMargin: '0px 0px -15% 0px' }).observe(el);
+  });
+
   /* ---------- key-fact card details ---------- */
 
   var rotor = $$('.fc-rotor span');

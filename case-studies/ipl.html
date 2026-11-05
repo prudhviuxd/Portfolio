@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script>try{if(sessionStorage.getItem('pt')==='1'){sessionStorage.removeItem('pt');if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('pt-in')}}catch(e){}</script>
+<script>(function(){try{var r=document.documentElement;if(sessionStorage.getItem('pt')==='1'){sessionStorage.removeItem('pt');if(!matchMedia('(prefers-reduced-motion: reduce)').matches)r.classList.add('pt-in')}var n=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0];if(location.hash||(n&&n.type!=='navigate'))return;if('scrollRestoration' in history)history.scrollRestoration='manual';var top=function(){window.scrollTo(0,0);if(window.top!==window.self&&r.scrollIntoView)r.scrollIntoView({block:'start',behavior:'instant'})};top();document.addEventListener('DOMContentLoaded',top);window.addEventListener('load',top)}catch(e){}})();</script>
 <script>document.documentElement.classList.add('cm');setTimeout(function(){if(!window.__cm)document.documentElement.classList.add('cm-off')},2500);</script>
 <title>IPL, Designing the IPL app for a billion cricket moods | Prudhvi Raj PJ</title>
 <meta name="description" content="Case study: redesigning the official IPL mobile app for BCCI to serve every kind of cricket fan, from casual scroller to stats-obsessed super-fan.">
