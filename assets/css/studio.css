@@ -344,7 +344,7 @@ ul{list-style:none}
 .wend{display:none}
 
 /* desktop: pinned, scroll drives the track sideways */
-.work.hs{height:340svh}
+.work.hs{height:440svh}
 .work.hs .work-pin{position:sticky;top:0;height:100svh;overflow:hidden;display:block}
 .work.hs .work-back{position:absolute;inset:0;z-index:1;display:flex;align-items:center;padding:0}
 .work.hs .work-back .wrap{will-change:transform,opacity}
@@ -792,3 +792,15 @@ html{scrollbar-color:#3a3530 var(--bg);scrollbar-width:thin}
   .o-e{transform:translate(20%,-50%)} .o-w{transform:translate(-20%,-50%)}
 }
 @media (prefers-reduced-motion:reduce){ .o-ring,.o-core{animation:none} }
+
+/* ---------- into Key facts: five sand stripes rise over the screen ----------
+   The same wipe as the page transition into a case study. On desktop the
+   Work section is pinned, so the stripes rise over the held "What I
+   actually do" screen, lowest first, and Key facts continues in the same
+   sand. On phones (not pinned) they rise over that panel as it leaves.
+   studio.js scales each stripe with the scroll. */
+.wipe{position:absolute;left:0;right:0;bottom:0;height:100svh;z-index:5;display:flex;flex-direction:column;pointer-events:none}
+.wipe i{flex:1;margin-top:-1px;background:var(--light);transform-origin:50% 100%;transform:scaleY(var(--s,0));will-change:transform}
+.work.hs .wipe{top:0;bottom:auto;height:100%}
+.work-pin{position:relative}
+@media (prefers-reduced-motion:reduce){ .wipe{display:none} }
