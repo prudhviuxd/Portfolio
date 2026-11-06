@@ -30,7 +30,7 @@
   --bg:#0d0d0d;
   --ink:#d8d8d8;
   --ink-2:#9c9c9c;
-  --ink-3:#6b6b6b;
+  --ink-3:#8f8f8f;
   --line:#2c2c2c;
   --card:#272727;
   --light:#e3d4bf;
@@ -143,7 +143,6 @@ ul{list-style:none}
    HERO
    ========================================================= */
 .hero{position:relative;min-height:100svh;display:flex}
-.lines{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:crosshair}
 .hero-in{position:relative;display:flex;flex-direction:column;justify-content:space-between;padding-top:clamp(150px,19vh,190px);padding-bottom:56px;pointer-events:none}
 .hero-in a,.hero-in .hero-card{pointer-events:auto}
 .hero-top{display:grid;grid-template-columns:minmax(0,1fr) clamp(260px,27vw,420px);column-gap:clamp(32px,4vw,72px);align-items:start}
@@ -190,9 +189,10 @@ ul{list-style:none}
 .hero-btm{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:24px}
 .scroll-ico{justify-self:start;display:inline-flex;animation:bob 2.4s ease-in-out infinite}
 @keyframes bob{50%{transform:translateY(5px)}}
-.blast{text-align:center;font-size:14px;text-transform:uppercase;line-height:1.35;display:flex;flex-direction:column;align-items:center}
-.blast span{display:inline-flex;align-items:center;gap:8px}
-.blast svg{color:#e8a13a}
+.avail{display:flex;align-items:center;gap:12px;font-size:13px;text-transform:uppercase;font-weight:500;line-height:1.25;color:var(--ink)}
+.avail-dot{position:relative;width:9px;height:9px;flex:none;border-radius:50%;background:#7bd389}
+.avail-dot::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1px solid #7bd389;animation:ping 2.2s var(--out) infinite}
+@keyframes ping{from{transform:scale(.5);opacity:1}to{transform:scale(1.6);opacity:0}}
 .hero-card{justify-self:end}
 .js .hero-btm>*{opacity:0;transform:translateY(16px);transition:opacity .9s .6s,transform 1s var(--out) .6s}
 .ready .hero-btm>*{opacity:1;transform:none}
@@ -340,7 +340,7 @@ ul{list-style:none}
 .wend{display:none}
 
 /* desktop: pinned, scroll drives the track sideways */
-.work.hs{height:480svh}
+.work.hs{height:340svh}
 .work.hs .work-pin{position:sticky;top:0;height:100svh;overflow:hidden;display:block}
 .work.hs .work-back{position:absolute;inset:0;z-index:1;display:flex;align-items:center;padding:0}
 .work.hs .work-back .wrap{will-change:transform,opacity}
@@ -490,6 +490,57 @@ ul{list-style:none}
 /* =========================================================
    RESPONSIVE
    ========================================================= */
+/* =========================================================
+   HOW I LEAD + AI IN MY PRACTICE
+   ========================================================= */
+.lead{position:relative;z-index:4;background:var(--bg);padding:140px 0 120px}
+.lead-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line)}
+.lead-grid li{padding:28px 24px 8px;border-left:1px solid var(--line);display:flex;flex-direction:column;gap:12px}
+.lead-grid li:first-child{border-left:0;padding-left:0}
+.lead-grid b{font-family:var(--display);font-weight:400;font-size:clamp(2.6rem,4vw,3.6rem);letter-spacing:-.06em;line-height:1;color:#e8a165}
+.lead-grid h3{font-size:13px;text-transform:uppercase;font-weight:600;letter-spacing:.01em}
+.lead-grid p{font-size:15px;line-height:1.45;color:var(--ink-2);max-width:30ch}
+.ai{margin-top:120px;display:grid;grid-template-columns:repeat(12,1fr);column-gap:24px;row-gap:48px}
+.ai-head{grid-column:1/-1;display:flex;flex-direction:column;gap:22px}
+.ai-head .h2{max-width:none}
+.ai-grid{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.ai-card{background:var(--card);border:1px solid #232323;border-radius:6px;padding:30px 28px 34px;display:flex;flex-direction:column;gap:16px;transition:border-color .4s,transform .6s var(--out)}
+.ai-card:hover{border-color:#3a3a3a;transform:translateY(-4px)}
+.ai-k{font-family:var(--mono);font-size:11px;text-transform:uppercase;color:#e8a165}
+.ai-card h4{font-family:var(--display);font-weight:400;font-size:clamp(1.6rem,2.2vw,2rem);letter-spacing:-.04em;line-height:1.05}
+.ai-card p{font-size:15px;line-height:1.45;color:var(--ink-2)}
+.js .lead-grid li,.js .ai-card{opacity:0;transform:translateY(28px);transition:opacity .8s,transform 1s var(--out),border-color .4s}
+.lead-grid.on li,.ai-grid.on .ai-card{opacity:1;transform:none}
+.lead-grid.on li:nth-child(2),.ai-grid.on .ai-card:nth-child(2){transition-delay:.08s}
+.lead-grid.on li:nth-child(3),.ai-grid.on .ai-card:nth-child(3){transition-delay:.16s}
+.lead-grid.on li:nth-child(4){transition-delay:.24s}
+
+/* ---------- testimonials (hidden until real quotes are added) ---------- */
+.quotes{position:relative;z-index:4;background:var(--bg);padding:120px 0;border-top:1px solid var(--line)}
+.quotes[hidden]{display:none}
+.quotes-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:40px}
+.quote{border-top:1px solid var(--line);padding-top:28px}
+.quote blockquote p{font-family:var(--display);font-size:clamp(1.5rem,2.4vw,2.2rem);letter-spacing:-.04em;line-height:1.1}
+.quote figcaption{margin-top:24px;display:flex;flex-direction:column;gap:4px}
+.quote figcaption span{font-family:var(--mono);font-size:11px;text-transform:uppercase;color:var(--ink-3)}
+
+@media (max-width:1024px){
+  .lead-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .lead-grid li:nth-child(3){border-left:0;padding-left:0}
+  .ai-grid{grid-template-columns:1fr}
+}
+@media (max-width:767px){
+  .lead{padding:100px 0 80px}
+  .lead-grid{grid-template-columns:1fr}
+  .lead-grid li{border-left:0;padding-left:0;border-bottom:1px solid var(--line);padding-bottom:24px}
+  .ai{margin-top:80px}
+  .quotes-grid{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  .js .lead-grid li,.js .ai-card{opacity:1;transform:none}
+  .avail-dot::after{animation:none}
+}
+
 @media (max-width:1024px){
   :root{--gut:24px}
   .fcards{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
@@ -507,7 +558,8 @@ ul{list-style:none}
   .hero-sum{margin-top:24px}
   .hero-in{padding-top:110px;padding-bottom:28px}
   .hero-btm{grid-template-columns:1fr;justify-items:start;gap:28px}
-  .blast{display:none}
+  .hero-btm .avail{order:-1}
+  .hero-btm{margin-top:36px}
   .scroll-ico{order:3}
   .hero-card{justify-self:start;width:100%;max-width:320px}
   .btn{min-width:0;width:100%}

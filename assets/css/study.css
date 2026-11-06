@@ -27,7 +27,7 @@
   --bg:#0A0A09; --bg-soft:#100F0E; --surface:#141311; --surface-2:#1A1917;
   --border:rgba(244,241,235,.085); --border-soft:rgba(244,241,235,.045);
 
-  --text:#F3F1EC; --text-muted:#ABA79F; --text-dim:#817D75;
+  --text:#F3F1EC; --text-muted:#ABA79F; --text-dim:#928e86;
 
   /* The metal ramp, matching the homepage: the chrome carries no hue. */
   --m-hi:#F0EDE6; --m-mid:#B4B0A7; --m-low:#6F6B63;

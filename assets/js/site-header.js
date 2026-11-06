@@ -21,11 +21,27 @@
     root.classList.toggle('menu-open', open);
     btn.setAttribute('aria-expanded', open);
     menu.setAttribute('aria-hidden', !open);
+    // While open, the page behind is inert so focus and screen readers stay in the menu.
+    $$('main, footer, .back-btn, .hd-logo, .hd-nav, .hd-r > a').forEach(function (el) {
+      if (open) el.setAttribute('inert', ''); else el.removeAttribute('inert');
+    });
     if (open) {
       var first = menu.querySelector('.menu-links a');
       if (first) first.focus({ preventScroll: true });
     }
   }
+  // Focus trap: Tab cycles between the Menu button and the links in the panel.
+  function focusables() {
+    return [btn].concat($$('a[href], button, input, select, textarea', menu).filter(function (el) {
+      return el.offsetParent !== null;
+    }));
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Tab' || !root.classList.contains('menu-open')) return;
+    var f = focusables(), i = f.indexOf(document.activeElement);
+    if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
+    else if (!e.shiftKey && (i === f.length - 1 || i < 0)) { e.preventDefault(); f[0].focus(); }
+  });
   btn.addEventListener('click', function () { setMenu(!root.classList.contains('menu-open')); });
   menu.addEventListener('click', function (e) {
     if (e.target.closest('[data-close]') || e.target.closest('a')) setMenu(false);
@@ -56,13 +72,13 @@
     o.setAttribute('aria-hidden', 'true');
     for (var i = 0; i < 5; i++) {
       var s = document.createElement('i');
-      s.style.transitionDelay = (4 - i) * 0.05 + 's';
+      s.style.transitionDelay = (4 - i) * 0.02 + 's';
       o.appendChild(s);
     }
     document.body.appendChild(o);
     requestAnimationFrame(function () { requestAnimationFrame(function () { o.classList.add('go'); }); });
     try { sessionStorage.setItem('pt', '1'); } catch (err) {}
-    setTimeout(function () { location.href = u.href; }, 720);
+    setTimeout(function () { location.href = u.href; }, 420);
   });
 
   // Coming back through the history cache: clear any leftover cover.

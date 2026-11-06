@@ -14,11 +14,11 @@
   --ipl-line:rgba(160,180,255,.14);
   --ipl-y:#f5b400;
   --ipl-b:#3b82f6;
-  --ipl-p:#e6337a;
+  --ipl-p:#f0609a;
   --ipl-t:#2dd4bf;
   --ipl-ink:#eef2ff;
   --ipl-ink-2:#a9b4d6;
-  --ipl-ink-3:#7783a8;
+  --ipl-ink-3:#9aa5c8;
   --acc:var(--ipl-y);
   background:var(--ipl-bg);
   color:var(--ipl-ink);

@@ -290,12 +290,12 @@
       fcards[1].style.zIndex = 2;
     } else fcards.forEach(function (c) { c.style.transform = ''; });
 
-    // Work: vertical scroll drives the track sideways (2 screens), then the
-    // whole light layer slides off left (1.5 screens) over the dark one.
+    // Work: vertical scroll drives the track sideways (1.5 screens), then the
+    // whole light layer slides off left (0.9 screens) over the dark one.
     if (hs && work) {
       var w = window.innerWidth;
       var y = clamp(-work.getBoundingClientRect().top, 0, work.offsetHeight - h);
-      var k = clamp(y / (2 * h), 0, 1), m = clamp((y - 2 * h) / (1.5 * h), 0, 1);
+      var k = clamp(y / (1.5 * h), 0, 1), m = clamp((y - 1.5 * h) / (0.9 * h), 0, 1);
       var S = k * Math.max(0, wTrack.scrollWidth - w);
       wTrack.style.transform = 'translate3d(' + (-S) + 'px,0,0)';
       wFront.style.transform = 'translate3d(' + (-w * m) + 'px,0,0)';
@@ -388,7 +388,7 @@
   $$('.ws-steps').forEach(function (ul) {
     $$('li', ul).forEach(function (li, i) { li.style.setProperty('--i', i); });
   });
-  $$('[data-ws], [data-ws-yt]').forEach(function (el) {
+  $$('[data-ws], [data-ws-yt], .lead-grid, .ai-grid').forEach(function (el) {
     if (!io || reduced) { el.classList.add('on'); return; }
     new IntersectionObserver(function (e, obs) {
       if (!e[0].isIntersecting) return;

@@ -16,9 +16,10 @@ const RATE_LIMIT = 5;             // messages per visitor per hour
 const MIN_SECONDS = 3;            // faster than this is a bot
 
 const TOPICS = [
-  'Full-time design leadership role',
-  'Consulting engagement',
-  'UX audit or research project',
+  'Full-time UX or design leadership role',
+  'Consulting or freelance project',
+  'UX audit or research',
+  'Design thinking workshop',
   'Speaking or mentoring',
   'Something else',
 ];

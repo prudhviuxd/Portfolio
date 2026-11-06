@@ -75,47 +75,10 @@ const canAnimate = prefersFinePointer && !prefersReducedMotion;
   );
 })();
 
-// ---------- Custom cursor + magnetic elements + spotlight + tilt ----------
+// ---------- Magnetic elements + spotlight + tilt ----------
 if (canAnimate) {
-  document.documentElement.classList.add('has-custom-cursor');
-
-  const dot = document.createElement('div');
-  dot.className = 'cursor-dot';
-  const ring = document.createElement('div');
-  ring.className = 'cursor-ring';
-  document.body.append(dot, ring);
-
-  let mx = window.innerWidth / 2;
-  let my = window.innerHeight / 2;
-  let rx = mx;
-  let ry = my;
-
-  window.addEventListener(
-    'mousemove',
-    (e) => {
-      mx = e.clientX;
-      my = e.clientY;
-      dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
-    },
-    { passive: true }
-  );
-
-  function raf() {
-    rx += (mx - rx) * 0.18;
-    ry += (my - ry) * 0.18;
-    ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
-    requestAnimationFrame(raf);
-  }
-  requestAnimationFrame(raf);
-
-  document.addEventListener('mousedown', () => ring.classList.add('press'));
-  document.addEventListener('mouseup', () => ring.classList.remove('press'));
-
-  const hoverTargets = 'a, button, .project-card, input, textarea, select, [role="button"]';
-  document.querySelectorAll(hoverTargets).forEach((el) => {
-    el.addEventListener('mouseenter', () => ring.classList.add('hover'));
-    el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
-  });
+  // The custom cursor (dot + trailing ring) was removed: the native cursor
+  // is clearer and matches the homepage.
 
   // Magnetic pull
   document.querySelectorAll('.btn-primary').forEach((el) => {

@@ -20,7 +20,8 @@
     '.learn-grid > li', '.glance-in > div', '.skill-grid > li', '.resp-list > li',
     '.flow-box', '.phone-col', '.swatch', '.results-band',
     '.w-stat', '.w-metric', '.w-panel', '.w-insight', '.w-finding', '.w-ksf', '.w-decision', '.w-node',
-    '.cv-role', '.cv-stat', '.cv-results > li', '.cv-tools > div', '.cv-list > li'
+    '.cv-role', '.cv-stat', '.cv-results > li', '.cv-tools > div', '.cv-list > li',
+    '.tldr-out > li:not(.tldr-h)', '.tldr dl > div', '.outcome-grid > li', '.feat-grid > .feat'
   ].join(',');
   var HEADS = 'h1, h2, h3, .w-serif, .next-title, .w-next a, .mtn-wordmark';
   var COPY = 'p, blockquote, .cs-kicker, .cs-label, .w-kicker, .w-label, .eyebrow, .cs-tags, ' +
@@ -154,4 +155,34 @@
   onScroll();
 
   requestAnimationFrame(function () { root.classList.add('cm-ready'); });
+})();
+
+/* "Jump to impact": load the images above the outcome first, then keep the
+   outcome aligned while they settle, so the jump does not land short. */
+(function () {
+  'use strict';
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a.tldr-jump');
+    if (!a) return;
+    var t = document.querySelector(a.getAttribute('href'));
+    if (!t) return;
+    e.preventDefault();
+    document.querySelectorAll('img[loading="lazy"]').forEach(function (img) {
+      if (img.compareDocumentPosition(t) & Node.DOCUMENT_POSITION_FOLLOWING) img.loading = 'eager';
+    });
+    var smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    t.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
+    var until = Date.now() + 2500, moved = false;
+    var stop = function () { moved = true; };
+    window.addEventListener('wheel', stop, { once: true, passive: true });
+    window.addEventListener('touchstart', stop, { once: true, passive: true });
+    window.addEventListener('keydown', stop, { once: true });
+    (function settle() {
+      if (moved || Date.now() > until) return;
+      var off = t.getBoundingClientRect().top - 90;
+      if (Math.abs(off) > 4 && Date.now() > until - 1700) window.scrollBy(0, off);
+      setTimeout(settle, 120);
+    })();
+    if (history.replaceState) history.replaceState(null, '', a.getAttribute('href'));
+  });
 })();
