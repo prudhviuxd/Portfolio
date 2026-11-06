@@ -586,53 +586,44 @@
   });
 })();
 
-/* Hero night sky: faint twinkling stars, and every few seconds a falling
-   star (the site's four-point star with a fading tail). Runs only while the
-   hero is on screen and the tab is visible; reduced motion draws the still
-   field once and lets nothing fall. */
+/* Hero night sky, drawn on one canvas:
+   - stars in three depths; the nearest drift a few pixels with the pointer
+   - a low, soft mist bank along the bottom edge, never behind the copy
+   - now and then a fine falling star (the site's four-point star + tail)
+   Runs only while the hero is on screen and the tab is visible; reduced
+   motion draws one still frame. */
 (function () {
   'use strict';
   var cvs = document.querySelector('.hero .stars');
   if (!cvs || !cvs.getContext) return;
   var ctx = cvs.getContext('2d');
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var W = 0, H = 0, dpr = 1, field = [], falling = [], clouds = [], running = false, next = 0, raf = 0;
+  var fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  var W = 0, H = 0, dpr = 1, stars = [], mist = [], falling = [], running = false, next = 0, raf = 0;
+  var mx = 0, my = 0, tx = 0, ty = 0;   // pointer offset, eased
 
-  // One soft cloud, pre-rendered once: overlapping radial puffs along a
-  // gentle arc, so it reads as a rounded cumulus rather than a streak.
-  function makeCloud(w) {
-    var h = Math.round(w * 0.6), c = document.createElement('canvas');
+  // A wide, flat bank of mist: overlapping soft ellipses, rendered once.
+  function makeMist(w) {
+    var h = Math.round(w * 0.3), c = document.createElement('canvas');
     c.width = w; c.height = h;
-    var g = c.getContext('2d'), puffs = 9 + Math.floor(Math.random() * 6);
-    for (var i = 0; i < puffs; i++) {
-      var t = i / (puffs - 1);
-      var px = w * (0.14 + t * 0.72) + (Math.random() - 0.5) * w * 0.06;
-      var arch = Math.sin(t * Math.PI);
-      var r = w * (0.1 + arch * 0.1 + Math.random() * 0.03);
-      var py = h * (0.62 - arch * 0.16) + (Math.random() - 0.5) * h * 0.06;
-      r = Math.min(r, px, w - px, py, h - py);   // never past the edge, so no hard cut
-      var rg = g.createRadialGradient(px, py, 0, px, py, r);
-      rg.addColorStop(0, 'rgba(226,224,230,.55)');
-      rg.addColorStop(0.45, 'rgba(226,224,230,.28)');
-      rg.addColorStop(1, 'rgba(226,224,230,0)');
-      g.fillStyle = rg;
-      g.beginPath(); g.arc(px, py, r, 0, 6.283); g.fill();
+    var g = c.getContext('2d'), n = 12 + Math.floor(Math.random() * 6);
+    for (var i = 0; i < n; i++) {
+      var t = i / (n - 1);
+      var cx = w * (0.08 + t * 0.84);
+      var swell = Math.sin(t * Math.PI);
+      var rx = w * (0.1 + swell * 0.08 + Math.random() * 0.04);
+      var ry = h * (0.22 + swell * 0.18);
+      var cy = h * (0.66 - swell * 0.14);
+      rx = Math.min(rx, cx, w - cx); ry = Math.min(ry, cy, h - cy);
+      g.save(); g.translate(cx, cy); g.scale(1, ry / rx);
+      var rg = g.createRadialGradient(0, 0, 0, 0, 0, rx);
+      rg.addColorStop(0, 'rgba(206,214,232,.5)');
+      rg.addColorStop(0.5, 'rgba(206,214,232,.2)');
+      rg.addColorStop(1, 'rgba(206,214,232,0)');
+      g.fillStyle = rg; g.beginPath(); g.arc(0, 0, rx, 0, 6.283); g.fill();
+      g.restore();
     }
     return c;
-  }
-  function seedClouds() {
-    clouds = [];
-    var n = W < 768 ? 4 : 7;
-    for (var i = 0; i < n; i++) {
-      var w = (W < 768 ? 260 : 380) + Math.random() * (W < 768 ? 160 : 320);
-      clouds.push({
-        img: makeCloud(Math.round(w)), w: w,
-        x: (i / n) * (W + w) - w * 0.5 + Math.random() * 120,
-        y: H * (0.04 + Math.random() * 0.78),
-        v: 0.008 + Math.random() * 0.012,          // px per ms: about 8 to 20 px a second
-        a: 0.07 + Math.random() * 0.06
-      });
-    }
   }
 
   function size() {
@@ -640,21 +631,35 @@
     W = cvs.clientWidth; H = cvs.clientHeight;
     cvs.width = W * dpr; cvs.height = H * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    var n = Math.round(W * H / 9000);
-    field = [];
-    for (var i = 0; i < n; i++) field.push({
-      x: Math.random() * W, y: Math.random() * H * 0.9,
-      r: Math.random() < 0.08 ? 1.3 : 0.4 + Math.random() * 0.6,
-      a: 0.15 + Math.random() * 0.45, t: Math.random() * 6.28, s: 0.4 + Math.random() * 1.2
+    stars = [];
+    var area = W * H;
+    [[area / 5200, 0.25, 0.55, 0.08, 0.3, 0.15],    // far: many, tiny, dim
+     [area / 16000, 0.6, 1.0, 0.25, 0.5, 0.45],     // mid
+     [area / 60000, 1.0, 1.6, 0.5, 0.85, 1]          // near: few, bright, move most
+    ].forEach(function (L) {
+      for (var i = 0; i < Math.round(L[0]); i++) stars.push({
+        x: Math.random() * W, y: Math.random() * H * 0.82,
+        r: L[1] + Math.random() * (L[2] - L[1]), a: L[3] + Math.random() * (L[4] - L[3]),
+        d: L[5], t: Math.random() * 6.28, s: 0.3 + Math.random() * 1.1
+      });
     });
-    seedClouds();
+    mist = [];
+    var n = W < 768 ? 3 : 5;
+    for (var j = 0; j < n; j++) {
+      var w = W * (W < 768 ? 1.1 : 0.62) + Math.random() * W * 0.25;
+      mist.push({
+        img: makeMist(Math.round(Math.min(w, 2200))), w: w,
+        x: (j / n) * (W + w) - w * 0.4,
+        y: H * (0.8 + Math.random() * 0.14),
+        v: 0.004 + Math.random() * 0.006,           // 4 to 10 px a second
+        a: 0.05 + Math.random() * 0.04
+      });
+    }
     if (reduced) draw(0);
   }
 
   function sparkle(x, y, r, a) {
-    // four-point star, the site's ornament
-    ctx.save(); ctx.translate(x, y); ctx.globalAlpha = a;
-    ctx.beginPath();
+    ctx.save(); ctx.translate(x, y); ctx.globalAlpha = a; ctx.beginPath();
     for (var i = 0; i < 4; i++) {
       ctx.rotate(Math.PI / 2);
       ctx.moveTo(0, -r); ctx.quadraticCurveTo(r * 0.12, -r * 0.12, r, 0);
@@ -662,63 +667,74 @@
       ctx.quadraticCurveTo(-r * 0.12, r * 0.12, -r, 0);
       ctx.quadraticCurveTo(-r * 0.12, -r * 0.12, 0, -r);
     }
-    ctx.fillStyle = '#f4ece0'; ctx.fill();
-    ctx.restore();
+    ctx.fillStyle = '#eef1f7'; ctx.fill(); ctx.restore();
   }
 
   function spawn() {
-    var tilt = (22 + Math.random() * 18) * Math.PI / 180;  // degrees below the horizon
-    var speed = 0.5 + Math.random() * 0.35;                // px per ms
+    var tilt = (24 + Math.random() * 14) * Math.PI / 180;
+    var speed = 0.55 + Math.random() * 0.3;
     falling.push({
-      x: W * (0.2 + Math.random() * 0.55), y: -10 + Math.random() * H * 0.3,
+      x: W * (0.25 + Math.random() * 0.5), y: Math.random() * H * 0.25,
       vx: -Math.cos(tilt) * speed, vy: Math.sin(tilt) * speed,
-      life: 0, max: 1100 + Math.random() * 900, len: 160 + Math.random() * 140
+      life: 0, max: 900 + Math.random() * 700, len: 120 + Math.random() * 100
     });
   }
 
   var last = 0;
   function draw(now) {
     var dt = last ? Math.min(now - last, 50) : 16; last = now;
+    tx += (mx - tx) * 0.05; ty += (my - ty) * 0.05;
     ctx.clearRect(0, 0, W, H);
-    for (var i = 0; i < field.length; i++) {
-      var s = field[i];
-      var tw = reduced ? 1 : 0.65 + 0.35 * Math.sin(s.t + now * 0.001 * s.s);
-      ctx.globalAlpha = s.a * tw;
-      ctx.fillStyle = '#e9e4dc';
-      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.283); ctx.fill();
+
+    for (var i = 0; i < stars.length; i++) {
+      var st = stars[i];
+      var tw = reduced ? 1 : 0.6 + 0.4 * Math.sin(st.t + now * 0.001 * st.s);
+      var x = st.x - tx * 14 * st.d, y = st.y - ty * 10 * st.d;
+      ctx.globalAlpha = st.a * tw; ctx.fillStyle = '#e8ecf4';
+      ctx.beginPath(); ctx.arc(x, y, st.r, 0, 6.283); ctx.fill();
+      if (st.d === 1 && tw > 0.9) {                 // the brightest near stars glint
+        ctx.globalAlpha = st.a * (tw - 0.9) * 4;
+        ctx.fillRect(x - st.r * 4, y - 0.35, st.r * 8, 0.7);
+        ctx.fillRect(x - 0.35, y - st.r * 4, 0.7, st.r * 8);
+      }
     }
-    // clouds drift right to left over the stars and wrap around
-    for (var c = 0; c < clouds.length; c++) {
-      var cl = clouds[c];
-      if (!reduced) { cl.x -= cl.v * dt; if (cl.x < -cl.w) { cl.x = W + Math.random() * 120; cl.y = H * (0.04 + Math.random() * 0.78); } }
-      ctx.globalAlpha = cl.a;
-      ctx.drawImage(cl.img, cl.x, cl.y - cl.w * 0.3, cl.w, cl.w * 0.6);
+
+    for (var c = 0; c < mist.length; c++) {
+      var m = mist[c];
+      if (!reduced) { m.x -= m.v * dt; if (m.x < -m.w) m.x = W + Math.random() * 80; }
+      ctx.globalAlpha = m.a;
+      ctx.drawImage(m.img, m.x - tx * 6, m.y - m.w * 0.15, m.w, m.w * 0.3);
     }
     ctx.globalAlpha = 1;
     if (reduced) return;
-    if (now > next) { spawn(); next = now + 2200 + Math.random() * 3600; }
+
+    if (now > next) { spawn(); next = now + 5000 + Math.random() * 5000; }
     for (var j = falling.length - 1; j >= 0; j--) {
       var f = falling[j];
       f.life += dt; f.x += f.vx * dt; f.y += f.vy * dt;
       var k = f.life / f.max;
       if (k >= 1) { falling.splice(j, 1); continue; }
-      var a = k < 0.15 ? k / 0.15 : 1 - (k - 0.15) / 0.85;   // fade in fast, out slow
-      var m = Math.hypot(f.vx, f.vy), ux = f.vx / m, uy = f.vy / m;
+      var al = k < 0.2 ? k / 0.2 : 1 - (k - 0.2) / 0.8;
+      var sp = Math.hypot(f.vx, f.vy), ux = f.vx / sp, uy = f.vy / sp;
       var g = ctx.createLinearGradient(f.x, f.y, f.x - ux * f.len, f.y - uy * f.len);
-      g.addColorStop(0, 'rgba(244,236,224,' + (0.85 * a) + ')');
-      g.addColorStop(1, 'rgba(244,236,224,0)');
-      ctx.globalAlpha = 1; ctx.strokeStyle = g; ctx.lineWidth = 1.6; ctx.lineCap = 'round';
+      g.addColorStop(0, 'rgba(238,241,247,' + (0.8 * al) + ')');
+      g.addColorStop(1, 'rgba(238,241,247,0)');
+      ctx.strokeStyle = g; ctx.lineWidth = 1.1; ctx.lineCap = 'round';
       ctx.beginPath(); ctx.moveTo(f.x, f.y); ctx.lineTo(f.x - ux * f.len, f.y - uy * f.len); ctx.stroke();
-      ctx.shadowColor = 'rgba(244,236,224,.8)'; ctx.shadowBlur = 10;
-      sparkle(f.x, f.y, 7, a);
+      ctx.shadowColor = 'rgba(238,241,247,.9)'; ctx.shadowBlur = 8;
+      sparkle(f.x, f.y, 4.5, al);
       ctx.shadowBlur = 0;
     }
     ctx.globalAlpha = 1;
     if (running) raf = requestAnimationFrame(draw);
   }
 
-  function start() { if (running || reduced) return; running = true; last = 0; next = performance.now() + 900; raf = requestAnimationFrame(draw); }
+  function start() { if (running || reduced) return; running = true; last = 0; next = performance.now() + 2500; raf = requestAnimationFrame(draw); }
   function stop() { running = false; cancelAnimationFrame(raf); }
+
+  if (fine && !reduced) window.addEventListener('pointermove', function (e) {
+    mx = e.clientX / window.innerWidth - 0.5; my = e.clientY / window.innerHeight - 0.5;
+  }, { passive: true });
 
   size();
   var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(size, 150); });
