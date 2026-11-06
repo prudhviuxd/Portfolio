@@ -224,7 +224,7 @@
   var vision = $('.vision'), mqTrack = $('.mq-track'), stripes = $$('.stripes i');
   var fades = $$('.vision [data-fade]');
   var fcards = $$('.fcard');
-  var wipe = $$('.wipe i');
+  var wipe = $$('.wipe i'), wipeIn = $$('.wipe-in i');
   var work = $('.work'), wTrack = $('.work-track'), wFront = $('.work-front');
   var wBack = $('.work-back .wrap'), wCards = $$('.wcard');
   var wEnd = $('.wend i'), wPlus = $('.wend svg');
@@ -319,19 +319,26 @@
       fcards[1].style.zIndex = 2;
     } else fcards.forEach(function (c) { c.style.transform = ''; });
 
-    // Work: vertical scroll drives the track sideways (1.5 screens), then the
-    // whole light layer slides off left (0.9 screens) over the dark one.
+    // Work: the panel rises in on stripes (0.5 screens), vertical scroll drives
+    // the track sideways (1.5), the light layer slides off left (0.9) over the
+    // dark one, which holds, then sand stripes rise over it (0.75).
     if (hs && work) {
       var w = window.innerWidth;
       var y = clamp(-work.getBoundingClientRect().top, 0, work.offsetHeight - h);
-      var k = clamp(y / (1.5 * h), 0, 1), m = clamp((y - 1.5 * h) / (0.9 * h), 0, 1);
+      // first half screen: the dark cover pulls away in stripes, lowest first
+      var pin = clamp(y / (0.5 * h), 0, 1);
+      for (var wi = 0; wi < wipeIn.length; wi++) {
+        var fb = wipeIn.length - 1 - wi;
+        wipeIn[wi].style.setProperty('--s', (1 - clamp(pin * 1.8 - fb * 0.2, 0, 1)).toFixed(3));
+      }
+      var k = clamp((y - 0.5 * h) / (1.5 * h), 0, 1), m = clamp((y - 2 * h) / (0.9 * h), 0, 1);
       var S = k * Math.max(0, wTrack.scrollWidth - w);
       wTrack.style.transform = 'translate3d(' + (-S) + 'px,0,0)';
       wFront.style.transform = 'translate3d(' + (-w * m) + 'px,0,0)';
       wBack.style.transform = 'translate3d(' + ((1 - m) * 18) + 'vw,0,0)';
       wBack.style.opacity = 0.2 + 0.8 * m;
       // hold on 'What I actually do', then the sand stripes rise over it
-      setWipe(clamp((y - 2.65 * h) / (0.75 * h), 0, 1));
+      setWipe(clamp((y - 3.15 * h) / (0.75 * h), 0, 1));
 
       // Each card rises from 550px below as it travels in from the right.
       wCards.forEach(function (card, i) {
