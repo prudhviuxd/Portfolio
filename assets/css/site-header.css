@@ -144,7 +144,7 @@ body main.cv{padding-top:168px}
 .progress{z-index:95}
 @media (max-width:767px){
   .w-hero,.cs-hero,.theme-who .w-hero{padding-top:140px}
-  .hd #printBtn{display:none}
+  .hd #printBtn,.hd #dlBtn{display:none}
   body main.cv{padding-top:150px}
 }
 

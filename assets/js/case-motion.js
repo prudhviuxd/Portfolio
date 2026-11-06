@@ -19,7 +19,8 @@
     '.stat-box', '.persona-card', '.feature-card', '.insight-card', '.chart-card',
     '.learn-grid > li', '.glance-in > div', '.skill-grid > li', '.resp-list > li',
     '.flow-box', '.phone-col', '.swatch', '.results-band',
-    '.w-stat', '.w-metric', '.w-panel', '.w-insight', '.w-finding', '.w-ksf', '.w-decision', '.w-node'
+    '.w-stat', '.w-metric', '.w-panel', '.w-insight', '.w-finding', '.w-ksf', '.w-decision', '.w-node',
+    '.cv-role', '.cv-stat', '.cv-results > li', '.cv-tools > div', '.cv-list > li'
   ].join(',');
   var HEADS = 'h1, h2, h3, .w-serif, .next-title, .w-next a, .mtn-wordmark';
   var COPY = 'p, blockquote, .cs-kicker, .cs-label, .w-kicker, .w-label, .eyebrow, .cs-tags, ' +
@@ -118,7 +119,7 @@
 
   /* ---- counters: "2.1M+", "68%", "50M+", "4 wks" count up from zero ---- */
   function countIn(scope) {
-    var nums = scope.matches && scope.matches('.cm-card') ? $$('.num, .v, .k, b, strong, .w-num', scope) : [];
+    var nums = scope.matches && scope.matches('.cm-card') ? $$('.num, .v, .k, b, strong, dt, .w-num', scope) : [];
     nums.forEach(function (n) {
       if (n.children.length || n.dataset.counted) return;
       var m = n.textContent.trim().match(/^([^\d]{0,2})(\d+(?:\.\d+)?)(.{0,8})$/);
