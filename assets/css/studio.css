@@ -144,7 +144,7 @@ ul{list-style:none}
    ========================================================= */
 .hero{position:relative;min-height:100svh;display:flex}
 .hero-in{position:relative;display:flex;flex-direction:column;justify-content:space-between;padding-top:clamp(150px,19vh,190px);padding-bottom:56px;pointer-events:none}
-.hero-in a,.hero-in .hero-card{pointer-events:auto}
+.hero-in a{pointer-events:auto}
 .hero-top{display:grid;grid-template-columns:minmax(0,1fr) clamp(260px,27vw,420px);column-gap:clamp(32px,4vw,72px);align-items:start}
 .hero-title{margin-left:-.05em;font-size:clamp(3.2rem,7.3vw,8.4rem);line-height:.88;letter-spacing:-.065em;max-width:12.5ch}
 /* Hero: "Design leader / advancing" hold still while the last line
@@ -193,7 +193,6 @@ ul{list-style:none}
 .avail-dot{position:relative;width:9px;height:9px;flex:none;border-radius:50%;background:#7bd389}
 .avail-dot::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1px solid #7bd389;animation:ping 2.2s var(--out) infinite}
 @keyframes ping{from{transform:scale(.5);opacity:1}to{transform:scale(1.6);opacity:0}}
-.hero-card{justify-self:end}
 .js .hero-btm>*{opacity:0;transform:translateY(16px);transition:opacity .9s .6s,transform 1s var(--out) .6s}
 .ready .hero-btm>*{opacity:1;transform:none}
 
@@ -561,7 +560,6 @@ ul{list-style:none}
   .hero-btm .avail{order:-1}
   .hero-btm{margin-top:36px}
   .scroll-ico{order:3}
-  .hero-card{justify-self:start;width:100%;max-width:320px}
   .btn{min-width:0;width:100%}
   .hero-cta{flex-direction:column;gap:12px}
   .grid,.about-foot,.sec-head,.contact-grid{grid-template-columns:1fr}
@@ -632,27 +630,31 @@ html{scrollbar-color:#3a3530 var(--bg);scrollbar-width:thin}
 ::-webkit-scrollbar-thumb{background:#3a3530;border-radius:10px;border:2px solid var(--bg)}
 ::-webkit-scrollbar-thumb:hover{background:var(--amber)}
 
-/* ---------- hero: warm key light behind the portrait ---------- */
+/* ---------- hero: a settled night sky ----------
+   Two slow cloud layers drift across (fractal-noise SVG, tiled so the
+   loop is seamless), a field of faint stars, and now and then a star
+   falls: the site's four-point star with a short tail (studio.js). */
 .hero{isolation:isolate;overflow:clip}
-.hero::before{
-  content:""; position:absolute; z-index:-1; pointer-events:none;
-  width:min(1100px,95vw); aspect-ratio:1; right:-18vw; top:50%;
-  translate:0 -50%;
-  background:radial-gradient(closest-side,rgba(232,161,101,.26),rgba(169,83,29,.12) 45%,transparent 72%);
-  opacity:var(--bloom,.7); scale:var(--bloom-s,1);
-  animation:breathe 9s ease-in-out infinite alternate;
-}
-@keyframes breathe{from{filter:hue-rotate(0deg) brightness(1)}to{filter:hue-rotate(-8deg) brightness(1.15)}}
+.sky{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden;
+  background:radial-gradient(120% 80% at 50% 110%,#17171a 0%,transparent 60%),var(--bg)}
+.cloud{position:absolute;left:0;width:200%;background-repeat:repeat-x;background-size:50% 100%;
+  -webkit-mask:linear-gradient(180deg,transparent 0%,#000 30%,#000 70%,transparent 100%);
+  mask:linear-gradient(180deg,transparent 0%,#000 30%,#000 70%,transparent 100%);
+  animation:drift linear infinite;will-change:transform}
+.cloud.c1{top:4%;height:62%;opacity:.13;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1800' height='700'%3E%3Cfilter id='f' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.0018 .0042' numOctaves='5' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .86 0 0 0 0 .86 0 0 0 0 .9 2.6 0 0 0 -1.25'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");animation-duration:240s}
+.cloud.c2{top:38%;height:70%;opacity:.09;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1800' height='700'%3E%3Cfilter id='f' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.0018 .0042' numOctaves='5' seed='23' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .86 0 0 0 0 .86 0 0 0 0 .9 2.6 0 0 0 -1.25'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");animation-duration:380s;animation-direction:reverse}
+@keyframes drift{to{transform:translate3d(-50%,0,0)}}
+.stars{position:absolute;inset:0;width:100%;height:100%;display:block}
 .hero-in{transform-origin:50% 0;will-change:transform,opacity}
 .hero-title .rot{color:var(--amber)}
-.portrait-in{box-shadow:0 40px 90px -30px rgba(169,83,29,.55),0 0 0 1px rgba(232,161,101,.12)}
+.portrait-in{box-shadow:0 40px 90px -40px rgba(0,0,0,.8)}
 .portrait .plus{background:var(--amber)}
 
 /* ---------- work: the sand panel rises over the hero ---------- */
 .work{
   overflow:clip;
   border-radius:var(--wr,56px) var(--wr,56px) 0 0;
-  box-shadow:0 -24px 60px -30px rgba(232,161,101,.28);
+  box-shadow:0 -24px 60px -30px rgba(0,0,0,.6);
 }
 .wcard-img{transition:transform .9s var(--out),box-shadow .9s var(--out)}
 .wcard-img:hover{transform:translateY(-6px);box-shadow:0 40px 80px -36px rgba(40,22,8,.55)}
@@ -704,7 +706,7 @@ html{scrollbar-color:#3a3530 var(--bg);scrollbar-width:thin}
 .ft-mark{color:var(--amber);margin-bottom:64px}
 
 @media (prefers-reduced-motion:reduce){
-  .hero::before{animation:none}
+  .cloud{animation:none}
   .about-big .w.on{animation:none}
 }
 
