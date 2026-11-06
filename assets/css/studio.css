@@ -204,7 +204,7 @@ ul{list-style:none}
 /* =========================================================
    ABOUT
    ========================================================= */
-.about{position:relative;z-index:3;min-height:100svh;display:flex;align-items:center;padding:150px 0 90px}
+.about{position:relative;z-index:3;min-height:100svh;display:flex;align-items:center;padding:150px 0 90px;background:var(--bg)}
 .about-lbl{grid-column:1/-1;margin-bottom:-2.6em}
 .about-big{
   grid-column:2/-1;
