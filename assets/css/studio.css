@@ -766,3 +766,29 @@ html{scrollbar-color:#3a3530 var(--bg);scrollbar-width:thin}
 .ready .tools li:hover{transition-delay:0s}
 @media (max-width:767px){ .tools{gap:5px;margin-top:14px;width:calc(100vw - 32px)} .tools li{height:28px;padding:0 10px 0 8px;font-size:11px} .tools svg{width:12px;height:12px} }
 @media (prefers-reduced-motion:reduce){ .js .tools li{opacity:1;translate:none} }
+
+/* ---------- "What I actually do": orbit illustration ----------
+   The four practices on slow orbits around the site's star. */
+.work-back-in{display:grid;grid-template-columns:minmax(0,1fr) clamp(300px,36vw,540px);align-items:center;column-gap:48px}
+.orbit{position:relative;width:calc(100% - 70px);aspect-ratio:1;margin:0 70px 0 0;justify-self:end}
+.orbit svg{width:100%;height:100%;display:block;overflow:visible}
+.o-ring,.o-core{transform-box:view-box;transform-origin:50% 50%}
+.o-r1{animation:o-spin 60s linear infinite}
+.o-r2{animation:o-spin 95s linear infinite reverse}
+.o-r3{animation:o-spin 140s linear infinite}
+.o-core{animation:o-spin 24s linear infinite}
+@keyframes o-spin{to{transform:rotate(360deg)}}
+.o-lbl{position:absolute;display:flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid #2c2c2c;border-radius:40px;
+  background:var(--bg);font-family:var(--mono);font-weight:300;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);white-space:nowrap}
+.o-lbl b{font-weight:300;color:var(--amber)}
+.o-n{left:50%;top:0;transform:translate(-50%,-50%)}
+.o-e{right:0;top:50%;transform:translate(50%,-50%)}
+.o-s{left:50%;bottom:0;transform:translate(-50%,50%)}
+.o-w{left:0;top:50%;transform:translate(-50%,-50%)}
+@media (max-width:1024px){ .work-back-in{grid-template-columns:minmax(0,1fr) clamp(260px,38vw,420px);column-gap:32px} }
+@media (max-width:767px){
+  .work-back-in{grid-template-columns:1fr;row-gap:56px}
+  .orbit{width:min(70vw,340px);justify-self:center;margin:10px 0 30px}
+  .o-e{transform:translate(20%,-50%)} .o-w{transform:translate(-20%,-50%)}
+}
+@media (prefers-reduced-motion:reduce){ .o-ring,.o-core{animation:none} }
