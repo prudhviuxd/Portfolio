@@ -521,3 +521,46 @@
     });
   });
 })();
+
+/* Sections answer the pointer: entering one fades in a light that follows
+   the cursor, leans the headline toward it and turns the star ornaments. */
+(function () {
+  'use strict';
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var sections = Array.prototype.slice.call(document.querySelectorAll('main > section:not([hidden]), body > footer.ft'));
+  sections.forEach(function (sec) {
+    if (getComputedStyle(sec).position === 'static') sec.style.position = 'relative';
+    var spot = document.createElement('span');
+    spot.className = 'spot';
+    spot.setAttribute('aria-hidden', 'true');
+    sec.appendChild(spot);
+    sec.classList.add('lean');
+
+    var x = 0, y = 0, queued = false;
+    function paint() {
+      queued = false;
+      var r = sec.getBoundingClientRect();
+      sec.style.setProperty('--sx', (x - r.left) + 'px');
+      sec.style.setProperty('--sy', (y - r.top) + 'px');
+      // lean relative to the visible part of the section
+      var top = Math.max(r.top, 0), bottom = Math.min(r.bottom, window.innerHeight);
+      var px = ((x - r.left) / r.width) * 2 - 1;
+      var py = bottom > top ? ((y - top) / (bottom - top)) * 2 - 1 : 0;
+      sec.style.setProperty('--px', px.toFixed(3));
+      sec.style.setProperty('--py', py.toFixed(3));
+    }
+    function track(e) {
+      x = e.clientX; y = e.clientY;
+      if (!queued) { queued = true; requestAnimationFrame(paint); }
+    }
+    sec.addEventListener('pointerenter', function (e) { track(e); sec.classList.add('is-hot'); });
+    sec.addEventListener('pointermove', track, { passive: true });
+    sec.addEventListener('pointerleave', function () { sec.classList.remove('is-hot'); });
+    // keep the light under a still cursor while the page scrolls past it
+    window.addEventListener('scroll', function () {
+      if (sec.classList.contains('is-hot') && !queued) { queued = true; requestAnimationFrame(paint); }
+    }, { passive: true });
+  });
+})();
