@@ -22,7 +22,7 @@
     btn.setAttribute('aria-expanded', open);
     menu.setAttribute('aria-hidden', !open);
     // While open, the page behind is inert so focus and screen readers stay in the menu.
-    $$('main, footer, .back-btn, .hd-logo, .hd-nav, .hd-r > a').forEach(function (el) {
+    $$('main, footer, .back-btn, .hd-logo, .hd-r > a').forEach(function (el) {
       if (open) el.setAttribute('inert', ''); else el.removeAttribute('inert');
     });
     if (open) {

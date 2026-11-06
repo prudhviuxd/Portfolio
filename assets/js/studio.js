@@ -676,7 +676,7 @@
         x: (j / n) * (W + w) - w * 0.4,
         y: H * (0.6 + Math.random() * 0.12),
         v: 0.004 + Math.random() * 0.006,           // 4 to 10 px a second
-        a: 0.05 + Math.random() * 0.04
+        a: 0.022 + Math.random() * 0.018
       });
     }
     if (reduced) draw(0);

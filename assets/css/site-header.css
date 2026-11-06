@@ -47,11 +47,6 @@
 .hd-logo{display:inline-flex;align-items:center;gap:10px;font-family:var(--sh-display);font-size:20px;letter-spacing:-.04em;text-transform:uppercase;line-height:1}
 .hd .mono-pj{display:inline-grid;place-items:center;width:30px;height:30px;border:1px solid currentColor;border-radius:50%;font-size:13px;letter-spacing:-.04em;line-height:1;padding-right:1px}
 .hd-r{display:flex;gap:8px;align-items:center}
-/* visible primary nav on wide screens; the menu still holds everything */
-.hd-nav{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;gap:30px}
-.hd-nav a{font-size:14px;font-weight:500;text-transform:uppercase;letter-spacing:-.01em;line-height:1;color:rgba(242,242,242,.78);transition:color .3s}
-.hd-nav a:hover,.hd-nav a[aria-current="page"]{color:#f2f2f2}
-.hd-nav a[aria-current="page"]::after{content:"";display:block;height:1px;background:currentColor;margin-top:5px}
 
 .hd .pill{
   display:inline-flex; align-items:center; gap:10px; height:30px; padding:0 15px;
@@ -128,7 +123,7 @@
 .back-btn:hover svg{transform:translateX(-4px)}
 .back-btn:focus-visible,.hd a:focus-visible,.hd button:focus-visible,.menu a:focus-visible{outline:1px solid #f2f2f2;outline-offset:4px}
 
-@media (max-width:1024px){ .hd,.menu,.back-btn{--sh-gut:24px} .hd-nav{display:none} }
+@media (max-width:1024px){ .hd,.menu,.back-btn{--sh-gut:24px} }
 @media (max-width:767px){
   .hd,.menu,.back-btn{--sh-gut:16px; --sh-h:64px}
   .hd-logo{font-size:17px}
