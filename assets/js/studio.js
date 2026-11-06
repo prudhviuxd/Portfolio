@@ -807,3 +807,12 @@
   }
   requestAnimationFrame(frame);
 })();
+
+/* Ink reveal on the hero: About's dark (#0d0d0d) as the mask; moving the
+   pointer (or dragging a finger) reveals the seascape for a moment. */
+(function () {
+  'use strict';
+  var hero = document.querySelector('.hero'), ink = document.querySelector('.sc-ink');
+  if (!hero || !ink || !window.InkReveal) return;
+  window.InkReveal(ink, hero, { maskColor: [13, 13, 13] });
+})();
