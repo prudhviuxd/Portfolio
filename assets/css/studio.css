@@ -608,3 +608,102 @@ ul{list-style:none}
   .stripes{display:none}
   .vision-txt{mix-blend-mode:normal}
 }
+
+/* =========================================================
+   WARMTH PASS
+   The page already owned ink, sand, amber and the star; this
+   pass lets amber act as the light source of the whole scroll.
+   One authored moment (the hero receding as the sand Work panel
+   rises over it), then amber carried through to the finale.
+   ========================================================= */
+:root{
+  --amber:#e8a165;
+  --amber-2:#f3c99c;
+  --ember:#a9531d;   /* amber deep enough for text on sand */
+}
+
+/* browser surfaces */
+::selection{background:var(--amber);color:#0d0d0d}
+:focus-visible{outline-color:var(--amber)}
+input,textarea{caret-color:var(--amber)}
+html{scrollbar-color:#3a3530 var(--bg);scrollbar-width:thin}
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:#3a3530;border-radius:10px;border:2px solid var(--bg)}
+::-webkit-scrollbar-thumb:hover{background:var(--amber)}
+
+/* ---------- hero: warm key light behind the portrait ---------- */
+.hero{isolation:isolate;overflow:clip}
+.hero::before{
+  content:""; position:absolute; z-index:-1; pointer-events:none;
+  width:min(1100px,95vw); aspect-ratio:1; right:-18vw; top:50%;
+  translate:0 -50%;
+  background:radial-gradient(closest-side,rgba(232,161,101,.26),rgba(169,83,29,.12) 45%,transparent 72%);
+  opacity:var(--bloom,.7); scale:var(--bloom-s,1);
+  animation:breathe 9s ease-in-out infinite alternate;
+}
+@keyframes breathe{from{filter:hue-rotate(0deg) brightness(1)}to{filter:hue-rotate(-8deg) brightness(1.15)}}
+.hero-in{transform-origin:50% 0;will-change:transform,opacity}
+.hero-title .rot{color:var(--amber)}
+.portrait-in{box-shadow:0 40px 90px -30px rgba(169,83,29,.55),0 0 0 1px rgba(232,161,101,.12)}
+.portrait .plus{background:var(--amber)}
+
+/* ---------- work: the sand panel rises over the hero ---------- */
+.work{
+  overflow:clip;
+  border-radius:var(--wr,56px) var(--wr,56px) 0 0;
+  box-shadow:0 -24px 60px -30px rgba(232,161,101,.28);
+}
+.wcard-img{transition:transform .9s var(--out),box-shadow .9s var(--out)}
+.wcard-img:hover{transform:translateY(-6px);box-shadow:0 40px 80px -36px rgba(40,22,8,.55)}
+
+/* ---------- about: words ignite amber, then cool to ink ---------- */
+.about-big .w{transition:color .9s var(--out)}
+.about-big .w.on{animation:ignite 2.2s cubic-bezier(.5,0,.2,1)}
+@keyframes ignite{
+  0%{color:var(--amber-2);text-shadow:0 0 28px rgba(232,161,101,.55)}
+  55%{color:var(--amber);text-shadow:0 0 0 transparent}
+  100%{color:var(--ink);text-shadow:0 0 0 transparent}
+}
+.about-mission .plus{background:var(--amber)}
+
+/* ---------- key facts: figures in ember ---------- */
+.impact-row b{color:var(--ember)}
+.fcard-dark .fc-num{color:var(--amber)}
+.fc-dots i.on{background:var(--amber);border-color:var(--amber)}
+
+/* ---------- leadership + AI: a light that follows the cursor ---------- */
+.ai-card{position:relative;overflow:hidden;isolation:isolate}
+.ai-card::before{
+  content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+  background:radial-gradient(420px circle at var(--mx,50%) var(--my,0%),rgba(232,161,101,.16),transparent 60%);
+  opacity:0; transition:opacity .5s;
+}
+.ai-card:hover::before{opacity:1}
+.ai-card:hover{border-color:rgba(232,161,101,.45)}
+
+/* ---------- expertise: the open row is lit ---------- */
+.exp-row summary:hover .exp-t{color:var(--amber-2)}
+.exp-row[open] .exp-x{background:var(--amber)}
+.exp-row[open] .exp-n{color:var(--amber)}
+.exp-t{transition:transform .5s var(--out),color .4s}
+
+/* ---------- contact + footer: the warm finale ---------- */
+.contact{isolation:isolate;overflow:clip}
+.contact::before{
+  content:""; position:absolute; z-index:-1; pointer-events:none;
+  left:-20vw; bottom:-60%; width:90vw; aspect-ratio:1.4;
+  background:radial-gradient(closest-side,rgba(232,161,101,.2),rgba(169,83,29,.08) 50%,transparent 75%);
+}
+.contact-links em{color:var(--amber)}
+.form .pill-solid{background:var(--amber);color:#0d0d0d;transition:background .3s,transform .5s var(--out),box-shadow .5s var(--out)}
+.form .pill-solid:hover{background:var(--amber-2);transform:translateY(-2px);box-shadow:0 18px 40px -16px rgba(232,161,101,.7)}
+.f:focus-within>span{color:var(--amber)}
+.f input:focus,.f select:focus,.f textarea:focus{border-color:var(--amber)}
+.ft{background:radial-gradient(80% 120% at 30% 0%,rgba(169,83,29,.14),transparent 70%),var(--bg)}
+.ft-mark{color:var(--amber);margin-bottom:64px}
+
+@media (prefers-reduced-motion:reduce){
+  .hero::before{animation:none}
+  .about-big .w.on{animation:none}
+}

@@ -255,8 +255,25 @@
     return clamp(-r.top / (r.height - vh()), 0, 1);
   }
 
+  var hero = $('.hero'), heroIn = $('.hero-in');
   function onScroll() {
     var h = vh();
+
+    // Hero recedes (drifts down, shrinks, dims) while the sand Work panel
+    // rises over it; the panel's rounded shoulders flatten as it docks.
+    if (hero && heroIn && !reduced) {
+      var hp = clamp(window.scrollY / h, 0, 1);
+      if (hp < 1) {
+        heroIn.style.transform = 'translate3d(0,' + (hp * h * 0.34).toFixed(1) + 'px,0) scale(' + (1 - hp * 0.06).toFixed(4) + ')';
+        heroIn.style.opacity = (1 - hp * 0.8).toFixed(3);
+        hero.style.setProperty('--bloom', (0.7 + hp * 0.3).toFixed(3));
+        hero.style.setProperty('--bloom-s', (1 + hp * 0.25).toFixed(3));
+      }
+    }
+    if (work) {
+      var wtop = work.getBoundingClientRect().top;
+      work.style.setProperty('--wr', (reduced ? 0 : clamp(wtop / (h * 0.55), 0, 1) * 64).toFixed(1) + 'px');
+    }
 
     // About: light words as the paragraph passes through the viewport.
     if (aboutWords.length) {
@@ -382,6 +399,15 @@
         .then(loop);
     })();
   })();
+
+  /* ---------- AI cards: a light that follows the pointer ---------- */
+  $$('.ai-card').forEach(function (c) {
+    c.addEventListener('pointermove', function (e) {
+      var r = c.getBoundingClientRect();
+      c.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      c.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  });
 
   /* ---------- workshops entrance ---------- */
 
