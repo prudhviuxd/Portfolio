@@ -43,12 +43,19 @@
 .ft-top-btn:hover .ft-arrow{translate:0 -3px}
 .ft a:focus-visible{outline:1px solid var(--sf-amber);outline-offset:4px}
 
-/* the name: a fine amber outline. Sized so the whole word always fits
-   the width, down to 320px. */
+/* the name: a fine amber outline that fills on hover. Sized so the whole
+   word always fits the width, down to 320px. */
 .ft-name{position:relative;margin:90px 0 56px -.04em;font-family:var(--sf-display);font-weight:400;
   font-size:min(19.5rem,18.6vw);letter-spacing:-.075em;line-height:.8;text-transform:uppercase;white-space:nowrap;padding-bottom:.08em}
 .ft-name span{display:inline-block}
 .ft-outline{color:transparent;-webkit-text-stroke:1px rgba(232,161,101,.8)}
+/* hovering the footer fills the name with amber, sweeping left to right;
+   leaving empties it again. Touch screens keep the outline. */
+.ft-fill{position:absolute;left:0;top:0;color:var(--sf-amber);pointer-events:none;
+  clip-path:inset(-.3em 100% -.3em 0);transition:clip-path 1.1s var(--sf-ease)}
+@media (hover:hover){
+  .ft:hover .ft-fill,.ft:focus-within .ft-fill{clip-path:inset(-.3em 0 -.3em 0)}
+}
 
 /* base row */
 .ft-base{display:flex;justify-content:space-between;align-items:center;gap:20px;padding-top:22px;border-top:1px solid var(--sf-line);
@@ -71,5 +78,5 @@
   .ft-base{flex-wrap:wrap}
   .ft-star{display:none}
 }
-@media (prefers-reduced-motion:reduce){ .ft-star svg,.ft-dot::after{animation:none} }
+@media (prefers-reduced-motion:reduce){ .ft-star svg,.ft-dot::after{animation:none} .ft-fill{transition:none} }
 @media print{ .ft{display:none} }
