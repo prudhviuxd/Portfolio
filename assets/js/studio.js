@@ -600,7 +600,44 @@
   if (!cvs || !cvs.getContext) return;
   var ctx = cvs.getContext('2d');
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var W = 0, H = 0, dpr = 1, field = [], falling = [], running = false, next = 0, raf = 0;
+  var W = 0, H = 0, dpr = 1, field = [], falling = [], clouds = [], running = false, next = 0, raf = 0;
+
+  // One soft cloud, pre-rendered once: overlapping radial puffs along a
+  // gentle arc, so it reads as a rounded cumulus rather than a streak.
+  function makeCloud(w) {
+    var h = Math.round(w * 0.6), c = document.createElement('canvas');
+    c.width = w; c.height = h;
+    var g = c.getContext('2d'), puffs = 9 + Math.floor(Math.random() * 6);
+    for (var i = 0; i < puffs; i++) {
+      var t = i / (puffs - 1);
+      var px = w * (0.14 + t * 0.72) + (Math.random() - 0.5) * w * 0.06;
+      var arch = Math.sin(t * Math.PI);
+      var r = w * (0.1 + arch * 0.1 + Math.random() * 0.03);
+      var py = h * (0.62 - arch * 0.16) + (Math.random() - 0.5) * h * 0.06;
+      r = Math.min(r, px, w - px, py, h - py);   // never past the edge, so no hard cut
+      var rg = g.createRadialGradient(px, py, 0, px, py, r);
+      rg.addColorStop(0, 'rgba(226,224,230,.55)');
+      rg.addColorStop(0.45, 'rgba(226,224,230,.28)');
+      rg.addColorStop(1, 'rgba(226,224,230,0)');
+      g.fillStyle = rg;
+      g.beginPath(); g.arc(px, py, r, 0, 6.283); g.fill();
+    }
+    return c;
+  }
+  function seedClouds() {
+    clouds = [];
+    var n = W < 768 ? 4 : 7;
+    for (var i = 0; i < n; i++) {
+      var w = (W < 768 ? 260 : 380) + Math.random() * (W < 768 ? 160 : 320);
+      clouds.push({
+        img: makeCloud(Math.round(w)), w: w,
+        x: (i / n) * (W + w) - w * 0.5 + Math.random() * 120,
+        y: H * (0.04 + Math.random() * 0.78),
+        v: 0.008 + Math.random() * 0.012,          // px per ms: about 8 to 20 px a second
+        a: 0.07 + Math.random() * 0.06
+      });
+    }
+  }
 
   function size() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -614,6 +651,7 @@
       r: Math.random() < 0.08 ? 1.3 : 0.4 + Math.random() * 0.6,
       a: 0.15 + Math.random() * 0.45, t: Math.random() * 6.28, s: 0.4 + Math.random() * 1.2
     });
+    seedClouds();
     if (reduced) draw(0);
   }
 
@@ -653,6 +691,14 @@
       ctx.fillStyle = '#e9e4dc';
       ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.283); ctx.fill();
     }
+    // clouds drift right to left over the stars and wrap around
+    for (var c = 0; c < clouds.length; c++) {
+      var cl = clouds[c];
+      if (!reduced) { cl.x -= cl.v * dt; if (cl.x < -cl.w) { cl.x = W + Math.random() * 120; cl.y = H * (0.04 + Math.random() * 0.78); } }
+      ctx.globalAlpha = cl.a;
+      ctx.drawImage(cl.img, cl.x, cl.y - cl.w * 0.3, cl.w, cl.w * 0.6);
+    }
+    ctx.globalAlpha = 1;
     if (reduced) return;
     if (now > next) { spawn(); next = now + 2200 + Math.random() * 3600; }
     for (var j = falling.length - 1; j >= 0; j--) {
