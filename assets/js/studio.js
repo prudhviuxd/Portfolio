@@ -268,10 +268,6 @@
         heroIn.style.opacity = (1 - hp * 0.8).toFixed(3);
       }
     }
-    if (work) {
-      var wtop = work.getBoundingClientRect().top;
-      work.style.setProperty('--wr', (reduced ? 0 : clamp(wtop / (h * 0.55), 0, 1) * 64).toFixed(1) + 'px');
-    }
 
     // About: light words as the paragraph passes through the viewport.
     if (aboutWords.length) {
@@ -540,7 +536,7 @@
     expertise: '.exp-row',
     workshops: '.sec-head, .ws-grid > *, .yt',
     contact: '.contact-l > *, .form',
-    footer: '.ft-row, .ft-mark'
+    footer: '.ft-top > *, .ft-name, .ft-base'
   };
 
   Object.keys(PARTS).forEach(function (id) {
@@ -732,4 +728,30 @@
   }).observe(cvs);
   document.addEventListener('visibilitychange', function () { if (document.hidden) stop(); else if (onScreen) start(); });
   start();
+})();
+
+/* Footer: the name fills with amber as the page reaches its end, and a
+   live Hyderabad clock (IST) sits beside the identity. */
+(function () {
+  'use strict';
+  var name = document.querySelector('.ft-name');
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (name && !reduced) {
+    var tick = false;
+    var fill = function () {
+      tick = false;
+      var r = name.getBoundingClientRect(), h = window.innerHeight;
+      var p = Math.min(1, Math.max(0, (h - r.top) / (r.height + 30)));
+      name.style.setProperty('--fill', (p * 100).toFixed(1) + '%');
+    };
+    window.addEventListener('scroll', function () { if (!tick) { tick = true; requestAnimationFrame(fill); } }, { passive: true });
+    window.addEventListener('resize', fill);
+    fill();
+  }
+  var t = document.getElementById('ftTime');
+  if (t && window.Intl) {
+    var fmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' });
+    var show = function () { t.textContent = fmt.format(new Date()) + ' IST'; };
+    show(); setInterval(show, 20000);
+  }
 })();
