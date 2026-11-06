@@ -430,11 +430,25 @@
     wCards.forEach(function (c) { wio.observe(c); });
   } else wCards.forEach(function (c) { reveal(c, 0); });
 
-  /* ---------- enquiry form (static site: hands off to the mail client) ---------- */
+  /* ---------- enquiry form ----------
+     Posts to contact.php, which emails the enquiry. Where PHP is not
+     available (a static preview, or the request fails) it falls back
+     to opening the visitor's email app with the message filled in. */
 
   var form = $('#enquiry');
   if (form) {
     var note = $('.form-note', form);
+    var sendBtn = $('button[type="submit"]', form);
+    var started = form.querySelector('input[name="t"]');
+    if (started) started.value = Date.now();
+
+    function mailtoFallback(d) {
+      var subject = 'Portfolio enquiry: ' + d.get('topic');
+      var body = d.get('message') + '\n\n' + d.get('name') + '\n' + d.get('email');
+      window.location.href = 'mailto:prudhviuxd@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+      note.textContent = 'Opening your email app. If nothing happens, write to prudhviuxd@gmail.com.';
+    }
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var ok = true;
@@ -445,11 +459,28 @@
         if (bad) ok = false;
       });
       if (!ok) { note.textContent = 'A couple of fields need another look.'; return; }
+
       var d = new FormData(form);
-      var subject = 'Portfolio enquiry: ' + d.get('topic');
-      var body = d.get('message') + '\n\n' + d.get('name') + '\n' + d.get('email');
-      window.location.href = 'mailto:prudhviuxd@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-      note.textContent = 'Opening your email app. If nothing happens, write to prudhviuxd@gmail.com.';
+      form.classList.add('sending'); sendBtn.disabled = true;
+      note.classList.remove('is-ok', 'is-err');
+      note.textContent = 'Sending\u2026';
+
+      fetch(form.getAttribute('action'), { method: 'POST', body: d, headers: { 'X-Requested-With': 'fetch' } })
+        .then(function (r) {
+          var type = r.headers.get('content-type') || '';
+          if (type.indexOf('application/json') < 0) throw new Error('no-php');
+          return r.json();
+        })
+        .then(function (res) {
+          note.textContent = res.message;
+          note.classList.add(res.ok ? 'is-ok' : 'is-err');
+          if (res.ok) {
+            form.reset();
+            if (started) started.value = Date.now();
+          }
+        })
+        .catch(function () { mailtoFallback(d); })
+        .then(function () { form.classList.remove('sending'); sendBtn.disabled = false; });
     });
     form.addEventListener('input', function (e) {
       var f = e.target.closest('.f');

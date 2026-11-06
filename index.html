@@ -432,7 +432,10 @@
           <li><em>CV.</em><a href="cv/Prudhvi_UX_UI_Designer_2026.pdf" download data-roll>Download PDF</a></li>
         </ul>
       </div>
-      <form class="form" id="enquiry" novalidate>
+      <form class="form" id="enquiry" action="contact.php" method="post" novalidate>
+        <!-- spam traps: a field people never see, and the time the form was opened -->
+        <div class="hp" aria-hidden="true"><label>Company<input name="company" tabindex="-1" autocomplete="off"></label></div>
+        <input type="hidden" name="t" value="">
         <label class="f"><span>Your name</span><input name="name" autocomplete="name" required><small>Enter your name</small></label>
         <label class="f"><span>Email</span><input name="email" type="email" autocomplete="email" required><small>Enter a valid email</small></label>
         <label class="f f-sel"><span>What's this about?</span>
