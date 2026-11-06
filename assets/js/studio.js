@@ -771,24 +771,39 @@
 })();
 
 
-/* Hero scene timeline: a one-time sunset that plays on load. The sun sinks
-   into the sea (--t), then the moon rises (--m). Eased, about nine seconds,
-   and it rests on the moonlit night. Reduced motion shows the night at once. */
+/* Hero scene: the real dusk photo holds for a moment, then crossfades to
+   its moonlit grade (--t) and the moon appears where the sun was (--m).
+   The moon is placed and sized on the photo itself, wherever the cover
+   crop puts it. Reduced motion shows the night at once. */
 (function () {
   'use strict';
-  var hero = document.querySelector('.hero');
-  if (!hero || !document.querySelector('.scene')) return;
+  var hero = document.querySelector('.hero'), scene = document.querySelector('.scene');
+  if (!hero || !scene) return;
+  var photo = scene.querySelector('.sc-dusk');
+  var SX = 0.6480, SY = 0.3254, IW = 2048, IH = 1365;   // where the sun is in the frame
+  function place() {
+    var cw = scene.clientWidth, ch = scene.clientHeight;
+    var k = Math.max(cw / IW, ch / IH), dw = IW * k, dh = IH * k;
+    var ox = parseFloat(getComputedStyle(photo).objectPosition) / 100;
+    if (isNaN(ox)) ox = 0.62;
+    var x = (cw - dw) * ox + SX * dw, y = (ch - dh) * 0.5 + SY * dh;
+    scene.style.setProperty('--mx', x.toFixed(1) + 'px');
+    scene.style.setProperty('--my', y.toFixed(1) + 'px');
+    scene.style.setProperty('--md', Math.max(46, dh * 0.072).toFixed(1) + 'px');
+  }
+  place();
+  window.addEventListener('resize', place);
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   var ease = function (x) { return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
   var clamp = function (v) { return Math.max(0, Math.min(1, v)); };
-  var DELAY = 1400, SUN = 8200, MOON_AT = 5200, MOON = 6000, t0 = 0;
+  var HOLD = 2600, FADE = 9000, MOON_AT = 3400, MOON = 5200, t0 = 0;
   function frame(now) {
     if (!t0) t0 = now;
-    var e = now - t0 - DELAY;
-    var t = ease(clamp(e / SUN)), m = ease(clamp((e - MOON_AT) / MOON));
+    var e = now - t0;
+    var t = ease(clamp((e - HOLD) / FADE)), m = ease(clamp((e - HOLD - MOON_AT) / MOON));
     hero.style.setProperty('--t', t.toFixed(4));
     hero.style.setProperty('--m', m.toFixed(4));
-    if (m < 1) requestAnimationFrame(frame);
+    if (t < 1 || m < 1) requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
 })();

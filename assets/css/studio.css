@@ -790,65 +790,37 @@ html{scrollbar-color:#3a3530 var(--bg);scrollbar-width:thin}
 }
 
 /* =========================================================
-   HERO SCENE: sunset over the sea, then moonrise
-   One timeline, --t from 0 (sun on the horizon) to 1 (moonlit
-   night), driven once on load by studio.js. --hz is the horizon.
-   The moon is a real photo (screen-blended off its black sky),
-   the sea a real ripple photo, tinted by the light of the moment.
+   HERO SCENE: one real seascape at dusk, graded into moonlit night
+   (a CC0 photograph; the night version is a day-for-night grade of
+   the same frame, so the sun's path on the water becomes the moon's).
+   --t crossfades dusk to night, --m brings up the real NASA moon where
+   the sun was. studio.js plays it once and sizes the moon to the photo.
    ========================================================= */
 .hero{--t:0;--m:0}
-.scene{--hz:64%;background:#05070d}
-.scene>*{position:absolute;left:0;right:0;pointer-events:none}
-.sc-night,.sc-dusk{top:0;bottom:0}
-.sc-night{background:linear-gradient(180deg,#03050b 0%,#070b18 38%,#0e1530 58%,#1a2547 var(--hz),#05070d 100%)}
-.sc-dusk{opacity:calc(1 - var(--t));
+.scene{background:#0b0d14}
+.scene>*{position:absolute;inset:0;pointer-events:none}
+.sc-cam{transform-origin:62% 40%;animation:sc-drift 70s ease-in-out infinite alternate}
+@keyframes sc-drift{from{transform:scale(1)}to{transform:scale(1.07) translate3d(-.6%,.4%,0)}}
+.sc-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:var(--ox,62%) 50%}
+.sc-night{opacity:var(--t)}
+.scene .stars{opacity:calc(var(--t) * .55);
+  -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 26%,transparent 42%);
+  mask-image:linear-gradient(180deg,#000 0%,#000 26%,transparent 42%)}
+.sc-moon{position:absolute;left:var(--mx,64%);top:var(--my,32%);width:var(--md,90px);height:auto;
+  transform:translate(-50%,-50%) scale(calc(.92 + var(--m) * .08));opacity:var(--m);
+  filter:saturate(.45) brightness(1.08) drop-shadow(0 0 18px rgba(214,226,255,.5)) drop-shadow(0 0 60px rgba(170,190,255,.3))}
+.sc-scrim{z-index:2;
   background:
-    radial-gradient(60% 34% at 78% var(--hz),rgba(255,170,96,.55),transparent 70%),
-    linear-gradient(180deg,#0c0f22 0%,#2a2346 26%,#6b3f63 44%,#c86a5a 56%,#f2a065 var(--hz),#0b0d16 100%)}
-.scene .stars{z-index:1;opacity:calc(.15 + .85 * var(--t));
-  -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 calc(var(--hz) - 8%),transparent var(--hz));
-  mask-image:linear-gradient(180deg,#000 0%,#000 calc(var(--hz) - 8%),transparent var(--hz))}
-
-/* everything that rises or sets lives above the horizon line */
-.sc-up{top:0;height:var(--hz);overflow:hidden;z-index:2}
-.sc-sun{position:absolute;left:78%;top:100%;width:clamp(90px,8vw,140px);aspect-ratio:1;border-radius:50%;
-  transform:translate(-50%,calc(-62% + var(--t) * 130%));
-  background:radial-gradient(circle at 50% 50%,#fff3d6 0%,#ffd08a 42%,#ff9a52 72%,#ff7a3d 100%);
-  box-shadow:0 0 60px 20px rgba(255,150,80,.55),0 0 180px 80px rgba(255,120,60,.28);
-  opacity:calc(1 - var(--t) * .6)}
-.sc-moon{position:absolute;left:64%;top:100%;width:clamp(92px,8.4vw,150px);height:auto;
-  transform:translate(-50%,calc(40% - var(--m) * 380%));
-  opacity:var(--m);
-  filter:drop-shadow(0 0 22px rgba(220,230,255,.45)) drop-shadow(0 0 70px rgba(170,190,255,.25))}
-
-/* the sea: a real ripple photo, cooled from dusk to night */
-.sc-sea{top:var(--hz);bottom:0;z-index:2;overflow:hidden}
-.sc-water{position:absolute;inset:0 -6% 0 -6%;
-  background:url("../img/scene/sea.webp") center top/cover no-repeat;
-  filter:saturate(calc(1.05 - var(--t) * .8)) brightness(calc(.9 - var(--t) * .3)) hue-rotate(calc(var(--t) * 12deg));
-  transform-origin:50% 0;animation:sc-swell 26s ease-in-out infinite alternate}
-.sc-water::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(255,150,90,calc(.35 - var(--t) * .35)) 0%,rgba(8,12,26,calc(.2 + var(--t) * .2)) 60%,#0d0d0d 100%),
-    linear-gradient(180deg,rgba(28,48,96,calc(var(--t) * .42)),rgba(10,20,44,calc(var(--t) * .5)))}
-@keyframes sc-swell{from{transform:translateX(-2%) scaleY(1)}to{transform:translateX(2%) scaleY(1.04)}}
-/* light paths: broken streaks of reflected light that shimmer */
-.sc-glint{position:absolute;top:0;bottom:22%;width:clamp(70px,9vw,160px);transform:translateX(-50%);
-  -webkit-mask:repeating-linear-gradient(180deg,#000 0 2px,transparent 2px 9px) 0 0/100% 180px,linear-gradient(180deg,#000 10%,transparent);
-  -webkit-mask-composite:source-in;mask-composite:intersect;
-  mask:repeating-linear-gradient(180deg,#000 0 2px,transparent 2px 9px) 0 0/100% 180px,linear-gradient(180deg,#000 10%,transparent);
-  animation:sc-shimmer 3.2s linear infinite}
-.sc-glint-sun{left:78%;opacity:calc(.9 - var(--t) * .9);
-  background:radial-gradient(50% 100% at 50% 0,rgba(255,196,130,.95),rgba(255,140,80,.25) 70%,transparent)}
-.sc-glint-moon{left:64%;opacity:calc(var(--m) * .85);
-  background:radial-gradient(50% 100% at 50% 0,rgba(235,240,255,.9),rgba(180,195,240,.25) 70%,transparent)}
-@keyframes sc-shimmer{to{-webkit-mask-position:0 180px,0 0;mask-position:0 180px,0 0}}
-.sc-horizon{top:var(--hz);height:1px;z-index:3;transform:translateY(-.5px);
-  background:linear-gradient(90deg,transparent,rgba(255,220,180,calc(.5 - var(--t) * .3)) 60%,transparent)}
-/* keeps the words readable over the scene; the sea melts into About */
-.sc-scrim{top:0;bottom:0;z-index:4;
-  background:
-    linear-gradient(90deg,rgba(5,7,13,.72) 0%,rgba(5,7,13,.42) 38%,transparent 62%),
-    linear-gradient(180deg,transparent 78%,#0d0d0d 100%)}
+    linear-gradient(90deg,rgba(6,8,14,.78) 0%,rgba(6,8,14,.5) 34%,rgba(6,8,14,.08) 62%,transparent 75%),
+    linear-gradient(180deg,rgba(6,8,14,.35) 0%,transparent 22%,transparent 74%,#0d0d0d 100%)}
+@media (max-width:767px){
+  .sc-photo{--ox:56%}
+  .sc-scrim{background:linear-gradient(180deg,rgba(6,8,14,.45) 0%,rgba(6,8,14,.55) 40%,rgba(6,8,14,.72) 72%,#0d0d0d 100%)}
+}
+@media (prefers-reduced-motion:reduce){
+  .hero{--t:1;--m:1}
+  .sc-cam{animation:none}
+}
 
 /* portrait gone: the intro column takes the width, tools sit under it */
 .hero-top{grid-template-columns:minmax(0,1fr)!important}
@@ -856,14 +828,4 @@ html{scrollbar-color:#3a3530 var(--bg);scrollbar-width:thin}
 .hero-copy .tools li{background:rgba(8,10,18,.5)}
 
 @media (max-width:767px){
-  .scene{--hz:56%}
-  .sc-sun{left:80%}
-  .sc-moon,.sc-glint-moon{left:84%}
-  .sc-moon{width:62px;transform:translate(-50%,calc(40% - var(--m) * 520%))}
-  .sc-glint-sun{left:80%}
-  .sc-scrim{background:linear-gradient(180deg,rgba(5,7,13,.25) 0%,rgba(5,7,13,.55) 40%,rgba(5,7,13,.7) 70%,#0d0d0d 100%)}
-}
-@media (prefers-reduced-motion:reduce){
-  .hero{--t:1;--m:1}
-  .sc-water,.sc-glint{animation:none}
 }
