@@ -790,45 +790,92 @@ html{scrollbar-color:#3a3530 var(--bg);scrollbar-width:thin}
 }
 
 /* =========================================================
-   HERO SCENE: one real seascape at dusk, graded into moonlit night
-   (a CC0 photograph; the night version is a day-for-night grade of
-   the same frame, so the sun's path on the water becomes the moon's).
-   --t crossfades dusk to night, --m brings up the real NASA moon where
-   the sun was. studio.js plays it once and sizes the moon to the photo.
+   HERO: BEAMS BACKGROUND (vanilla port of the BeamsBackground React
+   component). Soft, blurred light beams drift upward in cyan to violet
+   on About's dark, under a slowly breathing veil; the stars and falling
+   stars sit on top. studio.js draws the beams.
    ========================================================= */
-.hero{--t:0;--m:0}
-.scene{background:#0b0d14}
-.scene>*{position:absolute;inset:0;pointer-events:none}
-.sc-cam{transform-origin:62% 40%;animation:sc-drift 70s ease-in-out infinite alternate}
-@keyframes sc-drift{from{transform:scale(1)}to{transform:scale(1.07) translate3d(-.6%,.4%,0)}}
-.sc-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:var(--ox,62%) 50%}
-.sc-night{opacity:var(--t)}
-/* the hero rests in About's dark; the pointer inks holes in it that show
-   the seascape beneath (assets/js/ink-reveal.js). Stars sit on top. */
-.sc-ink{position:absolute;inset:0;z-index:3;display:block}
-.scene .stars{z-index:4;opacity:1;
-  -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 70%,transparent 92%);
-  mask-image:linear-gradient(180deg,#000 0%,#000 70%,transparent 92%)}
-.sc-moon{position:absolute;left:var(--mx,64%);top:var(--my,32%);width:var(--md,90px);height:auto;
-  transform:translate(-50%,-50%) scale(calc(.92 + var(--m) * .08));opacity:var(--m);
-  filter:saturate(.45) brightness(1.08) drop-shadow(0 0 18px rgba(214,226,255,.5)) drop-shadow(0 0 60px rgba(170,190,255,.3))}
-.sc-scrim{z-index:2;
-  background:
-    linear-gradient(90deg,rgba(6,8,14,.78) 0%,rgba(6,8,14,.5) 34%,rgba(6,8,14,.08) 62%,transparent 75%),
-    linear-gradient(180deg,rgba(6,8,14,.35) 0%,transparent 22%,transparent 74%,#0d0d0d 100%)}
-@media (max-width:767px){
-  .sc-photo{--ox:56%}
-  .sc-scrim{background:linear-gradient(180deg,rgba(6,8,14,.45) 0%,rgba(6,8,14,.55) 40%,rgba(6,8,14,.72) 72%,#0d0d0d 100%)}
-}
-@media (prefers-reduced-motion:reduce){
-  .hero{--t:1;--m:1}
-  .sc-cam{animation:none}
-}
+.beams{background:var(--bg)}
+.beams>*{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;display:block}
+.beams-cv{filter:blur(15px)}
+.beams-veil{background:rgba(10,10,10,.05);-webkit-backdrop-filter:blur(50px);backdrop-filter:blur(50px);
+  animation:beams-breathe 10s ease-in-out infinite}
+@keyframes beams-breathe{0%,100%{opacity:.05}50%{opacity:.15}}
+.beams .stars{z-index:2;
+  -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 72%,transparent 94%);
+  mask-image:linear-gradient(180deg,#000 0%,#000 72%,transparent 94%)}
+.beams-fade{z-index:3;background:linear-gradient(180deg,transparent 74%,var(--bg) 100%)}
+@media (prefers-reduced-motion:reduce){ .beams-veil{animation:none;opacity:.1} }
 
-/* portrait gone: the intro column takes the width, tools sit under it */
-.hero-top{grid-template-columns:minmax(0,1fr)!important}
-.hero-copy .tools{max-width:620px;margin-top:28px}
-.hero-copy .tools li{background:rgba(8,10,18,.5)}
+
 
 @media (max-width:767px){
+}
+
+/* =========================================================
+   HERO COMPOSITION (centred)
+   One reading order on a single axis: status, headline, value line,
+   then one primary and one secondary action. Everything secondary
+   (the toolkit, the scroll cue) sits quietly at the foot. Spacing
+   steps from tight (status to headline) to generous (copy to actions)
+   so the eye reads groups, not rows.
+   ========================================================= */
+.hero .hero-in{align-items:center;text-align:center}
+.hero .hero-top{display:flex;flex:1;width:100%;align-items:center;justify-content:center;padding-bottom:clamp(24px,4vh,56px)}
+.hero .hero-copy{display:flex;flex-direction:column;align-items:center;width:100%;max-width:1180px}
+
+/* status */
+.hero .hero-copy .avail{margin:0 0 clamp(26px,3.6vh,40px);padding:8px 16px 8px 14px;font-size:11.5px;letter-spacing:.04em;
+  color:var(--ink-2);background:rgba(13,13,13,.4);border-color:rgba(255,255,255,.12)}
+.hero .hero-copy .avail .avail-dot{width:7px;height:7px}
+
+/* headline: the hero's only loud element */
+.hero .hero-title{margin:0 auto;max-width:none;font-size:clamp(3rem,7.6vw,8.8rem);line-height:.9;letter-spacing:-.062em}
+.hero .hero-title .ln{text-align:center}
+
+/* value line: one measure, balanced, a step down in contrast */
+.hero .hero-sum{margin:clamp(26px,3.6vh,38px) auto 0;max-width:44ch;font-size:clamp(16px,1.2vw,18.5px);line-height:1.5;
+  color:var(--ink-2);text-wrap:balance}
+
+/* actions: one primary, one secondary, same height */
+.hero .hero-cta{margin-top:clamp(32px,4.6vh,48px);gap:12px;justify-content:center;flex-wrap:wrap}
+.hero .hero-cta .pill-lg{height:52px;padding:0 30px;font-size:13px;letter-spacing:.03em}
+.hero .hero-cta .pill-solid{background:#f2f2f2;color:#0d0d0d;transition:background .3s,transform .5s var(--out),box-shadow .5s var(--out)}
+.hero .hero-cta .pill-solid:hover{background:#fff;transform:translateY(-2px);box-shadow:0 14px 34px -14px rgba(160,170,255,.45)}
+.hero .hero-cta .pill-line{border-color:rgba(242,242,242,.28);color:#f2f2f2;background:rgba(13,13,13,.25);transition:border-color .3s,background .3s}
+.hero .hero-cta .pill-line:hover{border-color:rgba(242,242,242,.7);background:rgba(255,255,255,.05)}
+
+/* foot: the toolkit as a quiet strip, then the scroll cue */
+.hero .hero-btm{display:flex;flex-direction:column;align-items:center;gap:24px;width:100%}
+.toolbelt{display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap}
+.toolbelt-k{display:flex;align-items:center;gap:14px;font-family:var(--mono);font-weight:300;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.toolbelt-k::after{content:"";width:28px;height:1px;background:rgba(255,255,255,.16)}
+.hero .tools{margin:0;gap:4px 22px;justify-content:center}
+.hero .tools li{height:auto;padding:0;border:0;background:none;-webkit-backdrop-filter:none;backdrop-filter:none;
+  font-size:12.5px;color:var(--ink-3);gap:7px}
+.hero .tools li:hover{background:none;color:var(--ink)}
+.hero .tools svg{width:14px;height:14px}
+.hero .hero-btm .scroll-ico{justify-self:auto;color:var(--ink-3)}
+
+/* entrance: status joins the copy's choreography */
+.js .hero .hero-copy .avail{opacity:0;translate:0 10px;transition:opacity .9s .15s,translate 1s var(--out) .15s}
+.ready .hero .hero-copy .avail{opacity:1;translate:0 0}
+
+@media (max-width:767px){
+  .hero .hero-in{padding-top:104px}
+  .hero .hero-title{font-size:clamp(2.7rem,12.6vw,4.4rem)}
+  .hero .hero-copy .avail{font-size:10.5px;padding:8px 14px;text-wrap:balance;max-width:300px;text-align:left}
+  .hero .hero-cta{flex-direction:column;align-items:stretch;width:100%;max-width:340px}
+  .hero .hero-cta .pill-lg{justify-content:center}
+  .toolbelt{gap:14px}
+  .toolbelt-k{display:none}
+  .hero .tools{gap:18px}
+  .hero .tools span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .hero .tools svg{width:18px;height:18px}
+}
+@media (min-width:768px) and (max-height:800px){
+  .hero .hero-copy .avail{margin-bottom:22px}
+  .hero .hero-title{font-size:clamp(3rem,6.6vw,7.4rem)}
+  .hero .hero-sum{margin-top:22px}
+  .hero .hero-cta{margin-top:28px}
 }

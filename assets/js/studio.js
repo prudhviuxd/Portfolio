@@ -770,49 +770,108 @@
   start();
 })();
 
-
-/* Hero scene: the real dusk photo holds for a moment, then crossfades to
-   its moonlit grade (--t) and the moon appears where the sun was (--m).
-   The moon is placed and sized on the photo itself, wherever the cover
-   crop puts it. Reduced motion shows the night at once. */
+/* Beams background: a plain-JavaScript port of the BeamsBackground React
+   component. Same beam model (angle, width, length, speed, opacity, hue
+   190-260, pulse) and the same recycle-from-the-bottom in three columns,
+   at "strong" intensity. Sized to the hero (not the window), drawn at
+   half resolution since every beam is blurred anyway, and paused when
+   the hero is off screen or the tab is hidden. Reduced motion draws one
+   still frame. */
 (function () {
   'use strict';
-  var hero = document.querySelector('.hero'), scene = document.querySelector('.scene');
-  if (!hero || !scene) return;
-  var photo = scene.querySelector('.sc-dusk');
-  var SX = 0.6480, SY = 0.3254, IW = 2048, IH = 1365;   // where the sun is in the frame
-  function place() {
-    var cw = scene.clientWidth, ch = scene.clientHeight;
-    var k = Math.max(cw / IW, ch / IH), dw = IW * k, dh = IH * k;
-    var ox = parseFloat(getComputedStyle(photo).objectPosition) / 100;
-    if (isNaN(ox)) ox = 0.62;
-    var x = (cw - dw) * ox + SX * dw, y = (ch - dh) * 0.5 + SY * dh;
-    scene.style.setProperty('--mx', x.toFixed(1) + 'px');
-    scene.style.setProperty('--my', y.toFixed(1) + 'px');
-    scene.style.setProperty('--md', Math.max(46, dh * 0.072).toFixed(1) + 'px');
-  }
-  place();
-  window.addEventListener('resize', place);
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var ease = function (x) { return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
-  var clamp = function (v) { return Math.max(0, Math.min(1, v)); };
-  var HOLD = 2600, FADE = 9000, MOON_AT = 3400, MOON = 5200, t0 = 0;
-  function frame(now) {
-    if (!t0) t0 = now;
-    var e = now - t0;
-    var t = ease(clamp((e - HOLD) / FADE)), m = ease(clamp((e - HOLD - MOON_AT) / MOON));
-    hero.style.setProperty('--t', t.toFixed(4));
-    hero.style.setProperty('--m', m.toFixed(4));
-    if (t < 1 || m < 1) requestAnimationFrame(frame);
-  }
-  requestAnimationFrame(frame);
-})();
+  var cvs = document.querySelector('.beams-cv');
+  if (!cvs || !cvs.getContext) return;
+  var ctx = cvs.getContext('2d');
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var MINIMUM_BEAMS = 20, INTENSITY = 1;   // opacityMap.strong
+  var SCALE = 0.5;                         // render resolution
+  var W = 0, H = 0, beams = [], raf = 0, running = false;
 
-/* Ink reveal on the hero: About's dark (#0d0d0d) as the mask; moving the
-   pointer (or dragging a finger) reveals the seascape for a moment. */
-(function () {
-  'use strict';
-  var hero = document.querySelector('.hero'), ink = document.querySelector('.sc-ink');
-  if (!hero || !ink || !window.InkReveal) return;
-  window.InkReveal(ink, hero, { maskColor: [13, 13, 13] });
+  function createBeam(width, height) {
+    var angle = -35 + Math.random() * 10;
+    return {
+      x: Math.random() * width * 1.5 - width * 0.25,
+      y: Math.random() * height * 1.5 - height * 0.25,
+      width: 30 + Math.random() * 60,
+      length: height * 2.5,
+      angle: angle,
+      speed: 0.6 + Math.random() * 1.2,
+      opacity: 0.12 + Math.random() * 0.16,
+      hue: 190 + Math.random() * 70,
+      pulse: Math.random() * Math.PI * 2,
+      pulseSpeed: 0.02 + Math.random() * 0.03
+    };
+  }
+  function resetBeam(beam, index, total) {
+    var column = index % 3, spacing = W / 3;
+    beam.y = H + 100;
+    beam.x = column * spacing + spacing / 2 + (Math.random() - 0.5) * spacing * 0.5;
+    beam.width = 100 + Math.random() * 100;
+    beam.speed = 0.5 + Math.random() * 0.4;
+    beam.hue = 190 + (index * 70) / total;
+    beam.opacity = 0.2 + Math.random() * 0.1;
+  }
+  function drawBeam(beam) {
+    ctx.save();
+    ctx.translate(beam.x, beam.y);
+    ctx.rotate((beam.angle * Math.PI) / 180);
+    var o = beam.opacity * (0.8 + Math.sin(beam.pulse) * 0.2) * INTENSITY;
+    var g = ctx.createLinearGradient(0, 0, 0, beam.length);
+    var c = function (a) { return 'hsla(' + beam.hue + ',85%,65%,' + a + ')'; };
+    g.addColorStop(0, c(0));
+    g.addColorStop(0.1, c(o * 0.5));
+    g.addColorStop(0.4, c(o));
+    g.addColorStop(0.6, c(o));
+    g.addColorStop(0.9, c(o * 0.5));
+    g.addColorStop(1, c(0));
+    ctx.fillStyle = g;
+    ctx.fillRect(-beam.width / 2, 0, beam.width, beam.length);
+    ctx.restore();
+  }
+  function size() {
+    var box = cvs.parentElement.getBoundingClientRect();
+    W = box.width; H = box.height;
+    cvs.width = Math.max(1, Math.round(W * SCALE));
+    cvs.height = Math.max(1, Math.round(H * SCALE));
+    ctx.setTransform(SCALE, 0, 0, SCALE, 0, 0);
+    beams = [];
+    var total = MINIMUM_BEAMS * 1.5;
+    for (var i = 0; i < total; i++) {
+      // start every beam as a full-width, recycled-style beam, spread up the
+      // screen, so the hero is lit from the first frame (the original only
+      // reaches this look after each thin starting beam has cycled once)
+      var b = createBeam(W, H);
+      resetBeam(b, i, total);
+      b.y = -b.length * 0.35 + Math.random() * (H + b.length * 0.35);
+      beams.push(b);
+    }
+    if (reduced) frame(true);
+  }
+  function frame(still) {
+    ctx.clearRect(0, 0, W, H);
+    ctx.filter = 'blur(' + (35 * SCALE) + 'px)';
+    var total = beams.length;
+    for (var i = 0; i < total; i++) {
+      var b = beams[i];
+      if (!still) {
+        b.y -= b.speed;
+        b.pulse += b.pulseSpeed;
+        if (b.y + b.length < -100) resetBeam(b, i, total);
+      }
+      drawBeam(b);
+    }
+    ctx.filter = 'none';
+  }
+  function loop() { frame(false); if (running) raf = requestAnimationFrame(loop); }
+  function start() { if (running || reduced) return; running = true; raf = requestAnimationFrame(loop); }
+  function stop() { running = false; cancelAnimationFrame(raf); }
+
+  size();
+  var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(size, 150); });
+  var onScreen = true;
+  if ('IntersectionObserver' in window) new IntersectionObserver(function (e) {
+    onScreen = e[0].isIntersecting; if (onScreen && !document.hidden) start(); else stop();
+  }).observe(cvs);
+  document.addEventListener('visibilitychange', function () { if (document.hidden) stop(); else if (onScreen) start(); });
+  start();
 })();
