@@ -637,23 +637,14 @@ html{scrollbar-color:#3a3530 var(--bg);scrollbar-width:thin}
    stars, and now and then a star falls: the site's four-point star
    with a short tail. All drawn on one canvas in studio.js. */
 .hero{isolation:isolate;overflow:clip}
-.sky{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden;
-  background:
-    radial-gradient(38% 48% at 80% 36%,rgba(150,166,206,.12),transparent 72%),   /* moonlight behind the portrait */
-    radial-gradient(75% 42% at 50% 108%,rgba(96,108,140,.2),transparent 72%),    /* faint horizon */
-    linear-gradient(180deg,#08090c 0%,#0b0c10 55%,#0f1116 100%)}
-/* fine film grain and a soft vignette: texture without noise */
-.sky::before{content:"";position:absolute;inset:0;z-index:2;opacity:.07;mix-blend-mode:overlay;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
-.sky::after{content:"";position:absolute;inset:0;z-index:3;
-  background:radial-gradient(120% 90% at 50% 45%,transparent 55%,rgba(0,0,0,.5) 100%)}
-@media (max-width:767px){
-  .sky{background:
-    radial-gradient(70% 34% at 30% 22%,rgba(150,166,206,.13),transparent 72%),
-    radial-gradient(90% 30% at 50% 104%,rgba(96,108,140,.2),transparent 72%),
-    linear-gradient(180deg,#08090c 0%,#0b0c10 55%,#0f1116 100%)}
-}
-.stars{position:absolute;inset:0;width:100%;height:100%;display:block}
+/* the hero sits on exactly the same dark as About, so the two read as one
+   surface; only the stars and the low mist (drawn on the canvas) sit on it */
+.sky{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden;background:var(--bg)}
+.stars{position:absolute;inset:0;width:100%;height:100%;display:block;
+  /* the sky fades out before the hero's lower edge, so it meets About seamlessly */
+  -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 72%,transparent 100%);
+  mask-image:linear-gradient(180deg,#000 0%,#000 72%,transparent 100%)}
+.about.rv-wait::after{display:none}
 .hero-in{transform-origin:50% 0;will-change:transform,opacity}
 .hero-title .rot{color:var(--amber)}
 .portrait-in{box-shadow:0 40px 90px -40px rgba(0,0,0,.8)}

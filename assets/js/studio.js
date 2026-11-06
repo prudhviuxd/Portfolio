@@ -674,7 +674,7 @@
       mist.push({
         img: makeMist(Math.round(Math.min(w, 2200))), w: w,
         x: (j / n) * (W + w) - w * 0.4,
-        y: H * (0.8 + Math.random() * 0.14),
+        y: H * (0.6 + Math.random() * 0.12),
         v: 0.004 + Math.random() * 0.006,           // 4 to 10 px a second
         a: 0.05 + Math.random() * 0.04
       });
