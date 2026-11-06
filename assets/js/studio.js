@@ -668,7 +668,7 @@
       });
     });
     mist = [];
-    var n = W < 768 ? 3 : 5;
+    var n = 0;   // the sea replaces the mist
     for (var j = 0; j < n; j++) {
       var w = W * (W < 768 ? 1.1 : 0.62) + Math.random() * W * 0.25;
       mist.push({
@@ -770,3 +770,25 @@
   start();
 })();
 
+
+/* Hero scene timeline: a one-time sunset that plays on load. The sun sinks
+   into the sea (--t), then the moon rises (--m). Eased, about nine seconds,
+   and it rests on the moonlit night. Reduced motion shows the night at once. */
+(function () {
+  'use strict';
+  var hero = document.querySelector('.hero');
+  if (!hero || !document.querySelector('.scene')) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var ease = function (x) { return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+  var clamp = function (v) { return Math.max(0, Math.min(1, v)); };
+  var DELAY = 1400, SUN = 8200, MOON_AT = 5200, MOON = 6000, t0 = 0;
+  function frame(now) {
+    if (!t0) t0 = now;
+    var e = now - t0 - DELAY;
+    var t = ease(clamp(e / SUN)), m = ease(clamp((e - MOON_AT) / MOON));
+    hero.style.setProperty('--t', t.toFixed(4));
+    hero.style.setProperty('--m', m.toFixed(4));
+    if (m < 1) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
