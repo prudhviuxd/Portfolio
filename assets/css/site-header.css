@@ -57,6 +57,7 @@
   display:inline-flex; align-items:center; gap:10px; height:30px; padding:0 15px;
   border-radius:40px; font-family:var(--sh-body); font-size:14px; font-weight:500;
   text-transform:uppercase; letter-spacing:-.01em; line-height:1; cursor:pointer;
+  white-space:nowrap; flex:none;
   background:none; border:0; color:inherit; transition:background .3s,color .3s,border-color .3s;
 }
 .hd .pill-solid{background:#f2f2f2;color:#0d0d0d}
@@ -138,6 +139,10 @@
 }
 @media (prefers-reduced-motion:reduce){
   .hd *,.menu *,.back-btn,.back-btn *{transition-duration:.01ms!important;transition-delay:0s!important}
+}
+@media (max-width:375px){
+  .hd-logo>span:not(.mono-pj){display:none}
+  .hd .pill{padding:0 12px;font-size:13px}
 }
 @media print{ .hd,.menu,.back-btn{display:none!important} }
 

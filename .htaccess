@@ -39,3 +39,12 @@ Options -Indexes
   ExpiresByType text/html "access plus 10 minutes"
   ExpiresByType application/pdf "access plus 1 day"
 </IfModule>
+
+# Pages are always revalidated, so a new upload shows straight away. CSS and
+# JS carry a ?v= content stamp in every page, so they can be cached safely:
+# a changed file gets a new address.
+<IfModule mod_headers.c>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>

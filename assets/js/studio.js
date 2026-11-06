@@ -730,28 +730,3 @@
   start();
 })();
 
-/* Footer: the name fills with amber as the page reaches its end, and a
-   live Hyderabad clock (IST) sits beside the identity. */
-(function () {
-  'use strict';
-  var name = document.querySelector('.ft-name');
-  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (name && !reduced) {
-    var tick = false;
-    var fill = function () {
-      tick = false;
-      var r = name.getBoundingClientRect(), h = window.innerHeight;
-      var p = Math.min(1, Math.max(0, (h - r.top) / (r.height + 30)));
-      name.style.setProperty('--fill', (p * 100).toFixed(1) + '%');
-    };
-    window.addEventListener('scroll', function () { if (!tick) { tick = true; requestAnimationFrame(fill); } }, { passive: true });
-    window.addEventListener('resize', fill);
-    fill();
-  }
-  var t = document.getElementById('ftTime');
-  if (t && window.Intl) {
-    var fmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' });
-    var show = function () { t.textContent = fmt.format(new Date()) + ' IST'; };
-    show(); setInterval(show, 20000);
-  }
-})();
