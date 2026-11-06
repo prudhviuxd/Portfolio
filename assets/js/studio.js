@@ -224,9 +224,9 @@
   var vision = $('.vision'), mqTrack = $('.mq-track'), stripes = $$('.stripes i');
   var fades = $$('.vision [data-fade]');
   var fcards = $$('.fcard');
-  var wipe = $$('.wipe i'), wipeIn = $$('.wipe-in i');
+  var wipeIn = $$('.wipe-in i');
   var work = $('.work'), wTrack = $('.work-track'), wFront = $('.work-front');
-  var wBack = $('.work-back .wrap'), wCards = $$('.wcard');
+  var wCards = $$('.wcard');
   var wEnd = $('.wend i'), wPlus = $('.wend svg');
   var hs = false;
 
@@ -235,10 +235,8 @@
   function setWorkMode() {
     hs = !!work && window.innerWidth >= 768 && !reduced;
     if (work) work.classList.toggle('hs', hs);
-    var wipeBox = $('.wipe'), backBox = $('.work-back');
-    if (wipeBox && backBox) wipeBox.style.height = hs ? '' : backBox.offsetHeight + 'px';
     if (!hs) {
-      [wTrack, wFront, wBack].forEach(function (el) { if (el) { el.style.transform = ''; el.style.opacity = ''; } });
+      [wTrack, wFront].forEach(function (el) { if (el) { el.style.transform = ''; el.style.opacity = ''; } });
       $$('.wcard-in').forEach(function (el) { el.style.transform = ''; });
     }
   }
@@ -259,23 +257,9 @@
   }
 
   var hero = $('.hero'), heroIn = $('.hero-in');
-  // Five stripes, lowest first, each scaling up from the bottom.
-  function setWipe(p) {
-    for (var i = 0; i < wipe.length; i++) {
-      var fromBottom = wipe.length - 1 - i;
-      wipe[i].style.setProperty('--s', clamp(p * 1.8 - fromBottom * 0.2, 0, 1).toFixed(3));
-    }
-  }
-
   function onScroll() {
     var h = vh();
 
-    // Phones: the Work section is not pinned, so the stripes rise over the
-    // "What I actually do" panel as its lower edge leaves the screen.
-    if (!hs && wipe.length && work) {
-      var wb = work.getBoundingClientRect().bottom;
-      setWipe(reduced ? 0 : clamp(1 - (wb - h * 0.15) / (h * 0.75), 0, 1));
-    }
 
     // Hero recedes (drifts down, shrinks, dims) while the sand Work panel
     // rises over it; the panel's rounded shoulders flatten as it docks.
@@ -320,8 +304,8 @@
     } else fcards.forEach(function (c) { c.style.transform = ''; });
 
     // Work: the panel rises in on stripes (0.5 screens), vertical scroll drives
-    // the track sideways (1.5), the light layer slides off left (0.9) over the
-    // dark one, which holds, then sand stripes rise over it (0.75).
+    // the track sideways (1.5), then the light layer slides off left (0.9) to
+    // the dark, which carries straight on into the vision section.
     if (hs && work) {
       var w = window.innerWidth;
       var y = clamp(-work.getBoundingClientRect().top, 0, work.offsetHeight - h);
@@ -335,10 +319,6 @@
       var S = k * Math.max(0, wTrack.scrollWidth - w);
       wTrack.style.transform = 'translate3d(' + (-S) + 'px,0,0)';
       wFront.style.transform = 'translate3d(' + (-w * m) + 'px,0,0)';
-      wBack.style.transform = 'translate3d(' + ((1 - m) * 18) + 'vw,0,0)';
-      wBack.style.opacity = 0.2 + 0.8 * m;
-      // hold on 'What I actually do', then the sand stripes rise over it
-      setWipe(clamp((y - 3.15 * h) / (0.75 * h), 0, 1));
 
       // Each card rises from 550px below as it travels in from the right.
       wCards.forEach(function (card, i) {
