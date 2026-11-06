@@ -6,7 +6,7 @@
 <script>(function(){try{var r=document.documentElement;if(sessionStorage.getItem('pt')==='1'){sessionStorage.removeItem('pt');if(!matchMedia('(prefers-reduced-motion: reduce)').matches)r.classList.add('pt-in')}var n=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0];if(location.hash||(n&&n.type!=='navigate'))return;if('scrollRestoration' in history)history.scrollRestoration='manual';var top=function(){window.scrollTo(0,0);if(window.top!==window.self&&r.scrollIntoView)r.scrollIntoView({block:'start',behavior:'instant'})};top();document.addEventListener('DOMContentLoaded',top);window.addEventListener('load',top)}catch(e){}})();</script>
 <script>document.documentElement.classList.add('cm');setTimeout(function(){if(!window.__cm)document.documentElement.classList.add('cm-off')},2500);</script>
 <title>IPL, Designing the IPL app for a billion cricket moods | Prudhvi Raj PJ</title>
-<meta name="description" content="Case study: redesigning the official IPL mobile app for BCCI to serve every kind of cricket fan, from casual scroller to stats-obsessed super-fan.">
+<meta name="description" content="IPL mobile app case study: how demographic research reshaped a live-cricket app for superfans, casual watchers and a new generation of fans. +42% match-day retention after one season.">
 <link rel="stylesheet" href="../assets/css/base.css">
 <link rel="stylesheet" href="../assets/css/case-study.css">
 <link rel="stylesheet" href="../assets/css/ipl.css">
@@ -75,439 +75,239 @@
 <main class="theme-ipl" data-acc="vi">
 
   <!-- ============ HERO ============ -->
-  <section class="cs-hero">
-    <div class="cs-hero-bg ipl-hero-bg" aria-hidden="true">
-      <svg viewBox="0 0 1200 400" preserveAspectRatio="xMidYMid slice">
-        <g stroke="rgba(63,169,255,.35)" stroke-width="1">
-          <line x1="40" y1="0" x2="480" y2="400"/>
-          <line x1="110" y1="0" x2="560" y2="400"/>
-          <line x1="180" y1="0" x2="640" y2="400"/>
-          <line x1="1160" y1="0" x2="720" y2="400"/>
-          <line x1="1090" y1="0" x2="640" y2="400"/>
-          <line x1="1020" y1="0" x2="560" y2="400"/>
-        </g>
-        <g stroke="rgba(255,179,71,.25)" stroke-width="1">
-          <line x1="250" y1="0" x2="600" y2="400"/>
-          <line x1="950" y1="0" x2="600" y2="400"/>
-        </g>
-        <g fill="#0a0a0b">
-          <circle cx="10" cy="378" r="9"/><circle cx="34" cy="378" r="7"/><circle cx="58" cy="378" r="7"/><circle cx="82" cy="378" r="9"/><circle cx="106" cy="378" r="7"/><circle cx="130" cy="378" r="7"/><circle cx="154" cy="378" r="9"/><circle cx="178" cy="378" r="7"/><circle cx="202" cy="378" r="7"/><circle cx="226" cy="378" r="9"/><circle cx="250" cy="378" r="7"/><circle cx="274" cy="378" r="7"/><circle cx="298" cy="378" r="9"/><circle cx="322" cy="378" r="7"/><circle cx="346" cy="378" r="7"/><circle cx="370" cy="378" r="9"/><circle cx="394" cy="378" r="7"/><circle cx="418" cy="378" r="7"/><circle cx="442" cy="378" r="9"/><circle cx="466" cy="378" r="7"/><circle cx="490" cy="378" r="7"/><circle cx="514" cy="378" r="9"/><circle cx="538" cy="378" r="7"/><circle cx="562" cy="378" r="7"/><circle cx="586" cy="378" r="9"/><circle cx="610" cy="378" r="7"/><circle cx="634" cy="378" r="7"/><circle cx="658" cy="378" r="9"/><circle cx="682" cy="378" r="7"/><circle cx="706" cy="378" r="7"/><circle cx="730" cy="378" r="9"/><circle cx="754" cy="378" r="7"/><circle cx="778" cy="378" r="7"/><circle cx="802" cy="378" r="9"/><circle cx="826" cy="378" r="7"/><circle cx="850" cy="378" r="7"/><circle cx="874" cy="378" r="9"/><circle cx="898" cy="378" r="7"/><circle cx="922" cy="378" r="7"/><circle cx="946" cy="378" r="9"/><circle cx="970" cy="378" r="7"/><circle cx="994" cy="378" r="7"/><circle cx="1018" cy="378" r="9"/><circle cx="1042" cy="378" r="7"/><circle cx="1066" cy="378" r="7"/><circle cx="1090" cy="378" r="9"/><circle cx="1114" cy="378" r="7"/><circle cx="1138" cy="378" r="7"/><circle cx="1162" cy="378" r="9"/><circle cx="1186" cy="378" r="7"/>
-        </g>
-      </svg>
-    </div>
-    <div class="container cs-hero-inner">
-      <div class="cs-kicker">IPL · BCCI</div>
-      <h1>Designing the IPL app for a billion cricket moods</h1>
-      <p class="desc">A ground-up redesign of the official Indian Premier League mobile app, built to flex between the fan glancing at a score on the metro and the fan tracking every ball, every over, every fantasy point, across phone, tablet and web.</p>
-      <div class="grid g-4 cs-stats-row stagger">
-        <div class="stat-box"><div class="num">50M+</div><div class="label">App downloads across platforms</div></div>
-        <div class="stat-box"><div class="num">10+</div><div class="label">Fan personas mapped through research</div></div>
-        <div class="stat-box"><div class="num">3</div><div class="label">Design sprints, insight to prototype</div></div>
-        <div class="stat-box"><div class="num">4 wks</div><div class="label">Of embedded field research</div></div>
+  <section class="ipl-hero">
+    <div class="container ipl-hero-in">
+      <div class="ipl-hero-copy">
+        <div class="cs-kicker">UX Case Study &middot; Mobile &middot; 2024</div>
+        <h1>Designing the IPL app for a billion cricket moods</h1>
+        <p class="ipl-lede">How demographic research reshaped a live-cricket mobile app for superfans, casual watchers, and a new generation discovering the game on their phones.</p>
+        <ul class="ipl-tags">
+          <li>Live scores</li><li>Fantasy</li><li>Multilingual</li><li>Lite mode</li>
+        </ul>
+      </div>
+      <div class="ipl-hero-phones" aria-hidden="true">
+        <div class="ipl-phone p1"><div class="scr"><img src="../assets/img/ipl/screen-home.jpg" alt=""></div></div>
+        <div class="ipl-phone p2"><div class="scr"><img src="../assets/img/ipl/screen-commentary.jpg" alt=""></div></div>
       </div>
     </div>
   </section>
 
-  <!-- ============ AT A GLANCE ============ -->
-  <section class="glance">
-    <dl class="glance-in">
-      <div><dt>Role</dt><dd class="v"><b>Lead Product Designer</b></dd></div>
-      <div><dt>Team</dt><dd class="v">5</dd></div>
-      <div><dt>Timeline</dt><dd class="v">4 months</dd></div>
-      <div><dt>Platform</dt><dd class="v">iOS, Android, Web</dd></div>
-      <div><dt>Scope</dt><dd class="v">Field research, personas, IA, UI, prototyping</dd></div>
-    </dl>
+  <!-- ============ OVERVIEW ============ -->
+  <section class="ipl-sec">
+    <div class="container">
+      <div class="ipl-overview">
+        <div>
+          <div class="cs-label">Overview</div>
+          <p class="ipl-ov-line">A season-long redesign grounded in who actually opens the app on match day.</p>
+        </div>
+        <dl class="glance-in ipl-glance">
+          <div><dt>Role</dt><dd>Product &amp; UX Design</dd></div>
+          <div><dt>Timeline</dt><dd>12 weeks</dd></div>
+          <div><dt>Platform</dt><dd>iOS &middot; Android</dd></div>
+          <div><dt>Methods</dt><dd>Surveys &middot; Interviews &middot; Analytics</dd></div>
+        </dl>
+      </div>
+      <ol class="ipl-steps">
+        <li class="insight-card"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><b>Discover</b><span>Demographic + behavioral research</span></li>
+        <li class="insight-card"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/></svg><b>Define</b><span>Personas &amp; prioritized problems</span></li>
+        <li class="insight-card"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.6 7.6"/><circle cx="11" cy="11" r="2"/></svg><b>Design</b><span>Flows, screens, and modes</span></li>
+        <li class="insight-card"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6L4.5 19a1.5 1.5 0 0 0 1.3 2.2h12.4a1.5 1.5 0 0 0 1.3-2.2L14 9V3"/></svg><b>Validate</b><span>Usability tests &amp; metrics</span></li>
+      </ol>
+    </div>
   </section>
 
-  <!-- ============ WHO WATCHES & HOW ============ -->
-  <section class="cs-section reveal">
-    <div class="container cs-section-inner">
-      <h2 class="cs-h2 center">Who watches the IPL, and how they watch</h2>
-      <p class="cs-p intro-center">Before redesigning a single screen, we needed to understand who actually opens the IPL app, and when. Interviews, app-store review mining and a two-week diary study across six cities showed a fanbase that ranges from a five-minute score-check between meetings to a four-hour second-screen ritual during a final, all inside the same product.</p>
+  <!-- ============ DEMOGRAPHIC RESEARCH ============ -->
+  <section class="ipl-sec alt" id="research">
+    <div class="container">
+      <div class="cs-label">Demographic Research</div>
+      <h2 class="cs-h2">Who watches the IPL &mdash; and how they watch</h2>
+      <p class="cs-p ipl-intro">We synthesized 1,200 survey responses, 18 interviews, and in-app analytics. Three patterns stood out: a young, mobile-first audience; rapid growth beyond metro cities; and huge diversity in language and cricket fluency.</p>
 
-      <div class="cs-two-col top" style="margin-top:44px;">
-        <div class="chart-card">
-          <h4>Reach by age bracket, non-match days vs. match days</h4>
-          <svg viewBox="0 0 300 180" role="img" aria-label="Bar chart of app reach by age bracket, comparing non-match days and match days">
-            <line x1="10" y1="150" x2="290" y2="150" stroke="var(--border)" stroke-width="1"/>
-            <g>
-              <rect x="15" y="96" width="16" height="54" rx="3" fill="var(--blue)"/>
-              <rect x="33" y="48" width="16" height="102" rx="3" fill="var(--amber)"/>
-              <text x="31" y="164" font-size="9" fill="var(--text-dim)" text-anchor="middle">16-24</text>
+      <div class="ipl-charts">
+        <figure class="chart-card">
+          <figcaption>Audience skews young &mdash; 65% are 18&ndash;34</figcaption>
+          <svg class="ch" viewBox="0 0 460 230" role="img" aria-label="Share of audience by age: 13 to 17, 9 percent; 18 to 24, 31 percent; 25 to 34, 34 percent; 35 to 44, 15 percent; 45 and over, 11 percent">
+            <g class="grid">
+              <line x1="40" x2="450" y1="190" y2="190"/><line x1="40" x2="450" y1="145" y2="145"/><line x1="40" x2="450" y1="100" y2="100"/><line x1="40" x2="450" y1="55" y2="55"/><line x1="40" x2="450" y1="10" y2="10"/>
+            </g>
+            <g class="ax"><text x="32" y="194">0%</text><text x="32" y="149">9%</text><text x="32" y="104">18%</text><text x="32" y="59">27%</text><text x="32" y="14">36%</text></g>
+            <g class="bars">
+              <rect class="bar b" x="58"  y="145" width="58" height="45"/>
+              <rect class="bar y" x="140" y="35"  width="58" height="155" style="--i:1"/>
+              <rect class="bar y" x="222" y="20"  width="58" height="170" style="--i:2"/>
+              <rect class="bar b" x="304" y="115" width="58" height="75" style="--i:3"/>
+              <rect class="bar b" x="386" y="135" width="58" height="55" style="--i:4"/>
+            </g>
+            <g class="ax mid"><text x="87" y="212">13&ndash;17</text><text x="169" y="212">18&ndash;24</text><text x="251" y="212">25&ndash;34</text><text x="333" y="212">35&ndash;44</text><text x="415" y="212">45+</text></g>
+          </svg>
+        </figure>
 
-              <rect x="72" y="60" width="16" height="90" rx="3" fill="var(--blue)"/>
-              <rect x="90" y="24" width="16" height="126" rx="3" fill="var(--amber)"/>
-              <text x="88" y="164" font-size="9" fill="var(--text-dim)" text-anchor="middle">25-34</text>
-
-              <rect x="129" y="84" width="16" height="66" rx="3" fill="var(--blue)"/>
-              <rect x="147" y="57" width="16" height="93" rx="3" fill="var(--amber)"/>
-              <text x="145" y="164" font-size="9" fill="var(--text-dim)" text-anchor="middle">35-44</text>
-
-              <rect x="186" y="105" width="16" height="45" rx="3" fill="var(--blue)"/>
-              <rect x="204" y="90" width="16" height="60" rx="3" fill="var(--amber)"/>
-              <text x="202" y="164" font-size="9" fill="var(--text-dim)" text-anchor="middle">45-54</text>
-
-              <rect x="243" y="126" width="16" height="24" rx="3" fill="var(--blue)"/>
-              <rect x="261" y="117" width="16" height="33" rx="3" fill="var(--amber)"/>
-              <text x="259" y="164" font-size="9" fill="var(--text-dim)" text-anchor="middle">55+</text>
+        <figure class="chart-card">
+          <figcaption>Growth is now driven by Tier-2 &amp; Tier-3</figcaption>
+          <svg class="ch donut" viewBox="0 0 460 230" role="img" aria-label="Donut chart of audience growth by city tier">
+            <g transform="translate(230 112) rotate(-90)">
+              <circle r="62" class="seg" pathLength="100" stroke="#3b82f6" style="--len:36;--off:0"/>
+              <circle r="62" class="seg" pathLength="100" stroke="#e6337a" style="--len:27;--off:-36;--i:1"/>
+              <circle r="62" class="seg" pathLength="100" stroke="#f5b400" style="--len:37;--off:-63;--i:2"/>
             </g>
           </svg>
-          <div class="chart-legend">
-            <span><i style="background:var(--blue);"></i>Non-match days</span>
-            <span><i style="background:var(--amber);"></i>Match days</span>
-          </div>
-        </div>
+        </figure>
 
-        <div class="chart-card">
-          <h4>Where fans watch live matches</h4>
-          <svg viewBox="0 0 200 200" role="img" aria-label="Donut chart of viewing device share: mobile 68%, TV 22%, web 10%">
-            <g transform="rotate(-90 100 100)">
-              <circle cx="100" cy="100" r="80" fill="none" stroke="var(--blue)" stroke-width="24" stroke-dasharray="341.8 502.4" stroke-dashoffset="0"/>
-              <circle cx="100" cy="100" r="80" fill="none" stroke="var(--amber)" stroke-width="24" stroke-dasharray="110.6 502.4" stroke-dashoffset="-341.8"/>
-              <circle cx="100" cy="100" r="80" fill="none" stroke="var(--text-dim)" stroke-width="24" stroke-dasharray="50.2 502.4" stroke-dashoffset="-452.4"/>
+        <figure class="chart-card">
+          <figcaption>Superfans peak in death overs; casuals dip mid-innings</figcaption>
+          <svg class="ch" viewBox="0 0 460 230" role="img" aria-label="Superfan engagement through a match: 55 before the toss, 82 in the powerplay, 60 mid-innings, 95 in the death overs, 72 after the match">
+            <g class="grid">
+              <line x1="40" x2="450" y1="190" y2="190"/><line x1="40" x2="450" y1="145" y2="145"/><line x1="40" x2="450" y1="100" y2="100"/><line x1="40" x2="450" y1="55" y2="55"/><line x1="40" x2="450" y1="10" y2="10"/>
             </g>
-            <text x="100" y="96" text-anchor="middle" font-size="26" font-weight="700" fill="var(--text)" font-family="var(--font-display)">68%</text>
-            <text x="100" y="116" text-anchor="middle" font-size="10" fill="var(--text-dim)">mobile-first</text>
+            <g class="ax"><text x="32" y="194">0</text><text x="32" y="149">25</text><text x="32" y="104">50</text><text x="32" y="59">75</text><text x="32" y="14">100</text></g>
+            <path class="line" pathLength="1" d="M52,91 C96,74 140,47 184,42 C228,37 272,82 316,82 C346,82 360,22 388,19 C412,16 432,52 446,60"/>
+            <g class="dots"><circle cx="52" cy="91" r="4"/><circle cx="184" cy="42" r="4"/><circle cx="316" cy="82" r="4"/><circle cx="388" cy="19" r="4"/><circle cx="446" cy="60" r="4"/></g>
+            <g class="ax mid"><text x="56" y="212">Pre-toss</text><text x="184" y="212">Powerplay</text><text x="316" y="212">Mid-innings</text><text x="388" y="212">Death overs</text><text x="430" y="212">Post-match</text></g>
           </svg>
-          <div class="chart-legend">
-            <span><i style="background:var(--blue);"></i>Mobile 68%</span>
-            <span><i style="background:var(--amber);"></i>TV 22%</span>
-            <span><i style="background:var(--text-dim);"></i>Web 10%</span>
-          </div>
-        </div>
+        </figure>
+
+        <figure class="chart-card">
+          <figcaption>Hindi leads &mdash; English is not the majority</figcaption>
+          <svg class="ch" viewBox="0 0 460 230" role="img" aria-label="Preferred language, longest to shortest: Hindi, English, Tamil, Telugu, Bengali, other">
+            <g class="ax end"><text x="62" y="27">Hindi</text><text x="62" y="62">English</text><text x="62" y="97">Tamil</text><text x="62" y="132">Telugu</text><text x="62" y="167">Bengali</text><text x="62" y="202">Other</text></g>
+            <g class="hbars">
+              <rect class="hbar y" x="72" y="11"  width="300" height="24"/>
+              <rect class="hbar b" x="72" y="46"  width="224" height="24" style="--i:1"/>
+              <rect class="hbar b" x="72" y="81"  width="54"  height="24" style="--i:2"/>
+              <rect class="hbar b" x="72" y="116" width="47"  height="24" style="--i:3"/>
+              <rect class="hbar b" x="72" y="151" width="27"  height="24" style="--i:4"/>
+              <rect class="hbar b" x="72" y="186" width="27"  height="24" style="--i:5"/>
+            </g>
+          </svg>
+        </figure>
       </div>
 
-      <div class="grid g-3 cs-stats-row stagger">
-        <div class="stat-box"><div class="num">68%</div><div class="label">of live streams start on mobile within the first over</div></div>
-        <div class="stat-box"><div class="num">40%</div><div class="label">of fans run the app alongside TV as a second screen</div></div>
-        <div class="stat-box"><div class="num">2 of 3</div><div class="label">fans open the app to check scores outside match hours daily</div></div>
+      <div class="ipl-facts">
+        <div class="stat-box"><b class="num">68%</b><span>watch on mobile as their primary screen</span></div>
+        <div class="stat-box"><b class="num">40%</b><span>of viewers are women &mdash; a fast-rising segment</span></div>
+        <div class="stat-box"><b class="num">2 of 3</b><span>new users prefer a language other than English</span></div>
       </div>
     </div>
   </section>
 
   <!-- ============ PERSONAS ============ -->
-  <section class="cs-section alt reveal">
-    <div class="container cs-section-inner">
-      <h2 class="cs-h2 center">Three fans, three very different needs</h2>
-      <p class="cs-p intro-center">Engagement research kept surfacing the same tension: a single home screen was trying to serve a quick glance, a deep dive and a social moment all at once. We anchored the redesign around three archetypes that captured the spread.</p>
+  <section class="ipl-sec" id="personas">
+    <div class="container">
+      <div class="ipl-head-row">
+        <div>
+          <div class="cs-label">Personas</div>
+          <h2 class="cs-h2">Three fans, three very different needs</h2>
+        </div>
+        <figure class="ipl-fans"><img src="../assets/img/ipl/fans.jpg" alt="Cricket fans with painted faces watching a match on a phone" loading="lazy" decoding="async"></figure>
+      </div>
 
-      <div class="grid g-3" style="margin-top:40px;">
-        <div class="persona-card">
-          <div class="avatar">AR</div>
-          <h4>The Commuter Fan</h4>
-          <div class="role">Arjun, 27 · catches overs between metro stops</div>
-          <p class="quote">"I just need to know the score and get on with my day, I don't have three minutes to wait for a video to load."</p>
-          <ul>
-            <li>Instant score glance, no login wall</li>
-            <li>Works reliably on patchy network</li>
-            <li>Push alerts only for his team's matches</li>
-          </ul>
-        </div>
-        <div class="persona-card">
-          <div class="avatar">VK</div>
-          <h4>The Die-Hard Fan</h4>
-          <div class="role">Vikram, 34 · full-time analyst, part-time everything else</div>
-          <p class="quote">"Give me every ball, every stat, every player number, and let me set my fantasy team without leaving the app."</p>
-          <ul>
-            <li>Ball-by-ball commentary with filters</li>
-            <li>Deep player and team statistics</li>
-            <li>Fantasy team management in-app</li>
-          </ul>
-        </div>
-        <div class="persona-card">
-          <div class="avatar">SN</div>
-          <h4>The Social Viewer</h4>
-          <div class="role">Sanya, 23 · watches for the vibe, stays for the banter</div>
-          <p class="quote">"Half the fun is reacting with my group chat the second something wild happens on screen."</p>
-          <ul>
-            <li>Shareable highlight and moment cards</li>
-            <li>Live polls and predictions</li>
-            <li>Lightweight reactions during play</li>
-          </ul>
-        </div>
+      <div class="ipl-personas">
+        <article class="persona-card">
+          <header><span class="emo" aria-hidden="true">&#127942;</span><div><h3>Rahul Menon</h3><span class="tag t-y">The Superfan</span></div></header>
+          <ul class="meta"><li>Age &middot; 26</li><li>Bengaluru &middot; Metro</li><li>Flagship Android &middot; 5G</li></ul>
+          <p>Watches every match, runs a fantasy league with college friends, and second-screens live stats while the TV plays in the background.</p>
+          <h4 class="g">Goals</h4>
+          <ul class="pts"><li>Ball-by-ball live data without refreshing</li><li>Beat friends in fantasy &amp; predictions</li><li>Deep stats: matchups, win probability</li></ul>
+          <h4 class="f">Frustrations</h4>
+          <ul class="pts"><li>Score updates lag behind the TV feed</li><li>Fantasy &amp; scores live in separate apps</li><li>Notifications are noisy and untimed</li></ul>
+        </article>
+        <article class="persona-card">
+          <header><span class="emo" aria-hidden="true">&#128241;</span><div><h3>Priya Sharma</h3><span class="tag t-p">The Casual Watcher</span></div></header>
+          <ul class="meta"><li>Age &middot; 32</li><li>Indore &middot; Tier-2</li><li>Mid-range Android &middot; patchy 4G</li></ul>
+          <p>Follows her home team during playoffs. Wants the gist fast &mdash; who&rsquo;s winning, key moments &mdash; without cricket jargon or clutter.</p>
+          <h4 class="g">Goals</h4>
+          <ul class="pts"><li>Glanceable score in under 3 seconds</li><li>Catch highlights she missed</li><li>Follow one team, skip the rest</li></ul>
+          <h4 class="f">Frustrations</h4>
+          <ul class="pts"><li>Dense stat screens feel overwhelming</li><li>Heavy pages stall on weak networks</li><li>Too much English-only terminology</li></ul>
+        </article>
+        <article class="persona-card">
+          <header><span class="emo" aria-hidden="true">&#10024;</span><div><h3>Arjun Patel</h3><span class="tag t-t">The New Fan</span></div></header>
+          <ul class="meta"><li>Age &middot; 19</li><li>Surat &middot; Tier-2</li><li>Budget Android &middot; Hindi-first</li></ul>
+          <p>Got into cricket through reels and memes. Learning the rules, loves short-form clips, shares moments in group chats.</p>
+          <h4 class="g">Goals</h4>
+          <ul class="pts"><li>Understand what&rsquo;s happening in plain language</li><li>Short, shareable video moments</li><li>Learn players &amp; teams over time</li></ul>
+          <h4 class="f">Frustrations</h4>
+          <ul class="pts"><li>Assumes prior cricket knowledge</li><li>No easy way to share clips</li><li>English-only onboarding</li></ul>
+        </article>
       </div>
     </div>
   </section>
 
-  <!-- ============ PAIN TO DECISION MAPPING ============ -->
-  <section class="cs-section reveal">
-    <div class="container cs-section-inner">
-      <h2 class="cs-h2 center">Mapping persona pain to design decisions</h2>
-      <p class="cs-p intro-center">Every research finding was traced to a concrete interface decision, so nothing in the final design existed without a reason a fan had given us.</p>
+  <!-- ============ CHALLENGE -> SOLUTION ============ -->
+  <section class="ipl-sec alt" id="solutions">
+    <div class="container">
+      <div class="cs-label">Challenge &rarr; Solution</div>
+      <h2 class="cs-h2">Mapping persona pain to design decisions</h2>
+      <p class="cs-p ipl-intro">Every design decision traces back to a real, prioritized problem from research.</p>
 
-      <div class="ipl-map-wrap" style="margin-top:36px;">
-        <div class="map-row">
-          <div class="pain">Fans lose live score context the moment they switch apps to check anything else</div>
-          <div class="arrow">→</div>
-          <div class="decision">A persistent mini score bar pinned across every screen in the app</div>
-        </div>
-        <div class="map-row">
-          <div class="pain">Commuters on patchy network abandon video-heavy screens mid-load</div>
-          <div class="arrow">→</div>
-          <div class="decision">A lightweight, text-first Match Center with an adaptive low-data mode</div>
-        </div>
-        <div class="map-row">
-          <div class="pain">Die-hard fans found ball-by-ball detail buried under casual highlight content</div>
-          <div class="arrow">→</div>
-          <div class="decision">A dedicated, filterable ball-by-ball commentary feed of its own</div>
-        </div>
-        <div class="map-row">
-          <div class="pain">Fantasy players had to leave the app to check live player form before setting a team</div>
-          <div class="arrow">→</div>
-          <div class="decision">In-line player stat cards built directly into the Fantasy team-builder</div>
-        </div>
-        <div class="map-row">
-          <div class="pain">Social viewers had no quick way to react or share a moment mid-match</div>
-          <div class="arrow">→</div>
-          <div class="decision">One-tap reactions and shareable clip cards inside the Live Match Center</div>
-        </div>
-        <div class="map-row">
-          <div class="pain">New fans found five flat tabs (News, Videos, Scores, Fantasy, Shop) hard to parse</div>
-          <div class="arrow">→</div>
-          <div class="decision">Four core tabs restructured around live match state, personalised by fan type</div>
-        </div>
+      <div class="ipl-map">
+        <div class="map insight-card"><div class="pain"><span>Challenge &middot; Superfan</span><b>Live scores lag &amp; require manual refresh</b></div><i aria-hidden="true">&rarr;</i><div class="fix"><b>Real-time score engine + live win-probability</b><span>A persistent live bar with sub-second push updates and an animated win-probability meter, so second-screen users stay ahead of the broadcast.</span></div></div>
+        <div class="map insight-card"><div class="pain"><span>Challenge &middot; Superfan</span><b>Fantasy and scores split across apps</b></div><i aria-hidden="true">&rarr;</i><div class="fix"><b>Unified match hub with fantasy inline</b><span>Your fantasy XI, points, and leaderboard sit inside the same match screen &mdash; one tab away from live commentary.</span></div></div>
+        <div class="map insight-card"><div class="pain"><span>Challenge &middot; Casual &middot; New fan</span><b>Stat screens feel dense &amp; intimidating</b></div><i aria-hidden="true">&rarr;</i><div class="fix"><b>Progressive disclosure &amp; &lsquo;Simple / Pro&rsquo; modes</b><span>A glanceable summary card by default; advanced analytics tuck behind an optional Pro toggle so casual fans never see clutter.</span></div></div>
+        <div class="map insight-card"><div class="pain"><span>Challenge &middot; Tier-2/3 fans</span><b>Heavy pages stall on weak networks</b></div><i aria-hidden="true">&rarr;</i><div class="fix"><b>Lite mode &amp; data-aware loading</b><span>Skeleton-first rendering, compressed media, and a Lite mode that drops to text + key frames on 3G &mdash; designed for patchy connectivity.</span></div></div>
+        <div class="map insight-card"><div class="pain"><span>Challenge &middot; New fan &middot; Tier-2/3</span><b>English-only onboarding excludes many</b></div><i aria-hidden="true">&rarr;</i><div class="fix"><b>Multilingual UI + plain-language commentary</b><span>Hindi-first onboarding with 6 language options and a jargon-free commentary mode that explains terms inline.</span></div></div>
+        <div class="map insight-card"><div class="pain"><span>Challenge &middot; New fan</span><b>No easy way to share moments</b></div><i aria-hidden="true">&rarr;</i><div class="fix"><b>One-tap clip &amp; meme sharing</b><span>Auto-generated 15-second highlight clips with a share sheet tuned for WhatsApp and Instagram groups.</span></div></div>
       </div>
     </div>
   </section>
 
-  <!-- ============ SCREENS ============ -->
-  <section class="cs-section alt reveal">
-    <div class="container cs-section-inner">
-      <h2 class="cs-h2 center">The screens, mapped to fan needs</h2>
-      <p class="cs-p intro-center">Each surface was designed to answer one persona's core question fast, while staying one tap away from the others, so a commuter's quick glance and a die-hard's deep dive live comfortably in the same app.</p>
+  <!-- ============ THE DESIGN ============ -->
+  <section class="ipl-sec" id="design">
+    <div class="container">
+      <div class="cs-label">The Design</div>
+      <h2 class="cs-h2">The screens, mapped to fan needs</h2>
+      <p class="cs-p ipl-intro">From the personalized home to a real-time Match Center, fantasy, and player profiles &mdash; each screen is tagged with the persona it serves most. Hover a phone to scroll the full screen.</p>
 
-      <div class="phone-row p3" style="margin-top:44px;">
-        <div class="phone-col">
-          <div class="phone">
-            <div class="phone-screen mock-screen">
-              <div class="mock-scorebar column">
-                <div class="mock-match-tag">Match 11</div>
-                <div class="mock-teams-row">
-                  <div class="mock-team-block"><div class="mock-badge"></div><span>MI</span><b>227/3</b><small>20 OV</small></div>
-                  <div class="mock-vs">VS</div>
-                  <div class="mock-team-block"><div class="mock-badge"></div><span>KKR</span><b>176</b><small>19.1 OV</small></div>
-                </div>
-                <div class="mock-result">MI Won by 43 Runs</div>
-              </div>
-              <div class="mock-tabs">
-                <span class="on">Commentary</span><span>Scorecard</span><span>Teams</span>
-              </div>
-              <div class="mock-pill-row">
-                <span class="on">MI</span><span>KKR</span><span>SO1</span><span>SO2</span>
-              </div>
-              <div class="mock-body">
-                <div class="mock-card poty">
-                  <div class="mock-avatar" style="width:24px;height:24px;"></div>
-                  <div style="flex:1;"><div class="mock-line" style="width:65%;"></div><div class="mock-line sm" style="width:42%;margin-top:4px;"></div></div>
-                </div>
-                <div class="mock-row">
-                  <div class="mock-ball-badge">4</div>
-                  <div class="mock-line" style="flex:1;"></div>
-                </div>
-                <div class="mock-card"><div class="mock-line" style="width:92%;"></div><div class="mock-line sm" style="width:70%;margin-top:4px;"></div></div>
-              </div>
-            </div>
-          </div>
-          <div class="phone-caption">Live Match Center</div>
-          <div class="phone-sub">Score, tabs and commentary in one persistent view</div>
-        </div>
-
-        <div class="phone-col">
-          <div class="phone">
-            <div class="phone-screen mock-screen">
-              <div class="mock-topbar">
-                <div class="mock-bar" style="width:34%;"></div>
-                <div class="mock-bar" style="width:12%;"></div>
-              </div>
-              <div class="mock-body">
-                <div class="mock-card">
-                  <div class="mock-stat-line" style="margin-bottom:5px;"><span>End of Over 18</span></div>
-                  <div class="mock-over-row">
-                    <i class="six">6</i><i>2</i><i class="wkt">W</i><i>2</i><i class="four">4</i><i>1</i>
-                  </div>
-                </div>
-                <div class="mock-card">
-                  <div class="mock-stat-line"><span>V. Iyer</span><b>26 (16)</b></div>
-                  <div class="mock-stat-line" style="margin-top:4px;"><span>Nitish Rana</span><b>0 (1)</b></div>
-                </div>
-                <div class="mock-row">
-                  <div class="mock-ball-badge wicket">W</div>
-                  <div class="mock-line" style="flex:1;"></div>
-                </div>
-                <div class="mock-photo"></div>
-              </div>
-            </div>
-          </div>
-          <div class="phone-caption">End of Over &amp; Wicket Alert</div>
-          <div class="phone-sub">Ball-by-ball outcomes with photo moments</div>
-        </div>
-
-        <div class="phone-col">
-          <div class="phone">
-            <div class="phone-screen mock-screen">
-              <div class="mock-onboard">
-                <div class="mock-onboard-top"><span class="mock-skip">Skip ›</span></div>
-                <div class="mock-onboard-title">Choose Your<br>Favourite Player</div>
-                <div class="mock-hero-avatar"></div>
-                <div class="mock-avatar-row"><i></i><i></i><i class="on"></i><i></i><i></i></div>
-                <div class="mock-onboard-name">Virat Kohli</div>
-                <div class="mock-confirm">Confirm (2)</div>
-              </div>
-            </div>
-          </div>
-          <div class="phone-caption">Choose Your Favourite Player</div>
-          <div class="phone-sub">Personalised onboarding from the first tap</div>
-        </div>
+      <div class="ipl-screens">
+        <figure class="phone-col"><div class="ipl-phone long"><div class="scr" tabindex="0"><img src="../assets/img/ipl/screen-home.jpg" alt="IPL app home: hero video, live match card, quick links, points table, magic moments, leaderboard, interviews, results and engagement zone" loading="lazy"></div></div>
+          <figcaption><span class="tag">All personas</span><b>Home</b><span>A personalized feed &mdash; live card, points table, magic moments, and stories &mdash; so every fan lands on something relevant.</span></figcaption></figure>
+        <figure class="phone-col"><div class="ipl-phone"><div class="scr"><img src="../assets/img/ipl/screen-live.jpg" alt="Live score modal with batters, the last 18 deliveries, run rates and a View Match Center button" loading="lazy"></div></div>
+          <figcaption><span class="tag t-p">Casual watcher</span><b>Live score modal</b><span>A glanceable mini-scorecard surfaced anywhere in the app: last 18 balls, CRR/RR, and a one-tap route to Match Center.</span></figcaption></figure>
+        <figure class="phone-col"><div class="ipl-phone"><div class="scr"><img src="../assets/img/ipl/screen-fixtures.jpg" alt="Mumbai Indians team page showing upcoming fixtures" loading="lazy"></div></div>
+          <figcaption><span class="tag t-p">Casual watcher</span><b>Team &middot; Fixtures</b><span>Follow a single team and see only their schedule, results, and squad &mdash; cutting noise for fans who back one side.</span></figcaption></figure>
+        <figure class="phone-col"><div class="ipl-phone long"><div class="scr" tabindex="0"><img src="../assets/img/ipl/screen-commentary.jpg" alt="Match Center commentary with ball-by-ball updates, a new-batsman card and an end-of-over summary" loading="lazy"></div></div>
+          <figcaption><span class="tag t-y">Superfan</span><b>Match Center &middot; Commentary</b><span>Real-time ball-by-ball with new-batsman cards and over summaries &mdash; the second-screen home for superfans.</span></figcaption></figure>
+        <figure class="phone-col"><div class="ipl-phone long"><div class="scr" tabindex="0"><img src="../assets/img/ipl/screen-matchinfo.jpg" alt="Match Center commentary continuing into a match info table with venue, umpires, referee and toss" loading="lazy"></div></div>
+          <figcaption><span class="tag t-y">Superfan</span><b>Match Center &middot; Match info</b><span>Venue, officials, and context in the same flow, so deep-diving fans never have to leave the live experience.</span></figcaption></figure>
+        <figure class="phone-col"><div class="ipl-phone long"><div class="scr" tabindex="0"><img src="../assets/img/ipl/screen-teams.jpg" alt="Match Center teams tab listing the playing eleven and substitutes with role icons" loading="lazy"></div></div>
+          <figcaption><span class="tag t-y">Superfan</span><b>Match Center &middot; Teams</b><span>Full playing XI and substitutes with role tags &mdash; a clear lineup reference during selection and strategy talk.</span></figcaption></figure>
+        <figure class="phone-col"><div class="ipl-phone"><div class="scr"><img src="../assets/img/ipl/screen-fantasy.jpg" alt="Fantasy IPL landing: Don't just watch IPL, play it, with season-long and daily fantasy options and a live match strip" loading="lazy"></div></div>
+          <figcaption><span class="tag t-y">Superfan</span><b>Fantasy IPL</b><span>Season-long and daily fantasy built into the same app, with a live match strip pinned above the tab bar.</span></figcaption></figure>
+        <figure class="phone-col"><div class="ipl-phone long"><div class="scr" tabindex="0"><img src="../assets/img/ipl/screen-player.jpg" alt="MS Dhoni player profile with batting, bowling and fielding stats and the rest of the squad" loading="lazy"></div></div>
+          <figcaption><span class="tag t-t">New fan</span><b>Player profile</b><span>Rich batting, bowling, and fielding stats with squad context &mdash; helping new fans learn players over time.</span></figcaption></figure>
       </div>
 
-      <div class="phone-row p3" style="margin-top:36px;">
-        <div class="phone-col">
-          <div class="phone">
-            <div class="phone-screen mock-screen">
-              <div class="mock-onboard">
-                <div class="mock-onboard-top"><span class="mock-skip">Skip ›</span></div>
-                <div class="mock-onboard-title">Choose Your<br>Favourite Team</div>
-                <div class="mock-hero-avatar" style="background:radial-gradient(circle at 35% 30%, rgba(255,179,71,.55), rgba(255,255,255,.05));"></div>
-                <div class="mock-avatar-row"><i></i><i class="on"></i><i></i></div>
-                <div class="mock-onboard-name">Sunrisers Hyderabad</div>
-                <div class="mock-confirm">Confirm</div>
-              </div>
-            </div>
-          </div>
-          <div class="phone-caption">Choose Your Favourite Team</div>
-          <div class="phone-sub">One tap to a home-team feed</div>
-        </div>
-
-        <div class="phone-col">
-          <div class="phone">
-            <div class="phone-screen mock-screen">
-              <div class="mock-partners">
-                <div class="mock-wordmark"><div class="bat"></div><span>TATA IPL</span></div>
-                <div class="mock-section-label">Official Partners</div>
-                <div class="mock-sponsor-grid">
-                  <div class="mock-sponsor-pill">Dream11</div>
-                  <div class="mock-sponsor-pill">CRED</div>
-                  <div class="mock-sponsor-pill">Upstox</div>
-                  <div class="mock-sponsor-pill">RuPay</div>
-                  <div class="mock-sponsor-pill">Swiggy Instamart</div>
-                  <div class="mock-sponsor-pill">Paytm</div>
-                </div>
-                <div class="mock-section-label" style="margin-top:6px;">Broadcast Partners</div>
-                <div class="mock-sponsor-grid">
-                  <div class="mock-sponsor-pill">Star Sports</div>
-                  <div class="mock-sponsor-pill">JioCinema</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="phone-caption">Official Partners</div>
-          <div class="phone-sub">Sponsor real-estate kept out of the fan's way</div>
-        </div>
-
-        <div class="phone-col">
-          <div class="phone">
-            <div class="phone-screen mock-screen">
-              <div class="mock-topbar">
-                <div class="mock-bar" style="width:30%;"></div>
-                <div class="mock-bar" style="width:14%;"></div>
-              </div>
-              <div class="mock-body">
-                <div class="mock-info-table">
-                  <div class="mock-info-row"><div class="k">Venue</div><div class="v">Narendra Modi Stadium<small>Ahmedabad</small></div></div>
-                  <div class="mock-info-row"><div class="k">On Field Umpires</div><div class="v">Nitin Menon, Chris Gaffaney</div></div>
-                  <div class="mock-info-row"><div class="k">Third Umpire</div><div class="v">KN Ananthapadmanabhan</div></div>
-                  <div class="mock-info-row"><div class="k">Referee</div><div class="v">Javagal Srinath</div></div>
-                  <div class="mock-info-row"><div class="k">Toss</div><div class="v">MI elected to Bat first</div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="phone-caption">Match Info</div>
-          <div class="phone-sub">Officials and venue, one scroll below the score</div>
-        </div>
-      </div>
+      <ul class="learn-grid ipl-principles">
+        <li><h3>Real-time first</h3><p>Sub-second score pushes and a live win-probability meter keep second-screen superfans ahead of the broadcast.</p></li>
+        <li><h3>Progressive disclosure</h3><p>A Simple/Pro toggle hides advanced analytics until asked for, so casual fans never feel overwhelmed.</p></li>
+        <li><h3>Built for every network</h3><p>Lite mode, skeleton loading, and compressed media make match day work on patchy 3G in Tier-2/3 cities.</p></li>
+      </ul>
     </div>
   </section>
 
-  <!-- ============ RESULTS ============ -->
-  <section class="cs-section reveal">
-    <div class="container cs-section-inner">
-      <h2 class="cs-h2 center">Results after one IPL season</h2>
-      <p class="cs-p intro-center">Shipped ahead of the following season, the redesign was measured against the same behavioural benchmarks that shaped it, speed to score, depth of engagement, and return frequency.</p>
-
-      <div class="results-band" style="margin-top:40px;">
-        <div class="grid g-2">
-          <div class="stat-box"><div class="num">+22%</div><div class="label">Average session length</div></div>
-          <div class="stat-box"><div class="num">15s</div><div class="label">Faster time-to-score on open</div></div>
-          <div class="stat-box"><div class="num">61%</div><div class="label">Weekly active return rate</div></div>
-          <div class="stat-box"><div class="num">2.2x</div><div class="label">Fantasy team-builder engagement</div></div>
+  <!-- ============ IMPACT ============ -->
+  <section class="ipl-sec alt" id="impact">
+    <div class="container">
+      <div class="ipl-impact">
+        <div>
+          <div class="cs-label">Impact</div>
+          <h2 class="cs-h2">Results after one IPL season</h2>
+          <p class="cs-p">Designing to distinct personas &mdash; rather than an &ldquo;average&rdquo; user &mdash; lifted engagement across every segment, with the biggest gains among the fast-growing Tier-2/3 and new-fan audiences.</p>
+          <div class="ipl-results">
+            <div class="stat-box"><b class="num">+42%</b><span>Match-day retention</span><small>D1 return during live games</small></div>
+            <div class="stat-box"><b class="num">18m</b><span>Avg. session length</span><small>up from 11m</small></div>
+            <div class="stat-box"><b class="num">61%</b><span>Lite-mode adoption</span><small>of Tier-2/3 users</small></div>
+            <div class="stat-box"><b class="num">2.3&times;</b><span>Fantasy attach rate</span><small>vs. previous season</small></div>
+          </div>
         </div>
-        <div class="media-frame ipl-celebration">
-          <svg viewBox="0 0 300 220" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <radialGradient id="floodlight" cx="50%" cy="0%" r="75%">
-                <stop offset="0%" stop-color="rgba(255,179,71,.45)"/>
-                <stop offset="100%" stop-color="rgba(255,179,71,0)"/>
-              </radialGradient>
-            </defs>
-            <rect width="300" height="220" fill="url(#floodlight)"/>
-            <g fill="rgba(63,169,255,.55)">
-              <polygon points="0,220 0,150 20,120 40,150 40,220"/>
-              <polygon points="40,220 40,140 60,105 80,140 80,220"/>
-              <polygon points="80,220 80,155 100,125 120,155 120,220"/>
-              <polygon points="120,220 120,130 140,95 160,130 160,220"/>
-              <polygon points="160,220 160,150 180,118 200,150 200,220"/>
-              <polygon points="200,220 200,142 220,108 240,142 240,220"/>
-              <polygon points="240,220 240,158 260,128 280,158 280,220"/>
-              <polygon points="280,220 280,148 300,120 300,220"/>
-            </g>
-          </svg>
-          <div class="media-caption">Stadium celebration, final match night</div>
-        </div>
+        <figure class="ipl-crowd"><img src="../assets/img/ipl/crowd.jpg" alt="Young fans cheering and filming behind a stadium fence" loading="lazy" decoding="async"></figure>
       </div>
 
-      <div class="grid g-3" style="margin-top:40px;">
-        <div class="insight-card">
-          <div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 6.9L22 10l-6 4.8L18 22l-6-4-6 4 2-7.2L2 10l7.6-1.1z"/></svg></div>
-          <h4>One score bar, every screen</h4>
-          <p>Persisting live state across the whole app, not just the Match Center, removed the single biggest source of drop-off.</p>
-        </div>
-        <div class="insight-card">
-          <div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M18 17V9M13 17V5M8 17v-4"/></svg></div>
-          <h4>Depth should be optional, not default</h4>
-          <p>Separating casual and deep-dive layers let both personas feel at home without either one feeling underserved.</p>
-        </div>
-        <div class="insight-card">
-          <div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
-          <h4>Design for the second screen</h4>
-          <p>With 40% of fans watching TV and app together, the app's job during play is to complement the broadcast, not compete with it.</p>
-        </div>
+      <div class="ipl-takeaway insight-card">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+        <h3>Key takeaway</h3>
+        <p>India&rsquo;s cricket audience is not a monolith. By grounding the design in real demographic and behavioral segments &mdash; age, geography, language, and fandom intensity &mdash; we shipped a single app that feels personal to a superfan in Bengaluru and a first-time fan in Surat alike.</p>
       </div>
-    </div>
-  </section>
-
-  <!-- ============ LEARNINGS ============ -->
-  <section class="learn" id="learnings">
-    <div class="learn-in">
-      <span class="cs-label">What I took away</span>
-      <h2>What this project changed <span class="chrome">in how I work</span></h2>
-      <ol class="learn-grid reveal stagger">
-        <li>
-          <span class="n">01</span>
-          <h3>Design for the peak, not the average</h3>
-          <p>The app is quiet for ten months and then carries millions in a single over. Sizing the interface for the final ball of a chase, rather than for a median session, changed every layout decision.</p>
-        </li>
-        <li>
-          <span class="n">02</span>
-          <h3>Personas earn their keep when they conflict</h3>
-          <p>The glance fan and the stats obsessive want opposite things from the same screen. Naming that conflict early let us solve it with hierarchy instead of settings.</p>
-        </li>
-        <li>
-          <span class="n">03</span>
-          <h3>Watch people watch cricket</h3>
-          <p>Four weeks in living rooms and on commutes surfaced the second-screen behaviour no survey had reported. I now budget field time before I budget wireframes.</p>
-        </li>
-      </ol>
     </div>
   </section>
 
@@ -525,6 +325,12 @@
 
 <script src="../assets/js/main.js"></script>
 <script src="../assets/js/study.js"></script>
+<script>
+document.querySelectorAll('.ipl-phone.long img').forEach(function (img) {
+  function pace() { if (img.naturalWidth) img.style.setProperty('--dur', Math.max(2.5, img.naturalHeight / img.naturalWidth / 2.16 * 1.1).toFixed(1) + 's'); }
+  img.complete ? pace() : img.addEventListener('load', pace);
+});
+</script>
 <script src="../assets/js/case-motion.js"></script>
 <script src="../assets/js/site-header.js"></script>
 </body>

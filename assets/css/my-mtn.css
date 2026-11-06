@@ -205,3 +205,8 @@
 @media (max-width:640px){
   .theme-mtn .shot figcaption{ padding:12px 14px 14px; font-size:12.5px; }
 }
+
+/* home screen beside the "curated experience" copy */
+.theme-mtn .curated{align-items:center}
+.theme-mtn .curated-phone{margin:0;display:flex;justify-content:center}
+.theme-mtn .curated-phone img{width:min(300px,70vw);height:auto;filter:drop-shadow(0 30px 60px rgba(0,0,0,.55))}
