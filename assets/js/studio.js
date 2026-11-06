@@ -224,7 +224,7 @@
   var vision = $('.vision'), mqTrack = $('.mq-track'), stripes = $$('.stripes i');
   var fades = $$('.vision [data-fade]');
   var fcards = $$('.fcard');
-  var wipeIn = $$('.wipe-in i');
+  var wPin = $('.work-pin');
   var work = $('.work'), wTrack = $('.work-track'), wFront = $('.work-front');
   var wCards = $$('.wcard');
   var wEnd = $('.wend i'), wPlus = $('.wend svg');
@@ -237,6 +237,7 @@
     if (work) work.classList.toggle('hs', hs);
     if (!hs) {
       [wTrack, wFront].forEach(function (el) { if (el) { el.style.transform = ''; el.style.opacity = ''; } });
+      if (wPin) { var ps = wPin.style; ps.webkitMaskImage = ps.maskImage = ''; }
       $$('.wcard-in').forEach(function (el) { el.style.transform = ''; });
     }
   }
@@ -257,6 +258,26 @@
   }
 
   var hero = $('.hero'), heroIn = $('.hero-in');
+  // Five horizontal bands of the pinned layer, each revealed from its
+  // bottom edge up, lowest band first (the case-study stripe transition).
+  function setStripeMask(p, h) {
+    if (!wPin) return;
+    var st = wPin.style;
+    if (p >= 1) { st.webkitMaskImage = st.maskImage = 'none'; return; }
+    var band = h / 5, img = [], size = [], pos = [];
+    for (var i = 0; i < 5; i++) {
+      var sc = clamp(p * 1.8 - (4 - i) * 0.2, 0, 1);
+      var hh = sc > 0 ? band * sc + 1 : 0;
+      img.push('linear-gradient(#000,#000)');
+      size.push('100% ' + hh.toFixed(1) + 'px');
+      pos.push('0 ' + ((i + 1) * band - hh).toFixed(1) + 'px');
+    }
+    st.webkitMaskImage = st.maskImage = img.join(',');
+    st.webkitMaskSize = st.maskSize = size.join(',');
+    st.webkitMaskPosition = st.maskPosition = pos.join(',');
+    st.webkitMaskRepeat = st.maskRepeat = 'no-repeat';
+  }
+
   function onScroll() {
     var h = vh();
 
@@ -282,7 +303,7 @@
     // Vision: headline, marquee, then five stripes wipe up into the light section.
     if (vision && !reduced) {
       var vp = progress(vision);
-      if (fades[0]) fades[0].classList.toggle('on', vp > 0.01 || vision.getBoundingClientRect().top < h * 0.5);
+      if (fades[0]) fades[0].classList.toggle('on', vp > 0.01 || vision.getBoundingClientRect().top < h * 0.92);
       if (fades[1]) fades[1].classList.toggle('on', vp > 0.22);
       if (mqTrack) mqTrack.style.transform = 'translate3d(' + (-(vp * 35) - mqDrift) + '%,0,0)';
       stripes.forEach(function (s, idx) {
@@ -303,22 +324,19 @@
       fcards[1].style.zIndex = 2;
     } else fcards.forEach(function (c) { c.style.transform = ''; });
 
-    // Work: the panel rises in on stripes (0.5 screens), vertical scroll drives
-    // the track sideways (1.5), then the light layer slides off left (0.9) to
-    // the dark, which carries straight on into the vision section.
+    // Work: the panel opens in stripes over the end of About (0.5 screens),
+    // then vertical scroll drives the track sideways (1.5) and the section
+    // scrolls on into the vision section.
     if (hs && work) {
       var w = window.innerWidth;
       var y = clamp(-work.getBoundingClientRect().top, 0, work.offsetHeight - h);
-      // first half screen: the dark cover pulls away in stripes, lowest first
+      // first half screen: the panel opens over About in five stripes
       var pin = clamp(y / (0.5 * h), 0, 1);
-      for (var wi = 0; wi < wipeIn.length; wi++) {
-        var fb = wipeIn.length - 1 - wi;
-        wipeIn[wi].style.setProperty('--s', (1 - clamp(pin * 1.8 - fb * 0.2, 0, 1)).toFixed(3));
-      }
-      var k = clamp((y - 0.5 * h) / (1.5 * h), 0, 1), m = clamp((y - 2 * h) / (0.9 * h), 0, 1);
+      setStripeMask(pin, h);
+      work.classList.toggle('open', pin > 0.6);
+      var k = clamp((y - 0.5 * h) / (1.5 * h), 0, 1);
       var S = k * Math.max(0, wTrack.scrollWidth - w);
       wTrack.style.transform = 'translate3d(' + (-S) + 'px,0,0)';
-      wFront.style.transform = 'translate3d(' + (-w * m) + 'px,0,0)';
 
       // Each card rises from 550px below as it travels in from the right.
       wCards.forEach(function (card, i) {

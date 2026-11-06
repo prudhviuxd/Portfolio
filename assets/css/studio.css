@@ -344,9 +344,9 @@ ul{list-style:none}
 .wend{display:none}
 
 /* desktop: pinned, scroll drives the track sideways */
-.work.hs{height:390svh}
+.work.hs{height:300svh}
 .work.hs .work-pin{position:sticky;top:0;height:100svh;overflow:hidden;display:block}
-.work.hs .work-pin{background:var(--bg)}
+.work.hs .work-pin{background:linear-gradient(0deg,var(--light) 0%,var(--light-2) 100%)}
 .work.hs .work-back{position:absolute;inset:0;z-index:1;display:flex;align-items:center;padding:0}
 .work.hs .work-back .wrap{will-change:transform,opacity}
 .work.hs .work-front{position:absolute;inset:0;z-index:2;will-change:transform}
@@ -770,13 +770,16 @@ html{scrollbar-color:#3a3530 var(--bg);scrollbar-width:thin}
 
 
 
-/* ---------- into the projects: the sand panel rises in on stripes ----------
-   When the pinned Work section arrives it is still covered in the dark of
-   About; five dark stripes then pull up and away, lowest first, so the sand
-   "Selected work" panel rises in stripe by stripe (desktop only). */
-.wipe-in{display:none}
-.work.hs .wipe-in{display:flex;position:absolute;inset:0;z-index:6;flex-direction:column;pointer-events:none}
-.wipe-in i{flex:1;margin-top:-1px;background:var(--bg);transform-origin:50% 0;transform:scaleY(var(--s,1));will-change:transform}
+/* ---------- into the projects: the panel opens in stripes over About ----------
+   Desktop: the pinned Work section overlaps the last screen of About, so it
+   pins the moment About's end reaches the bottom of the screen. Its layer
+   starts fully masked (About shows through) and five stripes open from the
+   bottom up, lowest first (studio.js sets the mask). No empty screen. */
+.work.hs{margin-top:-100svh;background:transparent;box-shadow:none}
+.work.hs{pointer-events:none}
+.work.hs.open .work-pin{pointer-events:auto}
+#work{scroll-margin-top:-50svh}   /* links land with the panel already open */
+.vision{background:var(--bg);z-index:4}
 
 /* ---------- hero: headline and portrait share the width ----------
    Bigger headline and a wider portrait column, so the two halves meet
