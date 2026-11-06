@@ -522,45 +522,72 @@
   });
 })();
 
-/* Sections answer the pointer: entering one fades in a light that follows
-   the cursor, leans the headline toward it and turns the star ornaments. */
+/* Sections reveal as the pointer enters them. Each section below the hero
+   waits with its content blocks hidden; entering it with the mouse (or
+   moving focus into it) brings them in, one after another. Safety net: a
+   section that has sat across the middle of the screen for a moment opens
+   anyway, so content is never stuck hidden. Touch devices and reduced
+   motion skip the effect entirely. */
 (function () {
   'use strict';
-  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!fine || reduced || !('IntersectionObserver' in window)) return;
 
-  var sections = Array.prototype.slice.call(document.querySelectorAll('main > section:not([hidden]), body > footer.ft'));
-  sections.forEach(function (sec) {
+  // The blocks that animate in each section, top to bottom.
+  var PARTS = {
+    about: '.about-lbl, .about-big, .about-tag, .about-mission',
+    impact: '.facts-head, .fcards, .impact-row, .partners',
+    leadership: '.sec-head, .lead-grid, .ai-head, .ai-grid',
+    expertise: '.exp-row',
+    workshops: '.sec-head, .ws-grid > *, .yt',
+    contact: '.contact-l > *, .form',
+    footer: '.ft-row, .ft-mark'
+  };
+
+  Object.keys(PARTS).forEach(function (id) {
+    var sec = id === 'footer' ? document.querySelector('body > footer.ft') : document.getElementById(id);
+    if (!sec) return;
+    var parts = Array.prototype.slice.call(sec.querySelectorAll(PARTS[id]));
+    if (!parts.length) return;
+
+    // Already on screen when the page loads (a reload mid-page, a #link):
+    // show it straight away rather than hiding what the reader is looking at.
+    var r = sec.getBoundingClientRect();
+    if (r.top < window.innerHeight * 0.85 && r.bottom > 0) return;
+
     if (getComputedStyle(sec).position === 'static') sec.style.position = 'relative';
-    var spot = document.createElement('span');
-    spot.className = 'spot';
-    spot.setAttribute('aria-hidden', 'true');
-    sec.appendChild(spot);
-    sec.classList.add('lean');
+    parts.forEach(function (el, i) { el.classList.add('rv'); el.style.setProperty('--i', i); });
+    sec.classList.add('rv-wait');
 
-    var x = 0, y = 0, queued = false;
-    function paint() {
-      queued = false;
-      var r = sec.getBoundingClientRect();
-      sec.style.setProperty('--sx', (x - r.left) + 'px');
-      sec.style.setProperty('--sy', (y - r.top) + 'px');
-      // lean relative to the visible part of the section
-      var top = Math.max(r.top, 0), bottom = Math.min(r.bottom, window.innerHeight);
-      var px = ((x - r.left) / r.width) * 2 - 1;
-      var py = bottom > top ? ((y - top) / (bottom - top)) * 2 - 1 : 0;
-      sec.style.setProperty('--px', px.toFixed(3));
-      sec.style.setProperty('--py', py.toFixed(3));
+    var timer = null;
+    function open() {
+      if (sec.classList.contains('rv-in')) return;
+      // Inner entrances that already played while hidden replay in view.
+      var played = Array.prototype.slice.call(sec.querySelectorAll('[data-lines].on, .lead-grid.on, .ai-grid.on, [data-ws].on, [data-ws-yt].on'));
+      played.forEach(function (el) { el.classList.remove('on'); });
+      void sec.offsetWidth;
+      sec.classList.add('rv-in');
+      setTimeout(function () { played.forEach(function (el) { el.classList.add('on'); }); }, 140);
+      clearTimeout(timer);
+      io.disconnect();
     }
-    function track(e) {
-      x = e.clientX; y = e.clientY;
-      if (!queued) { queued = true; requestAnimationFrame(paint); }
-    }
-    sec.addEventListener('pointerenter', function (e) { track(e); sec.classList.add('is-hot'); });
-    sec.addEventListener('pointermove', track, { passive: true });
+    sec.addEventListener('pointerenter', open);
+    sec.addEventListener('pointermove', open, { passive: true });
+    sec.addEventListener('focusin', open);
+
+    // Fallback: the section crosses the middle band of the screen and the
+    // pointer has not come to it within 900ms.
+    var io = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) { clearTimeout(timer); timer = setTimeout(open, 900); }
+      else clearTimeout(timer);
+    }, { rootMargin: '-40% 0px -40% 0px' });
+    io.observe(sec);
+  });
+
+  // Stars turn while the pointer is inside any section.
+  Array.prototype.slice.call(document.querySelectorAll('main > section, body > footer.ft')).forEach(function (sec) {
+    sec.addEventListener('pointerenter', function () { sec.classList.add('is-hot'); });
     sec.addEventListener('pointerleave', function () { sec.classList.remove('is-hot'); });
-    // keep the light under a still cursor while the page scrolls past it
-    window.addEventListener('scroll', function () {
-      if (sec.classList.contains('is-hot') && !queued) { queued = true; requestAnimationFrame(paint); }
-    }, { passive: true });
   });
 })();

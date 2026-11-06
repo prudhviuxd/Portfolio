@@ -709,42 +709,32 @@ html{scrollbar-color:#3a3530 var(--bg);scrollbar-width:thin}
 }
 
 /* =========================================================
-   SECTIONS ANSWER THE POINTER
-   Entering a section lights it: an amber light follows the
-   cursor, the headline leans a few pixels toward it and the
-   star ornaments turn. Fine pointers only (set by studio.js).
+   SECTIONS REVEAL AS THE POINTER ENTERS
+   studio.js marks each section below the hero as waiting; its
+   content blocks rise, sharpen and fade in, one after another,
+   when the pointer enters (or focus does, or the section has sat
+   mid-screen for a moment, so nothing is ever left hidden).
    ========================================================= */
-.spot{
-  position:absolute; inset:0; z-index:6; pointer-events:none;
-  opacity:0; transition:opacity .7s var(--out);
-  background:radial-gradient(560px circle at var(--sx,50%) var(--sy,50%),rgba(232,161,101,.15),rgba(232,161,101,.05) 40%,transparent 70%);
-  mix-blend-mode:screen;
+.rv-wait .rv{
+  opacity:0; translate:0 56px; filter:blur(10px);
 }
-.work>.spot,.facts>.spot{
-  mix-blend-mode:multiply;
-  background:radial-gradient(620px circle at var(--sx,50%) var(--sy,50%),rgba(232,161,101,.3),rgba(232,161,101,.08) 45%,transparent 72%);
+.rv-wait.rv-in .rv{
+  opacity:1; translate:0 0; filter:blur(0);
+  transition:opacity .9s var(--out),translate 1.2s var(--out),filter 1s var(--out);
+  transition-delay:calc(var(--i,0) * 90ms);
 }
-.is-hot>.spot{opacity:1}
+/* a hairline draws across the top of the section as it opens */
+.rv-wait::after{
+  content:""; position:absolute; left:0; right:0; top:0; height:1px; z-index:7; pointer-events:none;
+  background:var(--line); transform:scaleX(0); transform-origin:left;
+}
+.rv-wait.rv-in::after{transform:scaleX(1);transition:transform 1.2s var(--ease)}
+.work.rv-wait::after,.facts.rv-wait::after{background:rgba(0,0,0,.12)}
 
-.lean .hero-title,.lean .sec-head .h1,.lean .facts-head .h1,.lean .contact-l .h1,
-.lean .wtitle-h,.lean .work-back .h1,.lean .ai-head .h2,.lean .ft-mark{
-  translate:0 0;
-  transition:translate 1.1s var(--out);
-}
-.lean.is-hot .hero-title,.lean.is-hot .sec-head .h1,.lean.is-hot .facts-head .h1,.lean.is-hot .contact-l .h1,
-.lean.is-hot .wtitle-h,.lean.is-hot .work-back .h1,.lean.is-hot .ai-head .h2,.lean.is-hot .ft-mark{
-  translate:calc(var(--px,0) * 10px) calc(var(--py,0) * 6px);
-}
-
-.plus,.ws-star,.exp-x{transition:rotate 1.4s var(--ease),transform .6s var(--ease),background .4s}
+/* star ornaments turn while the pointer is inside a section */
+.plus,.ws-star{transition:rotate 1.4s var(--ease),transform .6s var(--ease),background .4s}
 .is-hot .plus,.is-hot .ws-star{rotate:90deg}
-.is-hot .exp-row:not([open]) .exp-x{rotate:45deg}
-
-/* the section's top rule warms while the pointer is inside */
-.lean{transition:border-color .8s}
-.lean.is-hot{border-top-color:rgba(232,161,101,.35)}
 
 @media (prefers-reduced-motion:reduce){
-  .spot{display:none}
-  .lean.is-hot *{translate:none!important;rotate:none!important}
+  .rv-wait .rv{opacity:1;translate:none;filter:none}
 }
