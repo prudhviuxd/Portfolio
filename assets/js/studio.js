@@ -771,8 +771,8 @@
 })();
 
 /* Beams background: a plain-JavaScript port of the BeamsBackground React
-   component. Same beam model (angle, width, length, speed, opacity, hue
-   190-260, pulse) and the same recycle-from-the-bottom in three columns,
+   component. Same beam model (angle, width, length, speed, opacity, colour
+   from the site palette, pulse) and the same recycle-from-the-bottom in three columns,
    at "strong" intensity. Sized to the hero (not the window), drawn at
    half resolution since every beam is blurred anyway, and paused when
    the hero is off screen or the tab is hidden. Reduced motion draws one
@@ -785,6 +785,16 @@
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var MINIMUM_BEAMS = 20, INTENSITY = 1;   // opacityMap.strong
   var SCALE = 0.5;                         // render resolution
+  // The site palette as HSL: ember, amber, light amber, sand.
+  // Beams cycle through it so the light reads as one warm gradient.
+  var PALETTE = [
+    [23, 71, 39],    // ember   #a9531d
+    [27, 74, 65],    // amber   #e8a165
+    [31, 80, 78],    // amber-2 #f3c99c
+    [27, 74, 65],    // amber   #e8a165 (weighted: the site's signature colour)
+    [35, 39, 82]     // sand    #e3d4bf (one accent; low saturation greys out when blurred)
+  ];
+  function pick(i, total) { return PALETTE[Math.floor((i / total) * PALETTE.length) % PALETTE.length]; }
   var W = 0, H = 0, beams = [], raf = 0, running = false;
 
   function createBeam(width, height) {
@@ -797,7 +807,7 @@
       angle: angle,
       speed: 0.6 + Math.random() * 1.2,
       opacity: 0.12 + Math.random() * 0.16,
-      hue: 190 + Math.random() * 70,
+      col: PALETTE[Math.floor(Math.random() * PALETTE.length)],
       pulse: Math.random() * Math.PI * 2,
       pulseSpeed: 0.02 + Math.random() * 0.03
     };
@@ -808,7 +818,7 @@
     beam.x = column * spacing + spacing / 2 + (Math.random() - 0.5) * spacing * 0.5;
     beam.width = 100 + Math.random() * 100;
     beam.speed = 0.5 + Math.random() * 0.4;
-    beam.hue = 190 + (index * 70) / total;
+    beam.col = pick(index, total);
     beam.opacity = 0.2 + Math.random() * 0.1;
   }
   function drawBeam(beam) {
@@ -817,7 +827,7 @@
     ctx.rotate((beam.angle * Math.PI) / 180);
     var o = beam.opacity * (0.8 + Math.sin(beam.pulse) * 0.2) * INTENSITY;
     var g = ctx.createLinearGradient(0, 0, 0, beam.length);
-    var c = function (a) { return 'hsla(' + beam.hue + ',85%,65%,' + a + ')'; };
+    var c = function (a) { return 'hsla(' + beam.col[0] + ',' + beam.col[1] + '%,' + beam.col[2] + '%,' + a + ')'; };
     g.addColorStop(0, c(0));
     g.addColorStop(0.1, c(o * 0.5));
     g.addColorStop(0.4, c(o));
