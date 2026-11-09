@@ -970,40 +970,56 @@ a.fcard:hover .fc-go,a.fcard:focus-visible .fc-go{transform:translateX(6px);opac
   .craft{min-height:0}
 }
 
-
-/* ---------- project films: the case-study video plays in the card ---------- */
+/* ---------- project films: a poster and a play button on the card,
+   the film itself opens in a full-view player ---------- */
 .wcard-film{background:#0c0c0c;isolation:isolate}
-.wcard-film .film-v{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#0c0c0c}
+.film-poster,.film-poster img{position:absolute;inset:0;width:100%;height:100%}
+.film-poster img{object-fit:contain;transition:transform 1s var(--out)}
+.wcard-film:hover .film-poster img{transform:scale(1.03)}
 .wcard-film:hover{transform:none;box-shadow:0 40px 80px -36px rgba(40,22,8,.55)}
+.film-big{position:absolute;z-index:3;left:auto;right:16px;bottom:16px;top:auto;transform:none;display:grid;place-items:center;padding:10px;border-radius:50%;
+  background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.16);
+  transition:background .3s,border-color .3s,transform .5s var(--out)}
+.film-big svg{width:64px;height:64px;padding:20px 18px 20px 22px;border-radius:50%;background:var(--amber);color:#161616;transition:transform .5s var(--out)}
+.film-big:hover,.film-big:focus-visible{background:rgba(0,0,0,.75);border-color:rgba(232,161,101,.6)}
+.film-big:hover svg,.film-big:focus-visible svg{transform:scale(1.08)}
 .film-link{position:absolute;z-index:3;top:14px;left:14px;display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:30px;
   background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#fff;
   font-family:var(--mono);font-weight:300;font-size:11.5px;text-transform:uppercase;transition:background .3s,color .3s}
 .film-link:hover,.film-link:focus-visible{background:var(--amber);color:#161616}
 .film-link svg{transition:transform .4s var(--out)}
 .film-link:hover svg{transform:translate(2px,-2px)}
-.film-ctrl{position:absolute;z-index:3;right:14px;bottom:14px;display:flex;gap:6px}
-.film-btn{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:#fff;background:rgba(0,0,0,.55);
-  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.14);transition:background .3s,color .3s,border-color .3s}
-.film-btn:hover,.film-btn:focus-visible{background:var(--amber);color:#161616;border-color:var(--amber)}
-.film-play .i-play,.film-sound .i-sound{display:none}
-.film-play[aria-pressed="true"] .i-play,.film-sound[aria-pressed="true"] .i-sound{display:block}
-.film-play[aria-pressed="true"] .i-pause,.film-sound[aria-pressed="true"] .i-muted{display:none}
 .wcard-film .wcard-tag{z-index:3}
-/* nothing plays until asked: a large play button over the poster */
-.film-big{position:absolute;z-index:3;left:50%;top:50%;transform:translate(-50%,-50%);display:inline-flex;align-items:center;gap:12px;
-  padding:10px 22px 10px 10px;border-radius:60px;background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
-  border:1px solid rgba(255,255,255,.16);color:#fff;font-family:var(--mono);font-weight:300;font-size:12px;text-transform:uppercase;
-  transition:background .3s,border-color .3s,opacity .35s,transform .5s var(--out)}
-.film-big svg{width:56px;height:56px;padding:15px 13px 15px 17px;border-radius:50%;background:var(--amber);color:#161616;transition:transform .5s var(--out)}
-.film-big:hover,.film-big:focus-visible{background:rgba(0,0,0,.75);border-color:rgba(232,161,101,.6)}
-.film-big:hover svg,.film-big:focus-visible svg{transform:scale(1.08)}
-.wcard-film.is-playing .film-big{opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.92)}
-.wcard-film:not(.is-started) .film-play{display:none}
-.wcard-film:fullscreen .film-v,.film-v:fullscreen{object-fit:contain;background:#000}
-/* phones play the portrait cut, so the card turns portrait too */
+
+/* the player */
+.film-modal{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;
+  background:rgba(8,8,8,.94);color:var(--ink);display:none;flex-direction:column;opacity:0;transition:opacity .35s ease}
+.film-modal[open]{display:flex}
+.film-modal.is-in{opacity:1}
+.film-modal::backdrop{background:rgba(0,0,0,.6);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.fm-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px var(--gut)}
+.fm-title{font-family:var(--display);font-size:clamp(1.1rem,1.6vw,1.4rem);letter-spacing:-.02em}
+.fm-act{display:flex;align-items:center;gap:10px;margin-left:auto}
+.fm-link{display:inline-flex;align-items:center;gap:7px;padding:10px 16px;border-radius:30px;border:1px solid rgba(255,255,255,.16);
+  font-family:var(--mono);font-weight:300;font-size:12px;text-transform:uppercase;color:var(--ink);transition:background .3s,color .3s,border-color .3s}
+.fm-link:hover,.fm-link:focus-visible{background:var(--amber);border-color:var(--amber);color:#161616}
+.fm-close{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(255,255,255,.16);color:var(--ink);transition:background .3s,color .3s,border-color .3s}
+.fm-close:hover,.fm-close:focus-visible{background:var(--amber);border-color:var(--amber);color:#161616}
+.fm-stage{flex:1;min-height:0;display:grid;place-items:center;padding:0 var(--gut) 28px}
+.fm-video{display:block;max-width:min(100%,1600px);max-height:100%;width:auto;height:auto;aspect-ratio:16/9;width:100%;border-radius:8px;background:#000;
+  transform:scale(.96);transition:transform .5s var(--out)}
+.film-modal.is-in .fm-video{transform:none}
+.film-modal.is-portrait .fm-video{aspect-ratio:9/16;width:auto;height:100%}
+html.fm-lock{overflow:hidden}
 @media (max-width:767px){
   .wcard-film{aspect-ratio:9/16;width:min(100%,calc(80svh * 9 / 16));max-height:none;margin:0 auto}
-  .wcard-film .film-v{object-fit:cover}
+  .film-poster img{object-fit:cover}
   .wcard-film .wcard-tag{top:58px;bottom:auto}
-  .film-btn{width:42px;height:42px}
+  .film-big{right:auto;left:50%;top:auto;bottom:16%;transform:translateX(-50%)}
+  .fm-bar{padding:12px 16px}
+  .fm-title{display:none}
+  .fm-link{padding:9px 13px;font-size:11px}
+  .fm-stage{padding:0 0 12px}
+  .fm-video{border-radius:0}
 }
+@media (prefers-reduced-motion:reduce){ .film-modal,.fm-video{transition:none} }

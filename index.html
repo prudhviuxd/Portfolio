@@ -23,7 +23,7 @@
 <meta name="theme-color" content="#0d0d0d">
 <link rel="preload" href="assets/fonts/familjen.woff2" as="font" type="font/woff2" crossorigin>
 <script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
-<link rel="stylesheet" href="assets/css/studio.css?v=add9488b">
+<link rel="stylesheet" href="assets/css/studio.css?v=1135559c">
 <link rel="stylesheet" href="assets/css/site-header.css?v=52905b34">
 <link rel="stylesheet" href="assets/css/site-footer.css?v=2c6b52cd">
 <script>document.documentElement.classList.add('js');</script>
@@ -164,15 +164,13 @@
             <div class="wcard-in">
               <div class="wcard-c">
                 <div class="wcard-img wcard-film" data-film>
-                  <video class="film-v" muted loop playsinline preload="none" poster="assets/video/who-poster.jpg" data-src="assets/video/who.mp4" data-src-portrait="assets/video/who-portrait.mp4" data-poster-portrait="assets/video/who-portrait-poster.jpg" aria-label="WHO mYoga case study film"></video>
-                  <button type="button" class="film-big" aria-label="Play the WHO mYoga case study film with sound"><svg width="26" height="26" viewBox="0 0 26 26" fill="currentColor" aria-hidden="true"><path d="M8 5.2v15.6L21 13z"/></svg><span>Play film</span></button>
+                  <picture class="film-poster">
+                    <source media="(max-width: 767px)" srcset="assets/video/who-portrait-poster.jpg">
+                    <img src="assets/video/who-poster.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async">
+                  </picture>
+                  <button type="button" class="film-big" data-film-play data-src="assets/video/who.mp4" data-src-portrait="assets/video/who-portrait.mp4" data-title="WHO mYoga" data-href="case-studies/who-myyoga.html" aria-label="Play the WHO mYoga case study film"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 4.8v14.4L20 12z"/></svg></button>
                   <a class="film-link" href="case-studies/who-myyoga.html">Case study <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5"/></svg></a>
                   <span class="wcard-tag">2.1M+ active users in 3 months</span>
-                  <div class="film-ctrl">
-                    <button type="button" class="film-btn film-play" aria-label="Pause film" aria-pressed="false"><svg class="i-pause" width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><rect x="2.5" y="2" width="3" height="10" rx="1"/><rect x="8.5" y="2" width="3" height="10" rx="1"/></svg><svg class="i-play" width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><path d="M3.5 2.2v9.6L11.5 7z"/></svg></button>
-                    <button type="button" class="film-btn film-sound" aria-label="Unmute film" aria-pressed="false"><svg class="i-muted" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" aria-hidden="true"><path d="M2 6h2.5L8 3v10L4.5 10H2z" fill="currentColor" stroke="none"/><path d="m11 6 4 4m0-4-4 4"/></svg><svg class="i-sound" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><path d="M2 6h2.5L8 3v10L4.5 10H2z" fill="currentColor" stroke="none"/><path d="M10.5 5.5a3.5 3.5 0 0 1 0 5M12.5 3.5a6.3 6.3 0 0 1 0 9"/></svg></button>
-                    <button type="button" class="film-btn film-full" aria-label="Play full screen with sound"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><path d="M1.5 5.5v-4h4M9.5 1.5h4v4M13.5 9.5v4h-4M5.5 13.5h-4v-4"/></svg></button>
-                  </div>
                 </div>
                 <div class="wcard-body">
                   <h3 class="wf h3">WHO mYoga</h3>
@@ -190,15 +188,13 @@
             <div class="wcard-in">
               <div class="wcard-c">
                 <div class="wcard-img wcard-film" data-film>
-                  <video class="film-v" muted loop playsinline preload="none" poster="assets/video/mtn-poster.jpg" data-src="assets/video/mtn.mp4" data-src-portrait="assets/video/mtn-portrait.mp4" data-poster-portrait="assets/video/mtn-portrait-poster.jpg" aria-label="My MTN case study film"></video>
-                  <button type="button" class="film-big" aria-label="Play the My MTN case study film with sound"><svg width="26" height="26" viewBox="0 0 26 26" fill="currentColor" aria-hidden="true"><path d="M8 5.2v15.6L21 13z"/></svg><span>Play film</span></button>
+                  <picture class="film-poster">
+                    <source media="(max-width: 767px)" srcset="assets/video/mtn-portrait-poster.jpg">
+                    <img src="assets/video/mtn-poster.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async">
+                  </picture>
+                  <button type="button" class="film-big" data-film-play data-src="assets/video/mtn.mp4" data-src-portrait="assets/video/mtn-portrait.mp4" data-title="My MTN" data-href="case-studies/my-mtn.html" aria-label="Play the My MTN case study film"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 4.8v14.4L20 12z"/></svg></button>
                   <a class="film-link" href="case-studies/my-mtn.html">Case study <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5"/></svg></a>
                   <span class="wcard-tag">One-tap recharge &middot; OTP removed</span>
-                  <div class="film-ctrl">
-                    <button type="button" class="film-btn film-play" aria-label="Pause film" aria-pressed="false"><svg class="i-pause" width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><rect x="2.5" y="2" width="3" height="10" rx="1"/><rect x="8.5" y="2" width="3" height="10" rx="1"/></svg><svg class="i-play" width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><path d="M3.5 2.2v9.6L11.5 7z"/></svg></button>
-                    <button type="button" class="film-btn film-sound" aria-label="Unmute film" aria-pressed="false"><svg class="i-muted" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" aria-hidden="true"><path d="M2 6h2.5L8 3v10L4.5 10H2z" fill="currentColor" stroke="none"/><path d="m11 6 4 4m0-4-4 4"/></svg><svg class="i-sound" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><path d="M2 6h2.5L8 3v10L4.5 10H2z" fill="currentColor" stroke="none"/><path d="M10.5 5.5a3.5 3.5 0 0 1 0 5M12.5 3.5a6.3 6.3 0 0 1 0 9"/></svg></button>
-                    <button type="button" class="film-btn film-full" aria-label="Play full screen with sound"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><path d="M1.5 5.5v-4h4M9.5 1.5h4v4M13.5 9.5v4h-4M5.5 13.5h-4v-4"/></svg></button>
-                  </div>
                 </div>
                 <div class="wcard-body">
                   <h3 class="wf h3">My MTN</h3>
@@ -216,15 +212,13 @@
             <div class="wcard-in">
               <div class="wcard-c">
                 <div class="wcard-img wcard-film" data-film>
-                  <video class="film-v" muted loop playsinline preload="none" poster="assets/video/ipl-poster.jpg" data-src="assets/video/ipl.mp4" data-src-portrait="assets/video/ipl-portrait.mp4" data-poster-portrait="assets/video/ipl-portrait-poster.jpg" aria-label="IPL Mobile case study film"></video>
-                  <button type="button" class="film-big" aria-label="Play the IPL Mobile case study film with sound"><svg width="26" height="26" viewBox="0 0 26 26" fill="currentColor" aria-hidden="true"><path d="M8 5.2v15.6L21 13z"/></svg><span>Play film</span></button>
+                  <picture class="film-poster">
+                    <source media="(max-width: 767px)" srcset="assets/video/ipl-portrait-poster.jpg">
+                    <img src="assets/video/ipl-poster.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async">
+                  </picture>
+                  <button type="button" class="film-big" data-film-play data-src="assets/video/ipl.mp4" data-src-portrait="assets/video/ipl-portrait.mp4" data-title="IPL Mobile" data-href="case-studies/ipl.html" aria-label="Play the IPL Mobile case study film"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 4.8v14.4L20 12z"/></svg></button>
                   <a class="film-link" href="case-studies/ipl.html">Case study <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5"/></svg></a>
                   <span class="wcard-tag">+42% match-day retention &middot; 18m sessions</span>
-                  <div class="film-ctrl">
-                    <button type="button" class="film-btn film-play" aria-label="Pause film" aria-pressed="false"><svg class="i-pause" width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><rect x="2.5" y="2" width="3" height="10" rx="1"/><rect x="8.5" y="2" width="3" height="10" rx="1"/></svg><svg class="i-play" width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><path d="M3.5 2.2v9.6L11.5 7z"/></svg></button>
-                    <button type="button" class="film-btn film-sound" aria-label="Unmute film" aria-pressed="false"><svg class="i-muted" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" aria-hidden="true"><path d="M2 6h2.5L8 3v10L4.5 10H2z" fill="currentColor" stroke="none"/><path d="m11 6 4 4m0-4-4 4"/></svg><svg class="i-sound" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><path d="M2 6h2.5L8 3v10L4.5 10H2z" fill="currentColor" stroke="none"/><path d="M10.5 5.5a3.5 3.5 0 0 1 0 5M12.5 3.5a6.3 6.3 0 0 1 0 9"/></svg></button>
-                    <button type="button" class="film-btn film-full" aria-label="Play full screen with sound"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><path d="M1.5 5.5v-4h4M9.5 1.5h4v4M13.5 9.5v4h-4M5.5 13.5h-4v-4"/></svg></button>
-                  </div>
                 </div>
                 <div class="wcard-body">
                   <h3 class="wf h3">IPL Mobile</h3>
@@ -632,6 +626,23 @@
   </div>
 </footer>
 
+<!-- ======================= FILM PLAYER =======================
+     One full-view dialog for every project film: opens on play, plays
+     with sound and native controls, closes on Esc, the close button or
+     a click outside the film. -->
+<dialog class="film-modal" id="filmModal" aria-labelledby="filmModalTitle">
+  <div class="fm-bar">
+    <p class="fm-title" id="filmModalTitle">Case study film</p>
+    <div class="fm-act">
+      <a class="fm-link" href="#">Read the case study <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5"/></svg></a>
+      <button type="button" class="fm-close" aria-label="Close film"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><path d="m4 4 10 10M14 4 4 14"/></svg></button>
+    </div>
+  </div>
+  <div class="fm-stage">
+    <video class="fm-video" controls playsinline preload="none"></video>
+  </div>
+</dialog>
+
 <script>
 (function () {
   var st = document.querySelector('.hero-stage'); if (!st) return;
@@ -644,7 +655,7 @@
   if (document.readyState === 'complete') idle(go); else window.addEventListener('load', function () { idle(go); });
 })();
 </script>
-<script src="assets/js/studio.js?v=97377cad"></script>
+<script src="assets/js/studio.js?v=02722bef"></script>
 <script src="assets/js/site-header.js?v=aea91eaa"></script>
 <script src="assets/js/analytics.js?v=7f322b5b" defer></script>
 </body>
