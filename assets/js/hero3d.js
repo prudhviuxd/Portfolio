@@ -3,11 +3,12 @@
    the headline and CTAs never wait for it.
 
    The aligning lattice: 25 rounded copper, ember, sand and amber-glass
-   blocks drift as a loose cloud and settle into a precise grid as you
-   scroll (order out of ambiguity); a warm light follows the pointer.
+   blocks drift as a loose cloud and settle into a precise grid when you
+   hover them or scroll to the summary (order out of ambiguity); a warm
+   light follows the pointer.
 
-   Pauses off screen and in hidden tabs, honours the pause button,
-   caps device pixel ratio, and falls back to the poster on failure.
+   Rests off screen and in hidden tabs, caps device pixel ratio, and
+   falls back to the poster on failure.
    ========================================================= */
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/RoomEnvironment.js';
@@ -58,40 +59,52 @@ async function start() {
   size();
   new ResizeObserver(size).observe(host);
 
-  // inputs
+  // inputs: a warm light follows the pointer; hovering the lattice
+  // pulls it into its grid, and so does scrolling to the summary line
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const ptr = { x: 0, y: 0, tx: 0, ty: 0 };
+  let hover = false;
+  const hit = (e) => {
+    const r = host.getBoundingClientRect();
+    // the left edge fades under the copy, so only the visible lattice counts
+    hover = e.clientX > r.left + r.width * 0.18 && e.clientX < r.right && e.clientY > r.top && e.clientY < r.bottom;
+  };
   window.addEventListener('pointermove', (e) => {
     ptr.tx = (e.clientX / innerWidth) * 2 - 1;
     ptr.ty = -((e.clientY / innerHeight) * 2 - 1);
+    if (e.pointerType === 'mouse') hit(e);
   }, { passive: true });
-  const hero = document.querySelector('.hero');
-  const scrollP = () => Math.min(1, Math.max(0, scrollY / (hero.offsetHeight * 0.7)));
+  window.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') hit(e); }, { passive: true });
+  document.documentElement.addEventListener('pointerleave', () => { hover = false; });
 
-  let paused = reduced || localStorage.getItem('heroMotion') === 'off';
-  const btn = document.querySelector('.hero-stage-pause');
-  function syncBtn() {
-    if (!btn) return;
-    btn.setAttribute('aria-pressed', String(paused));
-    btn.querySelector('span').textContent = paused ? 'Play motion' : 'Pause motion';
+  // the grid is complete by the time the summary ("UX Leader with 12
+  // years...") sits in the middle of the screen, while the lattice is in view
+  const sum = document.querySelector('.hero-sum');
+  let gridAt = 200;
+  function measure() {
+    const top = sum ? sum.getBoundingClientRect().top + scrollY : innerHeight;
+    // ...but never later than the lattice leaving view (phones, where it sits above the copy)
+    const r = host.getBoundingClientRect();
+    const mid = r.top + scrollY + r.height * 0.5;
+    gridAt = Math.max(80, Math.min(top - innerHeight * 0.55, mid - innerHeight * 0.12));
   }
-  if (btn) btn.addEventListener('click', () => {
-    paused = !paused;
-    try { localStorage.setItem('heroMotion', paused ? 'off' : 'on'); } catch (e) {}
-    syncBtn(); if (!paused) loop();
-  });
-  syncBtn();
+  measure();
+  window.addEventListener('resize', measure, { passive: true });
+  const scrollP = () => Math.min(1, Math.max(0, scrollY / gridAt));
 
+  let k = reduced ? 1 : 0;
   let visible = true, running = false, last = performance.now(), t = 0;
   new IntersectionObserver((en) => { visible = en[0].isIntersecting; if (visible) loop(); }).observe(host);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) loop(); });
 
   function frame(now) {
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
-    if (!paused) t += dt;
+    t += dt;
     ptr.x += (ptr.tx - ptr.x) * 0.06; ptr.y += (ptr.ty - ptr.y) * 0.06;
     key.position.set(2.2 + ptr.x * 4.5, 1.2 + ptr.y * 3.2, 6);
-    obj.update(t, ptr, reduced ? 1 : scrollP(), paused);
+    const target = reduced ? 1 : Math.max(scrollP(), hover ? 1 : 0);
+    k += (target - k) * Math.min(1, dt * (hover ? 3.2 : 6));
+    obj.update(t, ptr, k);
     renderer.render(scene, camera);
   }
   function loop() {
@@ -101,18 +114,17 @@ async function start() {
     const step = (now) => {
       if (!visible || document.hidden) { running = false; return; }
       frame(now);
-      if (paused) { running = false; return; }   // one still frame, then rest
+      if (reduced) { running = false; return; }   // one still frame, then rest
       requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
   }
   frame(performance.now());
   stage.classList.add('is-live');
-  if (btn) btn.classList.add('is-live');
   loop();
 }
 
-/* ---------------- concept: the aligning lattice ---------------- */
+/* ---------------- the aligning lattice ---------------- */
 function buildLattice(scene) {
   const COLS = 5, ROWS = 5, N = COLS * ROWS, GAP = 0.66;
   const geo = new RoundedBoxGeometry(0.5, 0.5, 0.5, 4, 0.1);
@@ -144,9 +156,9 @@ function buildLattice(scene) {
   const tmp = new THREE.Vector3();
   return {
     fit(camera) { group.position.x = camera.aspect < 1 ? 0 : 0.35; group.scale.setScalar(camera.aspect < 0.8 ? 0.72 : 0.84); },
-    update(t, ptr, sp) {
-      // order arrives with scroll: from loose cloud to grid
-      const k = ease(Math.min(1, sp * 1.15));
+    update(t, ptr, p) {
+      // p: 0 = loose cloud, 1 = grid (scroll or hover)
+      const k = ease(Math.min(1, Math.max(0, p)));
       for (const m of cubes) {
         const u = m.userData;
         tmp.lerpVectors(u.cloud, u.grid, k);

@@ -668,8 +668,8 @@ html{scrollbar-color:#3a3530 var(--bg);scrollbar-width:thin}
 }
 .about-mission .plus{background:var(--amber)}
 
-/* ---------- key facts: figures in ember ---------- */
-.impact-row b{color:var(--ember)}
+/* ---------- key facts: figures in near-black on sand ---------- */
+.impact-row b{color:#0d0d0d}
 .fcard-dark .fc-num{color:var(--amber)}
 .fc-dots i.on{background:var(--amber);border-color:var(--amber)}
 
@@ -844,14 +844,6 @@ html{scrollbar-color:#3a3530 var(--bg);scrollbar-width:thin}
 .hero-stage-gl canvas{display:block;width:100%!important;height:100%!important}
 .hero-stage::before{content:"";position:absolute;inset:8% 6% 14% 10%;border-radius:50%;
   background:radial-gradient(closest-side,rgba(232,161,101,.16),transparent 72%);filter:blur(20px)}
-.hero-stage-pause{position:absolute;z-index:3;right:var(--gut);bottom:28px;display:inline-flex;align-items:center;gap:8px;
-  height:30px;padding:0 12px;border:1px solid rgba(255,255,255,.14);border-radius:30px;background:rgba(13,13,13,.5);
-  font-family:var(--mono);font-weight:300;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-2);
-  opacity:0;transition:opacity .8s,border-color .3s,color .3s}
-.hero-stage-pause.is-live{opacity:1}
-.hero-stage-pause:hover{color:var(--ink);border-color:rgba(232,161,101,.5)}
-.hero-stage-pause svg{fill:currentColor}
-.hero-stage-pause[aria-pressed="true"] svg rect:last-child{display:none}
 /* the copy sits above the stage and keeps its width */
 .hero .hero-in{z-index:2}
 .hero .hero-copy{max-width:min(46vw,760px)}
@@ -865,5 +857,4 @@ html{scrollbar-color:#3a3530 var(--bg);scrollbar-width:thin}
     -webkit-mask-image:linear-gradient(180deg,#000 70%,transparent 100%);mask-image:linear-gradient(180deg,#000 70%,transparent 100%)}
   .hero .hero-in{padding-top:calc(64px + 32svh)}
   .hero .hero-copy{max-width:none}
-  .hero-stage-pause{bottom:auto;top:calc(64px + 34svh - 40px);right:16px}
 }
