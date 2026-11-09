@@ -522,6 +522,7 @@
     expertise: '.exp-h, .craft-cards > *',
     consulting: '.sec-head, .ws-grid > *',
     mentoring: '.sec-head, .path, .yt',
+    testimonials: '.quotes-h, .quote-lead, .qgroup, .quotes-src',
     contact: '.contact-l > *, .form',
     footer: '.ft-top > *, .ft-name, .ft-base'
   };

@@ -471,14 +471,26 @@ ul{list-style:none}
 .lead-grid.on li:nth-child(3),.ai-grid.on .ai-card:nth-child(3){transition-delay:.16s}
 .lead-grid.on li:nth-child(4){transition-delay:.24s}
 
-/* ---------- testimonials (hidden until real quotes are added) ---------- */
-.quotes{position:relative;z-index:4;background:var(--bg);padding:120px 0;border-top:1px solid var(--line)}
+/* ---------- testimonials: one lead quote, then a group per role ---------- */
+.quotes{position:relative;z-index:4;background:var(--bg);padding:130px 0 140px;border-top:1px solid var(--line)}
 .quotes[hidden]{display:none}
-.quotes-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:40px}
-.quote{border-top:1px solid var(--line);padding-top:28px}
-.quote blockquote p{font-family:var(--display);font-size:clamp(1.5rem,2.4vw,2.2rem);letter-spacing:-.04em;line-height:1.1}
-.quote figcaption{margin-top:24px;display:flex;flex-direction:column;gap:4px}
-.quote figcaption span{font-family:var(--mono);font-size:11px;text-transform:uppercase;color:var(--ink-3)}
+.quotes-h{max-width:11ch}
+.quote blockquote p{font-size:17px;line-height:1.55;color:var(--ink)}
+.quote figcaption{margin-top:22px;display:flex;flex-direction:column;gap:4px}
+.quote figcaption b{font-weight:600;font-size:15px}
+.quote figcaption span{font-size:14px;color:var(--ink-2)}
+.quote figcaption em{font-style:normal;font-family:var(--mono);font-weight:300;font-size:11px;text-transform:uppercase;color:var(--ink-2)}
+.quote-lead{margin:72px 0 0;max-width:1000px;position:relative;padding-left:clamp(0px,6vw,96px)}
+.quote-lead::before{content:"\201C";position:absolute;left:0;top:-.18em;font-family:var(--display);font-size:clamp(4rem,9vw,8rem);line-height:1;color:var(--amber)}
+.quote-lead blockquote p{font-family:var(--display);font-size:clamp(1.5rem,2.3vw,2.2rem);line-height:1.2;letter-spacing:-.03em;max-width:40ch}
+.quotes-groups{margin-top:96px}
+.qgroup-in{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px}
+.qgroup{border-top:1px solid var(--line);padding-top:22px;display:flex;flex-direction:column;gap:28px}
+.qgroup h3{font-size:13px;text-transform:uppercase;font-weight:500;color:var(--amber-2)}
+.qgroup-in .quote blockquote p{max-width:56ch}
+.quotes-src{margin-top:64px}
+.quotes-src a{font-family:var(--mono);font-weight:300;font-size:12px;text-transform:uppercase;color:var(--ink-2);text-decoration:underline;text-underline-offset:4px;transition:color .3s}
+.quotes-src a:hover{color:var(--amber-2)}
 
 @media (max-width:1024px){
   .lead-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -490,7 +502,10 @@ ul{list-style:none}
   .lead-grid{grid-template-columns:1fr}
   .lead-grid li{border-left:0;padding-left:0;border-bottom:1px solid var(--line);padding-bottom:24px}
   .ai{margin-top:80px}
-  .quotes-grid{grid-template-columns:1fr}
+  .quotes-groups{margin-top:64px}
+  .qgroup-in{grid-template-columns:1fr;gap:40px}
+  .quote-lead{padding-left:0;margin-top:48px}
+  .quote-lead::before{position:static;display:block;height:.55em}
 }
 @media (prefers-reduced-motion:reduce){
   .js .lead-grid li,.js .ai-card{opacity:1;transform:none}
