@@ -221,9 +221,6 @@
 
   /* ---------- scroll-bound effects ---------- */
 
-  var vision = $('.vision'), mqTrack = $('.mq-track'), stripes = $$('.stripes i');
-  var fades = $$('.vision [data-fade]');
-  var fcards = $$('.fcard');
   var wPin = $('.work-pin');
   var work = $('.work'), wTrack = $('.work-track'), wFront = $('.work-front');
   var wCards = $$('.wcard');
@@ -300,30 +297,6 @@
       for (var i = 0; i < aboutWords.length; i++) aboutWords[i].classList.toggle('on', i < n);
     }
 
-    // Vision: headline, marquee, then five stripes wipe up into the light section.
-    if (vision && !reduced) {
-      var vp = progress(vision);
-      if (fades[0]) fades[0].classList.toggle('on', vp > 0.01 || vision.getBoundingClientRect().top < h * 0.92);
-      if (fades[1]) fades[1].classList.toggle('on', vp > 0.22);
-      if (mqTrack) mqTrack.style.transform = 'translate3d(' + (-(vp * 35) - mqDrift) + '%,0,0)';
-      stripes.forEach(function (s, idx) {
-        var k = stripes.length - 1 - idx;
-        var local = clamp((vp - 0.55 - k * 0.05) / 0.22, 0, 1);
-        s.style.transform = 'scaleY(' + local + ')';
-      });
-    } else fades.forEach(function (f) { f.classList.add('on'); });
-
-    // Key facts: the side cards fan out from behind the centre card.
-    if (fcards.length === 3 && window.innerWidth > 767 && !reduced) {
-      var fr = fcards[1].getBoundingClientRect();
-      var q = clamp((h - fr.top) / (h * 0.75), 0, 1);
-      var e = 1 - Math.pow(1 - q, 3), inv = 1 - e;
-      fcards[0].style.transform = 'translate3d(' + (inv * 104) + '%,' + (inv * 30) + 'px,' + (-inv * 120) + 'px) rotate(' + (-inv * 9) + 'deg)';
-      fcards[2].style.transform = 'translate3d(' + (-inv * 104) + '%,' + (inv * 30) + 'px,' + (-inv * 120) + 'px) rotate(' + (inv * 9) + 'deg)';
-      fcards[1].style.transform = 'translate3d(0,' + (inv * 60) + 'px,0)';
-      fcards[1].style.zIndex = 2;
-    } else fcards.forEach(function (c) { c.style.transform = ''; });
-
     // Work: the panel opens in stripes over the end of About (0.5 screens),
     // then vertical scroll drives the track sideways (1.5) and the section
     // scrolls on into the vision section.
@@ -362,61 +335,31 @@
   window.addEventListener('resize', function () { setWorkMode(); req(); });
   onScroll();
 
-  // Slow constant drift on the marquee so it never sits still.
-  if (mqTrack && !reduced) (function drift() {
-    mqDrift = (mqDrift + 0.012) % 50;
-    req();
-    requestAnimationFrame(drift);
-  })();
-
-  /* ---------- hero: typewriter on the last line only ----------
-     "UX Leader / advancing" stay put; the full first phrase shows at once,
-     then the last line erases and types the next word,
-     holds, deletes it and types the next (UX maturity, Innovation, AI)
-     on repeat. The HTML carries the first word, so without JS or with
-     reduced motion the headline still reads in full. */
+  /* ---------- hero: the last line swaps whole phrases ----------
+     "UX Leader / advancing" stay put and "UX maturity." is readable from
+     the first frame. After a hold, the phrase slides up and the next one
+     rises in (Innovation, AI), so the line is never blank or half-typed.
+     Without JS or with reduced motion the headline reads in full. */
 
   var rotLine = $('.hero-title .rot');
   if (rotLine && !reduced) (function () {
     var words = rotLine.getAttribute('data-type').split('|');
-    var slot = rotLine.firstElementChild;
-    var caret = document.createElement('span');
-    caret.className = 'caret';
-    rotLine.appendChild(caret);   // the first phrase is already in the HTML
-
-    var wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
-    function run(step, speed) {
-      caret.classList.add('typing');
-      return new Promise(function (done) {
-        (function tick() {
-          if (!step()) { caret.classList.remove('typing'); return done(); }
-          setTimeout(tick, speed + Math.random() * speed * 0.5);
-        })();
-      });
+    var slot = rotLine.firstElementChild, w = 0;
+    rotLine.classList.add('swap');
+    function next() {
+      if (document.hidden) { setTimeout(next, 1000); return; }
+      slot.classList.add('out');
+      setTimeout(function () {
+        w = (w + 1) % words.length;
+        slot.textContent = words[w];
+        slot.classList.remove('out');
+        slot.classList.add('in');
+        void slot.offsetWidth;
+        slot.classList.remove('in');
+        setTimeout(next, 3000);
+      }, 460);
     }
-    function type(text) {
-      return run(function () {
-        var n = slot.textContent.length;
-        if (n >= text.length) return false;
-        slot.textContent = text.slice(0, n + 1); return true;
-      }, 75);
-    }
-    function erase() {
-      return run(function () {
-        var t = slot.textContent;
-        if (!t.length) return false;
-        slot.textContent = t.slice(0, -1); return true;
-      }, 34);
-    }
-
-    // Hold the full first phrase long enough to read, then erase and cycle.
-    var w = 0;
-    (function loop(first) {
-      (first ? wait(3600) : type(words[w]).then(function () { return wait(1800); }))
-        .then(erase)
-        .then(function () { w = (w + 1) % words.length; return wait(300); })
-        .then(function () { loop(false); });
-    })(true);
+    setTimeout(next, 3800);
   })();
 
   /* ---------- AI cards: a light that follows the pointer ---------- */
@@ -433,37 +376,13 @@
   $$('.ws-steps').forEach(function (ul) {
     $$('li', ul).forEach(function (li, i) { li.style.setProperty('--i', i); });
   });
-  $$('[data-ws], [data-ws-yt], .lead-grid, .ai-grid').forEach(function (el) {
+  $$('[data-ws], [data-ws-yt], .lead-grid, .ai-grid, .path, .roles-list').forEach(function (el) {
     if (!io || reduced) { el.classList.add('on'); return; }
     new IntersectionObserver(function (e, obs) {
       if (!e[0].isIntersecting) return;
       el.classList.add('on'); obs.disconnect();
     }, { rootMargin: '0px 0px -15% 0px' }).observe(el);
   });
-
-  /* ---------- key-fact card details ---------- */
-
-  var rotor = $$('.fc-rotor span');
-  if (rotor.length) {
-    var ri = 0;
-    rotor[0].classList.add('on');
-    if (!reduced) setInterval(function () {
-      rotor[ri].classList.remove('on'); rotor[ri].classList.add('off');
-      var prev = rotor[ri];
-      setTimeout(function () { prev.classList.remove('off'); }, 800);
-      ri = (ri + 1) % rotor.length;
-      rotor[ri].classList.add('on');
-    }, 1800);
-  }
-
-  var dots = $$('.fc-dots i');
-  if (dots.length && io) {
-    new IntersectionObserver(function (e, obs) {
-      if (!e[0].isIntersecting) return;
-      obs.disconnect();
-      dots.forEach(function (d, i) { setTimeout(function () { d.classList.add('on'); }, reduced ? 0 : 120 * i); });
-    }, { threshold: 0.5 }).observe(dots[0].parentNode);
-  } else dots.forEach(function (d) { d.classList.add('on'); });
 
   // Stacked layout: reveal each card as it scrolls into view.
   if (io) {
@@ -555,10 +474,12 @@
 
   // The blocks that animate in each section, top to bottom.
   var PARTS = {
-    about: '.about-lbl, .about-big, .about-portrait, .about-tag, .about-mission',
+    about: '.about-big, .about-portrait, .about-tag, .about-mission',
+    roles: '.roles-h, .roles-sub, .roles-list, .partners',
     leadership: '.sec-head, .lead-grid, .ai-head, .ai-grid',
-    expertise: '.exp-row',
-    workshops: '.sec-head, .ws-grid > *, .yt',
+    expertise: '.exp-h, .exp-row',
+    consulting: '.sec-head, .ws-grid > *',
+    mentoring: '.sec-head, .path, .yt',
     contact: '.contact-l > *, .form',
     footer: '.ft-top > *, .ft-name, .ft-base'
   };
@@ -594,12 +515,11 @@
     sec.addEventListener('pointermove', open, { passive: true });
     sec.addEventListener('focusin', open);
 
-    // Fallback: the section crosses the middle band of the screen and the
-    // pointer has not come to it within 900ms.
+    // Open as soon as the section is a little way into view, so a reader
+    // scrolling with the wheel or keyboard never meets an empty screen.
     var io = new IntersectionObserver(function (entries) {
-      if (entries[0].isIntersecting) { clearTimeout(timer); timer = setTimeout(open, 900); }
-      else clearTimeout(timer);
-    }, { rootMargin: '-40% 0px -40% 0px' });
+      if (entries[0].isIntersecting) open();
+    }, { rootMargin: '0px 0px -12% 0px' });
     io.observe(sec);
   });
 

@@ -13,14 +13,17 @@ Hiring managers, design leaders and recruiters evaluating Prudhvi Raj PJ for UX 
 Personal portfolio of a UX Leader (Tech Mahindra / BORN, Hyderabad, 12 years in product design). Success: a reviewer grasps the role and value at once, opens a case study, downloads the CV or sends an enquiry.
 
 ## Positioning
-A design leader who still designs hands-on: leads and mentors a team of 18 designers and researchers, has shipped for WHO, MTN, Citi and the IPL, runs design-thinking workshops (30+, including Singapore Land Authority and Saudi Esports Federation) and builds AI agents for UX work.
+One practice, three roles, told in this order across the site:
+- Leader: runs a team of 18 designers and researchers at Tech Mahindra (BORN), owns UX strategy with C-level stakeholders, design ops and standards; builds AI agents for UX work.
+- Consultant: 30+ on-site design thinking workshops (Singapore Land Authority, Saudi Esports Federation), 70+ RFPs shaped; shipped for WHO, MTN, Citi and the IPL.
+- Mentor: weekly critiques, 1:1s and a structured onboarding programme for juniors; teaches in public on YouTube (He Knows UX).
 
 ## Operating Context
 Viewed on desktop during hiring reviews and on phones from shared links (LinkedIn, email). Static HTML/CSS/JS uploaded as a zip to shared hosting with a PHP contact form; no build step.
 
 ## Capabilities and Constraints
 - Static files only; third-party scripts must be pinned and loadable from a CDN or self-hosted.
-- Homepage hero must keep: the headline "UX Leader advancing UX maturity / Innovation / AI", the two CTAs (See selected work, Start a conversation), the summary line, the tools row and the availability line.
+- Homepage hero must keep: the headline "UX Leader advancing UX maturity / Innovation / AI" (readable from the first frame), the summary line, the two CTAs (See selected work, Start a conversation), the Leader / Consultant / Mentor line and the availability line. Tools live in the Craft section, not the hero.
 - Email stays prudhviuxd@gmail.com.
 
 ## Brand Commitments

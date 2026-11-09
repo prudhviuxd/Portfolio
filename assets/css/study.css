@@ -16,6 +16,22 @@
   src:url("../fonts/instrument.woff2") format("woff2-variations");
   font-weight:400 700; font-display:swap;
 }
+/* the homepage's own faces, so every case study reads as the same site */
+@font-face{
+  font-family:"Familjen";
+  src:url("../fonts/familjen.woff2") format("woff2");
+  font-weight:400 500; font-display:swap;
+}
+@font-face{
+  font-family:"Familjen";
+  src:url("../fonts/familjen-bold.woff2") format("woff2");
+  font-weight:600 900; font-display:swap;
+}
+@font-face{
+  font-family:"Martian";
+  src:url("../fonts/martian.woff2") format("woff2");
+  font-weight:300 500; font-display:swap;
+}
 @font-face{
   font-family:"JetBrains Mono";
   src:url("../fonts/jetbrains.woff2") format("woff2-variations");
@@ -44,9 +60,9 @@
   --gradient-brand:linear-gradient(96deg,#F7F4EE,#B4B0A7 46%,#8A867E 100%);
   --gradient-brand-soft:linear-gradient(120deg,rgba(244,241,235,.10),rgba(244,241,235,.03));
 
-  --display:"Bricolage","Helvetica Neue",sans-serif;
+  --display:"Familjen","Helvetica Neue",sans-serif;
   --body:"Instrument","Helvetica Neue",sans-serif;
-  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --mono:"Martian",ui-monospace,Menlo,monospace;
   --font-display:var(--display);
   --font-body:var(--body);
 
