@@ -969,3 +969,31 @@ a.fcard:hover .fc-go,a.fcard:focus-visible .fc-go{transform:translateX(6px);opac
   .craft-cards{grid-template-columns:1fr}
   .craft{min-height:0}
 }
+
+
+/* ---------- project films: the case-study video plays in the card ---------- */
+.wcard-film{background:#0c0c0c;isolation:isolate}
+.wcard-film .film-v{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#0c0c0c}
+.wcard-film:hover{transform:none;box-shadow:0 40px 80px -36px rgba(40,22,8,.55)}
+.film-link{position:absolute;z-index:3;top:14px;left:14px;display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:30px;
+  background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#fff;
+  font-family:var(--mono);font-weight:300;font-size:11.5px;text-transform:uppercase;transition:background .3s,color .3s}
+.film-link:hover,.film-link:focus-visible{background:var(--amber);color:#161616}
+.film-link svg{transition:transform .4s var(--out)}
+.film-link:hover svg{transform:translate(2px,-2px)}
+.film-ctrl{position:absolute;z-index:3;right:14px;bottom:14px;display:flex;gap:6px}
+.film-btn{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:#fff;background:rgba(0,0,0,.55);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.14);transition:background .3s,color .3s,border-color .3s}
+.film-btn:hover,.film-btn:focus-visible{background:var(--amber);color:#161616;border-color:var(--amber)}
+.film-play .i-play,.film-sound .i-sound{display:none}
+.film-play[aria-pressed="true"] .i-play,.film-sound[aria-pressed="true"] .i-sound{display:block}
+.film-play[aria-pressed="true"] .i-pause,.film-sound[aria-pressed="true"] .i-muted{display:none}
+.wcard-film .wcard-tag{z-index:3}
+.wcard-film:fullscreen .film-v,.film-v:fullscreen{object-fit:contain;background:#000}
+/* phones play the portrait cut, so the card turns portrait too */
+@media (max-width:767px){
+  .wcard-film{aspect-ratio:9/16;width:min(100%,calc(80svh * 9 / 16));max-height:none;margin:0 auto}
+  .wcard-film .film-v{object-fit:cover}
+  .wcard-film .wcard-tag{top:58px;bottom:auto}
+  .film-btn{width:42px;height:42px}
+}
