@@ -522,7 +522,7 @@
     expertise: '.exp-h, .craft-cards > *',
     consulting: '.sec-head, .ws-grid > *',
     mentoring: '.sec-head, .path, .yt',
-    testimonials: '.quotes-h, .quote-lead, .qgroup, .quotes-src',
+    testimonials: '.quotes-h, .tst, .quotes-src',
     contact: '.contact-l > *, .form',
     footer: '.ft-top > *, .ft-name, .ft-base'
   };
@@ -733,3 +733,75 @@
   start();
 })();
 
+/* Testimonials: an editorial slider. One quote at a time; it advances on
+   its own after a reading time set by the quote's length, and the active
+   line fills as the time runs. It rests while the pointer or keyboard
+   focus is on it, while it is off screen or the tab is hidden, and when
+   the pause button is on. Reduced motion starts paused. */
+(function () {
+  'use strict';
+  var root = document.querySelector('[data-tst]');
+  if (!root) return;
+  var slides = [].slice.call(root.querySelectorAll('.tst-slide'));
+  var bars = [].slice.call(root.querySelectorAll('.tst-bar'));
+  var num = root.querySelector('.tst-num'), count = root.querySelector('.tst-count b');
+  var btnPause = root.querySelector('.tst-pause');
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+  // about four words a second, never under seven seconds
+  var dur = slides.map(function (sl) {
+    var words = sl.querySelector('blockquote').textContent.trim().split(/\s+/).length;
+    return Math.max(7000, words * 250 + 2500);
+  });
+  var cur = 0, elapsed = 0, last = 0;
+  var userPaused = reduced, hover = false, focus = false, seen = false;
+
+  function go(n) {
+    n = (n + slides.length) % slides.length;
+    if (n === cur) return;
+    var prev = slides[cur];
+    prev.classList.remove('is-on'); prev.classList.add('is-out'); prev.setAttribute('aria-hidden', 'true');
+    setTimeout(function () { prev.classList.remove('is-out'); }, 650);
+    bars[cur].classList.remove('is-on'); bars[cur].removeAttribute('aria-current'); bars[cur].style.removeProperty('--p');
+    cur = n;
+    slides[cur].classList.add('is-on'); slides[cur].removeAttribute('aria-hidden');
+    bars[cur].classList.add('is-on'); bars[cur].setAttribute('aria-current', 'true');
+    num.classList.add('is-swap');
+    setTimeout(function () { num.textContent = pad(cur + 1); num.classList.remove('is-swap'); }, 300);
+    count.textContent = pad(cur + 1);
+    elapsed = 0;
+  }
+  function running() { return !userPaused && !hover && !focus && seen && !document.hidden; }
+  function tick(t) {
+    var dt = last ? Math.min(100, t - last) : 0; last = t;
+    if (running()) {
+      elapsed += dt;
+      if (elapsed >= dur[cur]) go(cur + 1);
+    }
+    bars[cur].style.setProperty('--p', Math.min(1, elapsed / dur[cur]).toFixed(4));
+    requestAnimationFrame(tick);
+  }
+
+  bars.forEach(function (b, i) { b.addEventListener('click', function () { go(i); }); });
+  root.querySelector('.tst-prev').addEventListener('click', function () { go(cur - 1); });
+  root.querySelector('.tst-next').addEventListener('click', function () { go(cur + 1); });
+  btnPause.addEventListener('click', function () {
+    userPaused = !userPaused;
+    btnPause.setAttribute('aria-pressed', String(userPaused));
+    btnPause.setAttribute('aria-label', userPaused ? 'Play recommendations' : 'Pause recommendations');
+  });
+  if (reduced) { btnPause.setAttribute('aria-pressed', 'true'); btnPause.setAttribute('aria-label', 'Play recommendations'); }
+  root.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight') { go(cur + 1); e.preventDefault(); }
+    if (e.key === 'ArrowLeft') { go(cur - 1); e.preventDefault(); }
+  });
+  var stage = root.querySelector('.tst-stage');
+  stage.addEventListener('pointerenter', function () { hover = true; });
+  stage.addEventListener('pointerleave', function () { hover = false; });
+  root.addEventListener('focusin', function (e) { focus = !e.target.closest('.tst-ctrl, .tst-bars'); });
+  root.addEventListener('focusout', function () { focus = false; });
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (e) { seen = e[0].isIntersecting; }, { threshold: 0.35 }).observe(root);
+  } else seen = true;
+  requestAnimationFrame(tick);
+})();
