@@ -370,7 +370,7 @@
   })();
 
   /* ---------- hero: typewriter on the last line only ----------
-     "UX Manager / advancing" stay put; the full first phrase shows at once,
+     "UX Leader / advancing" stay put; the full first phrase shows at once,
      then the last line erases and types the next word,
      holds, deletes it and types the next (UX maturity, Innovation, AI)
      on repeat. The HTML carries the first word, so without JS or with

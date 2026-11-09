@@ -7,10 +7,10 @@
 web
 
 ## Users
-Hiring managers, design leaders and recruiters evaluating Prudhvi Raj PJ for UX Manager and design leadership roles. They skim in seconds, often between other candidates, and decide whether to open a case study or get in touch.
+Hiring managers, design leaders and recruiters evaluating Prudhvi Raj PJ for UX Leadership roles. They skim in seconds, often between other candidates, and decide whether to open a case study or get in touch.
 
 ## Product Purpose
-Personal portfolio of a UX Manager (Tech Mahindra / BORN, Hyderabad, 12 years in product design). Success: a reviewer grasps the role and value at once, opens a case study, downloads the CV or sends an enquiry.
+Personal portfolio of a UX Leader (Tech Mahindra / BORN, Hyderabad, 12 years in product design). Success: a reviewer grasps the role and value at once, opens a case study, downloads the CV or sends an enquiry.
 
 ## Positioning
 A design leader who still designs hands-on: leads and mentors a team of 18 designers and researchers, has shipped for WHO, MTN, Citi and the IPL, runs design-thinking workshops (30+, including Singapore Land Authority and Saudi Esports Federation) and builds AI agents for UX work.
@@ -20,7 +20,7 @@ Viewed on desktop during hiring reviews and on phones from shared links (LinkedI
 
 ## Capabilities and Constraints
 - Static files only; third-party scripts must be pinned and loadable from a CDN or self-hosted.
-- Homepage hero must keep: the headline "UX Manager advancing UX maturity / Innovation / AI", the two CTAs (See selected work, Start a conversation), the summary line, the tools row and the availability line.
+- Homepage hero must keep: the headline "UX Leader advancing UX maturity / Innovation / AI", the two CTAs (See selected work, Start a conversation), the summary line, the tools row and the availability line.
 - Email stays prudhviuxd@gmail.com.
 
 ## Brand Commitments
