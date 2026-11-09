@@ -21,7 +21,7 @@
     '.flow-box', '.phone-col', '.swatch', '.results-band',
     '.w-stat', '.w-metric', '.w-panel', '.w-insight', '.w-finding', '.w-ksf', '.w-decision', '.w-node',
     '.cv-role', '.cv-stat', '.cv-results > li', '.cv-tools > div', '.cv-list > li',
-    '.tldr-out > li:not(.tldr-h)', '.tldr dl > div', '.outcome-grid > li', '.feat-grid > .feat'
+    '.tldr-out > li:not(.tldr-h)', '.decide-list > li', '.tldr dl > div', '.outcome-grid > li', '.feat-grid > .feat'
   ].join(',');
   var HEADS = 'h1, h2, h3, .w-serif, .next-title, .w-next a, .mtn-wordmark';
   var COPY = 'p, blockquote, .cs-kicker, .cs-label, .w-kicker, .w-label, .eyebrow, .cs-tags, ' +

@@ -47,3 +47,15 @@
   .tldr-out li{grid-template-columns:96px 1fr;gap:14px}
   .outcome-grid,.feat-grid{grid-template-columns:1fr}
 }
+
+/* "The calls I made": three decisions, numbered because order of the
+   story matters, set on the case study's own accent. */
+.decide{padding:clamp(64px,8vw,104px) 0;border-top:1px solid rgba(255,255,255,.08)}
+.decide-in{max-width:var(--container,1200px);margin:0 auto;padding:0 24px}
+.decide h2{font-family:var(--display,inherit);font-weight:700;font-size:clamp(28px,3.4vw,44px);letter-spacing:-.04em;line-height:1.05;margin:0 0 40px}
+.decide-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px}
+.decide-list li{border-top:1px solid var(--acc);padding-top:22px}
+.decide-n{display:block;font-family:var(--mono,ui-monospace,monospace);font-size:11px;letter-spacing:.14em;color:var(--acc);margin-bottom:14px}
+.decide-list h3{font-size:19px;line-height:1.25;font-weight:600;margin:0 0 10px;letter-spacing:-.01em}
+.decide-list p{font-size:15.5px;line-height:1.6;color:rgba(255,255,255,.74);margin:0;max-width:40ch}
+@media (max-width:900px){ .decide-list{grid-template-columns:1fr;gap:28px} }

@@ -370,7 +370,8 @@
   })();
 
   /* ---------- hero: typewriter on the last line only ----------
-     "Design leader / advancing" stay put; the last line types a word,
+     "UX Manager / advancing" stay put; the full first phrase shows at once,
+     then the last line erases and types the next word,
      holds, deletes it and types the next (UX maturity, Innovation, AI)
      on repeat. The HTML carries the first word, so without JS or with
      reduced motion the headline still reads in full. */
@@ -381,8 +382,7 @@
     var slot = rotLine.firstElementChild;
     var caret = document.createElement('span');
     caret.className = 'caret';
-    slot.textContent = '';
-    rotLine.appendChild(caret);
+    rotLine.appendChild(caret);   // the first phrase is already in the HTML
 
     var wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
     function run(step, speed) {
@@ -409,14 +409,14 @@
       }, 34);
     }
 
+    // Hold the full first phrase long enough to read, then erase and cycle.
     var w = 0;
-    (function loop() {
-      type(words[w])
-        .then(function () { return wait(1800); })
+    (function loop(first) {
+      (first ? wait(3600) : type(words[w]).then(function () { return wait(1800); }))
         .then(erase)
         .then(function () { w = (w + 1) % words.length; return wait(300); })
-        .then(loop);
-    })();
+        .then(function () { loop(false); });
+    })(true);
   })();
 
   /* ---------- AI cards: a light that follows the pointer ---------- */
@@ -555,7 +555,7 @@
 
   // The blocks that animate in each section, top to bottom.
   var PARTS = {
-    about: '.about-lbl, .about-big, .about-tag, .about-mission',
+    about: '.about-lbl, .about-big, .about-portrait, .about-tag, .about-mission',
     leadership: '.sec-head, .lead-grid, .ai-head, .ai-grid',
     expertise: '.exp-row',
     workshops: '.sec-head, .ws-grid > *, .yt',
