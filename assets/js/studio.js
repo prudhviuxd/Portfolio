@@ -806,86 +806,80 @@
   requestAnimationFrame(tick);
 })();
 
-/* Project films. Each card video loads only when it nears the screen, then
-   plays muted on a loop while it is in view and rests when it leaves.
-   Phones get the portrait cut, larger screens the landscape one; crossing
-   the breakpoint swaps the file and keeps the place. Controls: pause,
-   unmute, and full screen, which plays with sound and native controls,
-   then returns to the previous sound setting on exit. Reduced motion and
-   data saver start paused on the poster. */
+/* Project films. Nothing plays on its own: each card shows the film's
+   poster and a play button. Pressing play loads the film (portrait cut on
+   phones, landscape on larger screens) and plays it with sound. Pause,
+   mute and full screen sit in the corner; full screen adds the native
+   controls. A film pauses when it scrolls out of view or the tab is
+   hidden, and waits for the visitor to press play again. Crossing the
+   phone breakpoint swaps the file and keeps the place. */
 (function () {
   'use strict';
   var cards = [].slice.call(document.querySelectorAll('[data-film]'));
   if (!cards.length) return;
   var phone = window.matchMedia('(max-width: 767px)');
-  var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
-              !!(navigator.connection && navigator.connection.saveData);
+  var films = [];
 
   cards.forEach(function (card) {
     var v = card.querySelector('video');
-    var bPlay = card.querySelector('.film-play'), bSound = card.querySelector('.film-sound'), bFull = card.querySelector('.film-full');
-    var near = false, inView = false, userPaused = still, mutedBefore = true;
+    var bBig = card.querySelector('.film-big'), bPlay = card.querySelector('.film-play'),
+        bSound = card.querySelector('.film-sound'), bFull = card.querySelector('.film-full');
+    var mutedBefore = false;
+    v.dataset.poster = v.getAttribute('poster');
+    films.push(v);
 
-    function pick() {
-      var port = phone.matches;
-      var src = port ? v.dataset.srcPortrait : v.dataset.src;
-      var poster = port ? v.dataset.posterPortrait : v.getAttribute('data-poster') || v.poster;
-      if (!v.dataset.poster) v.dataset.poster = v.getAttribute('poster');
-      v.poster = port ? v.dataset.posterPortrait : v.dataset.poster;
-      if (!near) return;
-      if (v.dataset.cur === src) return;
+    function src() { return phone.matches ? v.dataset.srcPortrait : v.dataset.src; }
+    function setPoster() { v.poster = phone.matches ? v.dataset.posterPortrait : v.dataset.poster; }
+    function load() {
+      var want = src();
+      if (v.dataset.cur === want) return;
       var t = v.currentTime || 0, wasPlaying = !v.paused;
-      v.src = src; v.dataset.cur = src;
+      v.src = want; v.dataset.cur = want;
       if (t) v.addEventListener('loadedmetadata', function once() { v.removeEventListener('loadedmetadata', once); try { v.currentTime = Math.min(t, v.duration - 0.5); } catch (e) {} });
-      if (wasPlaying) play();
+      if (wasPlaying) start();
     }
-    function play() { var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); }
+    function start() {
+      // one film at a time
+      films.forEach(function (o) { if (o !== v && !o.paused) o.pause(); });
+      load();
+      card.classList.add('is-started');
+      var pr = v.play(); if (pr && pr.catch) pr.catch(function () {});
+    }
     function sync() {
+      card.classList.toggle('is-playing', !v.paused);
       bPlay.setAttribute('aria-pressed', String(v.paused));
       bPlay.setAttribute('aria-label', v.paused ? 'Play film' : 'Pause film');
       bSound.setAttribute('aria-pressed', String(!v.muted));
       bSound.setAttribute('aria-label', v.muted ? 'Unmute film' : 'Mute film');
     }
-    function update() {
-      var fs = document.fullscreenElement === v || document.webkitFullscreenElement === v;
-      if (fs) return;
-      if (inView && !userPaused && !document.hidden) { pick(); play(); } else if (!v.paused) v.pause();
-    }
+    function isFull() { return document.fullscreenElement === v || document.webkitFullscreenElement === v; }
 
-    pick();
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function (e) { if (e[0].isIntersecting) { near = true; pick(); } }, { rootMargin: '300px 0px' }).observe(card);
-      new IntersectionObserver(function (e) { inView = e[0].isIntersecting; update(); }, { threshold: 0.4 }).observe(card);
-    } else { near = true; inView = true; pick(); update(); }
-    (phone.addEventListener ? phone.addEventListener('change', pick) : phone.addListener(pick));
-    document.addEventListener('visibilitychange', update);
+    setPoster();
+    phone.addEventListener ? phone.addEventListener('change', function () { setPoster(); if (v.dataset.cur) load(); }) : null;
     ['play', 'pause', 'volumechange'].forEach(function (ev) { v.addEventListener(ev, sync); });
+    v.addEventListener('ended', function () { card.classList.remove('is-playing'); });
 
-    bPlay.addEventListener('click', function () {
-      near = true; pick();
-      if (v.paused) { userPaused = false; play(); } else { userPaused = true; v.pause(); }
-    });
-    bSound.addEventListener('click', function () {
-      near = true; pick();
-      v.muted = !v.muted;
-      if (!v.muted && v.paused) { userPaused = false; play(); }
-    });
+    bBig.addEventListener('click', function () { v.muted = false; start(); });
+    bPlay.addEventListener('click', function () { if (v.paused) start(); else v.pause(); });
+    bSound.addEventListener('click', function () { v.muted = !v.muted; });
     bFull.addEventListener('click', function () {
-      near = true; pick();
       mutedBefore = v.muted;
       v.muted = false; v.controls = true;
+      start();
       var req = v.requestFullscreen || v.webkitRequestFullscreen;
       if (req) { var r = req.call(v); if (r && r.catch) r.catch(function () {}); }
       else if (v.webkitEnterFullscreen) v.webkitEnterFullscreen();   // iPhone: the native player
-      userPaused = false; play();
     });
-    function leftFull() {
-      if (document.fullscreenElement === v || document.webkitFullscreenElement === v) return;
-      v.controls = false; v.muted = mutedBefore; update(); sync();
-    }
+    function leftFull() { if (isFull()) return; v.controls = false; v.muted = mutedBefore; sync(); }
     document.addEventListener('fullscreenchange', leftFull);
     document.addEventListener('webkitfullscreenchange', leftFull);
-    v.addEventListener('webkitendfullscreen', function () { v.controls = false; v.muted = mutedBefore; update(); sync(); });
+    v.addEventListener('webkitendfullscreen', function () { v.controls = false; v.muted = mutedBefore; sync(); });
+
+    // out of view or hidden tab: pause, and wait for play to be pressed again
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (e) { if (!e[0].isIntersecting && !v.paused && !isFull()) v.pause(); }, { threshold: 0.2 }).observe(card);
+    }
+    document.addEventListener('visibilitychange', function () { if (document.hidden && !v.paused && !isFull()) v.pause(); });
     sync();
   });
 })();

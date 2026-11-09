@@ -989,6 +989,16 @@ a.fcard:hover .fc-go,a.fcard:focus-visible .fc-go{transform:translateX(6px);opac
 .film-play[aria-pressed="true"] .i-play,.film-sound[aria-pressed="true"] .i-sound{display:block}
 .film-play[aria-pressed="true"] .i-pause,.film-sound[aria-pressed="true"] .i-muted{display:none}
 .wcard-film .wcard-tag{z-index:3}
+/* nothing plays until asked: a large play button over the poster */
+.film-big{position:absolute;z-index:3;left:50%;top:50%;transform:translate(-50%,-50%);display:inline-flex;align-items:center;gap:12px;
+  padding:10px 22px 10px 10px;border-radius:60px;background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.16);color:#fff;font-family:var(--mono);font-weight:300;font-size:12px;text-transform:uppercase;
+  transition:background .3s,border-color .3s,opacity .35s,transform .5s var(--out)}
+.film-big svg{width:56px;height:56px;padding:15px 13px 15px 17px;border-radius:50%;background:var(--amber);color:#161616;transition:transform .5s var(--out)}
+.film-big:hover,.film-big:focus-visible{background:rgba(0,0,0,.75);border-color:rgba(232,161,101,.6)}
+.film-big:hover svg,.film-big:focus-visible svg{transform:scale(1.08)}
+.wcard-film.is-playing .film-big{opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.92)}
+.wcard-film:not(.is-started) .film-play{display:none}
 .wcard-film:fullscreen .film-v,.film-v:fullscreen{object-fit:contain;background:#000}
 /* phones play the portrait cut, so the card turns portrait too */
 @media (max-width:767px){
