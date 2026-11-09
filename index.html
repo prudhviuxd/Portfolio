@@ -22,7 +22,8 @@
 <meta name="twitter:image" content="assets/img/og-image.jpg">
 <meta name="theme-color" content="#0d0d0d">
 <link rel="preload" href="assets/fonts/familjen.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/studio.css?v=5000da9b">
+<script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+<link rel="stylesheet" href="assets/css/studio.css?v=3cd05f86">
 <link rel="stylesheet" href="assets/css/site-header.css?v=52905b34">
 <link rel="stylesheet" href="assets/css/site-footer.css?v=2c6b52cd">
 <script>document.documentElement.classList.add('js');</script>
@@ -86,12 +87,13 @@
 
   <!-- ======================= HERO ======================= -->
   <section class="hero" id="top">
-    <div class="sky beams" aria-hidden="true">
-      <canvas class="beams-cv"></canvas>
-      <div class="beams-veil"></div>
+    <div class="sky" aria-hidden="true">
       <canvas class="stars"></canvas>
-      <div class="beams-fade"></div>
     </div>
+    <div class="hero-stage">
+      <div class="hero-stage-gl" aria-hidden="true"></div>
+    </div>
+    <button type="button" class="hero-stage-pause" aria-pressed="false"><svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><rect x="1" y="1" width="3" height="8" rx="1"/><rect x="6" y="1" width="3" height="8" rx="1"/></svg><span>Pause motion</span></button>
     <div class="wrap hero-in">
       <div class="hero-top">
         <div class="hero-copy">
@@ -597,7 +599,19 @@
   </div>
 </footer>
 
-<script src="assets/js/studio.js?v=2515a3d7"></script>
+<script>
+(function () {
+  var st = document.querySelector('.hero-stage'); if (!st) return;
+  var gl; try { var c = document.createElement('canvas'); gl = c.getContext('webgl2') || c.getContext('webgl'); } catch (e) {}
+  var save = navigator.connection && navigator.connection.saveData;
+  var still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!gl || save || still) { st.classList.add('is-fallback'); return; }
+  var go = function () { var m = document.createElement('script'); m.type = 'module'; m.src = 'assets/js/hero3d.js?v=afb0d648'; document.body.appendChild(m); };
+  var idle = window.requestIdleCallback || function (f) { return setTimeout(f, 200); };
+  if (document.readyState === 'complete') idle(go); else window.addEventListener('load', function () { idle(go); });
+})();
+</script>
+<script src="assets/js/studio.js?v=729725ba"></script>
 <script src="assets/js/site-header.js?v=aea91eaa"></script>
 <script src="assets/js/analytics.js?v=7f322b5b" defer></script>
 </body>
