@@ -221,6 +221,7 @@
 
   /* ---------- scroll-bound effects ---------- */
 
+  var fcards = $$('.roles-cards .fcard');
   var wPin = $('.work-pin');
   var work = $('.work'), wTrack = $('.work-track'), wFront = $('.work-front');
   var wCards = $$('.wcard');
@@ -296,6 +297,17 @@
       var n = Math.round(p * aboutWords.length);
       for (var i = 0; i < aboutWords.length; i++) aboutWords[i].classList.toggle('on', i < n);
     }
+
+    // Three roles: the side cards fan out from behind the centre card.
+    if (fcards.length === 3 && window.innerWidth > 767 && !reduced) {
+      var fr = fcards[1].getBoundingClientRect();
+      var q = clamp((h - fr.top) / (h * 0.75), 0, 1);
+      var e = 1 - Math.pow(1 - q, 3), inv = 1 - e;
+      fcards[0].style.transform = 'translate3d(' + (inv * 104) + '%,' + (inv * 30) + 'px,' + (-inv * 120) + 'px) rotate(' + (-inv * 9) + 'deg)';
+      fcards[2].style.transform = 'translate3d(' + (-inv * 104) + '%,' + (inv * 30) + 'px,' + (-inv * 120) + 'px) rotate(' + (inv * 9) + 'deg)';
+      fcards[1].style.transform = 'translate3d(0,' + (inv * 60) + 'px,0)';
+      fcards[1].style.zIndex = 2;
+    } else fcards.forEach(function (c) { c.style.transform = ''; });
 
     // Work: the panel opens in stripes over the end of About (0.5 screens),
     // then vertical scroll drives the track sideways (1.5) and the section
@@ -376,13 +388,43 @@
   $$('.ws-steps').forEach(function (ul) {
     $$('li', ul).forEach(function (li, i) { li.style.setProperty('--i', i); });
   });
-  $$('[data-ws], [data-ws-yt], .lead-grid, .ai-grid, .path, .roles-list').forEach(function (el) {
+  $$('[data-ws], [data-ws-yt], .lead-grid, .ai-grid, .path').forEach(function (el) {
     if (!io || reduced) { el.classList.add('on'); return; }
     new IntersectionObserver(function (e, obs) {
       if (!e[0].isIntersecting) return;
       el.classList.add('on'); obs.disconnect();
     }, { rootMargin: '0px 0px -15% 0px' }).observe(el);
   });
+
+  /* ---------- card details: word rotors and the team dots ---------- */
+
+  // Each rotor cycles its own words, only while it is on screen.
+  $$('.fc-rotor').forEach(function (rot, n) {
+    var words = $$('span', rot), ri = 0, timer = null;
+    if (!words.length) return;
+    words[0].classList.add('on');
+    if (reduced) return;
+    function step() {
+      var prev = words[ri];
+      prev.classList.remove('on'); prev.classList.add('off');
+      setTimeout(function () { prev.classList.remove('off'); }, 800);
+      ri = (ri + 1) % words.length;
+      words[ri].classList.add('on');
+    }
+    function start() { if (!timer) timer = setTimeout(function tick() { step(); timer = setTimeout(tick, 1900); }, 900 + n * 260); }
+    function stop() { clearTimeout(timer); timer = null; }
+    if (io) new IntersectionObserver(function (e) { e[0].isIntersecting ? start() : stop(); }).observe(rot);
+    else start();
+  });
+
+  var dots = $$('.fc-dots i');
+  if (dots.length && io && !reduced) {
+    new IntersectionObserver(function (e, obs) {
+      if (!e[0].isIntersecting) return;
+      obs.disconnect();
+      dots.forEach(function (d, i) { setTimeout(function () { d.classList.add('on'); }, 90 * i); });
+    }, { threshold: 0.5 }).observe(dots[0].parentNode);
+  } else dots.forEach(function (d) { d.classList.add('on'); });
 
   // Stacked layout: reveal each card as it scrolls into view.
   if (io) {
@@ -475,9 +517,9 @@
   // The blocks that animate in each section, top to bottom.
   var PARTS = {
     about: '.about-big, .about-portrait, .about-tag, .about-mission',
-    roles: '.roles-h, .roles-sub, .roles-list, .partners',
+    roles: '.roles-h, .roles-sub, .partners',
     leadership: '.sec-head, .lead-grid, .ai-head, .ai-grid',
-    expertise: '.exp-h, .exp-row',
+    expertise: '.exp-h, .craft-cards > *',
     consulting: '.sec-head, .ws-grid > *',
     mentoring: '.sec-head, .path, .yt',
     contact: '.contact-l > *, .form',

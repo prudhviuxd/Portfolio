@@ -819,23 +819,8 @@ html{scrollbar-color:#3a3530 var(--bg);scrollbar-width:thin}
 
 /* ---------- three roles: one index, read top to bottom ---------- */
 .roles{position:relative;z-index:4;background:linear-gradient(0deg,var(--light-2) 0%,var(--light) 100%);color:var(--dark-font);padding:150px 0 150px;margin-top:-1px}
-.roles-h{color:var(--dark-font);max-width:14ch}
-.roles-sub{margin-top:24px;max-width:52ch;font-size:18px;line-height:1.4;color:#3d362f}
-.roles-list{margin-top:72px;border-top:1px solid rgba(0,0,0,.16);list-style:none;padding:0}
-.role{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) 150px;column-gap:clamp(24px,4vw,64px);align-items:center;padding:34px 0;border-bottom:1px solid rgba(0,0,0,.16);color:var(--dark-font)}
-.roles-list li:first-child .role{padding-top:30px}
-.role-t{font-family:var(--display);font-weight:400;font-size:clamp(3rem,7vw,6rem);line-height:.92;letter-spacing:-.04em;transition:transform .6s var(--out),color .4s}
-.role-d{font-size:17px;line-height:1.45;color:#3d362f;max-width:44ch}
-.role-go{justify-self:end;display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-weight:300;font-size:12px;text-transform:uppercase;color:#2a2622;white-space:nowrap}
-.role-go::after{content:"";width:16px;height:10px;background:currentColor;transition:transform .5s var(--out);
-  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 10'%3E%3Cpath d='M0 5h14M10 1l4 4-4 4' fill='none' stroke='%23000' stroke-width='1.2'/%3E%3C/svg%3E") center/contain no-repeat;
-  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 10'%3E%3Cpath d='M0 5h14M10 1l4 4-4 4' fill='none' stroke='%23000' stroke-width='1.2'/%3E%3C/svg%3E") center/contain no-repeat}
-.role:hover .role-t,.role:focus-visible .role-t{transform:translateX(14px);color:var(--ember)}
-.role:hover .role-go::after,.role:focus-visible .role-go::after{transform:translateX(6px)}
-.js .roles-list li{opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform 1s var(--out)}
-.roles-list.on li{opacity:1;transform:none}
-.roles-list.on li:nth-child(2){transition-delay:.1s}
-.roles-list.on li:nth-child(3){transition-delay:.2s}
+.roles-h{color:var(--dark-font);max-width:14ch;margin:0 auto;text-align:center}
+.roles-sub{margin:24px auto 0;text-align:center;max-width:52ch;font-size:18px;line-height:1.4;color:#3d362f}
 .partners-h{font-size:13px;text-transform:uppercase;font-weight:500;color:#1f1f1f}
 
 /* chapter headings name the role in the sentence itself */
@@ -867,8 +852,6 @@ html{scrollbar-color:#3a3530 var(--bg);scrollbar-width:thin}
 
 @media (max-width:1024px){
   .path{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:48px}
-  .role{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)}
-  .role-go{grid-column:2;justify-self:start;margin-top:14px}
 }
 @media (max-width:767px){
   .hero-sum{font-size:16px}
@@ -880,9 +863,6 @@ html{scrollbar-color:#3a3530 var(--bg);scrollbar-width:thin}
   .about-portrait{max-width:260px}
   .about-tag{grid-column:1/-1}
   .roles{padding:96px 0 100px}
-  .roles-list{margin-top:48px}
-  .role{grid-template-columns:1fr;row-gap:12px;padding:28px 0}
-  .role-go{grid-column:1;justify-self:start;margin-top:4px}
   .mentor,.exp{padding:90px 0}
   .path{grid-template-columns:1fr;row-gap:36px;margin-bottom:48px}
   .exp-row summary{grid-template-columns:1fr 24px}
@@ -891,5 +871,61 @@ html{scrollbar-color:#3a3530 var(--bg);scrollbar-width:thin}
   .exp-body{padding:0 0 28px}
 }
 @media (prefers-reduced-motion:reduce){
-  .js .roles-list li,.js .path li,.js .roles-line,.js .hero .avail{opacity:1;transform:none}
+  .js .path li,.js .roles-line,.js .hero .avail{opacity:1;transform:none}
+}
+
+
+/* ---------- cards: three roles and the craft, one family ---------- */
+.fcards{display:grid;grid-template-columns:repeat(3,minmax(0,356px));justify-content:center;gap:22px;perspective:1600px;margin-top:72px}
+.fcard{position:relative;aspect-ratio:356/439;border-radius:6px;padding:40px 36px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;will-change:transform}
+.fcard-dark{background:var(--card);color:var(--ink)}
+.fcard-light{background:var(--cream);color:var(--dark-font);align-items:center;text-align:center}
+.fc-top{display:flex;justify-content:space-between;align-items:center;width:100%;gap:12px}
+.fc-lbl{font-size:13px;text-transform:uppercase;font-weight:500}
+.fc-go{width:18px;height:12px;background:currentColor;opacity:.7;transition:transform .5s var(--out),opacity .3s;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 12'%3E%3Cpath d='M0 6h16M11 1l5 5-5 5' fill='none' stroke='%23000' stroke-width='1.2'/%3E%3C/svg%3E") center/contain no-repeat;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 12'%3E%3Cpath d='M0 6h16M11 1l5 5-5 5' fill='none' stroke='%23000' stroke-width='1.2'/%3E%3C/svg%3E") center/contain no-repeat}
+a.fcard{transition:box-shadow .6s var(--out)}
+a.fcard:hover,a.fcard:focus-visible{box-shadow:0 34px 60px -30px rgba(40,22,8,.55)}
+a.fcard:hover .fc-go,a.fcard:focus-visible .fc-go{transform:translateX(6px);opacity:1}
+.fc-btm{display:flex;justify-content:space-between;align-items:flex-end;gap:14px}
+.fc-btm p{font-size:15px;line-height:1.3;max-width:19ch}
+.fc-num{font-family:var(--display);font-weight:400;font-size:clamp(3rem,4vw,3.6rem);letter-spacing:-.04em;line-height:.8;white-space:nowrap}
+.fcard-dark .fc-num{color:var(--amber)}
+.fc-num sup,.fc-circle sup{font-size:.4em;vertical-align:top;position:relative;top:-.1em;margin-left:2px}
+.fc-rotor{position:relative;height:1.1em;font-family:var(--display);font-size:clamp(2.6rem,3.6vw,3.4rem);letter-spacing:-.04em;overflow:hidden}
+.fc-rotor span{position:absolute;left:0;top:0;white-space:nowrap;opacity:0;transform:translateY(110%);transition:transform .8s var(--ease),opacity .45s ease}
+.fc-rotor span.on{opacity:1;transform:none;transition:transform .8s var(--ease),opacity .6s ease .15s}
+.fc-rotor span.off{opacity:0;transform:translateY(-110%)}
+.fc-circle{width:180px;height:180px;border-radius:50%;background:#fff;display:grid;place-items:center}
+.fc-circle b{font-family:var(--display);font-weight:400;font-size:3.4rem;letter-spacing:-.04em;line-height:1}
+.fc-mid{font-size:15px;line-height:1.3;max-width:24ch}
+.fc-dots{display:grid;grid-template-columns:repeat(6,14px);gap:12px;align-self:center}
+.fc-dots i{width:14px;height:14px;border-radius:50%;border:1px solid #555;transition:background .4s,border-color .4s}
+.fc-dots i.on{background:var(--amber);border-color:var(--amber)}
+
+/* craft: four cards, the full method list kept readable under the rotor */
+.craft-cards{grid-template-columns:repeat(4,minmax(0,1fr));justify-content:stretch;margin-top:0}
+.craft{aspect-ratio:auto;min-height:440px;padding:34px 30px;border:1px solid #2f2f2f;justify-content:flex-start;gap:0}
+.craft .fc-rotor{margin:44px 0 36px}
+.fc-btm .fc-wide{max-width:26ch}
+.craft .fc-rotor{font-size:clamp(2rem,2.5vw,2.6rem)}
+.craft-btm{display:flex;flex-direction:column;gap:16px}
+.craft-btm p{font-size:15px;line-height:1.4;color:var(--ink)}
+.craft-list{display:flex;flex-wrap:wrap;gap:6px}
+.craft-list li{border:1px solid #444;border-radius:30px;padding:5px 11px;font-size:12.5px;line-height:1.3;color:var(--ink-2)}
+.craft:hover{border-color:rgba(232,161,101,.45)}
+
+@media (max-width:1100px){
+  .craft-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:1024px){
+  .roles-cards{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  .roles-cards .fcard{padding:28px 22px}
+}
+@media (max-width:767px){
+  .fcards{margin-top:48px}
+  .roles-cards{grid-template-columns:1fr;max-width:380px;margin-left:auto;margin-right:auto}
+  .craft-cards{grid-template-columns:1fr}
+  .craft{min-height:0}
 }

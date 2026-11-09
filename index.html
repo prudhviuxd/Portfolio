@@ -23,7 +23,7 @@
 <meta name="theme-color" content="#0d0d0d">
 <link rel="preload" href="assets/fonts/familjen.woff2" as="font" type="font/woff2" crossorigin>
 <script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
-<link rel="stylesheet" href="assets/css/studio.css?v=954d9a44">
+<link rel="stylesheet" href="assets/css/studio.css?v=a20ae1a4">
 <link rel="stylesheet" href="assets/css/site-header.css?v=52905b34">
 <link rel="stylesheet" href="assets/css/site-footer.css?v=2c6b52cd">
 <script>document.documentElement.classList.add('js');</script>
@@ -250,29 +250,28 @@
     <div class="wrap">
       <h2 class="roles-h h1" data-lines>Three roles, one practice.</h2>
       <p class="roles-sub">Most weeks I&rsquo;m all three: running a team, advising a client, and coaching a designer through their next step.</p>
-      <ol class="roles-list">
-        <li>
-          <a class="role" href="#leadership">
-            <span class="role-t">Leader</span>
-            <span class="role-d">I run a team of 18 designers and researchers at Tech Mahindra (BORN) and own UX strategy with C&#8209;level stakeholders.</span>
-            <span class="role-go">How I lead</span>
-          </a>
-        </li>
-        <li>
-          <a class="role" href="#consulting">
-            <span class="role-t">Consultant</span>
-            <span class="role-d">More than 30 design thinking workshops on site, from Singapore to Riyadh, and 70+ RFPs shaped from first framing to proposal.</span>
-            <span class="role-go">How I consult</span>
-          </a>
-        </li>
-        <li>
-          <a class="role" href="#mentoring">
-            <span class="role-t">Mentor</span>
-            <span class="role-d">Weekly critiques, 1:1s and a structured onboarding programme that help designers make their own calls.</span>
-            <span class="role-go">How I mentor</span>
-          </a>
-        </li>
-      </ol>
+      <div class="fcards roles-cards">
+        <a class="fcard fcard-dark" href="#leadership">
+          <span class="fc-top"><span class="fc-lbl">Leader</span><span class="fc-go" aria-hidden="true"></span></span>
+          <div class="fc-dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="fc-btm">
+            <p>Designers and researchers I lead at Tech Mahindra (BORN), with UX strategy owned at C&#8209;level.</p>
+            <b class="fc-num"><span data-count="18">18</span></b>
+          </div>
+        </a>
+        <a class="fcard fcard-light" href="#consulting">
+          <span class="fc-top"><span class="fc-lbl">Consultant</span><span class="fc-go" aria-hidden="true"></span></span>
+          <div class="fc-circle"><b><span data-count="30">30</span><sup>+</sup></b></div>
+          <p class="fc-mid">Design thinking workshops on site, from Singapore to Riyadh, and 70+ RFPs shaped.</p>
+        </a>
+        <a class="fcard fcard-dark" href="#mentoring">
+          <span class="fc-top"><span class="fc-lbl">Mentor</span><span class="fc-go" aria-hidden="true"></span></span>
+          <div class="fc-rotor" aria-hidden="true"><span>Onboarding</span><span>Critique</span><span>1:1s</span><span>Ownership</span></div>
+          <div class="fc-btm">
+            <p class="fc-wide">Weekly critiques, 1:1s and a structured onboarding programme, so every designer grows into their own calls.</p>
+          </div>
+        </a>
+      </div>
       <div class="partners">
         <h3 class="partners-h">Clients and teams I&rsquo;ve worked with</h3>
         <ul class="logos">
@@ -347,31 +346,39 @@
   <section class="exp" id="expertise">
     <div class="wrap">
       <h2 class="exp-h h2">The craft underneath all three.</h2>
-      <div class="exp-list">
-        <details class="exp-row" open>
-          <summary><span class="exp-t h2">Research</span><span class="exp-d">Turning an uncertain brief into evidence a team can act on.</span><span class="exp-x" aria-hidden="true"></span></summary>
-          <div class="exp-body"><ul>
-            <li>User interviews</li><li>Surveys</li><li>Ethnographic &amp; demographic studies</li><li>Competitor &amp; SWOT analysis</li><li>Feature benchmarking</li><li>Card sorting</li><li>Behavioural analytics</li><li>KPI definition</li>
-          </ul></div>
-        </details>
-        <details class="exp-row">
-          <summary><span class="exp-t h2">Design</span><span class="exp-d">From the shape of the information to the states nobody demos.</span><span class="exp-x" aria-hidden="true"></span></summary>
-          <div class="exp-body"><ul>
-            <li>Information architecture</li><li>User flows &amp; journey mapping</li><li>Personas</li><li>Wireframing</li><li>UI design</li><li>Design systems</li><li>Service blueprints</li><li>Accessibility, WCAG</li><li>UX writing</li>
-          </ul></div>
-        </details>
-        <details class="exp-row">
-          <summary><span class="exp-t h2">Validation</span><span class="exp-d">Proof the thing works, agreed before the argument.</span><span class="exp-x" aria-hidden="true"></span></summary>
-          <div class="exp-body"><ul>
-            <li>Usability testing</li><li>A/B testing</li><li>Eye tracking</li><li>Heat maps</li><li>Beta testing</li><li>Design-implementation QA</li>
-          </ul></div>
-        </details>
-        <details class="exp-row">
-          <summary><span class="exp-t h2">Tools</span><span class="exp-d">What the team and I work in, day to day.</span><span class="exp-x" aria-hidden="true"></span></summary>
-          <div class="exp-body"><ul>
-            <li>Figma</li><li>Framer</li><li>Photoshop</li><li>Illustrator</li><li>Hotjar</li><li>Google Analytics</li><li>Claude &amp; the Anthropic API</li>
-          </ul></div>
-        </details>
+      <div class="fcards craft-cards">
+        <article class="fcard fcard-dark craft">
+          <span class="fc-lbl">Research</span>
+          <div class="fc-rotor" aria-hidden="true"><span>Interviews</span><span>Surveys</span><span>Card sorts</span><span>Analytics</span><span>Benchmarks</span></div>
+          <div class="craft-btm">
+            <p>Turning an uncertain brief into evidence a team can act on.</p>
+            <ul class="craft-list" aria-label="Research methods"><li>User interviews</li><li>Surveys</li><li>Ethnographic &amp; demographic studies</li><li>Competitor &amp; SWOT analysis</li><li>Feature benchmarking</li><li>Card sorting</li><li>Behavioural analytics</li><li>KPI definition</li></ul>
+          </div>
+        </article>
+        <article class="fcard fcard-dark craft">
+          <span class="fc-lbl">Design</span>
+          <div class="fc-rotor" aria-hidden="true"><span>Flows</span><span>IA</span><span>Wireframes</span><span>UI</span><span>Systems</span></div>
+          <div class="craft-btm">
+            <p>From the shape of the information to the states nobody demos.</p>
+            <ul class="craft-list" aria-label="Design methods"><li>Information architecture</li><li>User flows &amp; journey mapping</li><li>Personas</li><li>Wireframing</li><li>UI design</li><li>Design systems</li><li>Service blueprints</li><li>Accessibility, WCAG</li><li>UX writing</li></ul>
+          </div>
+        </article>
+        <article class="fcard fcard-dark craft">
+          <span class="fc-lbl">Validation</span>
+          <div class="fc-rotor" aria-hidden="true"><span>Usability</span><span>A/B tests</span><span>Heat maps</span><span>Beta</span><span>Design QA</span></div>
+          <div class="craft-btm">
+            <p>Proof the thing works, agreed before the argument.</p>
+            <ul class="craft-list" aria-label="Validation methods"><li>Usability testing</li><li>A/B testing</li><li>Eye tracking</li><li>Heat maps</li><li>Beta testing</li><li>Design-implementation QA</li></ul>
+          </div>
+        </article>
+        <article class="fcard fcard-dark craft">
+          <span class="fc-lbl">Tools</span>
+          <div class="fc-rotor" aria-hidden="true"><span>Figma</span><span>Framer</span><span>Hotjar</span><span>Analytics</span><span>Claude</span></div>
+          <div class="craft-btm">
+            <p>What the team and I work in, day to day.</p>
+            <ul class="craft-list" aria-label="Tools methods"><li>Figma</li><li>Framer</li><li>Photoshop</li><li>Illustrator</li><li>Hotjar</li><li>Google Analytics</li><li>Claude &amp; the Anthropic API</li></ul>
+          </div>
+        </article>
       </div>
     </div>
   </section>
@@ -586,7 +593,7 @@
   if (document.readyState === 'complete') idle(go); else window.addEventListener('load', function () { idle(go); });
 })();
 </script>
-<script src="assets/js/studio.js?v=7705d8fb"></script>
+<script src="assets/js/studio.js?v=b3bb4169"></script>
 <script src="assets/js/site-header.js?v=aea91eaa"></script>
 <script src="assets/js/analytics.js?v=7f322b5b" defer></script>
 </body>
