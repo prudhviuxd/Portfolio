@@ -22,6 +22,7 @@ class EnrollActivity : AppCompatActivity(), RecognitionListener {
     private var model: Model? = null
     private var spk: SpeakerModel? = null
     private var speech: SpeechService? = null
+    private var recognizer: Recognizer? = null
     private val samples = ArrayList<DoubleArray>()
     private var phraseIdx = 0
 
@@ -55,12 +56,13 @@ class EnrollActivity : AppCompatActivity(), RecognitionListener {
                 runOnUiThread {
                     if (isFinishing) { m.close(); s.close(); return@runOnUiThread }
                     model = m; spk = s
-                    speech = SpeechService(Recognizer(m, 16000f, s), 16000f).also { it.startListening(this) }
+                    val rec = Recognizer(m, 16000f, s).also { recognizer = it }
+                    speech = SpeechService(rec, 16000f).also { it.startListening(this) }
                     b.skip.isEnabled = true
                     show()
                 }
             } catch (e: Exception) {
-                runOnUiThread { b.phrase.text = "Couldn't start: ${e.message}" }
+                runOnUiThread { b.phrase.text = "Couldn't start the microphone: ${e.message}" }
             }
         }.start()
     }
@@ -75,6 +77,7 @@ class EnrollActivity : AppCompatActivity(), RecognitionListener {
     }
 
     override fun onResult(hypothesis: String?) {
+        if (samples.size >= phrases.size || isFinishing) return
         val json = try { JSONObject(hypothesis ?: return) } catch (_: Exception) { return }
         val text = json.optString("text")
         val vec = json.optJSONArray("spk") ?: run {
@@ -86,7 +89,7 @@ class EnrollActivity : AppCompatActivity(), RecognitionListener {
             b.heard.text = "That was a bit short — please read the whole phrase."
             return
         }
-        samples += DoubleArray(vec.length()) { vec.getDouble(it) }
+        samples += try { DoubleArray(vec.length()) { vec.getDouble(it) } } catch (_: Exception) { return }
         phraseIdx++
         b.heard.text = "Got it ✓"
         if (samples.size >= phrases.size) finishEnrollment() else b.root.postDelayed({ show() }, 600)
@@ -115,7 +118,10 @@ class EnrollActivity : AppCompatActivity(), RecognitionListener {
     override fun onTimeout() {}
 
     override fun onDestroy() {
+        // stop first: it waits for the recognition thread, so the native models aren't freed under it
+        speech?.stop()
         speech?.shutdown()
+        recognizer?.close()
         model?.close()
         spk?.close()
         super.onDestroy()

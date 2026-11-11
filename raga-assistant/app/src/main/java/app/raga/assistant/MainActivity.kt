@@ -31,7 +31,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var b: ActivityMainBinding
     private lateinit var prefs: Prefs
 
-    private val runtimePerms = buildList {
+    // lazy: checking the manifest needs the activity's context, which isn't ready during construction
+    private val runtimePerms by lazy { buildList {
         add(Manifest.permission.RECORD_AUDIO)
         add(Manifest.permission.READ_CONTACTS)
         add(Manifest.permission.CALL_PHONE)
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             add(Manifest.permission.READ_EXTERNAL_STORAGE)
         }
-    }.filter { declared(it) }.toTypedArray()
+    }.filter { declared(it) }.toTypedArray() }
 
     private val askPerms = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { refresh() }
 
@@ -92,6 +93,14 @@ class MainActivity : AppCompatActivity() {
         }
         b.verifySwitch.setOnCheckedChangeListener { _, on -> prefs.verifyVoice = on; refresh() }
         b.threshold.addOnChangeListener { _, v, fromUser -> if (fromUser) { prefs.threshold = v; refresh() } }
+
+        // keep content clear of the status bar / gesture bar (Android 15 draws edge to edge)
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(b.root) { v, insets ->
+            val bars = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars())
+            v.setPadding(bars.left, bars.top, bars.right, bars.bottom)
+            insets
+        }
+        showLastCrash()
 
         // wake words
         b.wakeWords.setText(prefs.wakeWords.joinToString(", "))
@@ -186,7 +195,7 @@ class MainActivity : AppCompatActivity() {
         else "Not set up yet — until you do, anyone can give Raga commands."
         b.enroll.text = if (enrolled) "Re-record my voice" else "Teach Raga my voice"
         b.verifySwitch.isChecked = prefs.verifyVoice
-        b.threshold.value = prefs.threshold.coerceIn(0.10f, 0.90f)
+        b.threshold.value = Prefs.snap(prefs.threshold)
         b.threshold.isEnabled = prefs.verifyVoice
         b.thresholdLabel.text = "Voice-match strictness: ${"%.2f".format(prefs.threshold)} " +
             "(raise it if others can trigger Raga; lower it if Raga ignores you — the log shows each score)"
@@ -230,6 +239,25 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("BatteryLife")
     private fun requestIgnoreBattery() {
         startActivity(Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:$packageName")))
+    }
+
+    /** If Raga crashed last time, show what happened so it can be copied and reported. */
+    private fun showLastCrash() {
+        val f = RagaApp.crashFile(this)
+        if (!f.exists()) return
+        val report = try { f.readText() } catch (_: Exception) { "" }
+        f.delete()
+        if (report.isBlank()) return
+        com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+            .setTitle("Raga crashed last time")
+            .setMessage("Copy these details and send them to whoever is fixing the app.\n\n" + report.take(3000))
+            .setPositiveButton("Copy details") { _, _ ->
+                val cm = getSystemService(android.content.ClipboardManager::class.java)
+                cm.setPrimaryClip(android.content.ClipData.newPlainText("Raga crash", report))
+                toast("Copied")
+            }
+            .setNegativeButton("Close", null)
+            .show()
     }
 
     private fun toast(s: String) = Toast.makeText(this, s, Toast.LENGTH_LONG).show()

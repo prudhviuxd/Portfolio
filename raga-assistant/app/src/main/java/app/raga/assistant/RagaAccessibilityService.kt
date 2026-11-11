@@ -108,13 +108,19 @@ class RagaAccessibilityService : AccessibilityService() {
 
     /** Press WhatsApp's send button once a chat opened from a link has loaded. */
     fun clickWhatsAppSend(): Boolean {
-        val roots = listOfNotNull(rootInActiveWindow)
-        for (root in roots) {
-            for (id in listOf("com.whatsapp:id/send", "com.whatsapp.w4b:id/send")) {
-                root.findAccessibilityNodeInfosByViewId(id).firstOrNull()?.let { return click(it) }
-            }
+        // Only ever press Send inside WhatsApp itself, never in whatever app happens to be on screen.
+        val root = rootInActiveWindow ?: return false
+        val pkg = root.packageName?.toString() ?: return false
+        if (pkg != "com.whatsapp" && pkg != "com.whatsapp.w4b") return false
+        root.findAccessibilityNodeInfosByViewId("$pkg:id/send").firstOrNull()?.let { return click(it) }
+        // WhatsApp renamed the button: look for "Send" inside WhatsApp's own window only
+        fun find(n: AccessibilityNodeInfo?): AccessibilityNodeInfo? {
+            if (n == null) return null
+            if (labelOf(n).equals("Send", ignoreCase = true)) return n
+            for (i in 0 until n.childCount) find(n.getChild(i))?.let { return it }
+            return null
         }
-        return allNodes().firstOrNull { labelOf(it).equals("Send", ignoreCase = true) }?.let { click(it) } ?: false
+        return find(root)?.let { click(it) } ?: false
     }
 
     companion object {

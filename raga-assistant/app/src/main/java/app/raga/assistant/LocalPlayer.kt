@@ -44,24 +44,37 @@ class LocalPlayer(private val context: Context) {
         startCurrent()
     }
 
+    private var failures = 0
+
     private fun startCurrent() {
         release()
         val song = current ?: return
         val uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, song.id)
-        player = MediaPlayer().apply {
+        try {
+            player = MediaPlayer().apply {
             setAudioAttributes(
                 AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA)
                     .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build(),
             )
             setDataSource(context, uri)
-            setOnCompletionListener { next() }
+            setOnCompletionListener { failures = 0; next() }
+            setOnErrorListener { _, _, _ -> skipBroken(); true }
             setOnPreparedListener { it.start() }
             prepareAsync()
+            }
+        } catch (e: Exception) {
+            skipBroken()
         }
     }
 
-    fun pause() { player?.takeIf { it.isPlaying }?.pause() }
-    fun resume() { player?.start() }
+    /** A song that can't be played (deleted, unsupported) is skipped, without looping forever. */
+    private fun skipBroken() {
+        release()
+        if (++failures < minOf(queue.size, 5)) next() else failures = 0
+    }
+
+    fun pause() { try { player?.takeIf { it.isPlaying }?.pause() } catch (_: IllegalStateException) {} }
+    fun resume() { try { player?.start() } catch (_: IllegalStateException) {} }
     fun next() { if (queue.isNotEmpty()) { index = (index + 1) % queue.size; startCurrent() } }
     fun previous() { if (queue.isNotEmpty()) { index = (index - 1 + queue.size) % queue.size; startCurrent() } }
 

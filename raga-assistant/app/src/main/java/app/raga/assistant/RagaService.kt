@@ -11,12 +11,13 @@ import android.content.pm.ServiceInfo
 import android.media.AudioManager
 import android.media.ToneGenerator
 import android.os.Build
+import android.app.KeyguardManager
 import android.os.Handler
+import android.os.HandlerThread
 import android.os.IBinder
 import android.os.Looper
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,8 +39,8 @@ object RagaStatus {
 
     fun add(line: String) {
         val ts = SimpleDateFormat("HH:mm:ss", Locale.US).format(Date())
+        // kept in memory only (not logcat), since it can contain message text
         log.value = (listOf("$ts  $line") + log.value).take(60)
-        Log.i("Raga", line)
     }
 }
 
@@ -51,12 +52,18 @@ object RagaStatus {
 class RagaService : Service(), RecognitionListener {
 
     private val main = Handler(Looper.getMainLooper())
+    // Commands run here, not on the main thread: searching files or contacts can take a while
+    // and would otherwise freeze the app ("Raga isn't responding").
+    private val workerThread = HandlerThread("raga-commands").apply { start() }
+    private val worker = Handler(workerThread.looper)
+    @Volatile private var destroyed = false
     private lateinit var prefs: Prefs
     private lateinit var executor: CommandExecutor
 
     private var model: Model? = null
     private var spkModel: SpeakerModel? = null
-    private var speech: SpeechService? = null
+    @Volatile private var speech: SpeechService? = null
+    private var recognizer: Recognizer? = null
     private var tts: TextToSpeech? = null
     private var ttsReady = false
     private var speaking = 0
@@ -76,9 +83,9 @@ class RagaService : Service(), RecognitionListener {
             ttsReady = status == TextToSpeech.SUCCESS
             tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
                 override fun onStart(id: String?) {}
-                override fun onDone(id: String?) = main.post { doneSpeaking() }.let {}
+                override fun onDone(id: String?) = worker.post { doneSpeaking() }.let {}
                 @Deprecated("Deprecated in Java")
-                override fun onError(id: String?) = main.post { doneSpeaking() }.let {}
+                override fun onError(id: String?) = worker.post { doneSpeaking() }.let {}
             })
         }
     }
@@ -88,9 +95,17 @@ class RagaService : Service(), RecognitionListener {
             stopSelf()
             return START_NOT_STICKY
         }
-        goForeground("Starting…")
+        try {
+            goForeground("Starting…")
+        } catch (e: Exception) {
+            // Android refuses a microphone service unless the app is on screen and has mic permission.
+            RagaStatus.add("Couldn't start listening: ${e.message}")
+            stopSelf()
+            return START_NOT_STICKY
+        }
         if (speech == null) loadAndListen()
-        return START_STICKY
+        // Not sticky: Android won't let a restarted background service use the microphone anyway.
+        return START_NOT_STICKY
     }
 
     private fun goForeground(text: String) {
@@ -137,12 +152,13 @@ class RagaService : Service(), RecognitionListener {
                 val m = Model(ModelManager.dir(this, modelId).absolutePath)
                 val s = SpeakerModel(ModelManager.dir(this, ModelManager.SPEAKER_MODEL.id).absolutePath)
                 main.post {
+                    if (destroyed) { m.close(); s.close(); return@post }
                     model = m; spkModel = s
                     startRecognizer()
                 }
             } catch (e: Exception) {
                 main.post {
-                    RagaStatus.add("Failed to load model: ${e.message}")
+                    RagaStatus.add("Failed to load model: ${e.message}. Try deleting and downloading the models again.")
                     stopSelf()
                 }
             }
@@ -151,7 +167,7 @@ class RagaService : Service(), RecognitionListener {
 
     private fun startRecognizer() {
         try {
-            val rec = Recognizer(model, SAMPLE_RATE, spkModel)
+            val rec = Recognizer(model, SAMPLE_RATE, spkModel).also { recognizer = it }
             speech = SpeechService(rec, SAMPLE_RATE).also { it.startListening(this) }
             RagaStatus.running.value = true
             updateNotification("Say \"${prefs.wakeWords.firstOrNull() ?: "raga"}\" and a command")
@@ -168,12 +184,21 @@ class RagaService : Service(), RecognitionListener {
     override fun onPartialResult(hypothesis: String?) {}
 
     override fun onResult(hypothesis: String?) {
-        if (hypothesis == null || speaking > 0) return
+        if (hypothesis == null) return
         val json = try { JSONObject(hypothesis) } catch (_: Exception) { return }
         val text = json.optString("text").trim()
         if (text.isEmpty()) return
-        val spk = json.optJSONArray("spk")?.let { a -> DoubleArray(a.length()) { a.getDouble(it) } }
-        handleUtterance(text, spk)
+        val spk = try {
+            json.optJSONArray("spk")?.let { a -> DoubleArray(a.length()) { a.getDouble(it) } }
+        } catch (_: Exception) { null }
+        worker.post {
+            if (destroyed || speaking > 0) return@post
+            try {
+                handleUtterance(text, spk)
+            } catch (e: Exception) {
+                RagaStatus.add("Error: ${e.message ?: e.javaClass.simpleName}")
+            }
+        }
     }
 
     override fun onFinalResult(hypothesis: String?) {}
@@ -215,7 +240,7 @@ class RagaService : Service(), RecognitionListener {
                     Command.No, Command.Cancel -> respond(Outcome("Okay, cancelled."))
                     else -> {
                         // not a yes/no: treat it as a fresh command if it was addressed to Raga
-                        if (afterWake != null && afterWake.isNotEmpty()) respond(executor.execute(parsed))
+                        if (afterWake != null && afterWake.isNotEmpty()) respond(blockedReason(parsed)?.let { Outcome(it) } ?: executor.execute(parsed))
                         else respond(Outcome(null, pending), reprompt = "Please say yes or no. ")
                     }
                 }
@@ -229,7 +254,26 @@ class RagaService : Service(), RecognitionListener {
         awakeUntil = 0
         val cmd = CommandParser.parse(command)
         RagaStatus.add("→ ${cmd.javaClass.simpleName}: $command")
+        blockedReason(cmd)?.let { respond(Outcome(it)); return }
         respond(executor.execute(cmd))
+    }
+
+    /**
+     * Actions that send data out of the phone or touch other apps need extra care: they
+     * need a saved voice print (unless the owner switched voice checking off) and an
+     * unlocked phone, so a stranger or a recording can't use them on a locked phone.
+     */
+    private fun blockedReason(cmd: Command): String? {
+        val sensitive = cmd is Command.SendSms || cmd is Command.SendWhatsApp || cmd is Command.ShareFile ||
+            cmd is Command.OpenFile || cmd is Command.Click || cmd is Command.TypeText
+        if (!sensitive) return null
+        if (prefs.verifyVoice && prefs.voicePrint == null) {
+            return "For your safety, teach Raga your voice in the app before sending messages or files."
+        }
+        if (getSystemService(KeyguardManager::class.java).isKeyguardLocked) {
+            return "Please unlock your phone first."
+        }
+        return null
     }
 
     private fun safely(block: () -> Outcome): Outcome = try { block() } catch (e: SecurityException) {
@@ -291,13 +335,19 @@ class RagaService : Service(), RecognitionListener {
     }
 
     override fun onDestroy() {
+        destroyed = true
+        // stop() waits for the recognition thread to finish; only then is it safe to free
+        // the native models (freeing them first crashes inside the speech engine).
         speech?.stop()
         speech?.shutdown()
         speech = null
+        recognizer?.close()
+        recognizer = null
         model?.close()
         spkModel?.close()
         tts?.shutdown()
-        executor.release()
+        worker.post { executor.release() }
+        workerThread.quitSafely()
         RagaStatus.running.value = false
         RagaStatus.state.value = "Stopped"
         RagaStatus.add("Stopped listening.")

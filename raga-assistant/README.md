@@ -50,7 +50,7 @@ Two ways round it:
   Or install from a computer with `adb install Raga.apk`, which Play Protect doesn't block.
 
 
-1. Get the APK: download `raga-debug-apk` from the latest **Raga Android app** run under the
+1. Get the APK: download `raga-apks` from the latest **Raga Android app** run under the
    repo's *Actions* tab (or build it yourself, below). Copy it to the phone and open it;
    allow "install unknown apps" when asked.
 2. Open **Raga** and go top to bottom:
@@ -75,9 +75,22 @@ Requires JDK 17+ and the Android SDK (platform 35).
 
 ```bash
 cd raga-assistant
-./gradlew testFullDebugUnitTest assembleFullDebug assembleLiteDebug
-# APKs: app/build/outputs/apk/{full,lite}/debug/
+./gradlew testFullDebugUnitTest assembleFullRelease assembleLiteRelease
+# APKs: app/build/outputs/apk/{full,lite}/release/
 ```
+
+## Security
+
+* Speech, voice print and settings never leave the phone; the app's data is private and not backed up.
+* Release builds are not debuggable.
+* Model downloads are checked against pinned SHA-256 hashes before the speech engine opens them,
+  and archive paths are checked so a bad archive can't write outside the models folder.
+* Sending SMS/WhatsApp, sharing or opening files, and clicking/typing on screen need a saved
+  voice print and an unlocked phone. Messages always ask "Shall I send it?" first.
+* WhatsApp auto-send only presses Send inside WhatsApp itself.
+* Files are shared with other apps one at a time, through a FileProvider limited to shared storage.
+* Voice matching can be fooled by a good recording of your voice; treat it as a convenience, not a lock.
+* Crashes are saved to a private file and shown on the next launch so they can be copied; nothing is uploaded.
 
 ## Limits (Android rules, not bugs)
 

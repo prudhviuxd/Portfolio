@@ -22,8 +22,8 @@ jobs:
         run: |
           rm -f local.properties
           chmod +x gradlew
-          ./gradlew testFullDebugUnitTest assembleFullDebug assembleLiteDebug --console=plain
+          ./gradlew testFullDebugUnitTest assembleFullRelease assembleLiteRelease --console=plain
       - uses: actions/upload-artifact@v4
         with:
-          name: raga-debug-apk
-          path: raga-assistant/app/build/outputs/apk/*/debug/*.apk
+          name: raga-apks
+          path: raga-assistant/app/build/outputs/apk/*/release/*.apk

@@ -58,6 +58,7 @@
     </queries>
 
     <application
+        android:name=".RagaApp"
         android:allowBackup="false"
         android:icon="@drawable/ic_launcher"
         android:label="Raga"

@@ -21,8 +21,8 @@ class Prefs(context: Context) {
 
     /** Cosine similarity an utterance needs to count as the owner's voice. */
     var threshold: Float
-        get() = sp.getFloat("threshold", 0.45f)
-        set(v) = sp.edit().putFloat("threshold", v).apply()
+        get() = snap(sp.getFloat("threshold", 0.45f))
+        set(v) = sp.edit().putFloat("threshold", snap(v)).apply()
 
     var verifyVoice: Boolean
         get() = sp.getBoolean("verify_voice", true)
@@ -37,6 +37,9 @@ class Prefs(context: Context) {
         set(v) = sp.edit().putString("model", v).apply()
 
     companion object {
+        /** Round to the 0.01 grid the strictness slider requires (an off-grid value crashes it). */
+        fun snap(v: Float): Float = (Math.round(v.coerceIn(0.10f, 0.90f) * 100f) / 100f)
+
         const val DEFAULT_WAKE_WORDS = "raga, ragha, ragga, raja"
     }
 }

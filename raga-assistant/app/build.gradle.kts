@@ -11,8 +11,8 @@ android {
         applicationId = "app.raga.assistant"
         minSdk = 26
         targetSdk = 35
-        versionCode = 2
-        versionName = "1.1"
+        versionCode = 3
+        versionName = "1.2"
         // real phones are ARM; x86_64 kept for the emulator
         ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64") }
     }
@@ -20,6 +20,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+            // Release builds are not debuggable, so a computer plugged into the phone can't read
+            // Raga's private data (voice print, settings). Signed with the local debug key so the
+            // APK installs without a separate keystore; swap in your own key for long-term use.
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
