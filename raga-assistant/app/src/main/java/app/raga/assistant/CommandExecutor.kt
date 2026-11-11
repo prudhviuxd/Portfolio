@@ -50,6 +50,14 @@ class CommandExecutor(private val ctx: Context, private val onStopRequested: () 
 
     fun release() = player.release()
 
+    /** Contact and app names, given to the speech recogniser so it hears them correctly. */
+    fun vocabulary(): List<String> {
+        val names = ArrayList<String>()
+        try { names += contacts().map { it.name }.take(150) } catch (_: Exception) {}
+        try { names += apps().map { it.label }.take(150) } catch (_: Exception) {}
+        return names.distinct()
+    }
+
     fun execute(cmd: Command): Outcome = try {
         run(cmd)
     } catch (e: SecurityException) {

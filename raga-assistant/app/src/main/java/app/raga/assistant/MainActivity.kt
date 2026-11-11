@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun talk() {
         if (!ready()) return
-        RagaService.listenNow(this)
+        AssistActivity.open(this)
     }
 
     private fun refresh() {

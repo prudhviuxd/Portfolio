@@ -44,6 +44,31 @@
             android:alpha="0.8" />
 
 
+        <!-- 0. Use Raga over any app -->
+        <TextView
+            style="@style/SectionTitle"
+            android:text="Use Raga over any app" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/fabSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Floating Raga button over other apps (tap to talk, drag to move)" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/makeAssistant"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Make Raga my phone's assistant" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.75"
+            android:text="Then hold the power or home button (or swipe up from a bottom corner) to open Raga from anywhere, like Siri. In the list, choose “Default digital assistant app” → Raga."
+            android:textSize="13sp" />
+
         <!-- 1. Speech model -->
         <TextView
             style="@style/SectionTitle"

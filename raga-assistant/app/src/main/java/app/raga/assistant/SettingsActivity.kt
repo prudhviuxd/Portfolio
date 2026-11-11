@@ -113,6 +113,24 @@ class SettingsActivity : AppCompatActivity() {
         b.speakSwitch.setOnCheckedChangeListener { _, on -> prefs.speakReplies = on }
 
         b.offlineSwitch.setOnCheckedChangeListener { _, on -> prefs.offlineCommands = on }
+        b.fabSwitch.setOnCheckedChangeListener { _, on ->
+            if (on == prefs.floatingButton) return@setOnCheckedChangeListener
+            prefs.floatingButton = on
+            if (on && !Settings.canDrawOverlays(this)) {
+                toast("Allow Raga to show over other apps first")
+                startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")))
+            }
+            // restart so the button appears / disappears
+            if (RagaStatus.running.value) { RagaService.stop(this); b.root.postDelayed({ RagaService.start(this) }, 500) }
+        }
+        b.makeAssistant.setOnClickListener {
+            val tries = listOf(
+                Intent(Settings.ACTION_VOICE_INPUT_SETTINGS),
+                Intent("android.settings.MANAGE_DEFAULT_APPS_SETTINGS"),
+                Intent(Settings.ACTION_SETTINGS),
+            )
+            for (i in tries) { try { startActivity(i); break } catch (_: Exception) {} }
+        }
         b.back.setOnClickListener { finish() }
 
         b.examples.text = "Say “Raga”, wait for the chime and the Listening card, then say:\n\n" +
@@ -161,6 +179,7 @@ class SettingsActivity : AppCompatActivity() {
         val running = RagaStatus.running.value
         b.status.text = if (running) "● Listening for “Raga” — ${RagaStatus.state.value}" else "Raga is off"
         b.offlineSwitch.isChecked = prefs.offlineCommands
+        b.fabSwitch.isChecked = prefs.floatingButton
 
         val models = hasModels()
         b.download.text = if (models) "Models downloaded ✓" else "Download models (~55 MB, one time)"

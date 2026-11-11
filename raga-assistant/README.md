@@ -17,8 +17,13 @@ checks every command against **your voice print**, so other people can't control
 "Raga, help"                          "Raga, stop listening"
 ```
 
-It works like "Hey Siri": say **"Raga"**, wait for the chime and the *Listening…* card,
-then say your command. Raga answers out loud, and when it asks something ("Shall I send it?")
+It works like "Hey Siri". Three ways to talk to Raga from **any app**:
+
+* say **"Raga"** (or "Raga, open YouTube" in one breath),
+* tap the **floating Raga button** (drag it anywhere),
+* make Raga the phone's **digital assistant** and hold the power / home button.
+
+A Siri-style card slides up over the current app, listens, acts and answers out loud. Raga answers out loud, and when it asks something ("Shall I send it?")
 just answer — no need to say "Raga" again.
 Sending an SMS or WhatsApp message asks "Shall I send it?" first; answer "yes" or "no".
 If a name is unclear, Raga asks "Did you mean …?".

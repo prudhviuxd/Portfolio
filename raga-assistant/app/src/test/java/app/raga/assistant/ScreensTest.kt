@@ -34,6 +34,15 @@ class ScreensTest {
         }
     }
 
+    @Test fun assistCard() {
+        ActivityScenario.launch(AssistActivity::class.java).onActivity { a ->
+            org.robolectric.shadows.ShadowLooper.idleMainLooper()
+            a.findViewById<android.widget.TextView>(R.id.heard).text = "“Open YouTube”"
+            a.findViewById<android.widget.TextView>(R.id.reply).apply { text = "Opening YouTube"; visibility = View.VISIBLE }
+            shot(a.window.decorView, "assist_card")
+        }
+    }
+
     @Test fun settings() {
         // an off-grid strictness value used to crash this screen
         Prefs(androidx.test.core.app.ApplicationProvider.getApplicationContext()).threshold = 0.4378f

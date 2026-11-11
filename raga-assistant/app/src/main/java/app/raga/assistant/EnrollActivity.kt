@@ -28,9 +28,11 @@ class EnrollActivity : AppCompatActivity(), RecognitionListener {
     private val heard = ArrayList<String>()
     private var done = false
 
+    // Short "Raga" and "Raga, <command>" in one breath, so both ways of speaking match the voice print.
     private val prompts = listOf(
-        "Say “Raga”", "Again, say “Raga”", "Once more: “Raga”",
-        "Say it a little softer: “Raga”", "Say it a little louder: “Raga”", "Last one: “Raga”",
+        "Say “Raga”", "Say “Raga, what time is it”", "Again, just “Raga”",
+        "Say “Raga, open YouTube”", "A little louder: “Raga”", "Say “Raga, call Mom”",
+        "Last one: “Raga”",
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,12 +89,12 @@ class EnrollActivity : AppCompatActivity(), RecognitionListener {
             b.heard.text = "Didn't quite catch that — say “Raga” again."
             return
         }
-        if (text.split(" ").size > 3) {
-            b.heard.text = "Heard “$text”. Just say the single word “Raga”."
+        if (text.split(" ").size > 7) {
+            b.heard.text = "Heard “$text”. Please say just the words shown."
             return
         }
         samples += try { DoubleArray(vec.length()) { vec.getDouble(it) } } catch (_: Exception) { return }
-        heard += text
+        heard += text.split(" ").first() // how the engine spells your "Raga"
         b.heard.text = "Got it ✓  (heard “$text”)"
         if (samples.size >= prompts.size) finishEnrollment() else b.root.postDelayed({ if (!done) show() }, 500)
     }

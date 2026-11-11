@@ -37,6 +37,18 @@ class Prefs(context: Context) {
         get() = sp.getBoolean("offline_commands", false)
         set(v) = sp.edit().putBoolean("offline_commands", v).apply()
 
+    /** Show the floating Raga button over other apps while Raga is on. */
+    var floatingButton: Boolean
+        get() = sp.getBoolean("floating_button", true)
+        set(v) = sp.edit().putBoolean("floating_button", v).apply()
+
+    var fabX: Int
+        get() = sp.getInt("fab_x", -1)
+        set(v) = sp.edit().putInt("fab_x", v).apply()
+    var fabY: Int
+        get() = sp.getInt("fab_y", -1)
+        set(v) = sp.edit().putInt("fab_y", v).apply()
+
     var modelName: String
         get() = sp.getString("model", ModelManager.SPEECH_MODELS.first().id)!!
         set(v) = sp.edit().putString("model", v).apply()

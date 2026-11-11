@@ -1,0 +1,8 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <gradient android:angle="135" android:startColor="#7B5CFF" android:centerColor="#FF4FA3" android:endColor="#33D1FF" />
+        </shape>
+    </item>
+    <item android:drawable="@drawable/ic_mic" android:left="14dp" android:top="14dp" android:right="14dp" android:bottom="14dp" />
+</layer-list>

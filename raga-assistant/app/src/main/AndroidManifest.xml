@@ -81,6 +81,25 @@
             </intent-filter>
         </activity>
 
+        <!-- The assistant card. ASSIST lets Raga be chosen as the phone's digital assistant
+             (long-press power/home); VOICE_COMMAND answers a headset's voice button. -->
+        <activity
+            android:name=".AssistActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:taskAffinity="app.raga.assistant.assist"
+            android:theme="@style/Theme.Raga.Assist">
+            <intent-filter>
+                <action android:name="android.intent.action.ASSIST" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VOICE_COMMAND" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".SettingsActivity"
             android:exported="false"
