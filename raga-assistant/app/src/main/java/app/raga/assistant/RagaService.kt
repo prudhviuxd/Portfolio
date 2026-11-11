@@ -74,7 +74,11 @@ class RagaService : Service() {
         instance = this
         prefs = Prefs(this)
         bubble = Bubble(this)
-        fab = FloatingButton(this) { AssistActivity.open(this) }
+        fab = FloatingButton(this, onDismiss = {
+            RagaStatus.add("Closed from the floating button.")
+            android.widget.Toast.makeText(this, "Raga closed. Open the Raga app to turn it on again.", android.widget.Toast.LENGTH_LONG).show()
+            stopSelf()
+        }) { AssistActivity.open(this) }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

@@ -23,7 +23,18 @@ It works like "Hey Siri". Three ways to talk to Raga from **any app**:
 * tap the **floating Raga button** (drag it anywhere),
 * make Raga the phone's **digital assistant** and hold the power / home button.
 
-A Siri-style card slides up over the current app, listens, acts and answers out loud. Raga answers out loud, and when it asks something ("Shall I send it?")
+A Siri-style card slides up over the current app, listens, acts and answers out loud.
+Type in the card to **chat** instead of speaking. Close it with ✕, or drag the floating
+button onto the ✕ at the bottom of the screen to turn Raga off.
+
+**Smart understanding (optional):** add your own Anthropic API key in Settings and Raga uses
+Claude to understand requests phrased any way ("I want something relaxing by Arijit"),
+follow the conversation ("call him too"), and answer questions. Claude turns the request into
+one of Raga's own commands, which the phone then carries out. Only the text of requests Raga
+doesn't understand by itself, and chat messages, are sent to Anthropic; never audio.
+
+**Closing apps:** "close YouTube", "close this app", "close all apps" (full version: Raga opens
+the recent-apps screen and swipes the app away, or presses Clear all). Raga answers out loud, and when it asks something ("Shall I send it?")
 just answer — no need to say "Raga" again.
 Sending an SMS or WhatsApp message asks "Shall I send it?" first; answer "yes" or "no".
 If a name is unclear, Raga asks "Did you mean …?".

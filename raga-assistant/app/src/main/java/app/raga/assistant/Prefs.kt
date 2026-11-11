@@ -49,6 +49,11 @@ class Prefs(context: Context) {
         get() = sp.getInt("fab_y", -1)
         set(v) = sp.edit().putInt("fab_y", v).apply()
 
+    /** The owner's own Anthropic API key for smart understanding and chat (optional). */
+    var aiKey: String
+        get() = sp.getString("ai_key", "") ?: ""
+        set(v) = sp.edit().putString("ai_key", v.trim()).apply()
+
     var modelName: String
         get() = sp.getString("model", ModelManager.SPEECH_MODELS.first().id)!!
         set(v) = sp.edit().putString("model", v).apply()

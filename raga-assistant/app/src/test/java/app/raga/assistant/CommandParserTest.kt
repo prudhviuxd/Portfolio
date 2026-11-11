@@ -71,6 +71,17 @@ class CommandParserTest {
         assertEquals(Command.OpenPanel(Panel.WIFI), p("turn on wifi"))
     }
 
+    @Test fun closing() {
+        assertEquals(Command.CloseApp("youtube"), p("close youtube"))
+        assertEquals(Command.CloseApp("whatsapp"), p("close the whats app app"))
+        assertEquals(Command.CloseApp(null), p("close this app"))
+        assertEquals(Command.CloseApp(null), p("close it"))
+        assertEquals(Command.CloseAllApps, p("close all apps"))
+        assertEquals(Command.CloseAllApps, p("clear recent apps"))
+        assertEquals(Command.StopListening, p("stop listening"))
+        assertEquals(Command.Media(MediaAction.PAUSE), p("stop the music"))
+    }
+
     @Test fun screen() {
         assertEquals(Command.Global(GlobalAction.HOME), p("go home"))
         assertEquals(Command.Global(GlobalAction.BACK), p("go back"))

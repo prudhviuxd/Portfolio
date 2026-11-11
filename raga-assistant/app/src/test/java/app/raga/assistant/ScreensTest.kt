@@ -40,6 +40,15 @@ class ScreensTest {
             a.findViewById<android.widget.TextView>(R.id.heard).text = "“Open YouTube”"
             a.findViewById<android.widget.TextView>(R.id.reply).apply { text = "Opening YouTube"; visibility = View.VISIBLE }
             shot(a.window.decorView, "assist_card")
+            // chat mode
+            a.findViewById<android.widget.EditText>(R.id.input).requestFocus()
+            val chat = a.findViewById<android.widget.TextView>(R.id.chat)
+            chat.text = "You:  remind me what song was playing\n\nRaga:  It was Kesariya by Arijit Singh.\n\nYou:  play it again\n\nRaga:  Playing Kesariya."
+            a.findViewById<View>(R.id.chatScroll).visibility = View.VISIBLE
+            a.findViewById<android.widget.TextView>(R.id.heard).text = ""
+            a.findViewById<android.widget.TextView>(R.id.reply).visibility = View.GONE
+            org.robolectric.shadows.ShadowLooper.idleMainLooper()
+            shot(a.window.decorView, "assist_chat")
         }
     }
 

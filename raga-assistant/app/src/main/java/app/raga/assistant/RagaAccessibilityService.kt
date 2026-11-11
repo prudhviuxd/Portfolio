@@ -22,7 +22,102 @@ class RagaAccessibilityService : AccessibilityService() {
         if (instance === this) instance = null
         return super.onUnbind(intent)
     }
-    override fun onAccessibilityEvent(event: AccessibilityEvent?) {}
+    private val handler = android.os.Handler(android.os.Looper.getMainLooper())
+
+    /** The last real app that was on screen (not Raga, the launcher, the keyboard or system UI). */
+    @Volatile var lastApp: String? = null
+        private set
+
+    override fun onAccessibilityEvent(event: AccessibilityEvent?) {
+        if (event?.eventType != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) return
+        val pkg = event.packageName?.toString() ?: return
+        if (pkg == packageName || pkg == "com.android.systemui" || pkg == homePackage() || pkg.contains("inputmethod") ||
+            pkg.contains("keyboard")
+        ) return
+        lastApp = pkg
+    }
+
+    private fun homePackage(): String? = try {
+        val i = android.content.Intent(android.content.Intent.ACTION_MAIN).addCategory(android.content.Intent.CATEGORY_HOME)
+        packageManager.resolveActivity(i, 0)?.activityInfo?.packageName
+    } catch (_: Exception) { null }
+
+    private fun swipeUp(r: Rect, onDone: () -> Unit = {}) {
+        val path = Path().apply { moveTo(r.exactCenterX(), r.exactCenterY()); lineTo(r.exactCenterX(), 20f) }
+        val g = GestureDescription.Builder().addStroke(GestureDescription.StrokeDescription(path, 0, 220)).build()
+        dispatchGesture(g, object : GestureResultCallback() {
+            override fun onCompleted(gestureDescription: GestureDescription?) = onDone()
+            override fun onCancelled(gestureDescription: GestureDescription?) = onDone()
+        }, null)
+    }
+
+    /**
+     * Close one app the way a person would: open the recent-apps screen and swipe its card
+     * away (or use the card's own "dismiss" action when the launcher offers one).
+     */
+    fun closeApp(label: String, onResult: (Boolean) -> Unit) {
+        performGlobalAction(GLOBAL_ACTION_RECENTS)
+        handler.postDelayed({
+            val nodes = allNodes().filter { it.isVisibleToUser && labelOf(it).isNotBlank() }
+            val match = Fuzzy.best(label, nodes) { labelOf(it) }?.takeIf { it.score >= 0.7 }?.item
+            if (match == null) {
+                performGlobalAction(GLOBAL_ACTION_HOME)
+                onResult(false); return@postDelayed
+            }
+            // a "dismiss"/"remove"/"close" accessibility action on the card or its parents?
+            var n: AccessibilityNodeInfo? = match
+            while (n != null) {
+                val act = n.actionList.firstOrNull { a ->
+                    val l = a.label?.toString()?.lowercase() ?: ""
+                    a.id == AccessibilityNodeInfo.AccessibilityAction.ACTION_DISMISS.id ||
+                        l.contains("dismiss") || l.contains("remove") || (l.contains("close") && !l.contains("all"))
+                }
+                if (act != null && n.performAction(act.id)) {
+                    handler.postDelayed({ performGlobalAction(GLOBAL_ACTION_HOME); onResult(true) }, 500)
+                    return@postDelayed
+                }
+                n = n.parent
+            }
+            // otherwise swipe the card up and away
+            var card: AccessibilityNodeInfo = match
+            while (card.parent != null && Rect().also { card.getBoundsInScreen(it) }.height() < resources.displayMetrics.heightPixels / 4) {
+                card = card.parent
+            }
+            val r = Rect().also { card.getBoundsInScreen(it) }
+            swipeUp(r) { handler.postDelayed({ performGlobalAction(GLOBAL_ACTION_HOME); onResult(true) }, 400) }
+        }, 900)
+    }
+
+    /** Press the recent-apps screen's "Clear all" / "Close all" button. */
+    fun closeAll(onResult: (Boolean) -> Unit) {
+        performGlobalAction(GLOBAL_ACTION_RECENTS)
+        val words = listOf("clear all", "close all", "clear", "dismiss all", "remove all", "clear everything")
+        fun findButton(): AccessibilityNodeInfo? = allNodes().firstOrNull { n ->
+            val l = labelOf(n).lowercase().trim()
+            n.isVisibleToUser && words.any { l == it }
+        }
+        fun attempt(step: Int) {
+            findButton()?.let { if (click(it)) { onResult(true); return } }
+            if (step >= 8) {
+                // no button: swipe the cards away one by one
+                var left = 12
+                fun swipeNext() {
+                    if (left-- <= 0) { performGlobalAction(GLOBAL_ACTION_HOME); onResult(true); return }
+                    val dm = resources.displayMetrics
+                    swipeUp(Rect(0, dm.heightPixels / 4, dm.widthPixels, dm.heightPixels * 3 / 4)) { handler.postDelayed({ swipeNext() }, 350) }
+                }
+                swipeNext(); return
+            }
+            // "Clear all" usually sits at one end of the list: scroll toward it
+            val list = allNodes().filter { it.isScrollable && it.isVisibleToUser }.maxByOrNull {
+                Rect().also { r -> it.getBoundsInScreen(r) }.let { r -> r.width() * r.height() }
+            }
+            val dir = if (step < 4) AccessibilityNodeInfo.ACTION_SCROLL_FORWARD else AccessibilityNodeInfo.ACTION_SCROLL_BACKWARD
+            list?.performAction(dir)
+            handler.postDelayed({ attempt(step + 1) }, 350)
+        }
+        handler.postDelayed({ attempt(0) }, 900)
+    }
     override fun onInterrupt() {}
 
     fun global(action: GlobalAction): Boolean {

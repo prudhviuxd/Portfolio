@@ -67,9 +67,32 @@ object Shared {
             is FollowUp.Ask -> return if (cmd == Command.Cancel) Outcome("Okay, cancelled.") else pending.onAnswer(text)
             null -> {}
         }
+        if (cmd is Command.Unknown && AiBrain.enabled(ctx)) return askAi(ctx, text)
         RagaStatus.add("→ ${cmd.javaClass.simpleName}")
+        val out = run(ctx, cmd)
+        AiBrain.remember(text, org.json.JSONObject().put("command", text).put("reply", out.say ?: "").toString())
+        return out
+    }
+
+    private fun run(ctx: Context, cmd: Command): Outcome {
         blockedReason(ctx, cmd)?.let { return Outcome(it) }
         return executor(ctx).execute(cmd)
+    }
+
+    /** Let Claude work out what was meant, then do it with Raga's own actions. */
+    private fun askAi(ctx: Context, text: String): Outcome {
+        RagaStatus.add("🤖 asking AI to understand: $text")
+        val a = AiBrain.interpret(ctx, text) ?: return Outcome("Sorry, I didn't understand.")
+        val command = a.command
+        if (command != null) {
+            val cmd = CommandParser.parse(command)
+            RagaStatus.add("🤖 → \"$command\" (${cmd.javaClass.simpleName})")
+            if (cmd !is Command.Unknown) {
+                val out = run(ctx, cmd)
+                return if (out.say == null && out.followUp == null) out.copy(say = a.reply ?: "Done.") else out
+            }
+        }
+        return Outcome(a.reply ?: "Sorry, I'm not sure how to do that.")
     }
 
     /**

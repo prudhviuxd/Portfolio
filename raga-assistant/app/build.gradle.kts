@@ -11,8 +11,8 @@ android {
         applicationId = "app.raga.assistant"
         minSdk = 26
         targetSdk = 35
-        versionCode = 6
-        versionName = "3.0"
+        versionCode = 7
+        versionName = "3.1"
         // real phones are ARM; x86_64 kept for the emulator
         ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64") }
     }
@@ -35,6 +35,12 @@ android {
     }
     testOptions {
         unitTests.isIncludeAndroidResources = true
+    }
+    packaging {
+        resources.excludes += listOf(
+            "META-INF/DEPENDENCIES", "META-INF/LICENSE*", "META-INF/NOTICE*", "META-INF/*.kotlin_module",
+            "META-INF/versions/**", "META-INF/INDEX.LIST", "META-INF/io.netty.versions.properties",
+        )
     }
     buildFeatures {
         viewBinding = true
@@ -69,10 +75,14 @@ dependencies {
     implementation("com.alphacephei:vosk-android:0.3.75")
     implementation("net.java.dev.jna:jna:5.18.1@aar")
 
+    // Optional AI understanding and chat (Claude), used only when the owner adds an API key
+    implementation("com.anthropic:anthropic-java:3.8.0")
+
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.json:json:20240303")
     testImplementation("org.robolectric:robolectric:4.14.1")
     testImplementation("androidx.test:core:1.6.1")
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
 }
 
 tasks.withType<Test>().configureEach {

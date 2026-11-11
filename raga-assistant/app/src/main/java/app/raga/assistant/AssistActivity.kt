@@ -44,6 +44,24 @@ class AssistActivity : AppCompatActivity() {
     private var googleReady = false
     private var finished = false
     private var vocabulary: ArrayList<String> = arrayListOf()
+    /** Typing to Raga: keep the card open for a back-and-forth instead of closing after each answer. */
+    private var chatMode = false
+        set(v) {
+            field = v
+            b.chatScroll.visibility = if (v && chatLog.isNotEmpty()) View.VISIBLE else View.GONE
+            b.orb.layoutParams = b.orb.layoutParams.apply { val s = if (v) 90 else 150; width = dp(s); height = dp(s) }
+        }
+    private val chatLog = StringBuilder()
+
+    private fun dp(v: Int) = (v * resources.displayMetrics.density).toInt()
+
+    private fun addChat(who: String, text: String) {
+        if (chatLog.isNotEmpty()) chatLog.append("\n\n")
+        chatLog.append(who).append("  ").append(text)
+        b.chat.text = chatLog
+        b.chatScroll.visibility = View.VISIBLE
+        b.chatScroll.post { b.chatScroll.fullScroll(View.FOCUS_DOWN) }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +76,13 @@ class AssistActivity : AppCompatActivity() {
         }
         b.root.setOnClickListener { close() }       // tap outside the card
         b.card.setOnClickListener { }               // taps on the card don't close it
-        b.orb.setOnClickListener { listen() }       // tap the orb to speak again
+        b.orb.setOnClickListener { chatMode = false; hideKeyboard(); listen() } // tap the orb to speak again
+        b.close.setOnClickListener { close() }
+        b.input.setOnFocusChangeListener { _, focused ->
+            if (focused) { chatMode = true; turn++; stopListening(); ui(UiPhase.WAITING) }
+        }
+        b.send.setOnClickListener { sendTyped() }
+        b.input.setOnEditorActionListener { _, _, _ -> sendTyped(); true }
 
         RagaService.instance?.pauseWake()           // free the microphone
         tts = TextToSpeech(this) { st ->
@@ -85,6 +109,20 @@ class AssistActivity : AppCompatActivity() {
         if (!said.isNullOrBlank()) process(said) else listen()
     }
 
+    private fun sendTyped() {
+        val t = b.input.text.toString().trim()
+        if (t.isEmpty()) return
+        chatMode = true
+        b.input.setText("")
+        process(t)
+    }
+
+    private fun hideKeyboard() {
+        b.input.clearFocus()
+        getSystemService(android.view.inputmethod.InputMethodManager::class.java)
+            ?.hideSoftInputFromWindow(b.input.windowToken, 0)
+    }
+
     // ------------------------------------------------------------------ UI state
 
     private fun ui(phase: UiPhase, heard: String? = null, reply: String? = null) {
@@ -95,7 +133,7 @@ class AssistActivity : AppCompatActivity() {
         b.hint.text = when (phase) {
             UiPhase.LISTENING -> "Listening…"
             UiPhase.THINKING -> "Thinking…"
-            else -> "Tap the orb to speak"
+            else -> if (chatMode) "Type a message, or tap the orb to speak" else "Tap the orb to speak"
         }
         b.reply.visibility = if (b.reply.text.isNullOrBlank()) View.GONE else View.VISIBLE
     }
@@ -220,7 +258,8 @@ class AssistActivity : AppCompatActivity() {
         stopListening()
         val text = stripWake(raw)
         RagaStatus.add("🗣 $text")
-        ui(UiPhase.THINKING, heard = text, reply = "")
+        if (chatMode) { addChat("You:", text); ui(UiPhase.THINKING, heard = "", reply = "") }
+        else ui(UiPhase.THINKING, heard = text, reply = "")
         val ctx = applicationContext
         Shared.worker.post {
             val outcome = try { Shared.decide(ctx, text) } catch (e: SecurityException) {
@@ -238,12 +277,14 @@ class AssistActivity : AppCompatActivity() {
         Shared.followUp = fu
         val text = listOfNotNull(outcome.say, fu?.prompt).joinToString(" ").ifBlank { "Done." }
         RagaStatus.add("💬 $text")
-        ui(UiPhase.SPEAKING, reply = text)
+        if (chatMode) { addChat("Raga:", text); ui(UiPhase.SPEAKING, reply = "") }
+        else ui(UiPhase.SPEAKING, reply = text)
         speakThen(text) {
             when {
                 closeAfter -> close()
+                chatMode -> ui(UiPhase.WAITING)       // chatting: stay open for the next message
                 Shared.followUp != null -> listen()   // answer without saying "Raga" again
-                else -> main.postDelayed({ close() }, 1200)
+                else -> main.postDelayed({ if (!chatMode) close() }, 1500)
             }
         }
     }
@@ -252,7 +293,7 @@ class AssistActivity : AppCompatActivity() {
         var done = false
         val finish = { if (!done) { done = true; if (!finished) then() } }
         val engine = tts
-        if (!Prefs(this).speakReplies) { main.postDelayed({ finish() }, 1500L + text.length * 40L); return }
+        if (!Prefs(this).speakReplies || chatMode) { main.postDelayed({ finish() }, 1500L + text.length * 40L); return }
         if (!ttsReady || engine == null) {
             // engine still starting: speak once it's ready, but never wait forever
             pendingSpeech = text to { finish() }

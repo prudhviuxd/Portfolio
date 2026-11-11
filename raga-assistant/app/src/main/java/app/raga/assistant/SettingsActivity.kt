@@ -123,6 +123,15 @@ class SettingsActivity : AppCompatActivity() {
             // restart so the button appears / disappears
             if (RagaStatus.running.value) { RagaService.stop(this); b.root.postDelayed({ RagaService.start(this) }, 500) }
         }
+        b.aiKey.setText(prefs.aiKey)
+        b.aiKey.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, a: Int, c: Int, d: Int) {}
+            override fun onTextChanged(s: CharSequence?, a: Int, c: Int, d: Int) {}
+            override fun afterTextChanged(s: Editable?) { prefs.aiKey = s.toString() }
+        })
+        b.getKey.setOnClickListener {
+            try { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://console.anthropic.com/settings/keys"))) } catch (_: Exception) {}
+        }
         b.makeAssistant.setOnClickListener {
             val tries = listOf(
                 Intent(Settings.ACTION_VOICE_INPUT_SETTINGS),

@@ -13,6 +13,9 @@ sealed class Command {
 
     // apps & files
     data class OpenApp(val name: String) : Command()
+    /** Close an app (null = the app that was on screen). */
+    data class CloseApp(val name: String?) : Command()
+    object CloseAllApps : Command()
     data class OpenFile(val name: String) : Command()
     data class ShareFile(val name: String, val app: String?) : Command()
 
@@ -196,8 +199,13 @@ object CommandParser {
         match(t, "(?:turn (?:on|off) |open |show )?(?:the )?(?:mobile )?data(?: settings)?(?: on| off)?")?.let { return Command.OpenPanel(Panel.MOBILE_DATA) }
         match(t, "(?:turn (?:on|off) |open |show )?(?:the )?hotspot(?: settings)?(?: on| off)?")?.let { return Command.OpenPanel(Panel.HOTSPOT) }
 
+        // ---------- closing apps ----------
+        match(t, "(?:close|clear|kill|quit|exit|shut down|remove) (?:all|all the|every|all my|all of the|all open)(?: recent)? apps?(?: in the background)?|clear (?:all )?(?:recent apps|recents)|close everything")?.let { return Command.CloseAllApps }
+        match(t, "(?:close|quit|exit|kill|shut)(?: down)?(?: (?:this|the|current|that|open))?(?: app| application)?|close it")?.let { return Command.CloseApp(null) }
+        match(t, "(?:close|quit|exit|kill|shut down|shut) (?:the |my )?(.+?)(?: app| application)?")?.let { return Command.CloseApp(it.groupValues[1]) }
+
         // ---------- screen control ----------
-        match(t, "(?:go )?home|(?:go to |show )?(?:the )?home screen|close (?:the |this )?app|minimi[sz]e")?.let { return Command.Global(GlobalAction.HOME) }
+        match(t, "(?:go )?home|(?:go to |show )?(?:the )?home screen|minimi[sz]e(?: (?:this|the) app)?")?.let { return Command.Global(GlobalAction.HOME) }
         match(t, "(?:go )?back|go to (?:the )?previous screen")?.let { return Command.Global(GlobalAction.BACK) }
         match(t, "(?:show )?(?:the )?recent(?:s| apps)|(?:open )?recent apps|switch apps?")?.let { return Command.Global(GlobalAction.RECENTS) }
         match(t, "(?:show |open |pull down )?(?:the |my )?notifications?(?: panel| shade)?")?.let { return Command.Global(GlobalAction.NOTIFICATIONS) }

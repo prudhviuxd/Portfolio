@@ -75,6 +75,8 @@ class CommandExecutor(private val ctx: Context, private val onStopRequested: () 
         is Command.SendSms -> sms(cmd.who, cmd.body)
         is Command.SendWhatsApp -> whatsApp(cmd.who, cmd.body)
         is Command.OpenApp -> openApp(cmd.name)
+        is Command.CloseApp -> closeApp(cmd.name)
+        Command.CloseAllApps -> closeAll()
         is Command.OpenFile -> openFile(cmd.name)
         is Command.ShareFile -> shareFile(cmd.name, cmd.app)
         is Command.Global -> global(cmd.action)
@@ -350,6 +352,38 @@ class CommandExecutor(private val ctx: Context, private val onStopRequested: () 
         val i = ctx.packageManager.getLaunchIntentForPackage(app.pkg) ?: return Outcome("I can't open ${app.label}.")
         start(i)
         return Outcome("Opening ${app.label}")
+    }
+
+    private fun goHome() = start(Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME))
+
+    private fun closeApp(name: String?): Outcome {
+        val svc = RagaAccessibilityService.instance
+        val target: App? = if (name == null) {
+            val pkg = svc?.lastApp ?: return if (svc == null) {
+                goHome(); Outcome("I've minimized it. Closing apps completely needs screen control (Accessibility) in the full version of Raga.")
+            } else Outcome("Which app should I close?")
+            apps().firstOrNull { it.pkg == pkg } ?: App(pkg, pkg)
+        } else {
+            val m = Fuzzy.best(name, apps()) { it.label }
+            if (m == null || m.score < 0.6) return Outcome("I couldn't find an app called $name.")
+            m.item
+        }
+        if (svc == null) {
+            goHome()
+            return Outcome("I've minimized ${target?.label}. Closing apps completely needs screen control (Accessibility) in the full version of Raga.")
+        }
+        val label = target!!.label
+        main.post { svc.closeApp(label) { ok -> if (!ok) RagaStatus.add("Couldn't find $label in recent apps") } }
+        return Outcome("Closing $label.")
+    }
+
+    private fun closeAll(): Outcome {
+        val svc = RagaAccessibilityService.instance ?: run {
+            goHome()
+            return Outcome("Closing all apps needs screen control (Accessibility) in the full version of Raga.")
+        }
+        main.post { svc.closeAll { } }
+        return Outcome("Closing all apps.")
     }
 
     private fun openApp(name: String): Outcome = resolve(name, apps(), { it.label }, "apps") { launch(it) }

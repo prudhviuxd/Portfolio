@@ -69,6 +69,33 @@
             android:text="Then hold the power or home button (or swipe up from a bottom corner) to open Raga from anywhere, like Siri. In the list, choose “Default digital assistant app” → Raga."
             android:textSize="13sp" />
 
+        <!-- Smart understanding -->
+        <TextView
+            style="@style/SectionTitle"
+            android:text="Smart understanding &amp; chat (optional)" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.75"
+            android:text="Add your own Anthropic API key and Raga uses Claude to understand requests phrased any way, follow the conversation, and answer questions. Only the text of a request Raga doesn't already understand (or a chat message) is sent to Anthropic — never audio. Without a key, Raga works fully on its own."
+            android:textSize="13sp" />
+
+        <EditText
+            android:id="@+id/aiKey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Anthropic API key (sk-ant-…)"
+            android:importantForAutofill="no"
+            android:inputType="textPassword" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/getKey"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get a key at console.anthropic.com" />
+
         <!-- 1. Speech model -->
         <TextView
             style="@style/SectionTitle"

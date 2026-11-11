@@ -89,7 +89,8 @@
             android:exported="true"
             android:launchMode="singleTask"
             android:taskAffinity="app.raga.assistant.assist"
-            android:theme="@style/Theme.Raga.Assist">
+            android:theme="@style/Theme.Raga.Assist"
+            android:windowSoftInputMode="adjustResize|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.ASSIST" />
                 <category android:name="android.intent.category.DEFAULT" />
