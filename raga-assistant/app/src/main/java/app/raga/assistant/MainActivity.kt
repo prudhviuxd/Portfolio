@@ -159,7 +159,8 @@ class MainActivity : AppCompatActivity() {
         b.permStatus.text = listOf(
             "${mark(runtimeOk)} Microphone, contacts, calls, SMS, media",
             "${mark(overlay)} Open apps while in the background",
-            "${mark(a11y)} Screen control: click, type, scroll, back, home, lock",
+            if (BuildConfig.SCREEN_CONTROL) "${mark(a11y)} Screen control: click, type, scroll, back, home, lock"
+            else "– Screen control isn't in Raga Lite (install the full version for click, type, scroll)",
             "${mark(files)} Find and open any file",
             "${mark(battery)} Keep running with the screen off",
         ).joinToString("\n")
@@ -168,6 +169,8 @@ class MainActivity : AppCompatActivity() {
         b.grantAccessibility.isEnabled = !a11y
         b.grantFiles.isEnabled = !files
         b.grantBattery.isEnabled = !battery
+
+        if (!BuildConfig.SCREEN_CONTROL) b.grantAccessibility.visibility = android.view.View.GONE
 
         val enrolled = prefs.voicePrint != null
         b.voiceStatus.text = if (enrolled) "Voice saved from ${prefs.enrollmentSamples} recordings. Raga ignores other voices."

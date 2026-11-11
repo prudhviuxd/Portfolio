@@ -38,6 +38,17 @@ Nothing you say leaves the phone. The internet is used only for the one-time mod
 
 ## Install
 
+### "Blocked by Play Protect"
+In some countries (India included) Play Protect blocks sideloaded apps that use Accessibility.
+Two ways round it:
+
+* **Raga Lite** (`release/Raga-Lite.apk`) leaves out screen control (click, type, scroll,
+  WhatsApp auto-send) and installs normally. Everything else works.
+* **Full Raga**: open the Play Store → your profile picture → **Play Protect** → ⚙ →
+  turn off **Scan apps with Play Protect**, install `release/Raga.apk`, then turn scanning back on.
+  Or install from a computer with `adb install Raga.apk`, which Play Protect doesn't block.
+
+
 1. Get the APK: download `raga-debug-apk` from the latest **Raga Android app** run under the
    repo's *Actions* tab (or build it yourself, below). Copy it to the phone and open it;
    allow "install unknown apps" when asked.
@@ -63,8 +74,8 @@ Requires JDK 17+ and the Android SDK (platform 35).
 
 ```bash
 cd raga-assistant
-./gradlew testDebugUnitTest assembleDebug
-# APK: app/build/outputs/apk/debug/app-debug.apk
+./gradlew testFullDebugUnitTest assembleFullDebug assembleLiteDebug
+# APKs: app/build/outputs/apk/{full,lite}/debug/
 ```
 
 ## Limits (Android rules, not bugs)

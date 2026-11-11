@@ -31,6 +31,23 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
+    }
+
+    // "full" has screen control (Accessibility). Play Protect blocks sideloaded apps that use
+    // Accessibility in some countries, so "lite" leaves it out and installs without the block.
+    flavorDimensions += "edition"
+    productFlavors {
+        create("full") {
+            dimension = "edition"
+            buildConfigField("boolean", "SCREEN_CONTROL", "true")
+        }
+        create("lite") {
+            dimension = "edition"
+            applicationIdSuffix = ".lite"
+            versionNameSuffix = "-lite"
+            buildConfigField("boolean", "SCREEN_CONTROL", "false")
+        }
     }
 }
 

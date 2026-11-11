@@ -127,7 +127,10 @@ class CommandExecutor(private val ctx: Context, private val onStopRequested: () 
 
     private inline fun a11y(block: (RagaAccessibilityService) -> Outcome): Outcome {
         val svc = RagaAccessibilityService.instance
-            ?: return Outcome("Turn on Raga in Accessibility settings so I can control the screen.")
+            ?: return Outcome(
+                if (BuildConfig.SCREEN_CONTROL) "Turn on Raga in Accessibility settings so I can control the screen."
+                else "Screen control needs the full version of Raga.",
+            )
         return block(svc)
     }
 
