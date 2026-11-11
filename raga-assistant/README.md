@@ -42,8 +42,9 @@ Nothing you say leaves the phone. The internet is used only for the one-time mod
 In some countries (India included) Play Protect blocks sideloaded apps that use Accessibility.
 Two ways round it:
 
-* **Raga Lite** (`release/Raga-Lite.apk`) leaves out screen control (click, type, scroll,
-  WhatsApp auto-send) and installs normally. Everything else works.
+* **Raga Lite** (`release/Raga-Lite.apk`) leaves out the permissions the fraud check looks for:
+  no screen control (click, type, scroll, WhatsApp auto-send), SMS opens the Messages app with
+  the text filled in instead of sending it, and "open file" only finds photos, videos and music.
 * **Full Raga**: open the Play Store → your profile picture → **Play Protect** → ⚙ →
   turn off **Scan apps with Play Protect**, install `release/Raga.apk`, then turn scanning back on.
   Or install from a computer with `adb install Raga.apk`, which Play Protect doesn't block.

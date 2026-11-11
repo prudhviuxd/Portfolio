@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             add(Manifest.permission.READ_EXTERNAL_STORAGE)
         }
-    }.toTypedArray()
+    }.filter { declared(it) }.toTypedArray()
 
     private val askPerms = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { refresh() }
 
@@ -124,6 +124,12 @@ class MainActivity : AppCompatActivity() {
         refresh()
     }
 
+    /** Lite leaves some permissions out of its manifest; don't ask for those. */
+    private fun declared(p: String): Boolean = try {
+        val info = packageManager.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS)
+        info.requestedPermissions?.contains(p) == true
+    } catch (_: Exception) { false }
+
     private fun granted(p: String) = ContextCompat.checkSelfPermission(this, p) == PackageManager.PERMISSION_GRANTED
 
     private fun hasModels() = ModelManager.isInstalled(this, prefs.modelName) &&
@@ -135,7 +141,9 @@ class MainActivity : AppCompatActivity() {
         return enabled.split(':').any { it.equals(me, ignoreCase = true) }
     }
 
-    private fun allFiles() = if (Build.VERSION.SDK_INT >= 30) Environment.isExternalStorageManager()
+    private fun allFiles() = if (Build.VERSION.SDK_INT >= 30) {
+        if (declared(Manifest.permission.MANAGE_EXTERNAL_STORAGE)) Environment.isExternalStorageManager() else true
+    }
     else granted(Manifest.permission.READ_EXTERNAL_STORAGE)
 
     private fun batteryOk() = getSystemService(PowerManager::class.java).isIgnoringBatteryOptimizations(packageName)
@@ -168,6 +176,7 @@ class MainActivity : AppCompatActivity() {
         b.grantOverlay.isEnabled = !overlay
         b.grantAccessibility.isEnabled = !a11y
         b.grantFiles.isEnabled = !files
+        if (Build.VERSION.SDK_INT >= 30 && !declared(Manifest.permission.MANAGE_EXTERNAL_STORAGE)) b.grantFiles.visibility = android.view.View.GONE
         b.grantBattery.isEnabled = !battery
 
         if (!BuildConfig.SCREEN_CONTROL) b.grantAccessibility.visibility = android.view.View.GONE

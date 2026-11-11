@@ -191,11 +191,16 @@ class CommandExecutor(private val ctx: Context, private val onStopRequested: () 
     private fun sms(who: String, body: String?): Outcome = withContact(who) { c ->
         val send: (String) -> Outcome = { text ->
             Outcome(null, FollowUp.Confirm("Send to ${c.name}: $text. Shall I send it?") {
-                if (!has(Manifest.permission.SEND_SMS)) throw SecurityException()
-                val sm = if (Build.VERSION.SDK_INT >= 31) ctx.getSystemService(SmsManager::class.java)
-                else @Suppress("DEPRECATION") SmsManager.getDefault()
-                sm.sendMultipartTextMessage(c.number, null, sm.divideMessage(text), null, null)
-                Outcome("Message sent to ${c.name}.")
+                if (!has(Manifest.permission.SEND_SMS)) {
+                    // Lite: no direct SMS permission, so open the Messages app with the text filled in
+                    start(Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + Uri.encode(c.number))).putExtra("sms_body", text))
+                    Outcome("The message is ready. Tap send.")
+                } else {
+                    val sm = if (Build.VERSION.SDK_INT >= 31) ctx.getSystemService(SmsManager::class.java)
+                    else @Suppress("DEPRECATION") SmsManager.getDefault()
+                    sm.sendMultipartTextMessage(c.number, null, sm.divideMessage(text), null, null)
+                    Outcome("Message sent to ${c.name}.")
+                }
             })
         }
         if (body.isNullOrBlank()) Outcome(null, FollowUp.Ask("What should the message to ${c.name} say?") { send(it) })
