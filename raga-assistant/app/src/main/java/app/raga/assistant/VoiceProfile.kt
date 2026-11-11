@@ -42,7 +42,8 @@ object VoiceProfile {
     fun suggestThreshold(samples: List<DoubleArray>): Double {
         val c = centroid(samples)
         val weakest = samples.minOf { cosine(it, c) }
-        return (weakest - 0.12).coerceIn(0.30, 0.70)
+        // prints of a short word like "Raga" vary more than long sentences, so allow a wider margin
+        return (weakest - 0.10).coerceIn(0.20, 0.60)
     }
 
     fun encode(v: DoubleArray): String = v.joinToString(",") { "%.6f".format(java.util.Locale.US, it) }

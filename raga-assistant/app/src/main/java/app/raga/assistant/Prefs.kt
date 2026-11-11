@@ -12,8 +12,8 @@ class Prefs(context: Context) {
         set(v) = sp.edit().putString("wake_words", v.joinToString(", ")).apply()
 
     var voicePrint: DoubleArray?
-        get() = VoiceProfile.decode(sp.getString("voice_print", null))
-        set(v) = sp.edit().putString("voice_print", v?.let { VoiceProfile.encode(it) }).apply()
+        get() = VoiceProfile.decode(sp.getString("voice_print_v2", null))
+        set(v) = sp.edit().putString("voice_print_v2", v?.let { VoiceProfile.encode(it) }).apply()
 
     var enrollmentSamples: Int
         get() = sp.getInt("enroll_samples", 0)

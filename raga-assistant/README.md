@@ -17,7 +17,9 @@ checks every command against **your voice print**, so other people can't control
 "Raga, help"                          "Raga, stop listening"
 ```
 
-You can also say just "Raga", wait for the beep, then say the command.
+It works like "Hey Siri": say **"Raga"**, wait for the chime and the *Listening…* card,
+then say your command. Raga answers out loud, and when it asks something ("Shall I send it?")
+just answer — no need to say "Raga" again.
 Sending an SMS or WhatsApp message asks "Shall I send it?" first; answer "yes" or "no".
 If a name is unclear, Raga asks "Did you mean …?".
 
@@ -25,16 +27,18 @@ If a name is unclear, Raga asks "Did you mean …?".
 
 | Part | How |
 | --- | --- |
-| Wake word + speech | [Vosk](https://alphacephei.com/vosk/) offline recognizer (small English model, ~40 MB), downloaded once inside the app |
-| Your voice only | Vosk speaker model (~13 MB) turns each utterance into a voice print; it is compared with the print saved when you enrolled (cosine similarity). Below the threshold → ignored |
+| Wake word | [Vosk](https://alphacephei.com/vosk/) offline recognizer restricted to the wake word (free recognition hears "raga" as "roger"; a wake-word-only grammar catches it reliably) |
+| Command | The phone's own speech recognizer (Google), accurate for accents, names and numbers; falls back to Vosk offline when the phone has none |
+| Answer | Text-to-speech plus a Siri-style card over any app |
+| Your voice only | Vosk speaker model (~13 MB) turns each "Raga" into a voice print, compared with the average of the prints recorded during setup (say "Raga" six times, like Siri setup) |
 | Always on | Foreground service with a microphone notification; keeps working with the screen off |
 | Calls / SMS | `TelecomManager.placeCall`, `SmsManager` — no tapping needed |
 | Music | Songs on the phone play directly; otherwise handed to Spotify / YouTube Music / YouTube. Pause/next/previous control any player |
 | Apps, files | Fuzzy match against installed apps and files on storage |
 | Any other screen | Accessibility service: "click &lt;label&gt;", "type …", "scroll", "back", "home", "lock", "screenshot", and auto-pressing WhatsApp's Send |
 
-Nothing you say leaves the phone. The internet is used only for the one-time model download
-(and by apps you ask Raga to open).
+The wake word and voice check run offline. The command after the chime goes to the phone's speech
+recognizer, which (as with Google Assistant) may use Google's servers unless offline speech is installed.
 
 ## Install
 

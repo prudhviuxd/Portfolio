@@ -12,8 +12,9 @@ import org.vosk.android.RecognitionListener
 import org.vosk.android.SpeechService
 
 /**
- * Records the owner reading a few phrases and stores their average voice print.
- * Raga then only obeys utterances that sound like this voice.
+ * Siri-style setup: say "Raga" a few times. Each recording gives a voice print; their average
+ * becomes the owner's print. It also learns how the offline recogniser spells the owner's
+ * "Raga" (it might hear "ragga" or "rager"), and adds those spellings as wake words.
  */
 class EnrollActivity : AppCompatActivity(), RecognitionListener {
 
@@ -24,17 +25,12 @@ class EnrollActivity : AppCompatActivity(), RecognitionListener {
     private var speech: SpeechService? = null
     private var recognizer: Recognizer? = null
     private val samples = ArrayList<DoubleArray>()
-    private var phraseIdx = 0
+    private val heard = ArrayList<String>()
+    private var done = false
 
-    private val phrases = listOf(
-        "Raga, what time is it right now?",
-        "Raga, call my mother on her mobile phone.",
-        "Raga, play my favourite song from the playlist.",
-        "Raga, send a message to my friend saying I am on my way.",
-        "Raga, open the camera and take a photo.",
-        "Raga, turn on the flashlight and increase the volume.",
-        "The quick brown fox jumps over the lazy dog near the river bank.",
-        "Raga, set an alarm for six thirty tomorrow morning.",
+    private val prompts = listOf(
+        "Say “Raga”", "Again, say “Raga”", "Once more: “Raga”",
+        "Say it a little softer: “Raga”", "Say it a little louder: “Raga”", "Last one: “Raga”",
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,9 +41,10 @@ class EnrollActivity : AppCompatActivity(), RecognitionListener {
         RagaService.stop(this) // free the microphone
 
         b.cancel.setOnClickListener { finish() }
-        b.skip.setOnClickListener { phraseIdx++; show() }
-        b.phrase.text = "Loading…"
+        b.skip.setOnClickListener { finishEnrollment() }
+        b.skip.text = "Finish now"
         b.skip.isEnabled = false
+        b.phrase.text = "Getting ready…"
 
         Thread {
             try {
@@ -56,65 +53,86 @@ class EnrollActivity : AppCompatActivity(), RecognitionListener {
                 runOnUiThread {
                     if (isFinishing) { m.close(); s.close(); return@runOnUiThread }
                     model = m; spk = s
+                    // free recognition (no grammar) so we see exactly what the engine hears for "Raga"
                     val rec = Recognizer(m, 16000f, s).also { recognizer = it }
-                    speech = SpeechService(rec, 16000f).also { it.startListening(this) }
-                    b.skip.isEnabled = true
+                    // started a little later, so the microphone is free after the service stops
+                    b.root.postDelayed({
+                        if (!isFinishing) speech = SpeechService(rec, 16000f).also { it.startListening(this) }
+                    }, 600)
                     show()
                 }
             } catch (e: Exception) {
-                runOnUiThread { b.phrase.text = "Couldn't start the microphone: ${e.message}" }
+                runOnUiThread { b.phrase.text = "Couldn't start: ${e.message}" }
             }
         }.start()
     }
 
     private fun show() {
         val i = samples.size
-        b.progress.max = phrases.size
+        b.progress.max = prompts.size
         b.progress.progress = i
-        b.counter.text = "Recording ${i + 1} of ${phrases.size}"
-        b.phrase.text = "“${phrases[phraseIdx % phrases.size]}”"
-        b.heard.text = "Read it aloud in your normal voice."
+        b.counter.text = "Recording ${i + 1} of ${prompts.size}"
+        b.phrase.text = prompts[i]
+        b.heard.text = "Speak normally, about an arm's length from the phone."
+        b.skip.isEnabled = samples.size >= 3
     }
 
     override fun onResult(hypothesis: String?) {
-        if (samples.size >= phrases.size || isFinishing) return
+        if (done || isFinishing) return
         val json = try { JSONObject(hypothesis ?: return) } catch (_: Exception) { return }
-        val text = json.optString("text")
-        val vec = json.optJSONArray("spk") ?: run {
-            if (text.isNotBlank()) b.heard.text = "Heard “$text” — please say the whole phrase."
+        val text = json.optString("text").trim()
+        val vec = json.optJSONArray("spk")
+        if (text.isEmpty() || vec == null) return
+        if (json.optInt("spk_frames", 0) < MIN_FRAMES) {
+            b.heard.text = "Didn't quite catch that — say “Raga” again."
             return
         }
-        val frames = json.optInt("spk_frames", 0)
-        if (frames < MIN_FRAMES) {
-            b.heard.text = "That was a bit short — please read the whole phrase."
+        if (text.split(" ").size > 3) {
+            b.heard.text = "Heard “$text”. Just say the single word “Raga”."
             return
         }
         samples += try { DoubleArray(vec.length()) { vec.getDouble(it) } } catch (_: Exception) { return }
-        phraseIdx++
-        b.heard.text = "Got it ✓"
-        if (samples.size >= phrases.size) finishEnrollment() else b.root.postDelayed({ show() }, 600)
+        heard += text
+        b.heard.text = "Got it ✓  (heard “$text”)"
+        if (samples.size >= prompts.size) finishEnrollment() else b.root.postDelayed({ if (!done) show() }, 500)
     }
 
     private fun finishEnrollment() {
+        if (done) return
+        if (samples.size < 3) { b.heard.text = "Please record at least 3 times."; return }
+        done = true
         speech?.stop()
-        if (samples.size < 3) { b.heard.text = "Not enough speech recorded. Try again."; return }
         prefs.voicePrint = VoiceProfile.centroid(samples)
         prefs.enrollmentSamples = samples.size
         prefs.threshold = VoiceProfile.suggestThreshold(samples).toFloat()
-        b.progress.progress = phrases.size
-        b.counter.text = "Done"
-        b.phrase.text = "Your voice is saved."
-        b.heard.text = "Raga will now only respond to you. Voice-match threshold set to ${"%.2f".format(prefs.threshold)}."
+
+        // Teach the wake listener how this voice's "Raga" comes out of the recogniser.
+        // Only spellings that sound like "raga", so everyday words never become wake words.
+        val learned = heard.map { it.lowercase().trim() }
+            .filter { it.length >= 3 && it.split(" ").size <= 2 && Fuzzy.score(it.replace(" ", ""), "raga") >= 0.5 }
+            .groupingBy { it }.eachCount()
+            .filter { (w, n) -> n >= 2 || w.startsWith("rag") }
+            .keys
+        val words = (prefs.wakeWords + learned).distinct()
+        prefs.wakeWords = words
+
+        b.progress.progress = prompts.size
+        b.counter.text = "All set"
+        b.phrase.text = "Raga knows your voice."
+        b.heard.text = "Raga will wake up to: ${words.joinToString(", ")}.\n" +
+            "Voice match needed: ${"%.2f".format(prefs.threshold)}.\n\n" +
+            "Go back and tap Start listening. Say “Raga”, wait for the chime, then your command."
         b.skip.visibility = View.GONE
-        b.cancel.text = "Finish"
+        b.cancel.text = "Done"
     }
 
     override fun onPartialResult(hypothesis: String?) {
+        if (done) return
         val p = try { JSONObject(hypothesis ?: return).optString("partial") } catch (_: Exception) { return }
-        if (p.isNotBlank()) b.heard.text = p
+        if (p.isNotBlank()) b.heard.text = "Hearing: $p"
     }
     override fun onFinalResult(hypothesis: String?) {}
-    override fun onError(exception: Exception?) { b.heard.text = "Error: ${exception?.message}" }
+    override fun onError(exception: Exception?) { b.heard.text = "Microphone error: ${exception?.message}" }
     override fun onTimeout() {}
 
     override fun onDestroy() {
@@ -128,6 +146,6 @@ class EnrollActivity : AppCompatActivity(), RecognitionListener {
     }
 
     companion object {
-        private const val MIN_FRAMES = 120 // ~1.2 s of speech
+        private const val MIN_FRAMES = 20 // ~0.2 s of speech
     }
 }

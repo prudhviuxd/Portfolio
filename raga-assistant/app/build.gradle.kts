@@ -11,8 +11,8 @@ android {
         applicationId = "app.raga.assistant"
         minSdk = 26
         targetSdk = 35
-        versionCode = 3
-        versionName = "1.2"
+        versionCode = 4
+        versionName = "2.0"
         // real phones are ARM; x86_64 kept for the emulator
         ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64") }
     }

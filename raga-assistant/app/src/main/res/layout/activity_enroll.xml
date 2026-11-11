@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Find a quiet place and read each phrase aloud, the way you will normally talk to Raga."
+        android:text="Like setting up “Hey Siri”: in a quiet place, say “Raga” each time you are asked."
         android:textSize="15sp" />
 
     <ProgressBar

@@ -117,7 +117,8 @@ class MainActivity : AppCompatActivity() {
             if (RagaStatus.running.value) RagaService.stop(this) else startListening()
         }
 
-        b.examples.text = EXAMPLES.joinToString("\n") { "• Raga, $it" }
+        b.examples.text = "Say “Raga”, wait for the chime and the Listening card, then say:\n\n" +
+            EXAMPLES.joinToString("\n") { "• $it" }
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -175,7 +176,7 @@ class MainActivity : AppCompatActivity() {
         fun mark(ok: Boolean) = if (ok) "✓" else "✗"
         b.permStatus.text = listOf(
             "${mark(runtimeOk)} Microphone, contacts, calls, SMS, media",
-            "${mark(overlay)} Open apps while in the background",
+            "${mark(overlay)} Show Raga over other apps (needed to open apps)",
             if (BuildConfig.SCREEN_CONTROL) "${mark(a11y)} Screen control: click, type, scroll, back, home, lock"
             else "– Screen control isn't in Raga Lite (install the full version for click, type, scroll)",
             "${mark(files)} Find and open any file",
