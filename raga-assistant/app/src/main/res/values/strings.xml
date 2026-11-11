@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="a11y_description">Lets Raga operate your phone by voice: tap buttons by name (\"Raga, click send\"), type text, scroll, go back or home, lock the screen and take screenshots. Raga only acts when you speak a command; it does not read or store your screen content.</string>
+</resources>
