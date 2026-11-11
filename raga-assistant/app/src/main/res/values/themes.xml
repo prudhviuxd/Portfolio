@@ -5,6 +5,15 @@
         <item name="colorSecondary">#E0598B</item>
     </style>
 
+    <style name="Theme.Raga.Siri" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">#B9A4FF</item>
+        <item name="colorSecondaryContainer">#33FFFFFF</item>
+        <item name="colorOnSecondaryContainer">#FFFFFF</item>
+        <item name="android:windowBackground">#000000</item>
+        <item name="android:statusBarColor">#000000</item>
+        <item name="android:navigationBarColor">#000000</item>
+    </style>
+
     <style name="SectionTitle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

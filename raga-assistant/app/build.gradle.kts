@@ -11,8 +11,8 @@ android {
         applicationId = "app.raga.assistant"
         minSdk = 26
         targetSdk = 35
-        versionCode = 4
-        versionName = "2.0"
+        versionCode = 5
+        versionName = "2.1"
         // real phones are ARM; x86_64 kept for the emulator
         ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64") }
     }
@@ -32,6 +32,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "17"
+    }
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
     }
     buildFeatures {
         viewBinding = true
@@ -68,4 +71,14 @@ dependencies {
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.json:json:20240303")
+    testImplementation("org.robolectric:robolectric:4.14.1")
+    testImplementation("androidx.test:core:1.6.1")
+}
+
+tasks.withType<Test>().configureEach {
+    System.getProperty("raga.shots")?.let { systemProperty("raga.shots", it) }
+    System.getProperty("robolectric.dependency.dir")?.let {
+        systemProperty("robolectric.offline", "true")
+        systemProperty("robolectric.dependency.dir", it)
+    }
 }

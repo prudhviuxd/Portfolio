@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/back"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Back"
+                android:src="@drawable/ic_back"
+                app:tint="?attr/colorOnSurface" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Settings"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="15sp"
+            android:alpha="0.8" />
+
+
+        <!-- 1. Speech model -->
+        <TextView
+            style="@style/SectionTitle"
+            android:text="1 · Offline speech model" />
+
+        <RadioGroup
+            android:id="@+id/modelGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ProgressBar
+            android:id="@+id/downloadProgress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/download"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Download models" />
+
+        <!-- 2. Permissions -->
+        <TextView
+            style="@style/SectionTitle"
+            android:text="2 · Permissions" />
+
+        <TextView
+            android:id="@+id/permStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:lineSpacingExtra="4dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/grantRuntime"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Allow microphone, contacts, calls, SMS, music" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/grantOverlay"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Allow Raga to show over other apps" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/grantAccessibility"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Turn on screen control (Accessibility)" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/grantFiles"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Allow access to all files" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/grantBattery"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Don't let battery saver stop Raga" />
+
+        <!-- 3. Voice -->
+        <TextView
+            style="@style/SectionTitle"
+            android:text="3 · Your voice" />
+
+        <TextView
+            android:id="@+id/voiceStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/enroll"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Teach Raga my voice" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/verifySwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Only respond to my voice" />
+
+        <TextView
+            android:id="@+id/thresholdLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textSize="14sp" />
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/threshold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:valueFrom="0.10"
+            android:valueTo="0.90"
+            android:stepSize="0.01"
+            app:labelBehavior="gone" />
+
+        <!-- 4. Wake word -->
+        <TextView
+            style="@style/SectionTitle"
+            android:text="4 · Wake word" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:alpha="0.75"
+            android:text="Comma-separated. Voice setup adds the spellings it hears for your “Raga” automatically." />
+
+        <EditText
+            android:id="@+id/wakeWords"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:importantForAutofill="no" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/speakSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Speak replies out loud" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/offlineSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Recognise commands offline (use if Raga hears “Raga” but not your command)" />
+
+        <!-- Log -->
+        <TextView
+            style="@style/SectionTitle"
+            android:text="What Raga heard" />
+
+        <TextView
+            android:id="@+id/log"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:textIsSelectable="true"
+            android:textSize="12sp" />
+
+        <TextView
+            style="@style/SectionTitle"
+            android:text="Try saying" />
+
+        <TextView
+            android:id="@+id/examples"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="4dp"
+            android:textSize="14sp" />
+    </LinearLayout>
+</ScrollView>

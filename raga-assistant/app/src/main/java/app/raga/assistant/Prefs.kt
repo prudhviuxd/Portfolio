@@ -32,6 +32,11 @@ class Prefs(context: Context) {
         get() = sp.getBoolean("speak_replies", true)
         set(v) = sp.edit().putBoolean("speak_replies", v).apply()
 
+    /** Use the offline recogniser for commands instead of the phone's (Google) one. */
+    var offlineCommands: Boolean
+        get() = sp.getBoolean("offline_commands", false)
+        set(v) = sp.edit().putBoolean("offline_commands", v).apply()
+
     var modelName: String
         get() = sp.getString("model", ModelManager.SPEECH_MODELS.first().id)!!
         set(v) = sp.edit().putString("model", v).apply()

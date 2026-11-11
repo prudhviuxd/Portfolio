@@ -36,9 +36,16 @@ import java.util.Date
 import java.util.Locale
 
 /** Shared, observable state for the UI. */
+enum class UiPhase { OFF, WAITING, LISTENING, THINKING, SPEAKING }
+
 object RagaStatus {
     val running = MutableStateFlow(false)
     val state = MutableStateFlow("Stopped")
+    val phase = MutableStateFlow(UiPhase.OFF)
+    val heard = MutableStateFlow("")
+    val reply = MutableStateFlow("")
+    /** 0..1 microphone level while a command is being spoken (drives the orb). */
+    val level = MutableStateFlow(0f)
     val log = MutableStateFlow<List<String>>(emptyList())
 
     fun add(line: String) {
@@ -83,6 +90,10 @@ class RagaService : Service(), RecognitionListener {
     private var destroyed = false
     private var turnId = 0
     private var lastPartial = ""
+    private var listenNowPending = false
+    private var googleReady = false
+    /** Set when the phone's recogniser doesn't respond; then commands use the offline one. */
+    private var googleBroken = false
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -101,6 +112,11 @@ class RagaService : Service(), RecognitionListener {
         if (intent?.action == ACTION_STOP) {
             stopSelf()
             return START_NOT_STICKY
+        }
+        if (intent?.action == ACTION_LISTEN_NOW) {
+            // tapped the orb: the owner is holding the phone, so skip the wake word and voice check
+            if (phase == Phase.WAKE) { followUp = null; startCommandTurn() }
+            else if (phase == Phase.IDLE) listenNowPending = true
         }
         try {
             goForeground("Starting…")
@@ -167,7 +183,7 @@ class RagaService : Service(), RecognitionListener {
                     RagaStatus.add("Ready. Say \"${prefs.wakeWords.firstOrNull() ?: "raga"}\", wait for the chime, then your command.")
                     if (prefs.voicePrint == null) RagaStatus.add("⚠ Voice not set up yet — anyone can wake Raga.")
                     if (!bubble.canShow) RagaStatus.add("⚠ \"Display over other apps\" is off — Raga can't open apps from the background.")
-                    listenForWakeWord()
+                    if (listenNowPending) { listenNowPending = false; startCommandTurn() } else listenForWakeWord()
                 }
             } catch (e: Exception) {
                 main.post {
@@ -200,6 +216,8 @@ class RagaService : Service(), RecognitionListener {
             val rec = Recognizer(model, SAMPLE_RATE, grammar).also { it.setSpeakerModel(spkModel); voskRec = it }
             vosk = SpeechService(rec, SAMPLE_RATE).also { it.startListening(this) }
             status("Say \"${words.firstOrNull() ?: "raga"}\"")
+            RagaStatus.phase.value = UiPhase.WAITING
+            RagaStatus.level.value = 0f
         } catch (e: Exception) {
             RagaStatus.add("Microphone error: ${e.message}")
             stopSelf()
@@ -207,7 +225,11 @@ class RagaService : Service(), RecognitionListener {
     }
 
     // Vosk callbacks (main thread)
-    override fun onPartialResult(hypothesis: String?) {}
+    override fun onPartialResult(hypothesis: String?) {
+        if (phase != Phase.COMMAND) return
+        val p = try { JSONObject(hypothesis ?: return).optString("partial") } catch (_: Exception) { return }
+        if (p.isNotBlank()) { RagaStatus.heard.value = p; RagaStatus.level.value = 0.6f; bubble.show("Raga · listening…", p) }
+    }
     override fun onFinalResult(hypothesis: String?) {}
     override fun onError(exception: Exception?) { RagaStatus.add("Microphone error: ${exception?.message}") }
 
@@ -263,15 +285,38 @@ class RagaService : Service(), RecognitionListener {
         chime()
         bubble.show(if (followUp != null) "Raga · waiting for your answer" else "Raga · listening…")
         status("Listening for your command…")
+        RagaStatus.phase.value = UiPhase.LISTENING
+        RagaStatus.heard.value = ""
+        RagaStatus.reply.value = if (followUp != null) followUp!!.prompt else ""
         // give the chime a moment so it isn't recognised as speech
         main.postDelayed({ if (turnId == myTurn && phase == Phase.COMMAND && !destroyed) listenForCommand() }, 300)
     }
 
     private fun listenForCommand() {
-        if (!SpeechRecognizer.isRecognitionAvailable(this)) {
+        if (prefs.offlineCommands || googleBroken || !SpeechRecognizer.isRecognitionAvailable(this)) {
             listenForCommandOffline()
             return
         }
+        val myTurn = turnId
+        googleReady = false
+        // Watchdogs: some phones' recognisers never answer an app in the background.
+        main.postDelayed({
+            if (turnId == myTurn && phase == Phase.COMMAND && !googleReady) {
+                RagaStatus.add("Phone speech recognizer didn't start — switching to offline recognition")
+                googleBroken = true
+                recognizer?.destroy(); recognizer = null
+                listenForCommandOffline()
+            }
+        }, 2500)
+        main.postDelayed({
+            if (turnId == myTurn && phase == Phase.COMMAND && googleReady) {
+                RagaStatus.add("Phone speech recognizer gave no result — switching to offline recognition")
+                googleBroken = true
+                recognizer?.destroy(); recognizer = null
+                phase = Phase.REPLY
+                speakThen("Sorry, say that again.") { startCommandTurn() }
+            }
+        }, 14000)
         val sr = recognizer ?: SpeechRecognizer.createSpeechRecognizer(this).also {
             recognizer = it
             it.setRecognitionListener(commandListener)
@@ -292,6 +337,7 @@ class RagaService : Service(), RecognitionListener {
 
     /** No Google speech service on this phone: recognise the command with the offline model. */
     private fun listenForCommandOffline() {
+        RagaStatus.add("Listening offline for your command")
         try {
             val rec = Recognizer(model, SAMPLE_RATE).also { voskRec = it }
             vosk = SpeechService(rec, SAMPLE_RATE).also { it.startListening(this, 8000) }
@@ -301,9 +347,9 @@ class RagaService : Service(), RecognitionListener {
     }
 
     private val commandListener = object : android.speech.RecognitionListener {
-        override fun onReadyForSpeech(params: Bundle?) {}
+        override fun onReadyForSpeech(params: Bundle?) { googleReady = true; RagaStatus.add("Listening (phone recognizer)") }
         override fun onBeginningOfSpeech() {}
-        override fun onRmsChanged(rmsdB: Float) {}
+        override fun onRmsChanged(rmsdB: Float) { RagaStatus.level.value = ((rmsdB + 2f) / 12f).coerceIn(0f, 1f) }
         override fun onBufferReceived(buffer: ByteArray?) {}
         override fun onEndOfSpeech() { if (phase == Phase.COMMAND) bubble.show("Raga · thinking…", lastPartial) }
         override fun onEvent(eventType: Int, params: Bundle?) {}
@@ -311,7 +357,7 @@ class RagaService : Service(), RecognitionListener {
         override fun onPartialResults(partialResults: Bundle?) {
             if (phase != Phase.COMMAND) return
             val p = partialResults?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.firstOrNull()
-            if (!p.isNullOrBlank()) { lastPartial = p; bubble.show("Raga · listening…", p) }
+            if (!p.isNullOrBlank()) { lastPartial = p; RagaStatus.heard.value = p; bubble.show("Raga · listening…", p) }
         }
 
         override fun onResults(results: Bundle?) {
@@ -336,10 +382,15 @@ class RagaService : Service(), RecognitionListener {
                 SpeechRecognizer.ERROR_RECOGNIZER_BUSY -> "The microphone is busy."
                 else -> "Sorry, something went wrong with listening."
             }
-            if (error == SpeechRecognizer.ERROR_RECOGNIZER_BUSY || error == SpeechRecognizer.ERROR_CLIENT) {
-                recognizer?.destroy(); recognizer = null
+            RagaStatus.add("Phone speech recognizer error $error")
+            recognizer?.destroy(); recognizer = null
+            val userIssue = error == SpeechRecognizer.ERROR_NO_MATCH || error == SpeechRecognizer.ERROR_SPEECH_TIMEOUT
+            if (!userIssue) {
+                // the recogniser itself failed (busy, refused a background app, no network…): go offline
+                googleBroken = true
+                listenForCommandOffline()
+                return
             }
-            RagaStatus.add("Speech recognizer error $error")
             onCommandFailed(msg)
         }
     }
@@ -360,6 +411,9 @@ class RagaService : Service(), RecognitionListener {
         val text = stripWake(raw)
         RagaStatus.add("🗣 $text")
         bubble.show("Raga · you said", text)
+        RagaStatus.heard.value = text
+        RagaStatus.phase.value = UiPhase.THINKING
+        RagaStatus.level.value = 0f
         val pending = followUp
         followUp = null
         worker.post {
@@ -411,6 +465,8 @@ class RagaService : Service(), RecognitionListener {
         val text = listOfNotNull(outcome.say, fu?.prompt).joinToString(" ").ifBlank { "Done." }
         RagaStatus.add("💬 $text")
         bubble.show("Raga", text)
+        RagaStatus.reply.value = text
+        RagaStatus.phase.value = UiPhase.SPEAKING
         status(text)
         speakThen(text) {
             if (followUp != null) startCommandTurn() // Siri-style: answer without saying Raga again
@@ -467,6 +523,8 @@ class RagaService : Service(), RecognitionListener {
         workerThread.quitSafely()
         RagaStatus.running.value = false
         RagaStatus.state.value = "Stopped"
+        RagaStatus.phase.value = UiPhase.OFF
+        RagaStatus.level.value = 0f
         RagaStatus.add("Stopped listening.")
         super.onDestroy()
     }
@@ -476,6 +534,13 @@ class RagaService : Service(), RecognitionListener {
         private const val NOTIF_ID = 7
         private const val SAMPLE_RATE = 16000f
         const val ACTION_STOP = "app.raga.assistant.STOP"
+        const val ACTION_LISTEN_NOW = "app.raga.assistant.LISTEN_NOW"
+
+        /** Tap-to-talk: start (if needed) and listen for a command straight away. */
+        fun listenNow(context: Context) {
+            val i = Intent(context, RagaService::class.java).setAction(ACTION_LISTEN_NOW)
+            if (Build.VERSION.SDK_INT >= 26) context.startForegroundService(i) else context.startService(i)
+        }
 
         fun start(context: Context) {
             val i = Intent(context, RagaService::class.java)

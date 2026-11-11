@@ -35,5 +35,23 @@ class RagaApp : Application() {
 
     companion object {
         fun crashFile(app: android.content.Context) = File(app.filesDir, "last_crash.txt")
+
+        /** If Raga crashed last time, show what happened so it can be copied and reported. */
+        fun showLastCrash(a: android.app.Activity) {
+            val f = crashFile(a)
+            if (!f.exists()) return
+            val report = try { f.readText() } catch (_: Exception) { "" }
+            f.delete()
+            if (report.isBlank()) return
+            com.google.android.material.dialog.MaterialAlertDialogBuilder(a)
+                .setTitle("Raga crashed last time")
+                .setMessage("Copy these details and send them to whoever is fixing the app.\n\n" + report.take(3000))
+                .setPositiveButton("Copy details") { _, _ ->
+                    val cm = a.getSystemService(android.content.ClipboardManager::class.java)
+                    cm.setPrimaryClip(android.content.ClipData.newPlainText("Raga crash", report))
+                }
+                .setNegativeButton("Close", null)
+                .show()
+        }
     }
 }
