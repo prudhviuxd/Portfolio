@@ -1,0 +1,36 @@
+// Word-level timings (seconds) transcribed from the original voiceover.
+// Each inner array is one on-screen caption chunk.
+export type Word = {t: string; at: number; hot?: boolean};
+
+export const CHUNKS: Word[][] = [
+  [{t: '“Click', at: 0.0}, {t: 'the', at: 0.5}, {t: 'cart', at: 0.85, hot: true}, {t: 'icon', at: 1.15}],
+  [{t: 'and', at: 1.5}, {t: 'check', at: 1.7}, {t: 'the', at: 1.95}, {t: 'total.”', at: 2.15}],
+  [{t: 'That’s', at: 2.75}, {t: 'not', at: 3.0}, {t: 'a', at: 3.2}, {t: 'usability', at: 3.3, hot: true}],
+  [{t: 'task.', at: 3.9}, {t: 'That’s', at: 4.5}],
+  [{t: 'instructions.', at: 4.85, hot: true}],
+  [{t: 'I', at: 5.9}, {t: 'ask', at: 6.2}, {t: 'AI', at: 6.45, hot: true}, {t: 'to', at: 6.75}, {t: 'turn', at: 6.95}, {t: 'my', at: 7.1}],
+  [{t: 'test', at: 7.2}, {t: 'goals', at: 7.45}, {t: 'into', at: 7.85}],
+  [{t: 'realistic', at: 8.2}, {t: 'scenarios.', at: 8.6, hot: true}],
+  [{t: 'Goal:', at: 10.0, hot: true}, {t: 'can', at: 10.3}, {t: 'people', at: 10.45}],
+  [{t: 'understand', at: 11.0}, {t: 'the', at: 11.4}, {t: 'final', at: 11.6}],
+  [{t: 'price?', at: 12.0, hot: true}, {t: 'AI’s', at: 12.55}],
+  [{t: 'draft:', at: 13.0}, {t: '“You’re', at: 13.55}, {t: 'ordering', at: 13.95}],
+  [{t: 'groceries', at: 14.2, hot: true}, {t: 'for', at: 14.7}, {t: 'dinner', at: 14.95}],
+  [{t: 'tonight.', at: 15.4}, {t: 'Your', at: 16.15}],
+  [{t: 'budget', at: 16.7}, {t: 'is', at: 17.05}, {t: '500', at: 17.2, hot: true}],
+  [{t: 'rupees.', at: 17.6}, {t: 'Get', at: 18.4}],
+  [{t: 'everything', at: 18.7}, {t: 'on', at: 19.05}, {t: 'this', at: 19.3}, {t: 'list', at: 19.6, hot: true}],
+  [{t: 'and', at: 20.0}, {t: 'decide', at: 20.2}, {t: 'if', at: 20.4}, {t: 'you’ll', at: 20.55}],
+  [{t: 'place', at: 21.0}, {t: 'the', at: 21.25}, {t: 'order.”', at: 21.45, hot: true}, {t: 'Then', at: 21.7}],
+  [{t: 'I', at: 22.1}, {t: 'check', at: 22.25}, {t: 'one', at: 22.5}, {t: 'thing:', at: 22.7, hot: true}],
+  [{t: 'does', at: 23.1}, {t: 'the', at: 23.25}, {t: 'task', at: 23.45}, {t: 'use', at: 23.7}, {t: 'the', at: 23.95}],
+  [{t: 'words', at: 24.2, hot: true}, {t: 'on', at: 24.45}, {t: 'the', at: 24.6}, {t: 'screen?', at: 24.75}],
+  [{t: 'If', at: 25.5}, {t: 'the', at: 25.6}, {t: 'button', at: 25.75}, {t: 'says', at: 26.0}, {t: '“Cart”', at: 26.25, hot: true}],
+  [{t: 'and', at: 26.75}, {t: 'the', at: 26.95}, {t: 'task', at: 27.1}, {t: 'says', at: 27.3}, {t: '“Cart”,', at: 27.5, hot: true}],
+  [{t: 'you’ve', at: 28.0}, {t: 'given', at: 28.25}, {t: 'them', at: 28.5}, {t: 'the', at: 28.7}],
+  [{t: 'answer.', at: 29.0, hot: true}, {t: 'Rewrite', at: 29.7}],
+  [{t: 'it', at: 30.0}, {t: 'in', at: 30.15}, {t: 'everyday', at: 30.3, hot: true}, {t: 'words.', at: 30.75}],
+  [{t: 'What’s', at: 31.5}, {t: 'a', at: 31.75}, {t: 'bad', at: 31.95, hot: true}, {t: 'usability', at: 32.2}],
+  [{t: 'task', at: 32.75}, {t: 'you’ve', at: 33.0}, {t: 'seen?', at: 33.3}],
+  [{t: 'Follow', at: 34.0, hot: true}, {t: 'for', at: 34.2}, {t: 'the', at: 34.45}, {t: 'next', at: 34.65}, {t: 'step.', at: 35.0}],
+];
