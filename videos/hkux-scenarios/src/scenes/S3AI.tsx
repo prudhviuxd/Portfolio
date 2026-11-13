@@ -17,7 +17,7 @@ const SCENARIOS = [
 // 5.0s – 10.0s  “I ask AI to turn my test goals into realistic scenarios.”
 export const S3AI: React.FC = () => {
   const f = useCurrentFrame();
-  const orbIn = tween(f, [at(6.3), at(6.8)], [0, 1], SPRING);
+  const orbIn = tween(f, [at(5.15), at(5.7)], [0, 1], SPRING);
   const absorb = at(7.9);
   const emit = at(8.55);
   const pulse = 1 + Math.sin(f / 5) * 0.03 + tween(f, [absorb + 10, absorb + 16], [0, 0.12]) - tween(f, [emit, emit + 10], [0, 0.12]);
@@ -94,7 +94,7 @@ export const S3AI: React.FC = () => {
             justifyContent: 'center',
           }}
         >
-          <Icon name="sparkle" size={170} color="white" stroke={3} fill="rgba(255,255,255,0.2)" draw={tween(f, [at(6.4), at(7.0)], [0, 1])} />
+          <Icon name="sparkle" size={170} color="white" stroke={3} fill="rgba(255,255,255,0.2)" draw={tween(f, [at(5.3), at(6.2)], [0, 1])} />
         </div>
       </div>
 
