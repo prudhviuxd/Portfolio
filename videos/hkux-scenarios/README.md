@@ -31,3 +31,54 @@ npx remotion render HKUX-Scenarios out/HKUX_Scenarios_Reimagined.mp4 --crf=18
 
 Fonts (Space Grotesk, Inter, JetBrains Mono, Fraunces Italic) are bundled in `public/fonts`
 so renders don't need network access.
+
+---
+
+# The full series: AI × UX · Design Thinking (24 more Shorts)
+
+Every other Short in the series script doc is built from data, not hand-animated:
+
+```
+src/series/
+  episodes/stage1..5.ts   one entry per Short: script (verbatim from the doc), header title,
+                          caption highlight words, CTA question, and a list of beats
+  scenes/                 the scene library every beat draws from
+  timing.ts               word timings → frame-accurate beats, cues and caption chunks
+  Episode.tsx             assembles one Short: scenes + rotating transitions + header + captions + outro
+  recordings.ts           registry of real voiceovers (empty until recordings arrive)
+```
+
+A beat is `{at: 'phrase from the script', scene: 'DocCard', props: {...}, cues: {name: 'phrase'}}`.
+`at` is where the beat starts and `cues` are moments inside it (a strike-through, a card flip,
+a number dropping). Both are **phrases from the script, not times**, so the same data works with
+estimated timing now and with your real recordings later.
+
+Scene library: `Statement`, `PromptCard`, `Counter`, `Compare`, `DocCard`, `Transcript`, `CardFan`,
+`Flip`, `Keycaps`, `Grid2x2`, `Curve`, `Timeline`, `Loop`, `Phone`, plus the automatic `Question`,
+`Follow` and brand outro at the end of every Short.
+
+## Timing before recordings
+
+Until a recording exists, each word is timed with a pace model fitted to the 5.1 voiceover
+(0.163s + 0.086s per syllable, plus pauses at punctuation; mean error 0.09s per word). Renders
+made this way are silent and paced for the voiceover you'll record.
+
+## Adding a recording
+
+```bash
+pip install faster-whisper            # once
+cp ~/my-take.m4a public/vo/2.3.m4a    # name it after the Short's id
+npm run align -- 2.3                  # writes timings/2.3.json and registers it in recordings.ts
+scripts/render-series.sh 2.3          # re-render just that Short, now with audio
+```
+
+`align` keeps the doc's exact words for captions and takes only the timing from the recording,
+so every beat, cue and caption moves to match your delivery automatically.
+
+## Rendering and review
+
+```bash
+scripts/render-series.sh        # all 24 → out/series/HKUX_<id>_<title>.mp4
+scripts/render-series.sh 3      # just stage 3
+npm run review -- /tmp/review 4 # one still per beat for stage 4, tiled per Short
+```

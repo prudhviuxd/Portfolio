@@ -46,6 +46,7 @@ export const ICONS: Record<string, string[]> = {
   check: ['M10 25l9 9 19-20'],
   x: ['M12 12l24 24M36 12L12 36'],
   bolt: ['M27 4L9 27h14l-3 17 19-24H25z'],
+  bin: ['M8 14h32', 'M13 14l2.5 28h17l2.5-28', 'M19 14V8h10v6', 'M21 21v14M27 21v14'],
   robot: [
     'M10 16h28v24H10z',
     'M24 16V9',

@@ -29,7 +29,10 @@
     "dev": "remotion studio",
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
-    "lint": "eslint src && tsc"
+    "lint": "eslint src && tsc",
+    "align": "python3 scripts/align.py",
+    "render:series": "scripts/render-series.sh",
+    "review": "node scripts/review.mjs"
   },
   "allowScripts": {
     "esbuild": false
