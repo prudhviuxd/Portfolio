@@ -53,7 +53,7 @@ export const Header: React.FC<{hideAt: number}> = ({hideAt}) => {
         <LogoMark size={76} />
         <div style={{flex: 1}}>
           <div style={{fontFamily: mono, fontSize: 26, color: C.peach, letterSpacing: 4, fontWeight: 700}}>
-            USABILITY TESTING · 1/5
+            STAGE 5 · TEST · 1 OF 5
           </div>
           <div style={{fontFamily: display, fontSize: 44, color: C.cream, fontWeight: 700, marginTop: 4}}>
             Scenarios, not instructions

@@ -36,6 +36,21 @@ export const S1Hook: React.FC = () => {
         <div style={{fontFamily: body, fontWeight: 800, fontSize: 44, color: C.ink, marginTop: 6, lineHeight: 1.1}}>
           Click the cart icon and check the total.
         </div>
+        {/* Struck through as the voiceover calls it "not a usability task" */}
+        {[0, 1].map((i) => (
+          <div
+            key={i}
+            style={{
+              position: 'absolute',
+              left: 26,
+              top: 82 + i * 48,
+              height: 7,
+              borderRadius: 4,
+              background: C.red,
+              width: `${tween(f, [s(2.45) + i * 4, s(2.75) + i * 4], [0, i ? 62 : 92])}%`,
+            }}
+          />
+        ))}
       </div>
 
       {/* App mock */}
