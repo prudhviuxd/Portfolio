@@ -1,0 +1,363 @@
+=== 1.1 · Fix your interview questions  (save as 1.1.m4a) ===
+
+[0:00.2]  Most user interviews fail before they start, because the questions are leading.
+[0:04.4]  Here's how I use AI to fix that.
+[0:06.9]  First, I write my research goal in one line: why do people abandon grocery checkout?
+[0:12.1]  Then I ask AI to draft a discussion guide from that goal.
+[0:15.7]  It's fast, but it always slips in questions like "Would you use a faster checkout?"
+[0:20.4]  Nobody can answer that honestly.
+[0:22.4]  So my second prompt is: flag every leading or future-tense question, and rewrite it about past behaviour.
+[0:28.7]  "Tell me about the last time you left a cart."
+[0:31.7]  AI drafts.
+[0:32.5]  You decide what's worth asking.
+[0:34.3]  What's the worst interview question you've been asked?
+[0:37.0]  Tell me in the comments.
+[0:38.7]  Follow for the next step.
+
+=== 1.2 · Interview the right people  (save as 1.2.m4a) ===
+
+[0:00.2]  Five interviews with the wrong people teach you nothing.
+[0:03.1]  Recruiting is where most research quietly fails.
+[0:05.5]  I ask AI to draft a screener: five questions that filter for people who actually ordered groceries online in the last month.
+[0:12.6]  Then I check two things AI usually misses.
+[0:15.3]  One: does any question give away the right answer?
+[0:18.6]  "Do you use grocery apps often?"
+[0:20.7]  Everyone says yes.
+[0:22.0]  Ask "How many orders did you place last month?"
+[0:24.8]  instead.
+[0:25.5]  Two: add one question that screens out designers and developers.
+[0:29.3]  They answer like designers.
+[0:30.9]  The screener decides who you hear from, so check it twice.
+[0:34.5]  Have you ever been screened out of a study?
+[0:37.4]  Follow for the next step.
+
+=== 1.3 · Make AI show its source  (save as 1.3.m4a) ===
+
+[0:00.2]  Ten interviews leave you with hours of notes.
+[0:02.8]  AI can turn them into themes in a minute.
+[0:05.7]  Here's the catch.
+[0:06.9]  When I ask AI to cluster interview notes, it sometimes invents a theme that sounds right but no user said.
+[0:13.3]  So I add one line to the prompt: for every theme, quote the participant and the line it came from.
+[0:19.7]  Then I open the notes and check three quotes at random.
+[0:23.2]  If a quote isn't there, the theme goes.
+[0:25.8]  Speed comes from AI.
+[0:27.3]  Trust comes from the quote.
+[0:29.0]  Would you trust AI to summarise your research?
+[0:31.6]  Tell me in the comments.
+[0:33.3]  Follow for the next step.
+
+=== 1.4 · No quote, no sticky note  (save as 1.4.m4a) ===
+
+[0:00.2]  An empathy map is only useful if every sticky note comes from a real user.
+[0:05.2]  I paste my interview quotes into AI and ask it to sort them into Says, Thinks, Does and Feels.
+[0:11.2]  It's quick, and it's good at spotting the gap between what people say and what they do.
+[0:16.2]  "I always compare prices," while the notes show they never opened a second app.
+[0:21.1]  But Thinks and Feels are guesses.
+[0:23.0]  So I keep one rule: no quote, no sticky note.
+[0:26.6]  Anything AI adds without a quote gets deleted.
+[0:29.4]  What's one thing users say but never actually do?
+[0:32.4]  Follow for the next step.
+
+=== 1.5 · The stage you can't outsource  (save as 1.5.m4a) ===
+
+[0:00.2]  Can AI replace user interviews?
+[0:02.2]  You'll see tools that offer synthetic users: AI personas you can interview.
+[0:06.6]  They answer smoothly, and that's the problem.
+[0:09.2]  They give you the average of the internet, not the person who left a cart at 11 PM because the delivery fee jumped.
+[0:16.5]  In my interviews, the most useful moments were the ones nobody could predict: a pause, a workaround, a reason they almost didn't mention.
+[0:25.0]  Use AI to prepare, take notes and sort.
+[0:27.8]  Do the listening yourself.
+[0:29.4]  Empathy is the one stage you can't outsource.
+[0:32.0]  Have you tried synthetic users?
+[0:33.9]  Tell me in the comments.
+[0:35.6]  Follow for the next stage: Define.
+
+=== 2.1 · A problem with no solution in it  (save as 2.1.m4a) ===
+
+[0:00.2]  If your problem statement mentions a solution, it isn't a problem statement.
+[0:04.6]  After research, I give AI my top themes and ask for a point-of-view statement: user, need, insight.
+[0:11.1]  The first draft usually sneaks in a feature.
+[0:13.7]  "Users need a one-tap checkout."
+[0:15.7]  That's a solution.
+[0:17.0]  So I push back: rewrite it without any feature.
+[0:20.3]  "Busy parents need to know the final price before they commit, because surprise fees make them abandon the order."
+[0:26.6]  Now the team can solve it ten different ways.
+[0:29.3]  AI writes fast.
+[0:30.6]  You keep it honest.
+[0:32.0]  Does your team write problem statements, or jump straight to features?
+[0:35.8]  Follow for the next step.
+
+=== 2.2 · Twenty HMWs, keep three  (save as 2.2.m4a) ===
+
+[0:00.2]  A good "How might we" question is not too wide and not too narrow.
+[0:04.2]  I ask AI for twenty HMW questions from one problem statement.
+[0:07.8]  Twenty in ten seconds: that's the useful part.
+[0:10.9]  Then I sort them.
+[0:12.2]  "How might we improve grocery shopping?"
+[0:14.5]  Too wide; you can't start.
+[0:16.3]  "How might we add a price pop-up?"
+[0:18.5]  Too narrow; it's a solution again.
+[0:21.0]  "How might we show the full price before people decide?"
+[0:24.0]  That one's just right.
+[0:25.5]  I keep three and drop seventeen.
+[0:27.5]  AI gives you volume.
+[0:29.1]  Your judgement gives you the three worth solving.
+[0:31.8]  What's a "How might we" your team is stuck on?
+[0:34.7]  Follow for the next step.
+
+=== 2.3 · Personas from data, not fiction  (save as 2.3.m4a) ===
+
+[0:00.2]  AI can write a persona in five seconds.
+[0:02.8]  That's exactly why most AI personas are fiction.
+[0:05.6]  Ask for "a persona for a grocery app" and you get Priya, 32, loves yoga, values convenience.
+[0:11.9]  None of that came from your users.
+[0:14.1]  Here's what I do instead.
+[0:15.9]  I paste my research themes and quotes, and ask AI to build the persona only from them, and to mark every line "from research" or "assumption".
+[0:24.2]  Then I delete or test every assumption.
+[0:26.7]  A persona should be a summary of real people, not a character you made up.
+[0:31.6]  Does your team still use made-up personas?
+[0:34.0]  Tell me in the comments.
+[0:35.7]  Follow for the next step.
+
+=== 2.4 · Find the one deep drop  (save as 2.4.m4a) ===
+
+[0:00.2]  A journey map shows where users struggle.
+[0:02.5]  AI can draft one, if you give it the right input.
+[0:05.9]  I give AI my interview notes and ask for a journey map with five stages: discover, choose, add to cart, checkout, delivery.
+[0:14.1]  For each stage: what the user does, what they feel, and the evidence.
+[0:18.9]  It drafts in seconds.
+[0:20.3]  Then I check the emotional curve.
+[0:22.5]  AI tends to make every stage a little bit frustrating.
+[0:25.7]  Real journeys have one or two deep drops.
+[0:28.1]  In my grocery example, it's checkout, when the fees appear.
+[0:31.9]  That drop is where you design first.
+[0:34.1]  Where does your product's journey drop?
+[0:36.2]  Follow for the next step.
+
+=== 2.5 · Count with AI, judge the hurt  (save as 2.5.m4a) ===
+
+[0:00.2]  You found twelve problems.
+[0:01.7]  You can solve three this quarter.
+[0:03.6]  Which three?
+[0:04.5]  I ask AI to count how many participants mentioned each problem, from my notes, and to quote one example for each.
+[0:11.4]  Then I put them on a simple grid: how often it happens, and how badly it hurts.
+[0:16.9]  AI is good at the counting.
+[0:18.8]  But it can't judge the hurt.
+[0:20.7]  Hidden fees came up in four interviews, and every time, the person left without ordering.
+[0:26.1]  That outranks a slow search that eight people mentioned and shrugged off.
+[0:29.8]  Count with AI.
+[0:30.9]  Decide with evidence.
+[0:32.3]  How does your team pick what to fix first?
+[0:34.9]  Follow for the next stage: Ideate.
+
+=== 3.1 · Humans sketch first, AI second  (save as 3.1.m4a) ===
+
+[0:00.2]  If you ask AI for ideas first, every idea in the room starts looking like AI's.
+[0:05.2]  That's called anchoring.
+[0:06.6]  So in ideation I keep one rule: humans go first.
+[0:10.1]  Everyone sketches eight ideas in eight minutes, on paper.
+[0:13.6]  Only then do I ask AI for ten more, for the same "How might we".
+[0:18.0]  Now AI is adding to your thinking, not replacing it.
+[0:21.5]  And you'll notice something: the team's wildest ideas usually beat AI's safest ones.
+[0:26.3]  AI fills the gaps.
+[0:27.6]  You set the direction.
+[0:29.2]  Does your team brainstorm before or after asking AI?
+[0:32.2]  Tell me in the comments.
+[0:33.9]  Follow for the next step.
+
+=== 3.2 · Worst ideas, flipped  (save as 3.2.m4a) ===
+
+[0:00.2]  Stuck in a brainstorm?
+[0:01.7]  Ask AI for the worst ideas instead.
+[0:04.0]  I give AI my "How might we": show the full price before people decide.
+[0:08.4]  Then I ask: give me ten ways to make the price as confusing as possible.
+[0:13.1]  It's great at this.
+[0:14.5]  Hide fees in a dropdown.
+[0:16.2]  Add them after payment.
+[0:17.7]  Change the price on every tap.
+[0:19.8]  Then we flip each one.
+[0:21.4]  Hidden in a dropdown becomes every fee on the first screen.
+[0:25.0]  Added after payment becomes a price locked at the cart.
+[0:28.4]  Bad ideas are easy to generate, and flipping them gets the team unstuck.
+[0:32.8]  And yes, half of those "worst" ideas are real dark patterns.
+[0:36.3]  What's the worst checkout you've seen?
+[0:38.3]  Follow for the next step.
+
+=== 3.3 · Borrow from another industry  (save as 3.3.m4a) ===
+
+[0:00.2]  The best idea for your app might come from a completely different industry.
+[0:04.5]  I ask AI: which other industries solve "show the total cost before commitment" well?
+[0:09.3]  It comes back with a taxi meter you watch rise, a restaurant menu with a price next to every dish, a petrol pump with a running total.
+[0:17.9]  Then I pick one and ask: what's the core principle?
+[0:21.2]  For the petrol pump, it's a live total you can watch as you add.
+[0:25.5]  That becomes an idea: a cart total that updates with every item, fees included.
+[0:30.9]  AI is a wide library.
+[0:32.7]  Your job is to find the principle, not copy the screen.
+[0:36.3]  Which app outside your industry inspires you?
+[0:38.8]  Follow for the next step.
+
+=== 3.4 · SCAMPER: seven directions  (save as 3.4.m4a) ===
+
+[0:00.2]  When ideas dry up, I use SCAMPER with AI.
+[0:03.2]  It's seven prompts: Substitute, Combine, Adapt, Modify, Put to another use, Eliminate, Reverse.
+[0:09.9]  I give AI the current checkout screen and ask for one idea per letter.
+[0:14.1]  Eliminate is usually the winner: what if there were no separate fee lines at all, just one honest price?
+[0:20.7]  Reverse is the fun one: what if the user sets a budget, and the app warns them before they cross it?
+[0:27.2]  Seven prompts, seven directions, in two minutes.
+[0:30.4]  Most won't survive, but one or two always open a door.
+[0:34.0]  Which SCAMPER letter works best for you?
+[0:36.3]  Follow for the next step.
+
+=== 3.5 · Ask AI why it might fail  (save as 3.5.m4a) ===
+
+[0:00.2]  Thirty ideas on the wall.
+[0:02.0]  Now what?
+[0:02.9]  First, the team places them on a two-by-two: impact on the user, and effort to build.
+[0:08.6]  Humans do this part; you know your codebase and your users.
+[0:12.3]  Then I use AI as a devil's advocate.
+[0:15.0]  For our top three, I ask: give me the strongest reason each one will fail.
+[0:19.9]  For the live cart total, it says: users may feel anxious when the total jumps on every tap.
+[0:25.9]  That's a real risk, and now we can test it.
+[0:29.0]  Don't ask AI which idea is best.
+[0:31.2]  Ask it why your favourite might fail.
+[0:33.5]  How does your team pick ideas?
+[0:35.5]  Follow for the next stage: Prototype.
+
+=== 4.1 · Prototype the riskiest assumption  (save as 4.1.m4a) ===
+
+[0:00.2]  The biggest prototyping mistake is building everything.
+[0:03.1]  Before I open any tool, I ask AI one question: here's my idea, list every assumption it depends on, riskiest first.
+[0:10.9]  For the live cart total, the riskiest one is: will a changing total make people add less, or trust us more?
+[0:17.7]  That's all the prototype needs to answer.
+[0:20.1]  Two screens, not twenty.
+[0:21.8]  No login, no settings, no profile.
+[0:24.4]  AI is good at listing assumptions you didn't know you had.
+[0:27.8]  Picking the one to test is your call.
+[0:30.2]  What's the biggest thing you've prototyped that nobody needed?
+[0:33.5]  Follow for the next step.
+
+=== 4.2 · Keep it ugly on purpose  (save as 4.2.m4a) ===
+
+[0:00.2]  My prototypes still start on paper.
+[0:02.4]  Then AI helps me skip the boring part.
+[0:04.9]  I sketch the cart screen in two minutes: list, total, button.
+[0:09.2]  I take a photo and ask an AI design tool to turn it into a clean wireframe.
+[0:14.3]  In a minute I have something I can click through.
+[0:17.4]  But I keep it grey.
+[0:19.0]  No colours, no brand, no polish.
+[0:21.5]  If it looks finished, users comment on the colours.
+[0:24.8]  If it looks rough, they comment on the idea.
+[0:27.9]  And the idea is what you're testing.
+[0:30.2]  Sketch fast, let AI clean it up, keep it ugly on purpose.
+[0:34.2]  Do you start on paper or on screen?
+[0:36.7]  Follow for the next step.
+
+=== 4.3 · Real content beats lorem ipsum  (save as 4.3.m4a) ===
+
+[0:00.2]  Lorem ipsum hides problems.
+[0:01.9]  Real words reveal them.
+[0:03.4]  In my prototypes, every label, price and message is real, and AI writes the first draft.
+[0:09.2]  I give it context: grocery app, busy parents, Indian rupees, the fees we actually charge.
+[0:15.2]  Then I ask for real product names, real prices, a real delivery message.
+[0:19.9]  Suddenly you see problems lorem ipsum never shows.
+[0:22.8]  "Small cart fee" doesn't fit on one line.
+[0:25.2]  Three fee lines push the button below the fold.
+[0:28.0]  Then I check every word AI wrote, because users will read it as a promise.
+[0:32.8]  Do your prototypes still use lorem ipsum?
+[0:35.4]  Tell me in the comments.
+[0:37.1]  Follow for the next step.
+
+=== 4.4 · A UI prompt is a design brief  (save as 4.4.m4a) ===
+
+[0:00.2]  "Design a checkout screen."
+[0:01.7]  That prompt gives you the average checkout on the internet.
+[0:05.1]  Here's the prompt I actually use.
+[0:07.3]  Who: busy parents ordering groceries on a phone.
+[0:10.5]  Goal: see the final price before paying.
+[0:13.2]  Constraints: our design system, 360-pixel width, all fees visible on the first screen.
+[0:18.1]  Content: these five items and these two fees.
+[0:21.0]  Avoid: no pre-selected add-ons.
+[0:23.2]  Same AI, completely different result.
+[0:25.6]  A prompt is a design brief.
+[0:27.6]  If you wouldn't hand a vague brief to a designer, don't hand it to AI.
+[0:32.1]  What's in your best UI prompt?
+[0:34.0]  Share it in the comments.
+[0:35.7]  Follow for the next step.
+
+=== 4.5 · A prototype in a day  (save as 4.5.m4a) ===
+
+[0:00.2]  A prototype is a question, not a product.
+[0:03.2]  Here's how I get one ready in a day.
+[0:06.0]  Morning: sketch on paper.
+[0:07.9]  AI turns the sketches into wireframes.
+[0:10.2]  Afternoon: I link the screens into a clickable flow, with AI writing the real content.
+[0:15.4]  By evening I have five screens, one task, ready for users.
+[0:19.4]  And here's the rule I give my team: don't fall in love with it.
+[0:23.7]  AI makes prototypes look good so fast that teams start defending them.
+[0:27.6]  If users struggle tomorrow, we throw it away, and that's a win.
+[0:31.8]  Have you ever defended a prototype you should have thrown away?
+[0:35.5]  Follow for the next stage: Test.
+
+=== 5.2 · Don't help the user  (save as 5.2.m4a) ===
+
+[0:00.2]  The fastest way to ruin a usability test is to help the user.
+[0:04.3]  "Did you see the fee there?"
+[0:06.2]  Now they did, and your data is gone.
+[0:08.9]  Before every test, I give AI my moderator script and ask: flag every line that leads, hints or explains the design.
+[0:16.3]  It catches things I still miss.
+[0:18.2]  "Is this clear?"
+[0:19.3]  becomes "What do you expect to happen next?"
+[0:22.0]  "Do you like it?"
+[0:23.4]  becomes "Tell me what you're thinking."
+[0:25.6]  AI can review the script.
+[0:27.3]  In the room, the hardest skill is still yours: staying quiet when they struggle.
+[0:31.8]  Is silence hard for you in tests?
+[0:34.0]  Tell me in the comments.
+[0:35.8]  Follow for the next step.
+
+=== 5.3 · AI points, you watch  (save as 5.3.m4a) ===
+
+[0:00.2]  Five test sessions, five hours of video.
+[0:02.7]  AI can summarise them in minutes, and I let it.
+[0:06.2]  I give AI the transcripts and ask for every moment a participant hesitated, went back, or said something unexpected, with timestamps.
+[0:14.0]  That's the useful part: timestamps.
+[0:16.4]  Because then I watch those clips myself.
+[0:18.7]  Transcripts miss the most important things: the long pause before tapping Pay, the thumb hovering over the fee line, the sigh.
+[0:25.8]  AI tells you where to look.
+[0:27.7]  Your eyes tell you what happened.
+[0:29.8]  Do you watch your test recordings, or just read the notes?
+[0:33.4]  Follow for the next step.
+
+=== 5.4 · Severity is impact, not frequency  (save as 5.4.m4a) ===
+
+[0:00.2]  Your test found fifteen issues.
+[0:02.0]  The team will fix three.
+[0:03.6]  Make sure they're the right three.
+[0:05.5]  I ask AI to draft a findings table: issue, how many participants hit it, and a suggested severity from one to four.
+[0:13.1]  It's a great first draft.
+[0:14.7]  But AI rates by how often something happened.
+[0:17.6]  Severity is about impact.
+[0:19.4]  One participant couldn't find the total at all and gave up.
+[0:22.9]  That's a four, even if it happened once.
+[0:25.7]  Three people said the font was small and carried on.
+[0:28.7]  That's a one.
+[0:29.8]  Let AI draft the table.
+[0:31.4]  You set the severity.
+[0:33.1]  How does your team rate usability issues?
+[0:35.6]  Follow for the next step.
+
+=== 5.5 · It's a loop, not a line  (save as 5.5.m4a) ===
+
+[0:00.2]  Design thinking is drawn as five steps in a line.
+[0:03.2]  It's really a loop.
+[0:04.7]  Our test showed something we didn't expect.
+[0:07.2]  People understood the live total, but they wanted to know why each fee existed.
+[0:11.8]  That's not a prototype fix.
+[0:13.6]  That's a new insight, so we go back to Define.
+[0:16.9]  A new problem statement: busy parents need to trust why they're paying each fee.
+[0:21.5]  AI helps you move around the loop faster: drafting, sorting, summarising.
+[0:26.1]  But the decision to go back is yours, and it's the most important decision in the whole process.
+[0:31.9]  Which stage does your team skip most?
+[0:34.0]  Tell me in the comments.
+[0:35.7]  Follow for more AI × UX.
+
